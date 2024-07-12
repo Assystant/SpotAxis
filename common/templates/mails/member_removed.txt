@@ -1,0 +1,11 @@
+{% extends 'mails/base_email.txt' %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Goodbye from Team{% endblock %}
+
+{% block content %}
+You have been removed from {{member.company.all.0.name}}'s team. Your account will be closed and your email disaccociated. You can create a fresh account with us to start anew.
+
+{% endblock %}
+
+{% block button-text %}{% trans 'SpotAxis' %}{% endblock %}

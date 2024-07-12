@@ -1,0 +1,185 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% block meta %}
+    <meta name="keyword" content="SpotAxis, Talent SignUp,Talent Acquisition, Jobs, Job Portal, Job Board, Vacancy, Online Resume, Online CV"/>
+    <meta name="description" content="Talent Signup for SpotAxis"/>
+{% endblock %}
+{% block title %}SpotAxis | Talent SignUp{% endblock %}
+{% block content %}
+
+    <!-- Content starts -->
+
+    <!-- Modal - Privacy Policy-->
+    <div class="modal fade" id="privacy-policy-modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body" id="privacy-policy-modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    {% include 'privacy_policy_include.html' %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal - Terms and Conditions-->
+    <div class="modal fade" id="terms-and-conditions-modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body" id="terms-and-conditions-modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    {% include 'terms_and_conditions_include.html' %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row"> <!-- Form registrar candidato -->
+        <div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 mt10">
+            <h1 class="text-center text-light">Talent SignUp</h1>
+        </div>
+        <div class="col-xs-10 col-xs-push-1 col-sm-6 col-sm-push-3 col-md-4 col-md-push-4 col-lg-2 col-lg-push-0 mt40 text-right">
+            <a class="btn btn-sm btn-block btn-info" href="{% url 'companies_record_recruiter' %}">Switch to Employer SignUp</a>
+            <small class="text-light">Are you an Employer?</small>
+        </div>
+        <div clas="col-xs-12 clearfix"></div>
+    </div>
+        <form id="create-candidate-form" action="." method="post" role="form" class="row mt10 mb50">
+            {% csrf_token %}
+            <div class="col-sm-8 col-sm-push-2 panel mt20">
+                <div class="row panel-body panel-shadow">
+                    <div class="col-xs-12 hidden">
+                        <h2 class="text-center text-light"></h2>
+                        <hr class="header-seperator mt10 no-margin-bottom">
+                    </div>
+
+
+                    <!-- Name -->
+                    <div class="col-xs-6">
+                    <div class="form-group">
+                        {% if form_user.first_name.errors %}
+                            <ul class="list-unstyled error-list">
+                            {% for error in form_user.first_name.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_first_name">{% trans 'First Name' %}<span class="required">*</span></label>
+                        {% endif %}
+                        <div class="input-group {% if form_user.first_name.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-tag fa-lg"></i></div>
+                            {{ form_user.first_name }}
+                        </div>
+                    </div></div>
+
+                    <!-- Surname -->
+                    <div class="col-xs-6">
+                    <div class="form-group">
+                        {% if form_user.last_name.errors %}
+                            <ul class="list-unstyled error-list">
+                            {% for error in form_user.last_name.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_last_name">{% trans 'Surname' %}<span class="required">*</span></label>
+                        {% endif %}
+                        <div class="input-group {% if form_user.last_name.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-tags fa-lg"></i></div>
+                            {{ form_user.last_name }}
+                        </div>
+                    </div></div>
+
+                    <!-- Email -->
+                    <div class="col-xs-12">
+                    <div class="form-group">
+                        {% if form_user.email.errors %}
+                            <ul class="list-unstyled error-list">
+                            {% for error in form_user.email.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_email">{% trans 'Email' %}<span class="required">*</span></label>
+                        {% endif %}
+                        <div class="input-group {% if form_user.email.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-at fa-lg"></i></div>
+                            {{ form_user.email }}
+                        </div>
+                    </div></div>
+
+                    <!-- Username --><div class="col-xs-12">
+                    <div class="form-group">
+                        {% if form_user.username.errors %}
+                            <ul class="list-unstyled error-list">
+                            {% for error in form_user.username.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_username">{% trans 'Username' %}<span class="required">*</span></label>
+                        {% endif %}
+                        <div class="input-group {% if form_user.username.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-user fa-lg"></i></div>
+                            {{ form_user.username }}
+                        </div>
+                    </div></div>
+
+                    <!-- Password --><div class="col-xs-12">
+                    <div class="form-group">
+                        {% if form_user.password.errors %}
+                            <ul class="list-unstyled error-list">
+                            {% for error in form_user.password.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_password">{% trans 'Password' %}<span class="required">*</span></label>
+                        {% endif %}
+                        <div class="input-group {% if form_user.password.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-lock fa-lg"></i></div>
+                            {{ form_user.password }}
+                        </div>
+                    </div></div>
+
+                    <!-- Confirm Password --><div class="col-xs-12">
+                    <div class="form-group">
+                        {% if form_user.password_repeat.errors %}
+                            <ul class="list-unstyled error-list">
+                            {% for error in form_user.password_repeat.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_password_repeat">{% trans 'Confirm password' %}<span class="required">*</span></label>
+                        {% endif %}
+                        <div class="input-group {% if form_user.password_repeat.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-lock fa-lg"></i></div>
+                            {{ form_user.password_repeat }}
+                        </div>
+                    </div></div>
+
+                    <!-- Submit Form -->
+                    <div class="col-xs-12 mt30">
+                        <button type="submit" id="submit_btn" class="btn btn-info btn-sm btn-block mt10 mb10" ><i class="fa fa-check-circle fa-lg"></i> Sign Up</button>
+                    
+
+                    <!-- Privacy Policy -->
+                    <p>
+                        {% trans 'When creating your account, you are indicating that you have read and accepted our ' %}
+                        <a data-toggle="modal" data-target="#privacy-policy-modal" class="clickable">{% trans 'Privacy Policy' %}</a>
+                        and
+                        <a data-toggle="modal" data-target="#terms-and-conditions-modal" class="clickable">{% trans 'Terms and Conditions' %}</a>.
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </form>
+    <!-- End of Candidate Registration Form-->
+<!-- Content ends -->
+
+{% endblock %}

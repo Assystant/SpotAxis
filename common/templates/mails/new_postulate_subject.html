@@ -1,0 +1,4 @@
+{% load i18n %}
+{% autoescape off %}
+{{ vacancy.employment }} | {% trans "New Application" %}{% if file_path %} - {% trans 'Profile Attached' %}{% endif %}
+{% endautoescape %}

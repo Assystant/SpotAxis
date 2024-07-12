@@ -1,0 +1,16 @@
+{% load TRM_tags %}
+<div class="relative clearfix" id="list-block-{{x.id}}">
+    <hr>
+    <button class='btn btn-trans btn-lg btn-absolute-tr no-padding remove-referer' data-id="{{x.id}}" data-name="{{x.name}}"><i class="fa fa-trash text-danger"></i></button>
+    {% if not label_only %}
+        {% with x.tag_name as block_head and x|args:vacancy|call:'ref_links' as xobjects %}
+            {% with xobjects.objects as copy_contents %}
+                {% include 'copy_blocks.html' %}
+            {% endwith %}
+        {% endwith %}
+    {% else %}
+        {% with x.tag_name as block_head and None as copy_contents %}
+                {% include 'copy_blocks.html' %}
+        {% endwith %}
+    {% endif %}
+</div>

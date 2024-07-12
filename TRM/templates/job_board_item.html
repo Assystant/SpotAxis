@@ -1,0 +1,28 @@
+{% load el_pagination_tags %}
+
+{% paginate companies %}
+{% for company in companies %}
+    <div class="pb10 pt10 pl10 pr10 bg-white border-bottom border-light relative clickable company-card" data-toggle="collapse" data-target=".company-{{company.id}}" onclick="checklinks()">
+        <div class="ml50 pl30 mh75">
+            <img class="card-left img-card-lg bordered ml10" src="{{company.logo.url}}">
+            <h4 class="no-margin-bottom"><a target="_blank" href="{{company.geturl}}">{{company}}</a>
+			<a class="pull-right btn btn-xs btn-info-inverse mr5 ml5" target="_blank" href="{{company.geturl}}">Apply on Career Site</a></h4>
+            {% for vacancy in company.jobs %}
+            	<div class="row no-margin pb5">
+            		<div class="col-xs-12 col-sm-6 no-padding">
+		                <h5 class='inline-block no-margin-bottom mt8 lh12'><b><a target="_blank" class=" text-light" href="{{vacancy.get_absolute_url}}">{{vacancy.employment}}</a></b><span class="inline-block ml10 label label-trans "><i class="fa text-light fa-black-tie fa-sm"></i> {{vacancy.employmentType}}</span></h5>
+		            </div>
+		            <div class="col-xs-12 col-sm-6">
+		                <h6 class="inline-block no-margin-bottom mt10 text-light"><i class="fa text-light fa-map-marker"></i> {%if vacancy.city%}{{vacancy.city|default:'city'}}, {%endif%} {%if vacancy.state%}{{vacancy.state|default:'state'}},{%endif%} {{vacancy.nationality}}</h6>
+		            </div>
+                </div>
+                {% if forloop.counter == 2 and not forloop.last %}<span href=".company-{{company.id}}" data-toggle="collapse" class="clickable mt5 small collapse fade in company-{{company.id}} text-light">and {{company.jobs.count|add:-2}} More <i class="fa fa-angle-down"></i> </span><div class="collapse fade company-{{company.id}}">{% endif %}
+                {% if forloop.last and forloop.counter > 2%}</div><span href=".company-{{company.id}}" data-toggle="collapse" class="clickable mt5 small collapse fade company-{{company.id}} text-light"><i class="fa fa-angle-up"></i> Less</span>{% endif %}
+
+            {% endfor %}
+        </div>
+    </div>
+{% empty %}
+	<div class="pb10 pt10 pl10 pr10 bg-white border-bottom border-light relative clickable text-center text-light">No results available. Try using a different search filter.</div>
+{% endfor %}
+{% show_more %}

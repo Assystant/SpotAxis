@@ -1,0 +1,112 @@
+{% load humanize %}
+{% load TRM_tags %}
+        <!--========== HEADER V2 ==========-->
+        <header class="navbar-fixed-top s-header-v1 js__header-sticky js__header-overlay {% if static_header %} s-header_shrink{% endif %}">
+            <!-- Navbar -->
+            <nav class="s-header-v2__navbar no-border">
+                <div class="container g-display-table--lg">
+                    <!-- Navbar Row -->
+                    <div class="s-header-v2__navbar-row">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="s-header-v2__navbar-col">
+                            <button type="button" class="collapsed s-header-v2__toggle" data-toggle="collapse" data-target="#nav-collapse" aria-expanded="false">
+                                <span class="s-header-v2__toggle-icon-bar"></span>
+                            </button>
+                        </div>
+
+                        <div class="s-header-v2__navbar-col s-header-v2__navbar-col-width--180">
+                            <!-- Logo -->
+                            <div class="s-header-v2__logo">
+                                <a href="/" class="s-header-v2__logo-link">
+                                    <img class="s-header-v2__logo-img s-header-v2__logo-img--default" src="{{ STATIC_URL }}newtheme/img/logo-white.png" alt="SpotAxis Logo">
+                                    <img class="s-header-v2__logo-img s-header-v2__logo-img--shrink" src="{{ STATIC_URL }}newtheme/img/logo.png" alt="SpotAxis Logo">
+                                </a>
+                            </div>
+                            <!-- End Logo -->
+                        </div>
+                        
+                        <div class="s-header-v2__navbar-col s-header-v2__navbar-col--right">
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="collapse navbar-collapse s-header-v2__navbar-collapse" id="nav-collapse">
+                                <ul class="s-header-v2__nav">                                
+                                    <li class="s-header-v2__nav-item"><a href="{% url 'product' %}" class="s-header-v2__nav-link">Product</a></li>
+                                    <li class="s-header-v2__nav-item"><a href="{% url 'pricing' %}" class="s-header-v2__nav-link">Pricing</a></li>
+                                    <!-- Pages -->
+                                    <li class="dropdown s-header-v2__nav-item s-header-v2__dropdown-on-hover">
+                                        <!--a href="javascript:void(0);" class="dropdown-toggle s-header-v2__nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Resources <span class="g-font-size-10--xs g-margin-l-5--xs ti-angle-down"></span></a>
+                                        <ul class="dropdown-menu s-header-v2__dropdown-menu">
+                                            <li><a href="" class="s-header-v2__dropdown-menu-link">Research &amp; Insights</a></li>
+                                            <li><a href="" class="s-header-v2__dropdown-menu-link">Case Studies</a></li>
+                                            <li><a href="" class="s-header-v2__dropdown-menu-link">Blogs</a></li>
+                                        </ul-->
+                                        <a href="{{settings.HOSTED_URL}}{% url 'zinnia:entry_archive_index' %}" class="s-header-v2__nav-link">Resources</a>
+                                    </li>
+                                    <!-- End Pages -->
+                                    {% if request.user.is_anonymous %}
+                                        <li class="s-header-v2__nav-item"><a href="{% url 'companies_record_recruiter'%}" class="s-header-v2__nav-link s-header-v2__nav-link--dark">Signup</a></li>
+                                        <li class="s-header-v2__nav-item"><a href="{% url 'auth_login'%}{%if not isIndex and not request.GET.next and not request.path|inAuthList %}?next={{request.path}}{% endif %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}" class="s-header-v2__nav-link s-header-v2__nav-link--dark">Login</a></li>
+                                    {% endif %}
+                                    {% if request.user.is_authenticated %}
+                                        <li class="dropdown s-header-v2__nav-item s-header-v2__dropdown-on-hover">
+                                            <a href="javascript:void(0);" class="dropdown-toggle s-header-v2__nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="font-weight:normal">
+                                                {{request.user.username}} &nbsp;
+                                                <img class="g-width-30--xs g-height-30--xs g-box-shadow__dark-lightest-v4 g-radius--circle g-margin-b-5--sm" src="/media/{{request.user.photo}}" alt="Image" data-name="{% if candidate and not company %}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %}">
+                                                <span class="g-font-size-10--xs g-margin-l-5--xs ti-angle-down"></span>
+                                            </a>
+                                            <!--ul class="dropdown-menu s-header-v2__dropdown-menu">
+                                                <li><a href="" class="s-header-v2__dropdown-menu-link">Research &amp; Insights</a></li>
+                                                <li><a href="" class="s-header-v2__dropdown-menu-link">Case Studies</a></li>
+                                                <li><a href="" class="s-header-v2__dropdown-menu-link">Blogs</a></li>
+                                            </ul-->
+                                            <ul class="user-dropdown dropdown-menu dropdown-menu-right s-header-v2__dropdown-menu">
+                                                <li>
+                                                    <div class="navbar-login">
+                                                        <div class="row user-card">
+                                                            <div class="col-xs-4">
+                                                                <p class="text-center">
+                                                                    <img class="img-circle img-responsive user-photo" src="/media/{{request.user.photo}}" alt="{% if candidate and not company%}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %} Pic" data-name="{% if candidate and not company %}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %}">
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-xs-8 pt10">
+                                                                <p class="text-center text-light"><strong>{{request.user.get_full_name|title}}</strong></p>
+                                                                <p class="text-center text-muted small">{{request.user.email}}</p>
+                                                                <p class="text-center">
+                                                                    {%if user_profile == 'recruiter' %}
+                                                                        <a href="{% url 'companies_recruiter_profile' %}">Profile</a>
+                                                                    {%elif user_profile == 'candidate' %}
+                                                                        <a href="{% url 'candidates_edit_curriculum' %}">Profile</a>
+                                                                    {% endif %}
+                                                                    {%if user_profile == 'Admin' %}
+                                                                        <a href="/admin/">Admin Panel</a>
+                                                                    {%endif%}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="divider no-margin navbar-login-session-bg"></li>
+                                                 <li><a class="pt10 pb10" href="{% url 'common_email_change' %}">Change Email <span class="glyphicon glyphicon-envelope pull-right"></span></a></li>
+                                                <li class="divider no-margin"></li>
+                                                <li class="hidden"><a class="pt10 pb10" href="{% url 'recover_user' %}">Change Username <span class="fa fa-user fa-lg pull-right"></span></a></li>
+                                                <li class="hidden divider no-margin"></li>
+                                                <li><a class="pt10 pb10" href="{% url 'auth_password_change' %}">Change Password <span class="glyphicon glyphicon-lock pull-right"></span></a></li>
+                                                <li class="divider no-margin"></li>
+                                                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}{% url 'zinnia:entry_archive_index' %}" target="_blank">Resources <span class="fa fa-lightbulb-o fa-lg mr3 pull-right"></span></a></li>
+                                                <li class="divider no-margin"></li>
+                                                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}{% url 'helpdesk_home' %}" target="_blank">Help <span class="fa fa-question fa-lg mr3 pull-right"></span></a></li>
+                                                <li class="divider no-margin"></li>
+                                                <li><a class="pt10 pb10" href="{% url 'auth_logout' %}{% if request.path|resolveNamespace:'zinnia' %}?next={{request.path}}{% endif %}">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+                                            </ul>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <!-- End Nav Menu -->
+                        </div>
+                    </div>
+                    <!-- End Navbar Row -->
+                </div>
+            </nav>
+            <!-- End Navbar -->
+        </header>
+        <!--========== END HEADER V2 ==========-->

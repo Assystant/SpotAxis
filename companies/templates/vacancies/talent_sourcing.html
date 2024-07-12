@@ -1,0 +1,20 @@
+<div class="container-fluid">
+    <div class="row bg-white is-flex">
+        <div class="col-xs-4 border-right border-light no-padding bg-light">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a data-toggle="tab" href="#section1" aria-expanded="true" aria-controls="section1">Job Boards</a></li>
+                <li><a data-toggle="tab" href="#section2" aria-expanded="false" aria-controls="section2">External Referrers</a></li>
+            </ul>
+        </div>
+        <div class="col-xs-8" id="sections" aria-multiselectable="true">
+            <div class="tab-content mt20 mb20 ml10 mr10">
+                <div id="section1" class="tab-pane fade in active">
+                    {% include 'job_board_block.html' %}
+                </div>
+                <div id="section2" class="tab-pane fade">
+                    {% include 'external_referer_block.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

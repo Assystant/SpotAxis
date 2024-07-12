@@ -1,0 +1,71 @@
+{% extends 'mails/base_email.html' %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% block title %}SpotAxis | {{ vacancy.employment }}{% endblock %}
+
+{% block content %}
+
+    <!-- Applied candidate Data -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+        <tr style="vertical-align: top">
+
+            <td style="max-width: 390px">
+                <!-- Name -->
+                <p style="color:#777;">
+                    <b style="color: #aaa;">Name:</b> {{ candidate.first_name|capfirst }} {{ candidate.last_name|capfirst }}
+                </p>
+
+                <!-- Age -->
+                {% if candidate.birthday %}
+                    <p style="color:#777;">
+                        <b style="color: #aaa;">Age:</b>
+                        {{ candidate.birthday|timesince|upto:',' }}
+                    </p>
+                {% endif %}
+
+                <!-- Past Education -->
+                {% if academic %}
+                    <p style="color:#777;">
+                        <b style="color: #aaa;">Past Education:</b> {{ academic.course_name }}
+                             - {{ academic.area }}
+                    </p>
+                {% endif %}
+
+                <!-- Current Residence -->
+                {% if candidate.city or candidate.state %}
+                    <p style="color:#777;">
+                        <b style="color: #aaa;">Current Residence:</b>
+                        {% if candidate.city %}
+                            {{ candidate.city }},
+                        {% endif %}
+                        {% if candidate.state %}
+                           {{ candidate.state }}, 
+                        {% endif %}
+                        {{ candidate.nationality}}
+                    </p>
+                {% endif %}
+
+                <!-- Desired Salary -->
+
+                {% if file_path %}
+                    <p style="color:#777;">
+                        <b style="color: #aaa;">{% trans 'Attached to the email is the profile of the candidate' %}</b>
+                    </p>
+                {% endif %}
+            </td>
+
+            <!-- Candidate Photo -->
+            <td style="float: right; text-align: right; padding-top: 2px; padding-left: 3px; max-width: 145px">
+                <img alt="{{ candidate.first_name }} {{ candidate.last_name }} Pic"
+                  src="{{ MEDIA_URL }}{{ candidate.user.photo}}" style="max-width: 100%; max-height:180px; display: inline-block; padding: 4px; border: 1px solid #ddd" data-name="{{candidate.first_name}} {{candidate.last_name}}"/>
+            </td>
+
+        </tr>
+    </table><!-- Candidate Data -->
+
+
+{% endblock %}
+
+{% block button-text %}{% trans 'View Profile on SpotAxis' %} {% endblock %}

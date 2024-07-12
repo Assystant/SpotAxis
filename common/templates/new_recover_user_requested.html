@@ -1,0 +1,30 @@
+{% extends "base/outer_base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% comment %} Home {% endcomment %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+
+{% block content %}
+
+        <!--========== PAGE CONTENT ==========-->
+        <!--<div class="g-bg-position--center g-fullheight--xs" style="background: url('{{ STATIC_URL }}newtheme/img/1920x1080/08.jpg'); background-color= white">-->
+        <div class="g-bg-position--center g-padding-y-80--xs" style="min-height:100vh">
+            <div class="container js__ver-center-aligned">
+                <div class="g-text-center--xs">
+                    <div class="g-margin-t-40--xs g-margin-b-60--xs g-margin-b-80--sm">
+                        <h1 class="g-font-size-32--xs g-font-size-50--sm g-font-size-60--md g-margin-b-30--xs">Recover Username</h1>
+                        <p class="text-uppercase g-font-size-20--md g-font-weight--300">We have sent the username to your email. If you did not receive any email, please check your Spam folder.</p>
+                        <p>
+                            <a href="{% url 'auth_login' %}" class="text-uppercase s-btn s-btn-icon--md s-btn--primary-brd g-radius--50 g-padding-x-50--xs g-padding-y-15--xs"><i class="fa fa-sign-in fa-lg"></i> {% trans "Login" %}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--========== END PAGE CONTENT ==========-->
+
+{% endblock %}

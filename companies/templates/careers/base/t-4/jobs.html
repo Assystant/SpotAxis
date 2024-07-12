@@ -1,0 +1,105 @@
+{% load TRM_tags %}
+<div class="location_selector">
+	<ul>
+		{% for location in company.company_locations %}
+			<li data-location="loc-{{forloop.counter}}"><a class="{% if forloop.first %}active{% endif %} -text-persian">{{location|upper|default:'Remote'}}</a></li>
+		{% empty %}
+			{% if isPreview or editing %}
+				<li data-location="newyork"><a class="-text-persian">NEW YORK</a></li>
+				<li data-location="montreal"><a class="active -text-persian">MONTREAL</a></li>
+				<li data-location="losangeles"><a class="-text-persian">LOS ANGELES</a></li>
+				<li data-location="sanfrancisco"><a class="-text-persian">SAN FRANCISCO</a></li>
+				<li data-location="london"><a class="-text-persian">LONDON</a></li>
+			{% else %}
+				<div class="listing column xs-12 border-bottom">
+					No current job openings. Check back later.
+				</div>
+			{% endif %}
+		{% endfor %}
+	</ul>
+</div>
+<div class="big-listing-container">
+	{% for location in company.company_locations %}
+		<div class="listing-container {% if forloop.first %}active{% endif %}" id="loc-{{forloop.counter}}">
+			{% for vacancy in vacancies %}
+				{% if vacancy.city == location %}
+					<div class="conjoin">
+						<div class="listing">
+							<h4 style="margin: 0; line-height: 1.7">{{ vacancy.employment }}</h4>
+							<i class="fa fa-caret-down -text-viking" aria-hidden="true"></i>
+						</div>
+						<div class="description clearfix">
+							<div>{{ vacancy.description|safe }}</div>
+							<a class="button bordered -bg-mantis scale-3 pull-right" href="{% url 'vacancies_get_vacancy_details' vacancy.id %}">Apply for this position</a>
+						</div>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	{% empty %}
+		{% if isPreview or editing %}
+			<div class="listing-container active" id="montreal">
+
+				<div class="conjoin">
+					<div class="listing">
+						<h4 style="margin: 0; line-height: 1.7">Nost Product Designer</h4>
+						<i class="fa fa-caret-down -text-viking" aria-hidden="true"></i>
+					</div>
+					<p class="description">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem ex id pariatur dignissimos quod obcaecati amet consequuntur cum nisi, odit voluptatem illo autem soluta, accusamus ratione. Rem, quia, totam!
+						<br/ >
+						<a class="button bordered -bg-mantis scale-3">Apply for this position</a>
+					</p>
+				</div>
+
+				<div class="conjoin">
+					<div class="listing">
+						<h4 style="margin: 0; line-height: 1.7">Product Designer</h4>
+						<i class="fa fa-caret-down -text-viking" aria-hidden="true"></i>
+					</div>
+					<p class="description">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem ex id pariatur dignissimos quod obcaecati amet consequuntur cum nisi, odit voluptatem illo autem soluta, accusamus ratione. Rem, quia, totam!
+						<br/ >
+						<a class="button bordered -bg-mantis scale-3">Apply for this position</a>
+					</p>
+				</div>
+
+				<div class="conjoin">
+					<div class="listing">
+						<h4 style="margin: 0; line-height: 1.7">Product Designer</h4>
+						<i class="fa fa-caret-down -text-viking" aria-hidden="true"></i>
+					</div>
+					<p class="description">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem ex id pariatur dignissimos quod obcaecati amet consequuntur cum nisi, odit voluptatem illo autem soluta, accusamus ratione. Rem, quia, totam!
+						<br/ >
+						<a class="button bordered -bg-mantis scale-3">Apply for this position</a>
+					</p>
+				</div>
+
+				<div class="conjoin">
+					<div class="listing">
+						<h4 style="margin: 0; line-height: 1.7">Product Designer</h4>
+						<i class="fa fa-caret-down -text-viking" aria-hidden="true"></i>
+					</div>
+					<p class="description">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem ex id pariatur dignissimos quod obcaecati amet consequuntur cum nisi, odit voluptatem illo autem soluta, accusamus ratione. Rem, quia, totam!
+						<br/ >
+						<a class="button bordered -bg-mantis scale-3">Apply for this position</a>
+					</p>
+				</div>
+
+				<div class="conjoin">
+					<div class="listing">
+						<h4 style="margin: 0; line-height: 1.7">Product Designer</h4>
+						<i class="fa fa-caret-down -text-viking" aria-hidden="true"></i>
+					</div>
+					<p class="description">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem ex id pariatur dignissimos quod obcaecati amet consequuntur cum nisi, odit voluptatem illo autem soluta, accusamus ratione. Rem, quia, totam!
+						<br/ >
+						<a class="button bordered -bg-mantis scale-3">Apply for this position</a>
+					</p>
+				</div>
+			</div>
+		{% endif %}
+	{% endfor %}
+</div> <!-- Big wrapper end -->

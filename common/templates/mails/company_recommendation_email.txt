@@ -1,0 +1,9 @@
+{% extends 'mails/base_email.txt' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Thanks for recommendation' %}{% endblock %}
+
+{% block content %}
+    {{ user.first_name|capfirst }} {{ user.last_name|capfirst }} of the company {{ company }} have registered on our site and indicated that you recommended us, so e are gicing you one month of free vacancies which begin to run once {{ user.first_name|capfirst }} {{ user.last_name|capfirst }} Makes their first purchase with us.
+    For more information please contact us at email@spotaxis.com
+{% endblock %}

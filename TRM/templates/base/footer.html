@@ -1,0 +1,35 @@
+{% load i18n %}
+{% trans "Log In" as iniciar_sesion %}
+
+<!-- Start footer -->
+
+	<footer id="footer" class=" bg-dark pt10">
+		<div class="copyright">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12 col-md-3 col-lg-3 text-center">
+						<ul class="list-inline pt5 social-icons inline-block">
+							<li><a href="https://www.facebook.com/spotaxis" target="_blank" class="btn btn-round btn-default"><i class=" fa fa-facebook mt10"></i></a></li>
+							<li><a href="https://twitter.com/spotaxis" target="_blank" class="btn btn-round btn-default"><i class="fa fa-twitter mt10"></i></a></li>
+							<!--li><a href="https://www.linkedin.com/company/spotaxis" target="_blank" class="btn btn-round btn-default"><i class="fa fa-linkedin mt10"></i></a></li>
+							<li><a href="http://plus.google.com" target="_blank" class="btn btn-round btn-default"><i class="fa fa-google-plus mt10"></i></a></li-->
+						</ul>
+					</div>
+					<div class="col-xs-12 col-md-3 col-lg-4 text-center pt15"
+						<p class="small no-margin">&copy; Copyright <a href="https://spotaxis.com/">SpotAxis</a>,2017</p>
+					</div>
+					<div class="col-xs-12 col-md-6 col-lg-5 text-center no-padding">
+						<p class="pt15 pb15 no-margin">
+							<a class="ml10 inline-block" href="{% url 'about_us' %}"> About Us</a>
+							<a class="ml10 inline-block" href="http://careers.spotaxis.com/"> Careers</a>
+							<a class="ml10 inline-block" href="{% url 'TRM_privacy_policy' %}"> Privacy Policy</a>
+							<a class="ml10 inline-block" href="{% url 'TRM_terms_and_conditions' %}"> Terms and Conditions</a>
+							<a class="ml10 inline-block" href="{{settings.HOSTED_URL}}{% url 'helpdesk_home' %}" target="_blank"> Help</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer> <!-- end #footer -->
+
+<!-- End footer -->

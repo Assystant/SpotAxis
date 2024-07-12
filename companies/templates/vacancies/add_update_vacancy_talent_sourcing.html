@@ -1,0 +1,77 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block meta %}
+    <meta name="keyword" content="{{company.name}}, Create Job"/>
+    <meta name="description" content="Create your job opening."/>
+{% endblock %}
+{% block title %}{{ request.user.recruiter.company.all.0.name }} | Create Job Opening{% endblock %}
+{% block css %}
+
+    <!-- Jquery-File-Uploads -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui.css">
+    <!-- CSS adjustments for browsers with JavaScript disabled -->
+    <noscript><link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui-noscript.css"></noscript>
+    <!-- Jquery-File-Uploads -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.1/switchery.min.css">
+    <link href="{{STATIC_URL}}datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}daterange/daterangepicker.css" rel="stylesheet">
+
+{% endblock %}
+{% comment %} Add/Modify Vacancies {% endcomment %}
+{% block page-header %}{% trans 'Publish Job' %}{% endblock %}
+{% block content %}
+
+    <div class="row mt10 mb40 no-margin-x">
+        <div class=" col-xs-12">
+            {% include 'vacancies/add_update_vacancy_timeline.html' %}
+        </div>
+        <div class="col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+           {% include 'vacancies/talent_sourcing.html' %}
+        </div>
+        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3">
+            <a class=" btn btn-info btn-block btn-sm mt10 mb10" href="{% url 'vacancies_get_vacancy_details' vacancy_id %}">Done</a>
+        </div>
+    </div>
+    {% include 'remove_external_referal_modal.html' %}
+
+{% endblock %}
+
+{% block java_script_srcs %}
+    {#    ================================================================================================================#}
+    <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.iframe-transport.js"></script>
+    <!-- The basic File Upload plugin -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload.js"></script>
+    <!-- The File Upload processing plugin -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload-process.js"></script>
+    <!-- The File Upload validation plugin -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.cookie.js"></script>
+    {#    ================================================================================================================#}
+    <script src="{{STATIC_URL}}datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.1/switchery.min.js"></script>
+    <script src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
+    <script src="{{ STATIC_URL }}ckeditor/ckeditor-init.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/moment.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/daterangepicker.js"></script>
+    <script src="{{ STATIC_URL }}js/external-referal.js"></script>
+{% endblock %}
+
+{% block java_script_code %}
+    <script>
+        new Clipboard('.btn-copy');
+        $('.btn-copy').click(function(){
+            $this = $(this);
+            $this.parents('.copy-block').find('.btn-copy-text').removeClass('hidden')
+            $this.parents('.copy-block').find('.btn-copy-text').addClass('animated fadeOutUp');
+            setTimeout(function(){
+                console.log($this);
+                $this.parents('.copy-block').find('.btn-copy-text').addClass('hidden');
+                $this.parents('.copy-block').find('.btn-copy-text').removeClass('animated fadeOutUp')
+            },500);
+        });
+    </script>
+{% endblock %}

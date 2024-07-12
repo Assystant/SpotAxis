@@ -1,0 +1,65 @@
+[
+  {
+    "model": "common.degree",
+    "pk": 4,
+    "fields": {
+      "name": "Other",
+      "codename": "other",
+      "order": 4
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 5,
+    "fields": {
+      "name": "Doctorate",
+      "codename": "doctorate",
+      "order": 5
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 6,
+    "fields": {
+      "name": "Post Graduate",
+      "codename": "pg",
+      "order": 6
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 7,
+    "fields": {
+      "name": "Graduate",
+      "codename": "graduate",
+      "order": 7
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 8,
+    "fields": {
+      "name": "Higher Secondary",
+      "codename": "higher_school",
+      "order": 8
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 9,
+    "fields": {
+      "name": "Secondary",
+      "codename": "high_school",
+      "order": 9
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 10,
+    "fields": {
+      "name": "Primary",
+      "codename": "elementary_school",
+      "order": 100
+    }
+  }
+]

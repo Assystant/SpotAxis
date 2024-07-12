@@ -1,0 +1,177 @@
+[
+  {
+    "model": "companies.company_industry",
+    "pk": 1,
+    "fields": {
+      "name": "Banking, financial Services and Insurance"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 2,
+    "fields": {
+      "name": "Aerospace"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 3,
+    "fields": {
+      "name": "Automobile and Boats"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 4,
+    "fields": {
+      "name": "Defence"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 5,
+    "fields": {
+      "name": "Clothes and Textiles"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 6,
+    "fields": {
+      "name": "Healthcare and Life science"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 7,
+    "fields": {
+      "name": "Electrical and Heavy Machinery"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 8,
+    "fields": {
+      "name": "Transport, Logistics and Warehousing"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 9,
+    "fields": {
+      "name": "Food and Beverage"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 10,
+    "fields": {
+      "name": "Infrastructure"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 11,
+    "fields": {
+      "name": "Real Estate and Realty"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 12,
+    "fields": {
+      "name": "Cause and community"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 13,
+    "fields": {
+      "name": "Education"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 14,
+    "fields": {
+      "name": "Personal and Lifestyle"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 15,
+    "fields": {
+      "name": "Home and Kitchen"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 16,
+    "fields": {
+      "name": "Technology"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 17,
+    "fields": {
+      "name": "Entertainment and Liesure"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 18,
+    "fields": {
+      "name": "Games, Sports and Activity"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 19,
+    "fields": {
+      "name": "Wholesale and Retail"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 20,
+    "fields": {
+      "name": "Agriculture and farming"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 21,
+    "fields": {
+      "name": "Telecom and Communications"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 22,
+    "fields": {
+      "name": "Media and Publishing"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 23,
+    "fields": {
+      "name": "Energy and Resources"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 24,
+    "fields": {
+      "name": "Professional, Business and Other Services"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 25,
+    "fields": {
+      "name": "Travel, Tourism and Hospitality"
+    }
+  }
+]

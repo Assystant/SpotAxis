@@ -1,0 +1,56 @@
+{% extends "base/outer_base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% comment %} Home {% endcomment %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+{% block css %}
+	<style>
+            .s-header-v2__navbar.no-border {
+                border:0!important;
+            }
+        </style>
+{% endblock %}
+{% block content %}
+
+        <!--========== PROMO BLOCK ==========-->
+        <div class="g-bg-position--center js__parallax-window" style="background: url({{ STATIC_URL }}newtheme/img/1920x1080/04.jpg) 50% 0 no-repeat fixed;">
+            <div class="g-container--md g-text-center--xs g-padding-y-150--xs">
+                <!--<p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--white-opacity g-letter-spacing--2 g-margin-b-25--xs">30 years experience</p>-->
+                <h1 class="g-font-size-40--xs g-font-size-50--sm g-font-size-60--md g-color--white g-letter-spacing--1">Privacy Policy</h1>
+            </div>
+        </div>
+        <!--========== END PROMO BLOCK ==========-->
+
+        <!--========== PAGE CONTENT ==========-->
+        <div id="js__scroll-to-section" class="g-container--md g-padding-y-80--xs g-padding-y-125--sm">
+        <p>At <a href="https://spotaxis.com" target="_blank">SpotAxis.com</a>, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by <a href="https://spotaxis.com" target="_blank">SpotAxis.com</a> and how we use it.</p>
+        <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through email at <a href="mailto:happyuser@spotaxis.com?subject=Privacy Policy Query" target="_blank">happyuser@spotaxis.com</a>.</p>
+        <h3>Log Files</h3>
+        <p>SpotAxis.com follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services’ analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users’ movement on the website, and gathering demographic information.</p>
+        <h3>Cookies and Web Beacons</h3>
+        <p>Like any other website, <a href="https://spotaxis.com" target="_blank">SpotAxis.com</a> uses ‘cookies’. These cookies are used to store information including visitors’ preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users’ experience by customizing our web page content based on visitors’ browser type and/or other information.</p>
+        <h3>DoubleClick DART Cookie</h3>
+        <p>Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to www.website.com and other sites on the internet. However, visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy.</p>
+        <h3>Our Advertising and Analytics Partners</h3>
+        <p>Some of advertisers and analyzers on our site may use cookies and web beacons. Our advertising and/or analyzing partners include:</p>
+        <ul><li>Google</li></ul>
+        <p>Each of our advertising and/or analyzing partners has their own Privacy Policy for their website. For easier access, an updated and hyperlinked resource is maintained here: <a href="https://www.google.com/policies/privacy/" target="_blank">Google Analytics Privacy Policy</a></p>
+        <h3>Privacy Policies</h3>
+        <p>You may consult this list to find the Privacy Policy for each of the advertising partners of <a href="https://spotaxis.com" target="_blank">SpotAxis.com</a>.</p>
+        <p>Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on <a href="https://spotaxis.com" target="_blank">SpotAxis.com</a>, which are sent directly to users’ browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.</p>
+        <p>Note that <a href="https://spotaxis.com" target="_blank">SpotAxis.com</a> has no access to or control over these cookies that are used by third-party advertisers.</p>
+        <h3>Third Part Privacy Policies</h3>
+        <p>SpotAxis.com’s Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options. </p>
+        <p>You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers’ respective websites. What Are Cookies?</p>
+        <h3>Online Privacy Policy Only</h3>
+        <p>This privacy policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in <a href="https://spotaxis.com" target="_blank">SpotAxis.com</a>. This policy is not applicable to any information collected offline or via channels other than this website.</p>
+        <h3>Consent</h3>
+        <p>By using our website, you hereby consent to our Privacy Policy and agree to its <a target="_blank" href="{% url 'TRM_terms_and_conditions' %}">Terms and Conditions</a>.</p>
+        </div>
+        <!--========== END PAGE CONTENT ==========-->
+
+{% endblock %}

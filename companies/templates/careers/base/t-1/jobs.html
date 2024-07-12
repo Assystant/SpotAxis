@@ -1,0 +1,77 @@
+
+<div class="listing-container row flex-row root">
+{% load TRM_tags %}
+{%for vacancy in vacancies%}
+	<div class="listing column xs-12 md-10 lg-8 align-middle border-bottom">
+		<div class="flex-row align-top	">
+			<div class='spaceless column xs-12 md-6 align-top no-padding'>
+				<h5 class=" no-margin">{{vacancy.function|title}}</h5>
+				<h3 class="no-margin -text-dark ">{{vacancy.employment|title}}</h3>
+				<h6 class="no-margin -text-dove ">{{vacancy.city}}{%if vacancy.city%},{%endif%} {{vacancy.state}}{%if vacancy.state%},{%endif%} {{vacancy.nationality}}</h6>
+			</div>
+			<div class='spaceless column xs-12 md-6 align-right no-padding text-right'>
+				<a class="button hollow social scale-2 -bg-twitter fa fa-twitter" href="https://twitter.com/home?status={{vacancy.get_absolute_url|lower}}" target="_blank"></a>
+				<a class="button hollow social scale-2 -bg-linkedin fa fa-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url={{vacancy.get_absolute_url|lower}}" target="_blank"></a>
+				<a class="button hollow social scale-2 -bg-facebook fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u={{vacancy.get_absolute_url|lower}}&redirect_uri={{vacancy.get_absolute_url|lower}}" target="_blank"></a>
+				<a class="button hollow social scale-2 -bg-googleplus fa fa-google-plus" href="https://plus.google.com/share?url={{vacancy.get_absolute_url|lower}}" target="_blank"></a>
+				<a class="button bordered -bg-dove scale-2" href="{% url 'vacancies_get_vacancy_details' vacancy.id %}">APPLY FOR POSITION</a>
+			</div>
+		</div>
+		<div class="listing-description -text-dove ">
+			{{vacancy.description|safe}}
+		</div>
+		<h5 class="column readMore no-padding"><a href="{% url 'vacancies_get_vacancy_details' vacancy.id %}">Read More</a> </h5>
+	</div>
+{% empty %}
+	{% if isPreview or editing %}
+		<div class="listing column xs-12 md-10 lg-8 align-middle border-bottom">
+			<div class="flex-row align-top	">
+				<div class='spaceless column xs-12 md-6 align-top no-padding'>
+					<h5 class="no-margin ">ENGINEERING</h5>
+					<h3 class="no-margin -text-dark ">Senior Platform Engineer</h3>
+					<h6 class="-text-dove no-margin ">Denver, Colorado</h6>
+				</div>
+				<div class='spaceless column xs-12 md-6 align-right no-padding text-right'>
+					<a class="button hollow social scale-2 -bg-twitter fa fa-twitter"></a>
+					<a class="button hollow social scale-2 -bg-linkedin fa fa-linkedin"></a>
+					<a class="button hollow social scale-2 -bg-facebook fa fa-facebook"></a>
+					<a class="button hollow social scale-2 -bg-googleplus fa fa-google-plus"></a>
+					<a class="button bordered -bg-dove scale-2 " href="#">APPLY FOR POSITION</a>
+				</div>
+			</div>
+			<div class="listing-description no-padding -text-dove">
+				<p class="-text-dove ">
+				Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+			</p></div>
+			<h5 class="column readMore no-padding"><a href="#">Read More</a> </h5>
+		</div>
+		<div class="listing column xs-12 md-10 lg-8 align-middle border-bottom">
+			<div class="flex-row align-top	">
+				<div class='spaceless column xs-12 md-6 align-top no-padding'>
+					<h5 class="no-margin ">ENGINEERING</h5>
+					<h3 class="no-margin -text-dark ">Senior Platform Engineer</h3>
+					<h6 class="-text-dove no-margin ">Denver, Colorado</h6>
+				</div>
+				<div class='spaceless column xs-12 md-6 align-right no-padding text-right'>
+					<a class="button hollow social scale-2 -bg-twitter fa fa-twitter"></a>
+					<a class="button hollow social scale-2 -bg-linkedin fa fa-linkedin"></a>
+					<a class="button hollow social scale-2 -bg-facebook fa fa-facebook"></a>
+					<a class="button hollow social scale-2 -bg-googleplus fa fa-google-plus"></a>
+					<a class="button bordered -bg-dove scale-2 " href="#">APPLY FOR POSITION</a>
+				</div>
+			</div>
+			<div class="listing-description no-padding -text-dove">
+				<p class="-text-dove ">
+				Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+			</p></div>
+			<h5 class="column readMore no-padding"><a href="#">Read More</a> </h5>
+		</div>
+	{% else %}
+		<div class="listing column xs-12 md-10 lg-8 align-middle align-center border-bottom">
+			No current job openings. Check back later.
+		</div>
+	{% endif %}
+{%endfor%}
+<hr />
+
+</div>

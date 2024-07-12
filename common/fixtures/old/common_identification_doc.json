@@ -1,0 +1,42 @@
+[
+  {
+    "model": "common.identification_doc",
+    "pk": 1,
+    "fields": {
+      "name": "Credencial de Elector",
+      "codename": "ife"
+    }
+  },
+  {
+    "model": "common.identification_doc",
+    "pk": 2,
+    "fields": {
+      "name": "CURP",
+      "codename": "curp"
+    }
+  },
+  {
+    "model": "common.identification_doc",
+    "pk": 3,
+    "fields": {
+      "name": "Licencia de Conducir",
+      "codename": "driver"
+    }
+  },
+  {
+    "model": "common.identification_doc",
+    "pk": 4,
+    "fields": {
+      "name": "Pasaporte",
+      "codename": "passport"
+    }
+  },
+  {
+    "model": "common.identification_doc",
+    "pk": 5,
+    "fields": {
+      "name": "R.F.C.",
+      "codename": "rfc"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}SpotAxis | SignUp Activation{% endblock %}
+
+
+{% block content %}
+
+    <div class="row mb60 page-content">
+        <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 white-container-msgs">
+            <h2 class="text-center text-light">{% trans 'Account Activation' %}</h3>
+            <div class="panel panel-default">
+                <div class="panel-body panel-shadow pt40 pb40">
+                    {% if account_verification_active %}
+                        <p>
+                            {% blocktrans %}
+                                We have sent an email to <strong>{{ email }}</strong> including a link to complete your signup. If you did not receive any email try checking your Spam folder.
+                                The link is valid for <strong>{{ expiration_days }} hours</strong>.
+                            {% endblocktrans %}
+                        </p>
+                    {% else %}
+                        <p>{% trans 'The link is invalid or has already been used previously.' %}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

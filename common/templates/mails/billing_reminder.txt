@@ -1,0 +1,11 @@
+{% extends 'mails/base_email.txt' %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Billing Reminder{% endblock %}
+
+{% block content %}
+{{message}}
+
+{% endblock %}
+
+{% block button-text %}{% trans 'SpotAxis' %}{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'mails/base_email.html' %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Account Activation{% endblock %}
+
+{% block content %}
+{% trans 'Click on the link below to complete your signup and activate your account' %}
+{% endblock %}
+
+{% block button-text %}{% trans 'Activate my account' %}{% endblock %}

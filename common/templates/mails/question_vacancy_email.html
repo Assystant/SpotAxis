@@ -1,0 +1,16 @@
+{% extends 'mails/base_email.html' %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% block title %}{{ vacancy.employment }}{% endblock %}
+
+{% block content %}
+    <b><i>{{ candidate.user.get_full_name }}</i></b> asked...
+    <br/>
+    <br/>
+    <p>
+        <span style="color: #0066cc"><strong>&raquo;&raquo;</strong></span> {{ question }}
+    </p>
+{% endblock %}
+
+{% block button-text %}{% trans 'See Job/Reply' %}{% endblock %}

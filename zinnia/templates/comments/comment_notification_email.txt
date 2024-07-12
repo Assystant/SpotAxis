@@ -1,0 +1,14 @@
+{% load i18n %}{% trans "Author" %}: {{ comment.name }} {{ comment.url }}
+{% trans "Email" %}: {{ comment.email }}
+{% trans "IP" %}: {{ comment.ip_address }}
+
+{% trans "Comment" %}:
+{{ comment.comment }}
+
+{% trans "View this comment" %}: {{ protocol }}://{{ site }}{{ content_object.get_absolute_url }}#comment-{{ comment.pk }}-by-{{ comment.user_name|slugify }}
+
+{% trans "Flag this comment" %}: {{ protocol }}://{{ site }}{% url 'comments-flag' comment.pk %}
+
+{% trans "Delete this comment" %}: {{ protocol }}://{{ site }}{% url 'comments-delete' comment.pk %}
+
+{% trans "Approve this comment" %}: {{ protocol }}://{{ site }}{% url 'comments-approve' comment.pk %}

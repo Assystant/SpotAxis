@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<nav class="navbar {%if isIndex%} navbar-trans{%else%}navbar-default{%endif%} no-margin">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><img class="navbar-img img-responsive" src="{{STATIC_URL}}img/logo/{%if not isIndex%}logo.png{%else%}logo-white.png{%endif%}" alt="SpotAxis Logo"></a>
+    </div>
+  </div><!-- /.container-fluid -->
+</nav>

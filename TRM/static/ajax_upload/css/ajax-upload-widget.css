@@ -1,0 +1,12 @@
+.ajax-upload-preview-area {
+    display: inline-block;
+    margin: 0 10px;
+}
+/*.ajax-upload-preview-area img {*/
+    /*display: block;*/
+    /*max-width: 130px;*/
+    /*max-height: 130px;*/
+    /*float: right;*/
+    /*box-shadow: white 0px 0px 6px 0px, black 1px 1px 3px 0px;*/
+/*}*/
+

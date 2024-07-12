@@ -1,0 +1,30 @@
+<div class="takeme">
+<!-- No footer for this template -->
+
+<script type="text/javascript">
+		$(document).on('click', '.listing', function(){
+			$(this).find('i').toggleClass('fa-caret-down fa-caret-up');
+			$(this).next('.description').fadeToggle(500);
+		});
+
+		$(document).on('click','.location_selector>ul>li', function(){
+			$('.description').hide();
+			$('.location_selector>ul>li').find('a').removeClass('active');
+			$(this).find('a').addClass('active');
+
+			$('.listing-container').removeClass('active');
+			var handler= "#" + $(this).attr('data-location');
+			$(handler).addClass('active');
+		});
+		$(document).ready(function(){
+			if(!$('.jumbotron .content h2:not(.empty)').text().trim() && !$('.jumbotron .content h5:not(.empty)').text().trim()){
+				$('.jumbotron .content').hide();
+				setTimeout(function(){
+					if ($('.jumbotron .content h2').hasClass('empty')) {
+						$('.jumbotron .content').show();
+					}
+				},1000);
+			}
+		})
+	</script>
+</div>

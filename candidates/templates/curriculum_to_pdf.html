@@ -1,0 +1,375 @@
+{% load TRM_tags %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <style type="text/css">
+
+
+            @page {
+                size: letter;
+        {#        @frame header_frame {           /* Static Frame */#}
+        {#            margin-left: 1.5cm;#}
+        {#    		margin-right: 1.5cm;#}
+        {#            top: 1cm;#}
+        {#            height: 2cm;#}
+        {#            -pdf-frame-border: 1;    /* for debugging the layout */#}
+        {#        }#}
+                @frame content_frame {          /* Content Frame */
+                    margin-left: 1.5cm;
+                    margin-right: 1.5cm;
+                    top: 1cm;
+                    height: 24.5cm;
+        {#            -pdf-frame-border: 1;    /* for debugging the layout */#}
+                }
+                @frame footer_frame {           /* Another static Frame */
+                    -pdf-frame-content: footer_content;
+        {#            left: 1.5cm;#}
+        {#            width: 512pt;#}
+        {#            width: 18.5cm;#}
+                    margin-left: 1.5cm;
+                    margin-right: 2.1cm;
+                    top: 26cm;
+                    bottom: 1.5cm;
+                    height: 3cm;
+        {#            -pdf-frame-border: 1;    /* for debugging the layout */#}
+                }
+            }
+
+        </style>
+
+    <style>
+
+        * {
+            border-radius: 0 !important;
+        }
+
+        body {
+            color: #4b5b64;
+            font-size: 13px;
+            font-family: 'Lato', Helvetica, Arial, sans-serif;
+            line-height: 18px;
+        }
+
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+            color: inherit;
+            font-weight: 700;
+            font-family: 'Roboto Condensed', sans-serif;
+            line-height: 1.1;
+        }
+
+        h4, .h4 {
+            font-size: 20px;
+        }
+
+        h5, .h5 {
+            font-size: 16px;
+        }
+
+        h6, .h6 {
+            font-size: 14px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .w25 {
+            width: 25%;
+            padding-bottom: 2px;
+        }
+
+        .subtitle {
+            padding-bottom: 5px;
+            border-bottom: 2px solid #2c85b6;
+            padding-top: 15px;
+        }
+
+        .cv-subtitle {
+            margin: 20px 0 10px;
+            color: #86BB3F;
+        }
+
+        p {
+            margin: 0 0 4px;
+        }
+
+        .blue {
+            color: #2a7eac;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div id="content_frame">
+
+       <table>
+            <tr>
+
+                <td style="width: 30%">
+                    <img src="{{ MEDIA_URL }}{{ candidate.user.photo }}" alt="{{ candidate.first_name }} {{ candidate.last_name }} pic" style="height: 180px; max-height: 180px; width: auto; max-width: 180px;" data-name="{{candidate.first_name}} {{candidate.last_name}}">
+                </td>
+
+                <td style="vertical-align: top; text-align: right; width: 70%">
+
+                    <h4 style="margin: 0;">{{ candidate.first_name }} {{ candidate.last_name }}</h4>
+
+                    {% if candidate.birthday or candidate.gender %}
+                        <h5 style="margin: 3px 0 3px;">
+                                {% if candidate.gender %}
+                                    {% if candidate.gender.codename == 'male' %}
+                                        Male
+                                    {% elif candidate.gender.codename == 'female' %}
+                                        Female
+                                    {% endif %}
+                                {% endif %}
+                                {% if candidate.birthday %} - {{ candidate.birthday|timesince|upto:',' }}{% endif %}
+                        </h5>
+                    {% endif %}
+
+                    {% if candidate.city %}<p>{{ candidate.city }}, {% endif %}{% if candidate.state %}{{ candidate.state }}, {% endif %}{{candidate.nationality}}</p>
+
+                    {% if candidate.maritalStatus %}<p>{{ candidate.maritalStatus }}</p>{% endif %}
+
+
+                    <p>Email: <span class="blue">{%if candidate.user%}{{ candidate.user.email }}{%else %} {{candidate.public_email}}{%endif%}</span></p>
+
+                    {% if candidate.phone or candidate.cellphone  %}
+                        <p>
+                            {% if candidate.phone %}
+                                Phone: <span class="blue">{{ candidate.phone }}</span> -
+                            {% endif %}
+                            {% if candidate.cellphone %}
+                                Mobile: <span class="blue">{{ candidate.cellphone }}</span>
+                            {% endif %}
+                        </p>
+                    {% endif %}
+
+                    <!--p >Availability to travel: {% if candidate.travel %}<span class="blue">Yes{% else %}No{% endif %}</span></p>
+
+                    <p>Availability to change residence: {% if candidate.residence %}<span class="blue">Yes{% else %}No{% endif %}</span></p-->
+
+                </td>
+            </tr>
+       </table>
+        {% if candidate.objective %}
+            <h5 class="subtitle">Professional Objective</h5>
+            {% if candidate.objective %}
+                <p>{{ candidate.objective|linebreaks }}</p>
+            {% else %}
+                <p><i>No registered professional goal</i></p>
+            {% endif %}
+        {% endif %}
+
+        {% if candidate.skills %}
+            <h5 class="subtitle">Skills</h5>
+            <p>{{candidate.skills}}</p>
+        {%endif %}
+
+        {% if expertises%}
+            <h5 class="subtitle">Experience</h5>
+        {%endif%}
+        {% for expertise in expertises %}
+            <h6 class="cv-subtitle">{{ expertise.employment }}</h6>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="bold w25">Company</td>
+                        <td class="w25">{{ expertise.company }}</td>
+
+                        <td class="bold w25">Duration</td>
+                        <td class="w25">
+                            {% if expertise.present %}
+                                {{ today|timeuntil:expertise.start_date }} (present)
+                            {% else %}
+                                {{ expertise.end_date|timeuntil:expertise.start_date }}
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="bold w25">Start Date</td>
+                        <td class="w25">{{expertise.start_date }}</td>
+
+                        <td class="bold w25">End Date</td>
+                        <td class="w25">
+                            {% if expertise.present %}
+                                Present Employee
+                            {% else %}
+                                {{ expertise.end_date}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold w25">Location</td>
+                        <td class="w75">{% if expertise.city %}{{expertise.city}}, {%endif%}{% if expertise.state %}{{expertise.state }}, {% endif %}{{expertise.country}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="margin-top: 1px; padding-bottom: 2px; border-bottom: 1px solid #cccbce;">
+                <tbody>
+                    <tr>
+                        <td style="width: 225px; font-weight: bold; vertical-align: top;">Completed Tasks</td>
+                        <td>{{ expertise.tasks }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+        
+        {% if academics %}
+            <h5 class="subtitle">Education</h5>
+        {% endif %}
+        {% for academic in academics %}
+
+            <h6 class="cv-subtitle">
+                {{ academic.course_name }} - {{academic.area}}
+            </h6>
+
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="bold w25">Institution</td>
+                        <td class="w25">{{ academic.school }}</td>
+
+                        <td class="bold w25">Level</td>
+                        <td class="w25">{{ academic.degree }}</td>
+
+                    </tr>
+
+                    <tr>
+                        <td class="bold w25">Status</td>
+                        <td class="w25">{{ academic.status }}</td>
+
+                        <td class="bold w25">Location</td>
+                        <td class="w25">
+                            {% if academic.city %}{{ academic.city }}, {% endif %}
+                            {% if academic.state %}{{ academic.state }}, {% endif %}
+                            {{ academic.country }}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="bold w25">Start Date</td>
+                        <td class="w25">{{ academic.start_date }}</td>
+
+                        {% if academic.status.codename != 'progress' %}
+                            <td class="bold w25">End Date</td>
+                            <td class="w25">{{ academic.end_date }}</td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="margin-top: 1px; padding-bottom: 2px; border-bottom: 1px solid #cccbce;">
+                <tr><td><td></tr>
+            </table>
+
+        {% endfor %}
+
+        {% if trainings %}
+            <h5 class="subtitle">Trainings</h5>
+        {% endif %}
+        {% for training in trainings %}
+            <table style="margin-top: 1px; padding-bottom: 2px; border-bottom: 1px solid #cccbce;">
+                <tbody>
+                    <tr>
+                        <td style="width: 225px; font-weight: bold; vertical-align: top;">{{ training.name }}</td>
+                        <td class="w75">{{ training.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+
+
+        {% if projects %}
+            <h5 class="subtitle">Projects</h5>
+        {% endif %}
+        {% for project in projects %}
+            <table style="margin-top: 1px; padding-bottom: 2px; border-bottom: 1px solid #cccbce;">
+                <tbody>
+                    <tr>
+                        <td style="width: 225px; font-weight: bold; vertical-align: top;">{{ project.name }}</td>
+                        <td class="w75">{{ project.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+
+
+        {% if certificates %}
+            <h5 class="subtitle">Certificates</h5>
+        {% endif %}
+        {% for certificate in certificates %}
+            <table style="margin-top: 1px; padding-bottom: 2px; border-bottom: 1px solid #cccbce;">
+                <tbody>
+                    <tr>
+                        <td style="width: 225px; font-weight: bold; vertical-align: top;">{{ certificate.name }}</td>
+                        <td class="w75">{{ certificate.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+
+        {% if languages %}
+            <h5 class="subtitle">Languages</h5>
+        {% endif %}
+        {% for language in languages %}
+            <table style="margin-top: 1px; padding-bottom: 2px; border-bottom: 1px solid #cccbce;">
+                <tbody>
+                    <tr>
+                        <td class="w25 bold" style="vertical-align:top;">{{ language.language }}</td>
+                        <td class="w25">{%if language.read%} - Read{%endif%}{% if language.write %} - Write{% endif %}{% if language.speak %} - Speak{% endif %}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+        {% if candidate.interests %}
+            <h5 class="subtitle">Interests</h5>
+            <p>{{ candidate.interests|safe|linebreaks }}</p>
+        {% endif %}
+        {% if candidate.hobbies %}
+            <h5 class="subtitle">Hobbies</h5>
+            <p>{{ candidate.hobbies|safe|linebreaks }}</p>
+        {% endif %}
+        {% if candidate.extra_curriculars %}
+            <h5 class="subtitle">Extra Curriculars</h5>
+            <p>{{ candidate.extra_curriculars|safe|linebreaks }}</p>
+        {% endif %}
+        {% if candidate.interests %}
+            <h5 class="subtitle">Interests</h5>
+            <p>{{ candidate.interests|safe|linebreaks }}</p>
+        {% endif %}
+        {% if candidate.others %}
+            <h5 class="subtitle">Others</h5>
+            <p>{{ candidate.others|safe|linebreaks }}</p>
+        {% endif %}
+
+    </div>
+
+
+    <!--div id="footer_content" class="hidden">
+        <table>
+            <tr>
+                <td>
+                    <img src="{{ MEDIA_URL }}{{ logo_pdf }}" alt="SpotAxis Logo">
+                </td>
+                <td style="text-align: right;">
+                    <h6 style="margin-bottom: 1px;">spotaxis.com</h6>
+                    <p style="font-size: 12px; line-height: 12px; margin-top: 0;">contact@spotaxis.com</p>
+                </td>
+            </tr>
+        </table>
+
+    </div-->
+
+
+
+</body>
+</html>

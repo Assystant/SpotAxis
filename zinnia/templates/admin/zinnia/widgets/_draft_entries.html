@@ -1,0 +1,36 @@
+{% load i18n %}
+{% for entry in entries %}
+<tr>
+  <th>
+    <a href="{% url 'admin:zinnia_entry_change' entry.pk %}"
+       title="{% trans "Edit the entry" %}">
+      {{ entry.title }}
+    </a>
+    {% trans "on" context "on date" %}
+    <time>{{ entry.publication_date|date:"DATE_FORMAT" }}</time>
+    {{ entry.html_content|truncatewords_html:20|safe }}
+  </th>
+  <td>
+    <a href="{{ entry.get_absolute_url }}" class="previewlink">
+      {% trans "Preview" %}
+    </a>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <th colspan="2">
+    {% trans "No draft resources." %}
+  </th>
+</tr>
+{% endfor %}
+
+{% if entries %}
+<tr>
+  <th colspan="2">
+    <a href="{% url 'admin:zinnia_entry_changelist' %}?status__exact=0"
+       title="{% trans "View all draft resources" %}" class="managelink">
+      {% trans "View all draft resources" %}
+    </a>
+  </th>
+</tr>
+{% endif %}

@@ -1,0 +1,240 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load humanize %}
+{% load TRM_tags %}
+
+{% block meta %}
+    <meta name="keyword" content="{{user.first_name}} {{user.last_name}}, Employer Profile"/>
+    <meta name="description" content="Profile page of en Employer"/>
+{% endblock %}
+{% block title %}SpotAxis | {{ user }} | Profile{% endblock %}
+{% block page-header %}{{ user }}{% endblock %}
+
+{% block content %}
+    
+    <!-- Update Image-->
+    <div class="modal fade" id="updateimage-modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">Update Image</h5>
+                </div>
+                <div class="modal-body text-justify">
+                    <form id="uploadimage-form" action="." method="post" enctype="multipart/form-data" class="mt10">
+                        {% csrf_token %}
+                        <input type="hidden" name="isimage" value="1">
+                        <img class="img-responsive user-photo img-circle" src="{{MEDIA_URL}}{{user.photo}}" alt="{{user.first_name}} {{user.last_name}} Pic" style="margin:20px auto 20px" data-name="{{user.get_full_name}}">
+                        {% if form_user_photo.photo.errors %}
+                            <ul class="list-unstyled error-list">
+                                {% for error in form_user_photo.photo.errors %}
+                                    <li>{{ error|escape }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {{ form_user_photo.photo }}
+                        <div class="mt20 text-right">
+                            <button id="submit_btn" type="submit" class="btn btn-info">
+                                Update Image
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div><!-- Update Image -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-push-2">
+                <section class="account-profile row text-center bg-white pt20 pb20 br-2 border-bottom border-light collapse fade in mt20">
+                    <a><img src="{{ MEDIA_URL }}{{ user.photo }}" alt="{{user.first_name}} {{user.last_name}} Pic" class="img-responsive img-circle center-block user-photo" data-name="{{user.get_full_name}}"><span class="fa fa-2x fa-camera pic-edit clickable mt30 text-info" data-toggle="modal" data-target="#updateimage-modal"></span></a>
+                    <h2><span id="account-name">{{ user }}</span></h2><p>
+                    <small class="mb20">
+                        {%if recruiter%}
+                            <small><a data-toggle="collapse" data-target=".account-profile" class="clickable"><i class="fa fa-pencil"></i> {% trans 'Update Profile' %}</a></small>
+                        {%endif%}</small></p>
+                    
+                    <span><i class="fa fa-phone"></i> <span id="account-phone">{{user.cellphone|default:'NA'}}</span></span><br>
+                    <span><i class="fa fa-envelope"></i> <a href="mailto:{{user.email}}">{{ user.email }}</a> - <small><a href="{% url 'common_email_change' %}">Change</a></small></span><br>
+                </section>
+    
+                <section class="form-section account-profile row collapse fade mt20">
+                    <h2 class="text-center text-light">Account Information</h2>
+                    <form id="recruiter-form" enctype="multipart/form-data" action="" method="post" role="form" class="mt10 mb50" >
+                        {% csrf_token %}
+                        <div class='container-fluid bg-white br-2 border-bottom border-light pt20 pb20'>
+                        <div class="row">
+                            <!-- Tradename -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_first_name">{% trans 'First Name' %}<span class="required">*</span></label>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-addon"><i class="fa fa-tag fa-lg"></i></div>
+                                        {{ form_user.first_name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Business Name -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_last_name">{% trans 'Surname' %}<span class="required">*</span></label>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-addon"><i class="fa fa-tags fa-lg"></i></div>
+                                        {{ form_user.last_name }}
+                                    </div>
+                                </div>
+                                </div>
+                            </div><!-- Tradename and Business Name -->
+
+                            <div class="row">
+                                <!-- Company Phone -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_cellphone">{% trans 'Phone' %}</label>
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-addon"><i class="fa fa-phone fa-lg"></i></div>
+                                            {{ form_user.cellphone }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Phone -->
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-sm btn-block btn-info"><i class="fa fa-check-circle fa-lg"></i> Save and Update</button>
+                                    <a class="btn btn-sm btn-block btn-default clickable" data-toggle="collapse" data-target=".account-profile"><i class="fa fa-chevron-circle-left"></i> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                {% if not user.recruiter.company.all %}
+                    <div class="col-xs-10 col-xs-push-1 mt20"><a class="btn btn-info btn-block" href="{% url 'companies_record_company' %}"><i class="fa fa-pencil"></i> Create a Company Profile</a></div>
+                    
+                {% endif %}
+            </div>
+        </div>
+    </div>
+<!-- End Content -->
+{%endblock%}
+{%block java_script_code%}
+<script>
+
+        function toreadabledate(d){
+            var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+            date = new Date(d);
+            month = monthNames[date.getMonth()]
+
+            return month + ' ' + date.getDate() + ', ' + date.getYear();
+        }
+        $('#recruiter-form').submit(function(e){
+            update_recruiter(this,e);
+            return false
+        });
+        function update_recruiter(_this,e){
+            // alert('a');
+            $this = $(_this);
+            // alert('submitting');
+            e.preventDefault();
+            var formdata = $this.serializeArray();
+            console.log(formdata);
+            // var url = $this.attr('action');
+            // console.log(url);
+            // var id = $this.attr('data-id');
+            // console.log(id)
+            // if(!id){
+            //     id=0;
+            // }
+            $this.find('.error-list').remove();
+            $this.find('.has-error').removeClass('has-error');
+            $.ajax({
+                url : "{% url 'companies_recruiter_profile'%}",
+                type:'post',
+                data:formdata,
+                complete: function(data){
+                    $this.find('.btn-info').html('<i class="fa fa-check-circle fa-lg"></i> Save and Update');
+                    $this.find('.btn-info').prop('disabled',false);
+                    $this.find('.btn-info').removeClass('disabled');
+                },
+                success: function(data){
+                    console.log(data);
+                    if (data.success == true){
+                        $view = $(".account-profile:not('.form-section')");
+                        $view.find('#account-name').html($this.find('#id_first_name').val() + ' ' + $this.find('#id_last_name').val());
+                        $view.find('#account-phone').html($this.find('#id_cellphone').val());
+                        $('.account-profile').collapse('toggle')
+                    }
+                    else {
+
+                        if ('first_name' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_first_name]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_first_name').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.first_name).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('last_name' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_last_name]');
+                            console.log(data.errors.last_name)
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_last_name').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.last_name).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('cellphone' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_cellphone]');
+                            console.log(data.errors.cellphone)
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_cellphone').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.cellphone).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                    }  
+                },
+                error: function(e){
+                    console.log(e);
+                }
+            })
+            return false;
+        }
+        $('#id_photo').change(function(){
+            readURL(this);
+        })
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('.user-photo').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $('#uploadimage-form').submit(function(){
+            console.log($('#id_photo').val())
+        });
+    {% if form_user_photo.photo.errors %}
+        $(document).ready(function(){
+            $('#updateimage-modal').modal('show');
+        });
+    {% endif %}
+</script>
+{% endblock %}

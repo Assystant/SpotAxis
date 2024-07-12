@@ -1,0 +1,153 @@
+
+[class*='column'] {
+    padding: 16px;
+}
+.field{
+    z-index:0;
+}
+.palette>button {
+    color: black;
+    outline: none;
+    border: none;
+    background-color: white;
+    opacity: 1;
+    padding: 12px;
+    transition: all 0.25s ease-in-out;
+}
+.palette>button:hover {
+    background: #5bc0de;
+}
+.palette {
+    border: 1px solid #ccc;
+    display: inline-flex;
+    flex-direction: column;
+    flex: 1;
+}
+.palette-container {
+    padding: 5px;
+    position: fixed;
+    top: 15%;
+    left: 2%;
+    /* display: none; */
+    
+    transition: all 2s linear;
+    z-index: 2;
+}
+.element-drag-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 200;
+    background: pink;
+    padding: 10px;
+}
+.palette-list,
+.palette-align,
+.palette-fontsize,
+.palette-fontfamily {
+    position: absolute;
+    visibility: hidden;
+    left: 50px;
+}
+.palette-fontfamily {
+    top: 180px;
+}
+.palette-list {
+    bottom: 30px;
+}
+.palette-align {
+    bottom: 40px;
+}
+.palette-fontsize {
+    bottom: 50px;
+}
+#picker {
+    display: none;
+}
+*>span {
+    color: inherit;
+}
+.image-palette {
+    color: white;
+    font-size: 1.2rem;
+    position: absolute;
+    z-index: 30 !important;
+    position: absolute;
+}
+.image-palette>.fa {
+    opacity: 1;
+    cursor: pointer;
+    padding: 10px;
+}
+
+
+.cameraIcon{
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+}
+
+.fixed-nav {
+    min-height:50px;
+    max-height:50px;
+    padding:0 2rem;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    margin:0;
+}
+
+.no-margin {
+    margin:0 !important;
+}
+
+#savepage {
+    min-width:100px;
+    transition: background 0.3s linear;
+    height:20px;
+}
+#savepage.saved {
+    background:white;
+    color: #7bbc53;
+    font-size:90%;
+}
+#savepage.saved .fa {
+    color: #7bbc53;
+    margin-right: 5px;
+    margin-top:2px;
+
+}
+
+
+.field {
+    width:100%;
+}
+.removeRow {
+    margin-left:5px;
+    padding-top:25px;
+}
+
+
+.trigger_link_manager {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    width:10px;
+    height:10px;
+    padding:5px;
+    font-size:83%;
+    cursor: pointer;
+}
+.btn-round {
+    border-radius:50%;
+    padding:5px;
+    width:30px;
+    height: 30px;
+}
+.editable.empty:after{
+    content:'Lorem Ipsum';
+    cursor:text;
+    opacity:0.5;
+    display:inline-block;
+}

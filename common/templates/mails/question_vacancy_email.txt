@@ -1,0 +1,12 @@
+{% extends 'mails/base_email.txt' %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% block title %}{{ vacancy.employment }}{% endblock %}
+
+{% block content %}
+    {{ candidate.user.get_full_name }} asked...
+{{ question }}
+{% endblock %}
+
+{% block button-text %}{% trans 'See Job/Reply' %}{% endblock %}

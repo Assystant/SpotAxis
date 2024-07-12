@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load mptt_tags %}
+<ul class="{% if not categories %}no-{% endif %}categories-tree category-root">
+  {% recursetree categories %}
+  <li{% if node.slug == context_category.slug %} class="current">{% else %}>{% endif %}
+    <a href="{{ node.get_absolute_url }}"
+       title="{% blocktrans with category=node %}Show all resources in {{ category }}{% endblocktrans %}">{{ node }}</a>
+    {% blocktrans count entry_count=node.count_entries %}{{ entry_count }} resource{% plural %}{{ entry_count }} resources{% endblocktrans %}
+    {% if not node.is_leaf_node %}
+    <ul class="category-children category-{{ node.slug }}">
+      {{ children }}
+    </ul>
+    {% endif %}
+  </li>
+  {% endrecursetree %}
+  {% if not categories %}
+  <li>
+    {% trans "No categories yet." %}
+  </li>
+  {% endif %}
+</ul>

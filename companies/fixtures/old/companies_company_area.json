@@ -1,0 +1,818 @@
+[
+  {
+    "model": "companies.company_area",
+    "pk": 1,
+    "fields": {
+      "name": "Alimentaci\u00f3n General",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 2,
+    "fields": {
+      "name": "Bares",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 3,
+    "fields": {
+      "name": "Bebidas",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 4,
+    "fields": {
+      "name": "Congelados",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 5,
+    "fields": {
+      "name": "Conservas",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 6,
+    "fields": {
+      "name": "Otros Establecimientos",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 7,
+    "fields": {
+      "name": "Perecederos",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 8,
+    "fields": {
+      "name": "Restaurantes",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 9,
+    "fields": {
+      "name": "Servicios de Banquetes",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 10,
+    "fields": {
+      "name": "Varios",
+      "company_industry": 1
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 11,
+    "fields": {
+      "name": "Constructoras",
+      "company_industry": 2
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 12,
+    "fields": {
+      "name": "Inmobiliarias",
+      "company_industry": 2
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 13,
+    "fields": {
+      "name": "Materiales de Construcci\u00f3n",
+      "company_industry": 2
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 14,
+    "fields": {
+      "name": "Profesionales de la Construcci\u00f3n",
+      "company_industry": 2
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 15,
+    "fields": {
+      "name": "Varios",
+      "company_industry": 2
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 16,
+    "fields": {
+      "name": "Agricultura",
+      "company_industry": 3
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 17,
+    "fields": {
+      "name": "Aprovechamiento Forestal",
+      "company_industry": 3
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 18,
+    "fields": {
+      "name": "Caza",
+      "company_industry": 3
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 19,
+    "fields": {
+      "name": "Ganader\u00eda",
+      "company_industry": 3
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 20,
+    "fields": {
+      "name": "Pesca",
+      "company_industry": 3
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 21,
+    "fields": {
+      "name": "Fundaciones",
+      "company_industry": 4
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 22,
+    "fields": {
+      "name": "Organismos del Gobierno",
+      "company_industry": 4
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 23,
+    "fields": {
+      "name": "Organismos Internacionales",
+      "company_industry": 4
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 24,
+    "fields": {
+      "name": "Organismos Relacionados con Gobierno",
+      "company_industry": 4
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 25,
+    "fields": {
+      "name": "Organizaciones No Gubernamentales",
+      "company_industry": 4
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 26,
+    "fields": {
+      "name": "Otros Organismos",
+      "company_industry": 4
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 27,
+    "fields": {
+      "name": "Aeroespacial",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 28,
+    "fields": {
+      "name": "Automotriz",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 29,
+    "fields": {
+      "name": "Carb\u00f3n",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 30,
+    "fields": {
+      "name": "Electricidad",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 31,
+    "fields": {
+      "name": "Industria Qu\u00edmica",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 32,
+    "fields": {
+      "name": "Madera",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 33,
+    "fields": {
+      "name": "Manufactura",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 34,
+    "fields": {
+      "name": "Mec\u00e1nica",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 35,
+    "fields": {
+      "name": "Metalmec\u00e1nico",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 36,
+    "fields": {
+      "name": "Metalurgia y Miner\u00eda",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 37,
+    "fields": {
+      "name": "Otras Relacionadas",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 38,
+    "fields": {
+      "name": "Petr\u00f3leo y Energ\u00eda",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 39,
+    "fields": {
+      "name": "Pl\u00e1sticos y Derivados",
+      "company_industry": 5
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 40,
+    "fields": {
+      "name": "Otros Medios de Comunicaci\u00f3n",
+      "company_industry": 6
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 41,
+    "fields": {
+      "name": "Portales de Internet",
+      "company_industry": 6
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 42,
+    "fields": {
+      "name": "Prensa",
+      "company_industry": 6
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 43,
+    "fields": {
+      "name": "Publicidad Exterior",
+      "company_industry": 6
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 44,
+    "fields": {
+      "name": "Radio",
+      "company_industry": 6
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 45,
+    "fields": {
+      "name": "Revistas",
+      "company_industry": 6
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 46,
+    "fields": {
+      "name": "TV",
+      "company_industry": 6
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 47,
+    "fields": {
+      "name": "Decoraci\u00f3n",
+      "company_industry": 7
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 48,
+    "fields": {
+      "name": "Material de Oficina",
+      "company_industry": 7
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 49,
+    "fields": {
+      "name": "Mobiliario",
+      "company_industry": 7
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 50,
+    "fields": {
+      "name": "Papeler\u00eda",
+      "company_industry": 7
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 51,
+    "fields": {
+      "name": "Pl\u00e1sticos y Derivados",
+      "company_industry": 7
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 52,
+    "fields": {
+      "name": "Varios",
+      "company_industry": 7
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 53,
+    "fields": {
+      "name": "Agencias de Publicidad",
+      "company_industry": 8
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 54,
+    "fields": {
+      "name": "Art\u00edculos de Promoci\u00f3n",
+      "company_industry": 8
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 55,
+    "fields": {
+      "name": "Dise\u00f1o Gr\u00e1fico",
+      "company_industry": 8
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 56,
+    "fields": {
+      "name": "Fotograf\u00eda",
+      "company_industry": 8
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 57,
+    "fields": {
+      "name": "Imprentas",
+      "company_industry": 8
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 58,
+    "fields": {
+      "name": "Mercadotecnia y Promoci\u00f3n",
+      "company_industry": 8
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 59,
+    "fields": {
+      "name": "Otros Servicios",
+      "company_industry": 8
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 60,
+    "fields": {
+      "name": "Productoras",
+      "company_industry": 8
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 61,
+    "fields": {
+      "name": "Centros de Est\u00e9tica",
+      "company_industry": 9
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 62,
+    "fields": {
+      "name": "Farmac\u00e9utica y Biotecnolog\u00eda",
+      "company_industry": 9
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 63,
+    "fields": {
+      "name": "Medicina y Salud",
+      "company_industry": 9
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 64,
+    "fields": {
+      "name": "Otros Productos",
+      "company_industry": 9
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 65,
+    "fields": {
+      "name": "Otros Servicios",
+      "company_industry": 9
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 66,
+    "fields": {
+      "name": "Perfumer\u00eda y Cosm\u00e9tica",
+      "company_industry": 9
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 67,
+    "fields": {
+      "name": "Comercio Exterior",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 68,
+    "fields": {
+      "name": "Formaci\u00f3n",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 69,
+    "fields": {
+      "name": "Gestor\u00eda y Consultor\u00eda",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 70,
+    "fields": {
+      "name": "Otros Servicios",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 71,
+    "fields": {
+      "name": "Seguros",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 72,
+    "fields": {
+      "name": "Servicios de Outsourcing, Head Hunter y Consultor\u00eda en R.H.",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 73,
+    "fields": {
+      "name": "Servicios de Salud y Asistencia Social",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 74,
+    "fields": {
+      "name": "Servicios Educativos",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 75,
+    "fields": {
+      "name": "Servicios Financieros",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 76,
+    "fields": {
+      "name": "Telemarketing",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 77,
+    "fields": {
+      "name": "Traducci\u00f3n",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 78,
+    "fields": {
+      "name": "Transportes",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 79,
+    "fields": {
+      "name": "Ventas",
+      "company_industry": 10
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 80,
+    "fields": {
+      "name": "Electr\u00f3nica y Electrodom\u00e9sticos",
+      "company_industry": 11
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 81,
+    "fields": {
+      "name": "Ordenadores y Perif\u00e9ricos",
+      "company_industry": 11
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 82,
+    "fields": {
+      "name": "Otros Relacionados",
+      "company_industry": 11
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 83,
+    "fields": {
+      "name": "Servicios de Internet",
+      "company_industry": 11
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 84,
+    "fields": {
+      "name": "Software",
+      "company_industry": 11
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 85,
+    "fields": {
+      "name": "Tecnolog\u00eda",
+      "company_industry": 11
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 86,
+    "fields": {
+      "name": "Telecomunicaciones",
+      "company_industry": 11
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 87,
+    "fields": {
+      "name": "Telefon\u00eda",
+      "company_industry": 11
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 88,
+    "fields": {
+      "name": "Calzado y Complementos",
+      "company_industry": 12
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 89,
+    "fields": {
+      "name": "Confecci\u00f3n",
+      "company_industry": 12
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 90,
+    "fields": {
+      "name": "Joyer\u00eda",
+      "company_industry": 12
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 91,
+    "fields": {
+      "name": "Otros Productos",
+      "company_industry": 12
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 92,
+    "fields": {
+      "name": "Prendas de Vestir",
+      "company_industry": 12
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 93,
+    "fields": {
+      "name": "Textil Hogar",
+      "company_industry": 12
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 94,
+    "fields": {
+      "name": "Agencias de Viajes",
+      "company_industry": 13
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 95,
+    "fields": {
+      "name": "Alojamiento",
+      "company_industry": 13
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 96,
+    "fields": {
+      "name": "Arte",
+      "company_industry": 13
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 97,
+    "fields": {
+      "name": "Clubes Deportivos",
+      "company_industry": 13
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 98,
+    "fields": {
+      "name": "Espect\u00e1culos",
+      "company_industry": 13
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 99,
+    "fields": {
+      "name": "Material Deportivo",
+      "company_industry": 13
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 100,
+    "fields": {
+      "name": "M\u00fasica, Video y Jugueter\u00eda",
+      "company_industry": 13
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 101,
+    "fields": {
+      "name": "Otras Actividades",
+      "company_industry": 13
+    }
+  },
+  {
+    "model": "companies.company_area",
+    "pk": 102,
+    "fields": {
+      "name": "Turismo",
+      "company_industry": 13
+    }
+  }
+]

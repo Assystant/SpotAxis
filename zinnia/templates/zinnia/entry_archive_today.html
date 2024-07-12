@@ -1,0 +1,29 @@
+{% extends "zinnia/entry_list.html" %}
+{% load i18n %}
+
+{% block meta-description %}{% trans "Today archives" %} {{ day|date:"DATE_FORMAT" }}{% endblock meta-description %}
+
+{% block title %}{% trans "Today archives" %} {{ day|date:"DATE_FORMAT" }}{% endblock title %}
+
+{% block body-class %}{{ block.super }} archive date today year-{{ day|date:"Y" }} month-{{ day|date:"m" }} week-{{ day|date:"W" }} day-{{ day|date:"d" }}{% endblock body-class %}
+
+{% block content-title %}
+<h1 class="text-light mb20">{% trans "Today archives" %}</h1>
+{% endblock content-title %}
+
+{% block content-related %}<hr class="mr20">
+<div class="conainer-fluid">
+  <div class="row no-margin">
+    {% if previous_day %}
+      <div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+        <div class=" bordered mb20 pb10 pl10 pr10 pt10">
+          <h2 class="text-muted border-bottom border-light pb5 mb10 mt10">{% trans "Previous day" %}</h2>
+          <p>
+            <a href="{% url 'zinnia:entry_archive_day' previous_day|date:"Y" previous_day|date:"m" previous_day|date:"d" %}" rel="archives">{{ previous_day|date:"DATE_FORMAT" }}</a>
+          </p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock content-related %}

@@ -1,0 +1,26 @@
+[
+   {
+      "model": "common.profile",
+      "pk": 1,
+      "fields": {
+         "name": "Recruiter",
+         "codename": "recruiter"
+      }
+   },
+   {
+      "model": "common.profile",
+      "pk": 2,
+      "fields": {
+         "name": "Candidate",
+         "codename": "candidate"
+      }
+   },
+   {
+      "model": "common.profile",
+      "pk": 3,
+      "fields": {
+         "name": "Admin",
+         "codename": "Admin"
+      }
+   }
+]

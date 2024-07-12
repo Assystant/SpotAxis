@@ -1,0 +1,14 @@
+<nav class="navbar navbar-short navbar-default" id="navbar-short">
+    <div class="container-fluid text-center" id="navbar_short">
+        <ul class="nav navbar-nav pull-left">
+            <li class="">
+                <a class="" href="{% url 'vacancies_get_vacancy_details' vacancy.id %}"><i class="fa fa-arrow-left fa-sm"></i> Do not apply</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav nav nav-center no-padding nav-spaced-center">
+        	<li>
+        		<h4 class="inline-block mt5 mb5">{{vacancy|title}}</h4>
+        	</li>
+        </ul>
+    </div>
+</nav>

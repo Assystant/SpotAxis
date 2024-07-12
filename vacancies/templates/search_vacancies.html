@@ -1,0 +1,397 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block title %}{% trans 'Find jobs' %}{% endblock %}
+{% comment %} Index and advanced features of jobsearch {% endcomment %}
+{% block page-header %}{% trans 'Find jobs' %}{% endblock %}
+
+{% block header_search %}
+
+        <div class="header-search-bar">
+            <div class="container">
+                <form action="{% url 'vacancies_search_vacancies' %}" method="post" class="form-horizontal" role="form">
+                    {% csrf_token %}
+
+                    <div class="basic-form clearfix">
+                        <a href="#" class="toggle"><span></span></a>
+                        <div class="hsb-input-1">
+                            {{ form.state }}
+                        </div>
+
+                        <div class="hsb-text-1">{% trans 'Industry' %}</div>
+                        <div class="hsb-input-1">
+                            {{ form.industry }}
+                        </div>
+                        <div class="hsb-text-2">{% trans 'When' %}</div>
+                        <div class="hsb-input-1">
+                            {{ form.vacancyPubDateSearch }}
+                        </div>
+
+                        <div class="hsb-submit">
+                            <button type="submit" class="btn btn-block btn-default">
+                                <i class="fa fa-search"></i> {% trans 'Search' %}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="advanced-form">
+                        <div class="container">
+                            <div class="row">
+                                <label class="col-md-1">{% trans 'Area' %}</label>
+                                <div class="col-md-5">
+                                    {{ form.area }}
+                                </div>
+                                <label class="col-md-1">{% trans 'Level' %}</label>
+                                <div class="col-md-5">
+                                    {{ form.degree }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-1">{% trans 'Gender' %}</label>
+                                <div class="col-md-5">
+                                    {{ form.gender }}
+                                </div>
+                                <label class="col-md-1">{% trans 'Keyword' %}</label>
+                                <div class="col-md-5">
+                                    {{ form.search }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> <!-- end .header-search-bar -->
+
+    {% endblock %} {# End block header search #}
+
+{% block content %}
+
+<!-- Content starts -->
+    <div class="row"><!-- row sidebar and vacancies -->
+        <div class="col-sm-4 page-sidebar">
+            <aside>
+                <div class="white-container mb0">
+
+                    <div class="widget sidebar-widget jobs-filter-widget">
+                        <h5 class="widget-title">{% trans 'Filter all results' %}
+                        {% if del_filters %}
+                            <small><a class="bottom pull-right" href="{% url 'vacancies_first_search' %}">{% trans 'Remove filters' %}</a></small>
+                        {% endif %}
+                        </h5>
+
+                        <div class="widget-content">
+
+                            {# <!--h6>{% trans 'By State' %}</h6>
+
+                            <div>
+                                <ul class="filter-list">
+                                    <li><a href="">{% trans 'All' %}</a></li>
+                                    {% for state in states %}
+                                        <li>
+                                        <a href="">{{ state.0 }} <span>()</span></a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <a href="#" class="toggle"></a>
+                            </div--> #}
+
+                            <h6>{% trans 'By Industries' %}</h6>
+
+                            <div>
+                                <ul class="filter-list">
+                                    <li>
+                                        <a href="{% url 'vacancies_filter_vacancies_by_industry' industry_id=0 %}">{% trans 'All' %}</a>
+                                    </li>
+                                    {% for industry in industries %}
+                                        <li>
+                                        <a href="{% url 'vacancies_filter_vacancies_by_industry' industry_id=industry.0.pk %}">{{ industry.0 }} <span>({{ industry.1 }})</span></a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <a href="#" class="toggle"></a>
+                            </div>
+
+                            <h6>{% trans 'By Date' %}</h6>
+
+                            <div>
+                                <ul class="filter-list">
+                                    {% for pub_date in pub_dates %}
+                                        <li>
+                                            <a href="{% url 'vacancies_filter_vacancies_by_pub_date' days=pub_date.0.days %}">
+                                                {{ pub_date.0}} <span>({{ pub_date.1 }})</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <a href="#" class="toggle"></a>
+                            </div>
+
+                            <h6>{% trans 'By Type' %}</h6>
+
+                            <div>
+                                <ul class="filter-list">
+                                    <li><a href="{% url 'vacancies_filter_vacancies_by_employmentType' employmentType_id=0 %}">{% trans 'Anyone' %}</a></li>
+                                    {% for employmentType in employment_types %}
+                                        <li>
+                                            <a href="{% url 'vacancies_filter_vacancies_by_employmentType' employmentType_id=employmentType.0.pk %}">
+                                                {{ employmentType.0}} <span>({{ employmentType.1 }})</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <a href="#" class="toggle"></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div> <!-- end .page-sidebar -->
+
+        <div class="col-sm-8 page-content">
+            <div class="title-lines">
+                 <h3 class="mt0">Vacancies</h3>
+            </div>
+
+            <div class="row search-terms">
+                <div class="col-md-4 col-sm-6 col-xs-6 term">
+                    <i class="fa fa-tags" data-toggle="tooltip" data-placement="top" title="{% trans 'Found Vacancies' %}"></i><span>Results: <span class="number">{{ total_vacancies }}</span></span>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-6 term">
+                    <i class="fa fa-map-marker" data-toggle="tooltip" data-placement="top" title="{% trans 'Place' %}"></i><span>{{ search_state }}</span>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-6 term">
+                    <i class="fa fa-calendar" data-toggle="tooltip" data-placement="top" title="{% trans 'Date of Publications' %}"></i><span>{{ vacancies_search_pub_date_days }}</span>
+                </div>
+{#            </div>#}
+{#            <div class="row search-terms">#}
+                <div class="col-md-4 col-sm-6 col-xs-6 term">
+                    <i class="fa fa-gears" data-toggle="tooltip" data-placement="top" title="{% trans 'Industry' %}"></i><span>{{ search_industry }}</span>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-6 term">
+                    <i class="fa fa-cog" data-toggle="tooltip" data-placement="top" title="{% trans 'Area' %}"></i><span>{{ search_area }}</span>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-6 term">
+                    <i class="fa fa-briefcase" data-toggle="tooltip" data-placement="top" title="{% trans 'Type of Employment' %}"></i><span>{{ search_employment_type }}</span>
+                </div>
+            </div>
+
+            <hr style="margin: 15px 0 30px">
+            {% if vacancies %}
+                {% include "vacancies_paginator.html" %}
+
+                {% for vacancy in vacancies %}
+
+                    <div class="jobs-item with-thumb job-item-margin search-page">
+                        <div class="clearfix visible-xs"></div>
+                        <div class="thumb">
+                            {% if vacancy.confidential %}
+                                <img src="{{ MEDIA_URL }}{{ LOGO_COMPANY_DEFAULT }}" alt="Logo">
+                            {% else %}
+                                <a href="{% url 'vacancies_vacancies_by_company' company_id=vacancy.company.pk %}">
+                                    <img src="{{ MEDIA_URL }}{{ vacancy.company.logo }}" alt="Logo">
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="date">{{ vacancy.pub_date|date:"d" }} <span>{{ vacancy.pub_date|date:"M" }}</span></div>
+                        <h6 class="title search"><a href="{% url 'vacancies_get_vacancy_details' vacancy_id=vacancy.pk %}">{{ vacancy.employment }} </a>
+                            &nbsp;
+                            {% if postulates %}
+                                {% for postulate in postulates %}
+                                    {% if postulate.vacancy_id == vacancy.id %}
+                                        <i class="fa fa-check-square postulado" data-toggle="tooltip" data-placement="top" title="Apply"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </h6>
+                        <span class="meta">
+                            {% if vacancy.confidential %}
+                                <span style="color: #4AA92F;">{% trans 'Confidential' %}</span>
+                            {% else %}
+                                <a href="{% url 'vacancies_vacancies_by_company' company_id=vacancy.company.pk %}">{{ vacancy.company }}</a>
+                            {% endif %}
+                        </span>
+                        <ul class="list-unstyled list-info">
+                            <li><i class="fa fa-map-marker color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Place' %}"></i><span>{% if vacancy.municipal %}{{vacancy.municipal}}, {% endif %}{{ vacancy.state }}</span></li>
+                        </ul>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-6">
+                                <ul class="list-unstyled list-info">
+                                    <li><i class="fa fa-user color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Gender' %}"></i><span>{{ vacancy.gender }}</span></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-xs-6">
+                                <ul class="list-unstyled list-info">
+                                    <li>
+                                        <i class="fa fa-calendar color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Age' %}"></i>
+                                        {% if vacancy.min_age %}
+                                            <span>{{ vacancy.min_age }} - {{ vacancy.max_age }} {% trans 'años' %}</span>
+                                        {% else %}
+                                            <span>{% trans 'Anyone' %}</span>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-6">
+                                <ul class="list-unstyled list-info">
+                                    <li><i class="fa fa-graduation-cap color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Level of study' %}"></i><span>{{ vacancy.degree|default:'Any' }}</span></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-xs-6">
+                                <ul class="list-unstyled list-info">
+                                    <li>
+                                        <i class="fa fa-dollar color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Salary' %}"></i>
+                                        {% if vacancy.salaryType.codename == 'fixed' %}
+                                            <span>$ {{ vacancy.min_salary|currency }}{% if vacancy.min_salary != vacancy.max_salary %} - $ {{ vacancy.max_salary|currency }}{% endif %}</span>
+                                        {% else %}
+                                            <span>{{ vacancy.salaryType }}</span>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-6">
+                                <ul class="list-unstyled list-info">
+                                    <li><i class="fa fa-gears color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Industria' %}"></i><span>{% if vacancy.industry %}{{ vacancy.industry.name }}{% else %}All{% endif %}</span></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-xs-6">
+                                <ul class="list-unstyled list-info">
+                                    <li><i class="fa fa-cog color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Área' %}"></i><span>{% if vacancy.area %}{{ vacancy.area.name }}{% else %}All{% endif %}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <ul class="btns-icons-info">
+                            {% if user_profile == 'candidate' %}
+                                <li>
+                                    <!-- To mark/unmark a vacancy as favourite -->
+                                    <button id="btn_fav_{{ vacancy.pk }}" onclick="mark_unmark_favorite({{ vacancy.pk }})"
+                                        class="fa fa-heart btn-icon-info {% if vacancy.id in vacancy_favs_ids %}icon-vac-fav{% else %}icon-vac-nofav{% endif %}"
+                                        data-toggle="tooltip" data-placement="top"
+                                        title="{% if vacancy.id in vacancy_favs_ids %}{% trans 'Added to favourites' %}{% else %}{% trans 'Add to favourites' %}{% endif %}">
+                                    </button>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <a href="#" class="btn-icon-info btn-icon-plus fa fa-plus toggle" data-toggle="tooltip" data-placement="top" title="{% trans 'More Information' %}"></a>
+                            </li>
+                        </ul>
+                        <div class="content">
+                            <h5>{% trans 'Description' %}</h5>
+                            <p>{{ vacancy.description|striptags|rem_nbsp|safe|slice:":500" }}...  <a href="{% url 'vacancies_get_vacancy_details' vacancy_id=vacancy.pk %}" class="read-more">{% trans 'See more' %}</a></p>
+
+                            <div class="clearfix">
+                                <a href="{% url 'vacancies_get_vacancy_details' vacancy_id=vacancy.pk %}" class="btn btn-info pull-right" style="width: 200px;">
+                                    <i class="fa fa-search"></i> {% trans 'Go to the Vacancy' %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %} {# end for vacancy in vacancies #}
+
+                {% include "vacancies_paginator.html" %}
+
+            {% else %}
+                <h3>{% trans 'No vacancies to sow' %} </h3>
+            {% endif %} {# end if vacancies #}
+
+        </div> <!-- end .page-content -->
+
+    </div><!-- end row sidebar and vacancies -->
+
+<!-- Content ends -->
+
+{% endblock %}
+
+{% block java_script_srcs %}
+
+{% endblock %}
+
+{% block java_script_code %}
+    <script type="text/javascript">
+
+        function get_common_areas(value) {
+            var id = (value);
+            $('#id_area').empty();
+            $.ajax({
+                data: {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                url: '/ajax/get-common-areas/',
+                type: 'POST',
+                {#            dataType: 'html',#}
+                success: function (data) {
+                    if (data.length > 0) {
+                        $('#id_area').append('<option value="-1">All</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#id_area').append('<option value="' + data[i].pk + '">' + data[i].fields.name + '</option>');
+                        }
+                    } else {
+                        $('#id_area').append('<option value="-1">All</option>');
+                    }
+                },
+                error: function () {
+                    $('#id_area').append('<option value="-1">All</option>');
+                }
+            });
+        }
+
+        {% if user_profile == 'candidate' %}
+            function mark_unmark_favorite(vacancy_id) {
+                {# Marca o desmarca una vacante como favorita #}
+                var btn_fav = $("#btn_fav_" + vacancy_id);
+                $.ajax({
+                    data: {
+                        'id': vacancy_id,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    url: '/ajax/mark-vacancy-asfavorite/',
+                    type: 'GET',
+                    success: function(data){
+                        console.log(data);
+                        var message = '';
+                        if (data == 'marked'){
+                            btn_fav.removeClass('icon-vac-nofav').addClass('icon-vac-fav');
+                            btn_fav.attr('title', 'Added to favourites').tooltip('fixTitle').tooltip('show');
+                            console.log('Marked as favourite');
+                        }
+                        if (data == 'unmarked'){
+                            btn_fav.removeClass('icon-vac-fav').addClass('icon-vac-nofav');
+                            btn_fav.attr('title', 'Add to favourites').tooltip('fixTitle').tooltip('show');
+                            console.log('Removed from favourite');
+                        }
+                        if (data == 'error'){
+                            alert("Failed to mark as favourite. Please try again a moment later.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Failed to mark as favourite. Please try again a moment later.");
+                    }
+                });
+            }
+        {% endif %}
+
+        $(document).ready(function () {
+            $(function() {
+                $('#id_industry').change(
+                    function () {
+                        get_common_areas(this.value);
+                    }
+                );
+            });
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+    </script>
+{% endblock %}

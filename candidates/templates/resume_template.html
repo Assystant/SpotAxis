@@ -1,0 +1,73 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block meta %}
+    <meta name="keyword" content="SpotAxis, Resume Buiilder, Resume Builder Templates, Pdf Print, Online Resume, Online CV"/>
+    <meta name="description" content="Template Selector for printing/exporting CV/Resume/Profile to pdf "/>
+{% endblock %}
+{% block title %}SpotAxis | Template Selector{% endblock %}
+{% comment %} Page where a candidate's bookmarked vacancies are shown. {% endcomment %}
+{% block page-header %}{% trans 'Template Selector' %}{% endblock %}
+{% block content %}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12">
+			    <div class="horizontal-timeline">
+			        <div class="steps">
+			            <div class="step-badge">
+			                <h1>1</h1>
+			            </div>
+			            <div class="step-header">
+			                <h3>Sign Up</h3>
+			            </div>
+			            <div class="step-description">
+			                <p>No sign up required</p>
+			            </div>
+			        </div>
+			        <div class="steps">
+			            <div class="step-badge">
+			                <h1>2</h1>
+			            </div>
+			            <div class="step-header">
+			                <h3>Profile</h3>
+			            </div>
+			            <div class="step-description">
+			                <p>Enter your Details</p>
+			            </div>
+			        </div>
+			        <div class="steps active">
+			            <div class="step-badge">
+			                <h1>3</h1>
+			            </div>
+			            <div class="step-header">
+			                <h3>Template</h3>
+			            </div>
+			            <div class="step-description">
+			                <p>Select a Template and Download</p>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
+			<a class="panel mt10" href="/cv/pdf/{{candidate.id}}/1/">
+				<div class="panel-body panel-shadow">
+					<div style="height:200px; line-height:200px" class="text-center"><img style="max-width:100%; max-height:100%; margin:auto" src = "/static/img/bg-banner.jpeg" alt='Resume Template Preview'>
+					</div><hr>
+					<h4 class="text-center">Basic</h4 class="text-center">
+				</div>
+			</a>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
+			<a class="panel mt10 pt40 pb40">
+				<div class="panel-body panel-shadow pt50 pb50">
+					<h2 class="text-center pt50 pb50"> More Coming Soon</h2>
+				</div>
+			</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

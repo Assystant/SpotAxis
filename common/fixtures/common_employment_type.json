@@ -1,0 +1,65 @@
+[
+  {
+    "model": "common.employment_type",
+    "pk": 2,
+    "fields": {
+      "name": "Full Time",
+      "codename": "full_time",
+      "order": 1
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 3,
+    "fields": {
+      "name": "Part Time",
+      "codename": "part_time",
+      "order": 2
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 4,
+    "fields": {
+      "name": "Spare Time",
+      "codename": "spare_time",
+      "order": 4
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 5,
+    "fields": {
+      "name": "Contract",
+      "codename": "contract",
+      "order": 7
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 6,
+    "fields": {
+      "name": "Freelance",
+      "codename": "freelance",
+      "order": 5
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 7,
+    "fields": {
+      "name": "Intern",
+      "codename": "intern",
+      "order": 6
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 8,
+    "fields": {
+      "name": "Weekend",
+      "codename": "weekend",
+      "order": 3
+    }
+  }
+]

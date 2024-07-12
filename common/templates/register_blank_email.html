@@ -1,0 +1,56 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Email Registration{% endblock %}
+
+
+{% block content %}
+
+    <div class="row mt50 mb60">
+        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+
+            <form id="change-email-form" enctype="multipart/form-data" action="." method="post" role="form">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 class="text-light">{% trans 'Register your e-mail' %}</h2>
+                        <hr>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                            {% if form.email.errors %}
+                                <ul class="list-unstyled error-list">
+                                {% for error in form.email.errors %}
+                                    <li>{{ error|escape }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                <label for="id_email">{% trans 'Email' %}</label>
+                            {% endif %}
+                            <div class="input-group {% if form.email.errors %}has-error{% endif %} mb20">
+                                <div class="input-group-addon"><i class="fa fa-at fa-lg"></i></div>
+                                {{ form.email }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt25 mb40">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-info btn-block btn-lg">
+                            <i class="fa fa-envelope fa-lg"></i> {% trans 'Register Email' %}
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

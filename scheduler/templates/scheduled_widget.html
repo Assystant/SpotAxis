@@ -1,0 +1,24 @@
+{% load TRM_tags %}
+{% load humanize %}
+<a class="btn btn-xs btn-trans clickable pull-right refresh-widget pb5 pt5" onclick="populate_schedule(this);"><small><i class="fa fa-refresh"></i> Refresh</small></a>
+<div class="pt10 pb10"></div>
+{% for date,schedules in recruiter.schedules.items %}
+	<div class="date-block">
+		<small class="text-light">{{date|naturalday|title}}</small>
+    	<div class="ml5 mr5 border-top border-light pt5 pb5">
+    		{% for schedule in schedules %}
+    			<div class="candidate-card" data-candidate="{{schedule.application.id}}" data-remove="true">
+            		<h6 class="no-margin-top clickable no-style mt5 mb5" data-toggle="popover" data-placement="left" data-html="true" data-content='{% include "base/scheduler_popover.html" %}'>
+            			<small class="{% if schedule.local_time|isPast %}text-danger{% elif schedule.local_time|isNearFuture:60 %}text-success{% endif %}">{{schedule.local_time_only}} - </small> <a target="_blank" class="" href="{% url 'vacancies_get_vacancy_stage_details' schedule.application.vacancy.id schedule.application.vacancy_stage.order schedule.application.stage_section %}#candidate-s-{{schedule.application.id}}">{{schedule.application.candidate}}</a>
+            		</h6>
+            	</div>
+    		{% endfor %}
+    	</div>
+    </div>
+	<div class="ml5 mr5 border-top border-light pt10 text-center text-light no-result hidden">No Upcoming Schedule
+	</div>
+{% empty %}
+
+	<div class="ml5 mr5 border-top border-light pt10 text-center text-light">No Upcoming Schedule
+	</div>
+{% endfor %}

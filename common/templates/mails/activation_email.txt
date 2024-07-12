@@ -1,0 +1,7 @@
+{% extends 'mails/base_email.txt' %}
+{% load i18n %}
+
+{% block content %}{% trans 'Click on the link below to complete your signup and activate your account' %}
+{% endblock %}
+
+{% block button-text %}{% trans 'Activate my account' %}{% endblock %}

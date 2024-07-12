@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ settings.PROJECT_NAME }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{settings.PROJECT_NAME}} Administration</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

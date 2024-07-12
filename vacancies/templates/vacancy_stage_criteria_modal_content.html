@@ -1,0 +1,37 @@
+{% load TRM_tags %}
+<div class="row none-row border-bottom border-light mb5 collapse fade {% if not current_process.criteria_as_list %} in{% endif %}">
+    <div class="col-xs-12 col-sm-7 pt10 pl20">
+        Overall (default if none set)
+    </div>
+    <div class="col-xs-12 col-sm-5 pt10 pb10 no-padding-x text-center">
+            <span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span>
+        </div>
+</div>
+{% for criterion in current_process.criteria_as_list %}
+    <div class="row border-bottom border-light mb5">
+        <div class="col-xs-12 col-sm-7">
+            <input type="text" value="{{criterion}}" class="form-control" placeholder="Criteria Name" required>
+        </div>
+        <div class="col-xs-12 col-sm-5 pt10 pb10 no-padding-x text-center">
+            <span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span>
+            <a class="clickable remove btn btn-xs btn-default ml10 mr10"><i class="fa fa-times"></i> Remove</a>
+        </div>
+    </div>
+{% endfor %}
+{% if not curent_process.criteria_as_list %}
+    <div class="row border-bottom border-light mb5">
+        <div class="col-xs-12 col-sm-7">
+            <input type="text" class="form-control" placeholder="Criteria Name" required>
+        </div>
+        <div class="col-xs-12 col-sm-5 pt10 pb10 no-padding-x text-center">
+            <span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span>
+            <a class="clickable remove btn btn-xs btn-default ml10 mr10"><i class="fa fa-times"></i> Remove</a>
+        </div>
+    </div>
+{% endif %}
+<div class="col-xs-12 text-center pt5 mt5 mb5">
+    <a class="small clickable add-criteria"><i class="fa fa-plus"></i> Add</a>
+</div>
+<div class="col-xs-10 col-xs-push-1 mt5 pt5 border-top border-light">
+    <button class="btn btn-sm btn-info btn-block">Save</button>
+</div>

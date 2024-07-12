@@ -1,0 +1,1602 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block meta %}
+    <meta name="keyword" content="{{company.name}}, Create Job"/>
+    <meta name="description" content="Create your job opening."/>
+{% endblock %}
+{% block title %}{{ request.user.recruiter.company.all.0.name }} | Create Job Opening{% endblock %}
+{% block css %}
+
+    <!-- Jquery-File-Uploads -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui.css">
+    <!-- CSS adjustments for browsers with JavaScript disabled -->
+    <noscript><link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui-noscript.css"></noscript>
+    <!-- Jquery-File-Uploads -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.1/switchery.min.css">
+    <link href="{{STATIC_URL}}datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}daterange/daterangepicker.css" rel="stylesheet">
+
+{% endblock %}
+{% comment %} Add/Modify Vacancies {% endcomment %}
+{% block page-header %}{% trans 'Publish Job' %}{% endblock %}
+{% block content %}
+    <noscript>
+        <div class="disabled">
+            Javascript is disabled in your browser.
+            For instructions to enable javascript, click
+            <a href="http://www.enable-javascript.com/en/"
+            target="_blank">here</a>.
+        </div>
+    </noscript>
+    <!-- Content starts -->
+    {% if not vacancy_status == 'closed' and company|args:'JM_CUSTOM_APPLICATION_FORM'|call:'check_service' %}
+        <div class="modal fade" tabindex="-1" role="dialog" id="new_template_modal">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center">New Template</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% include 'template_form.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content starts -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="preview-template">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center">Template Preview</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h3 class="text-center text-info"><i class="fa fa-spinner fa-pulse"></i> Please Wait...</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row mt10 mb40 no-margin-x">
+        <div class=" col-xs-12">
+            <h3 class="text-center text-light">
+                {% if not vacancy_status %}
+                    {# If a new job #}
+                    New Job
+                {% else %}
+                    Modify Job
+                {% endif %}
+            </h3>
+            {% include 'vacancies/add_update_vacancy_timeline.html' %}
+        </div>
+        <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+            {% if company.vacancy_set.all.count and not update and company|args:'JP_TEMPLATE'|call:'check_service' %}
+                <div class="container-fluid bg-white border-bottom border-light br-2 pt20 pb20">
+                    <form class="col-xs-12 col-sm-10 col-sm-push-1 no-padding" action="." method="post">
+                        {% csrf_token %}
+                        <p class="text-light"> Select a previous job posting as a template</p>
+                        <input type="hidden" name="template">
+                        <select id="templates" placeholder="Select a Template"></select>
+                    </form>
+                </div>
+            {% endif %}
+            <form id="fileupload-form" action="." method="post" enctype="multipart/form-data" >
+                {% csrf_token %}
+                <div class="container-fluid bg-white border-bottom border-light br-2 pt20 pb20">
+                    <div class="row">
+                        <!-- Job Role -->
+                        <div class="col-sm-8 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.employment.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.employment.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_employment">{% trans 'Job Role' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.employment.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-briefcase fa-lg"></i></div>
+                                    {{ vacancy_form.employment }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Number of Positions -->
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.vacancies_number.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.vacancies_number.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_vacancies_number">{% trans 'Number of Positions' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.vacancies_number.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-users fa-lg"></i></div>
+                                    {{ vacancy_form.vacancies_number }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-xs-12">
+
+                        </div>
+                    </div><!-- Job Role and No of Positions -->
+
+                    <div class="row">
+                        <!-- Industry -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.industry.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.industry.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_industry">{% trans 'Industry' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.industry.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-gears fa-lg"></i></div>
+                                    {{ vacancy_form.industry }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Function -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.function.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.function.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_function">{% trans 'Function' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.function.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-gear fa-lg"></i></div>
+                                    {{ vacancy_form.function }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--Industry and Function-->
+                    <div class="row">
+                        <!--Country-->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.nationality.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.nationality.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_nationality">{% trans 'Country' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.nationality.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-globe fa-lg"></i></div>
+                                    {{ vacancy_form.nationality }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- State -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.state.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.state.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_state">{% trans 'State' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.state.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-location-arrow fa-lg"></i></div>
+                                    {{ vacancy_form.state }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--Country and State -->
+
+                    <div class="row">
+                        
+                        <!-- City -->
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                {% if vacancy_form.city.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.city.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_city">{% trans 'City' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.city.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-crosshairs fa-lg"></i></div>
+                                    {{ vacancy_form.city }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Type of employment -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.employmentType.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.employmentType.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_employmentType">{% trans 'Job Type' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.employmentType.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-black-tie"></i></div>
+                                    {{ vacancy_form.employmentType }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--City -->
+                    <div class="row">
+                        <!--Skills-->
+                        <div class="col-xs-12">
+                            <div class="form-group {% if vacancy_form.skills.errors %}has-error{%endif%}">
+                                {% if vacancy_form.skills.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.skills.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_skills">{% trans 'Skills Required' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                {{ vacancy_form.skills}}
+                            </div>
+                        </div>
+                    </div><!--Skills-->
+
+                    <div class="row">
+                        
+                        <!-- Salary -->
+                        <div class="col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.salaryType.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.salaryType.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_salaryType">{% trans 'Salary' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.salaryType.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-money fa-lg"></i></div>
+                                    {{ vacancy_form.salaryType }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Salary -->
+                        <div class="col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.currency.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.currency.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_currency">{% trans 'Currency' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.currency.errors %}has-error{% endif %} mb20">
+                                    {{ vacancy_form.currency }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Minimum Salary -->
+                        <div class="col-sm-3 col-xs-6">
+                            <div class="form-group">
+                                {% if vacancy_form.min_salary.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.min_salary.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_min_salary">{% trans 'Minimum Annual Salary' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.min_salary.errors %}has-error{% endif %} mb20">
+                                    {{ vacancy_form.min_salary }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Maximum Salary -->
+                        <div class="col-sm-3 col-xs-6">
+                            <div class="form-group">
+                                {% if vacancy_form.max_salary.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.max_salary.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_max_salary">{% trans 'Maximum Annual Salary' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.max_salary.errors %}has-error{% endif %} mb20">
+                                    {{ vacancy_form.max_salary }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Type of Employment - Salary -->
+
+                    <div class="row">
+                        <!-- Date of Hire -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.hiring_date.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.hiring_date.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_hiring_date">{% trans 'Date of Hire' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.hiring_date.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                    {{ vacancy_form.hiring_date }}
+                                    {{vacancy_form.hiring_date.errors}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Description -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group {% if vacancy_form.description.errors %}has-error{%endif%}">
+                                {% if vacancy_form.description.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.description.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_description">{% trans 'Description of Job' %}<span class="required"> * </span></label>
+                                {% endif %}
+                                {{ vacancy_form.media }} {# Nedded by CKEDITOR to work #}
+                                    {{ vacancy_form.description }}
+                            </div>
+                        </div>
+                    </div><!-- Description -->
+                </div>
+                <div class="row mt40">
+                    <h4 class="text-center text-light">Preferences</h4>
+                </div>
+
+                <div class="container-fluid bg-white border-bottom border-light br-2 pt20 pb20">
+                    <div class="row">
+                        <!-- Gender -->
+                        <div class="col-md-6  col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                {% if vacancy_form.gender.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.gender.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_gender">{% trans 'Gender' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.gender.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-venus-mars fa-lg"></i></div>
+                                    {{ vacancy_form.gender }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Age -->
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {% if vacancy_form.min_age.errors %}
+                                            <ul class="list-unstyled error-list text-danger">
+                                            {% for error in vacancy_form.min_age.errors %}
+                                                <li>{{ error|escape }}</li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <label for="id_min_age">{% trans 'Minimun Age' %}</label>
+                                        {% endif %}
+                                        <div class="input-group {% if vacancy_form.min_age.errors %}has-error{% endif %} mb20">
+                                            <div class="input-group-addon"><i class="fa fa-sort-numeric-asc fa-lg"></i></div>
+                                            {{ vacancy_form.min_age }}
+                                        </div>
+                                    </div>
+                                </div><!-- Minimum Age -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {% if vacancy_form.max_age.errors %}
+                                            <ul class="list-unstyled error-list text-danger">
+                                            {% for error in vacancy_form.max_age.errors %}
+                                                <li>{{ error|escape }}</li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <label for="id_max_age">{% trans 'Maximm Age' %}</label>
+                                        {% endif %}
+                                        <div class="input-group {% if vacancy_form.max_age.errors %}has-error{% endif %} mb20">
+                                            <div class="input-group-addon"><i class="fa fa-sort-numeric-desc fa-lg"></i></div>
+                                            {{ vacancy_form.max_age }}
+                                        </div>
+                                    </div>
+                                </div><!-- Maximum Age -->
+                            </div>
+                        </div>
+                    </div><!-- Gender - Age -->
+
+                    <div class="row">
+                        <!-- Education -->
+                        <div class="col-md-6  col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                {% if vacancy_form.degree.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.degree.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_degree">{% trans 'Education' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.degree.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-mortar-board fa-lg"></i></div>
+                                    {{ vacancy_form.degree }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Experience -->
+                        <div class="col-sm-3 col-xs-6">
+                            <div class="form-group">
+                                {% if vacancy_form.minEmploymentExperience.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.minEmploymentExperience.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_minEmploymentExperience">{% trans 'Minimum Experience' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.minEmploymentExperience.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-crosshairs fa-lg"></i></div>
+                                    {{ vacancy_form.minEmploymentExperience }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <div class="form-group">
+                                {% if vacancy_form.maxEmploymentExperience.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.maxEmploymentExperience.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_maxEmploymentExperience">{% trans 'Maximum Experience' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.maxEmploymentExperience.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-crosshairs fa-lg"></i></div>
+                                    {{ vacancy_form.maxEmploymentExperience }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Education - Experience -->
+
+                    <div class="row">
+                        
+                        <!-- Notice Period -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.notice_period.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.notice_period.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_notice_period">{% trans 'Maximum Notice Period' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.notice_period.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                    {{ vacancy_form.notice_period }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Notics Period -->
+                </div>
+
+                    <!-- Attached Files -->
+                <div class="row mt40">
+                    <h4 class="text-center text-light">Attachments</h4>
+                </div>
+                <div class="container-fluid bg-white border-bottom border-light br-2 pt20 pb20">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <dt>
+                                <label>
+                                    {% blocktrans with max_files=fileForm.max_files max_megas=fileForm.max_megas%}
+                                        (Attach up to {{ max_files }} files and {{ max_megas }} MB each; pdf, word, ppt and image files only)<br>Attach company profile, job details, questionnaires or any relevant file.
+                                    {% endblocktrans %}
+                                </label>
+                            </dt>
+                            {% if fileForm.file.errors %}
+                                <ul class="list-unstyled error-list text-danger">
+                                {% for error in fileForm.file.errors %}
+                                    <li>{{ error|escape }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="row no-margin-x">
+                                <div id="div-files" class="files col-xs-12 col-sm-9 col-lg-10 mt20">
+                                    {% for file in objFiles %}
+                                        <!-- List of files -->
+                                        <p id="file_{{ file.pk }}">
+                                            {% if file.ext == '.pdf' %}
+                                                <i class="fa fa-file-pdf-o"></i>
+                                            {% elif file.ext == '.doc' or file.ext == '.docx' %}
+                                                <i class="fa fa-file-word-o"></i>
+                                            {% elif file.ext == '.xls' or file.ext == '.xlsx' %}
+                                                <i class="fa fa-file-excel-o"></i>
+                                            {% elif file.ext == '.ppt' or file.ext == '.pptx' %}
+                                                <i class="fa fa-file-powerpoint-o"></i>
+                                            {% elif file.ext == '.jpg' or file.ext == '.jpeg' or file.ext == '.png' %}
+                                                <i class="fa fa-picture-o"></i>
+                                            {% endif %}
+                                            <a href="{{ file.file.url }}" target="_blank" class="ml5">
+                                                {{ file.filename }}
+                                            </a>
+                                            - <span class="size">{{ file.file.size|filesizeformat }}</span>
+                                            -
+                                            <button class="btn btn-danger btn-xs" data-pk="{{ file.pk }}">
+                                                <i class="fa fa-times"></i>
+                                                <span>Remove</span>
+                                            </button>
+                                        </p>
+                                    {% endfor %}
+                                    <p class="text-light {% if objFiles %}hidden{%endif%}" id="no-file-label"> No Files Attached</p>
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-lg-2 mt20 mb20">
+                                    <span class="btn btn-info btn-sm fileinput-button btn-block">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                        <span>{% trans 'Add Files' %}</span>
+                                        <!-- The file input field used as target for the file upload widget -->
+                                        {{ fileForm.file }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="progress" class="progress hidden vacancy-files">
+                                <!-- Progress Bar -->
+                                <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"></div>
+                            </div>
+                            
+
+                        </div>
+                    </div><!-- Attached Files -->
+                </div>
+
+                <div class="row mt40">
+                    <h4 class="text-center text-light">Job Settings</h4>
+                </div>
+                <div class="container-fluid bg-white border-bottom border-light br-2 pt20">
+
+                    <div class="row mb5 hidden">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.another_email.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.another_email.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_another_email">
+                                        Send Applications To
+                                    </label>
+                                {% endif %}
+                                {{ vacancy_form.another_email }}
+                            </div>
+                        </div>
+                        <div id="email" class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if vacancy_form.email.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in vacancy_form.email.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_email">{% trans 'Enter your contact Email' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if vacancy_form.email.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-at fa-lg"></i></div>
+                                    {{ vacancy_form.email }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb20"><!-- Allow publications and allow public applications-->
+                        <div class="col-xs-12 hidden">
+                            <!-- Allow applications from candidates -->
+                            <label for="id_postulate" data-toggle="tooltip" class="pull-left no-margin-bottom">
+                                Allow to apply with Social Media.<br><small>(One click appications from SpotAxis, Facebook, Linkedin, GPlus, Stackoverflow and Github)</small>
+                            </label>
+                            <span class="pull-right">No {{ vacancy_form.postulate }} Yes</span>
+                            <!--div class="flipswitch pull-right ">
+                                <label class="flipswitch-label" for="id_postulate">
+                                    <div class="flipswitch-inner"></div>
+                                    <div class="flipswitch-switch"></div>
+                                </label>
+                            </div-->
+                        </div>
+                    </div>
+                    <div class="row mb20">
+                        <div class="col-xs-12">
+                            <!-- Allow public applications-->
+                            <label for="id_public_cv" class="pull-left no-margin-bottom">
+                                Allow public candidates to apply for the job.<br><small>(Candidates can fill forms and send attachments)</small>
+                            </label>
+                            <span class="pull-right">No {{ vacancy_form.public_cvs }} Yes</span>
+                        </div>
+                    </div><!-- Allow applications and allow public applications-->
+                    <div class="row mb20">
+                        {% if not vacancy_status == 'closed' and company|args:'JM_CUSTOM_APPLICATION_FORM'|call:'check_service' %}
+                            <div class="col-xs-12">
+                                <label for="id_pub_after" class="pull-left">Customize Apply Form<br><small>(Create your custom application form for this job)</small></label>
+                                <span class="pull-right">No {{ vacancy_form.has_custom_form }} Yes</span>
+                            </div>
+                            <div class="col-xs-12 {% if not vacancy_form.has_custom_form.value %}hidden{% endif %}" id="template-select">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        {% if vacancy_form.form_template.errors %}
+                                            <ul class="list-unstyled error-list text-danger">
+                                                {% for error in vacancy_form.form_template.errors %}
+                                                    <li>{{ error|escape }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-clock-o fa-lg"></i>
+                                            </div>
+                                            {{ vacancy_form.form_template }}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 pt5">
+                                        <a class="btn btn-xs btn-default ml5 mr5 hidden" data-toggle="modal" data-target="#preview-template" id="template-preview"> Preview </a>
+                                        <a class="btn btn-info btn-trans btn-xs ml5 mr5" data-toggle="modal" data-target="#new_template_modal"> <i class="fa fa-plus"></i> Create New</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if update %}
+                                <div class="col-xs-12 hidden" id="template-warning" data-value='{{vacancy_form.form_template.value|default:""}}'>
+                                    <small class="text-danger">Only new applications ater saving the changes will adhere to the new template. Any past aplications will contain previously used template's data.</small>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div><!-- Post a future date -->
+
+                    <div class="row hidden">
+                        <div class="col-sm-6 col-xs-12">
+                            <!-- Allow questions -->
+                            <dl class="dl-horizontal">
+                                <dt style="width: 190px;">
+                                    <label for="id_questions">
+                                        {% trans 'Allow Questions?' %}
+                                    </label>
+                                </dt>
+                                <dd style="margin-left: 205px;">
+                                    <label id="sliderLabel">
+                                        No {{ vacancy_form.questions }} Yes
+                                    </label>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div><!-- Allow questions-->
+
+                    <div class="row mb20">
+                            {% if not vacancy_status == 'closed' and company|args:'JM_ARCHIVE'|call:'check_service' %}
+                                <div class="col-xs-12">
+                                    <label for="id_ban" class="pull-left">Impose Reapply restrictions</label>
+                                    <span class="pull-right">No {{ vacancy_form.ban }} Yes</span>
+                                </div>
+                                <div class="col-xs-12 collapse fade banRow">
+                                    {% if vacancy_form.ban_period.errors %}
+                                        <ul class="list-unstyled error-list text-danger">
+                                            {% for error in vacancy_form.ban_period.errors %}
+                                                <li>{{ error|escape }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+
+
+                                    <div class="input-group input-group-sm inline-block">
+                                            Ban candidate for 
+                                        {{ vacancy_form.ban_period }}
+                                    </div>
+                                    <span class="pl5"> for <label for="id_ban_all_0" class="pl5 pr5"> <input type="radio" name="ban_all" id="id_ban_all_0" value="0"> All positions </label>  <label for="id_ban_all_1" class="pl5 pr5"> <input type="radio" name="ban_all" id="id_ban_all_1" value="1" checked> <span id="current_function">this</span> positions only. </label></span>
+                                </div>
+
+                            {% endif %}
+                    </div><!-- Post a future date -->
+                    {# Post a future date only of vacany is new #}
+                    {% if not vacancy_status == 'closed' and company|args:'JM_DURATION'|call:'check_service' %}
+                        <div class="row mb20">
+                            <div class="col-xs-12">
+                                <label for="id_pub_after" class="pull-left">Customize Publishing Period<br><small>{% if update %}(Current publishing period: {{vacancy_form.instance.pub_date}} - {{vacancy_form.instance.unpub_date}}){% else %}(Default publishing period is 30 days){% endif %}</small></label>
+                                <span class="pull-right">No {{ vacancy_form.pub_after }} Yes</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-6 col-lg-4 hidden" id="pubDate">
+                                {% if vacancy_form.pub_date.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                        {% for error in vacancy_form.pub_date.errors %}
+                                            <li>{{ error|escape }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o fa-lg"></i>
+                                    </div>
+                                    {{ vacancy_form.pub_date }}
+                                </div>
+                            </div>
+                        </div><!-- Post a future date -->
+                    {% else %}
+                        <div class="row mb20">
+                            <div class="col-xs-12">
+                                <h6 class="text-center text-light">This job opening will be posted for a period of 30 days</h6>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="row mt40 pl20 pr20">
+                    <div class="col-xs-12">
+                        <button type="submit" id="submit_btn" class="btn btn-info btn-sm btn-block">
+                            <i class="fa fa-check-circle fa-lg"></i>
+                            {% if not vacancy_status %}{% trans 'Save and Create Job'%}{% else %}{% trans 'Save and Update Job'%}{% endif %}
+                        </button>
+                    </div>
+                    <div class="col-xs-12 mt10">
+                        <a title="Summary" class="btn btn-default btn-block btn-sm" href="/">{% trans 'Cancel' %}</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Content ends -->
+
+{% endblock %}
+
+{% block java_script_srcs %}
+    {#    ================================================================================================================   #}
+    <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.iframe-transport.js"></script>
+    <!-- The basic File Upload plugin -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload.js"></script>
+    <!-- The File Upload processing plugin -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload-process.js"></script>
+    <!-- The File Upload validation plugin -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.cookie.js"></script>
+    {#    ================================================================================================================   #}
+    <script src="{{STATIC_URL}}datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.1/switchery.min.js"></script>
+    <script src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
+    <script src="{{ STATIC_URL }}ckeditor/ckeditor-init.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/moment.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/daterangepicker.js"></script>
+{% endblock %}
+
+{% block java_script_code %}
+    <script type="text/javascript">
+
+        $('#id_skills').selectize({create:true});
+        // $('#id_minEmploymentExperience').change(function(){
+        //     console.log(this)
+        //     if($(this).val() == 1){
+        //         $('#id_maxEmploymentExperience').attr('disabled',true);
+        //     }
+        //     else {
+
+        //         $('#id_maxEmploymentExperience').attr('disabled',false);
+        //     }
+        // })
+
+        function get_common_areas(value) {
+            var id = (value);
+            $('#id_area').empty();
+            $.ajax({
+                data: {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                url: '/ajax/get-common-areas/',
+                type: 'POST',
+                {#            dataType: 'html',#}
+                success: function (data) {
+                    if (data.length > 0) {
+                        $('#id_area').append('<option value="-1">Select...</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#id_area').append('<option value="' + data[i].pk + '">' + data[i].fields.name + '</option>');
+                        }
+                    } else {
+                        $('#id_area').append('<option value="0">Select an Industry first</option>');
+                    }
+                },
+                error: function () {
+                    $('#id_area').append('<option value="0">Select an Industry First</option>');
+                }
+            });
+        }
+
+        function get_municipals(value) {
+            var id = (value);
+            $('#id_municipal').empty();
+            $.ajax({
+                data: {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                url: '/ajax/get-municipals/',
+                type: 'POST',
+                {#            dataType: 'html',#}
+                success: function (data) {
+                    if (data.length == 0) {
+                        $('#id_municipal').append('<option value="0">Select a state first</option>');
+                    } else {
+                        $('#id_municipal').append('<option value="-1">Select...</option>');
+                    }
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#id_municipal').append('<option value="' + data[i].pk + '">' + data[i].fields.name + '</option>');
+                    }
+                },
+                error: function () {
+                    $('#id_municipal').empty();
+                }
+            });
+        }
+
+        function get_salarytype_codename(value) {
+            var id = (value);
+            $.ajax({
+                data: {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                url: '/ajax/get-salarytype-codename/',
+                type: 'POST',
+                {#            dataType: 'html',#}
+                success: function (data) {
+                    if (data != 'fixed') {
+                        $("#id_min_salary").attr('disabled', 'disabled');
+                        $("#id_max_salary").attr('disabled', 'disabled');
+                        $("#id_currency").attr('disabled', 'disabled');
+                    }
+                    else {
+                        $("#id_min_salary").removeAttr("disabled");
+                        $("#id_max_salary").removeAttr("disabled");
+                        $("#id_currency").removeAttr("disabled");
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            
+            elems.forEach(function(html) {
+              var switchery = new Switchery(html,{color:'#5bc0de', size:'small'});
+            });
+            $(function() {
+
+                // $('#id_industry').change(
+                //     function () {
+                //         get_common_areas(this.value);
+                //     }
+                // );
+
+                // $('#id_state').change(
+                //     function () {
+                //         get_municipals(this.value);
+                //     }
+                // );
+
+                another_email = document.getElementById('id_another_email').value;
+                if (another_email == 'True') {
+                    $("#id_email").removeAttr("disabled");
+                    $("#email").removeClass("hidden");
+                }
+                else {
+                    $("#id_email").attr('disabled', 'disabled');
+                    $("#email").addClass("hidden");
+                }
+
+                $('#id_another_email').change(
+                    function() {
+                        if (this.value == 'True') {
+                            $("#id_email").removeAttr("disabled");
+                            $("#email").removeClass("hidden");
+                        }
+                        else {
+                            $("#id_email").attr('disabled', 'disabled');
+                            $("#email").addClass("hidden");
+                        }
+                    }
+                );
+
+                // $('#id_pub_date').datepicker({
+                //         format: "yyyy-mm-dd",
+                //         startView: 3,
+                //         minViewMode: 3,
+                //         language: "en",
+                //         autoclose: true,
+                //         startDate: '+1d',
+                //         endDate: '+60d'
+                // });
+
+                $('#id_hiring_date').datepicker({
+                        format: "yyyy-mm-dd",
+                        startView: 3,
+                        minViewMode: 3,
+                        language: "en",
+                        autoclose: true,
+                        startDate: '+1d',
+                        endDate: '+180d'
+                });
+
+                $(document).ready(function(){
+                    if($('#id_function').val()){
+                        $('#current_function').html($('#id_function').val())
+                    }
+                });
+                $('#id_function').blur(function(){
+                    $('#current_function').html($('#id_function').val())
+                })
+
+                var salaryType = document.getElementById('id_salaryType').value;
+                get_salarytype_codename(salaryType);
+                $('#id_salaryType').change(
+                    function() {
+                        get_salarytype_codename(this.value);
+                    }
+                );
+
+                if (document.getElementById('id_pub_after') != null) {
+                    var pubAfter = document.getElementById('id_pub_after').checked;
+                    if (pubAfter) {
+                        $("#pubDate").removeClass("hidden");
+                    } else {
+                        $("#pubDate").addClass("hidden");
+                    }
+                }
+
+                if(document.getElementById('id_ban') != null) {
+                    var ban = document.getElementById('id_ban').checked;
+                    if(ban){
+                        $('.banRow').collapse('show');
+                    }
+                    else {
+                        $('.banRow').collapse('hide');
+                    }
+                }
+
+                $('#id_has_custom_form').change(
+                    function() {
+                        var customFormToggle = document.getElementById('id_has_custom_form').checked;
+                        if (customFormToggle == true) {
+                            $("#template-select").removeClass("hidden");
+                        } else {
+                            $("#template-select").addClass("hidden");
+                        }
+                    }
+                );
+                $('#id_ban').change(
+                    function(){
+                        var ban = document.getElementById('id_ban').checked;
+                        if (ban == true){
+                            $('.banRow').collapse('show');
+                        }
+                        else {
+                            $('.banRow').collapse('hide');
+                        }
+                    }
+                )
+
+                $('#id_pub_after').change(
+                    function() {
+                        var pubAfter = document.getElementById('id_pub_after').checked;
+                        if (pubAfter == true) {
+                            $("#pubDate").removeClass("hidden");
+                        } else {
+                            $("#pubDate").addClass("hidden");
+                        }
+                    }
+                );
+
+                if (document.getElementById('id_confidential') != null) {
+                    var confidential = document.getElementById('id_confidential').checked;
+                    if (confidential) {
+                        $("#data_contact").addClass("hidden");
+                    } else {
+                        $("#data_contact").removeClass("hidden");
+                    }
+                }
+
+                $('#id_confidential').change(
+                    function() {
+                        var confidential = document.getElementById('id_confidential').checked;
+                        if (confidential == true) {
+                            $("#data_contact").addClass("hidden");
+                        } else {
+                            $("#data_contact").removeClass("hidden");
+                        }
+                    }
+                );
+
+            });
+        });
+        // console.log('this not working');
+        var existing_files = {{ objFiles.count }};
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+         }
+
+        function getFileSize(bytes) {
+            if (typeof bytes !== 'number') return '';
+            if (bytes >= 1024000000) return (bytes / 1024000000).toFixed(1) + ' GB';
+            if (bytes >= 1024000) return (bytes / 1024000).toFixed(1) + ' MB';
+            return (bytes / 1024).toFixed(1) + ' KB';
+        }
+
+        function validateFiles(data, existing_files) {
+            var maxFileSize = parseInt({{ fileForm.max_megas }}) * 1024000;  // Maximum size allowed per file in Megas
+            var maxFiles = {{ fileForm.max_files }}; // Maximum no of files permitted
+            var error_total_files = false;
+            var error_size = false;
+            var error_ext = false;
+
+            if(data.files.length + existing_files > maxFiles){
+                alert("You can only upload unto " + maxFiles + " files");
+                error_total_files = true;
+            }
+
+            $.each(data.files, function (index, file) {
+                if (file.size > maxFileSize) {
+                    alert('The file size of ' + file.name + ' is greater than ' + getFileSize(maxFileSize));
+                    error_size = true;
+                }
+                var ext = file.name.split('.').pop().toLowerCase();
+                if($.inArray(ext, ['png','jpg','jpeg','bmp','doc','docx','xls','xlsx','ppt','pptx','ppsx','pdf']) == -1) {
+                    alert('Only Word, Excel, PowerPoint, PDF and images are allowed.');
+                    error_ext = true;
+                }
+            });
+
+            return !(error_size == true || error_ext == true || error_total_files == true);
+        }
+        {% if company.vacancy_set.all.count and not update and company|args:'JP_TEMPLATE'|call:'check_service' %}
+            var templateSelect = {
+                searchField: ['text','country','state','city','industry','function','type'],
+                sortField:'text',
+                openOnFocus:true,
+                allowEmptyOption: false,
+                allowPrecedence:true,
+                hideSelected: true,
+                multiple:false,
+                selected:null,
+                options:[
+                    {% for vacancy in company.vacancy_set.all %}
+                        {   'value':{{vacancy.id}}, 
+                            'text':'{{vacancy}}', 
+                            'industry': '{{vacancy.industry}}',
+                            'function': '{{vacancy.function}}',
+                            'country': '{{vacancy.nationality}}',
+                            'state': '{{vacancy.state}}',
+                            'city': '{{vacancy.city}}',
+                            'type': '{{vacancy.employmentType}}',
+                            'add_date': '{{vacancy.add_date}}',
+                            'no': '{{vacancy.vacancies_number}}'
+                        },
+                    {%endfor %}
+                ],
+                create: false,
+                selectOnTab: true,
+                render: {
+                    option: function(item,escape){
+                        // console.log(img.initial())
+                        return '<div class="row no-margin bg-white border-bottom border-light" data-value="'+item.value+'">'+
+                                    '<div class="col-xs-12 no-padding">'+
+                                        '<div class="inline-block ml10">'+
+                                            '<h4 class="no-margin-bottom text-light">'+
+                                                ' <i class="fa fa-briefcase text-light"></i> '+item.text+' <small> -- (No of Openings - '+item.no+')</small>'+
+                                            '</h4>'+
+                                            '<p class="mt5 no-margin-bottom text-muted">'+
+                                                '<i class="fa text-light fa-map-marker"></i> '+item.city + ', ' + item.state + ', ' + item.country +
+                                            '</p>'+
+                                            '<p class="no-margin-bottom text-muted">'+
+                                                '<i class="fa text-light fa-gears"></i> ' + item.industry + ' <small>'+
+                                                    '-- <i class="fa fa-cog text-light"></i> ' + item.function + '</small>'+ 
+                                            '</p>'+
+                                            '<p class="label label-trans">'+item.type+' -- <small>'+item.add_date+'</small></p>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>';
+                    },
+
+                },
+                onItemAdd: function(value, $item){
+                    template = {{template|default:'0'}}
+                    if(value!=template)
+                    {
+                        $this=this
+                        this.disable();
+                        loadingHtml = '<div class="inline-block text-muted ml10"><i class="fa fa-pulse fa-spinner"></i> Please Wait</div>'
+                        $item.append(loadingHtml);
+                        // console.log()
+                        this.$control.parents('form').find('[name="template"]').val(value);
+                        this.$control.parents('form').submit();
+                    }
+                },
+                onType: function(str){
+                    this.$dropdown.next('.no-results').remove();
+                    if(!this.hasOptions){
+                        this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Members Found</div>')
+                    }
+                },
+                onBlur:function(){
+                    this.$dropdown.next('.no-results').remove();
+                },
+            }
+        {% endif %}
+        $(document).ready(function(){
+                var url = '/upload/file/';
+                var csrftoken = $.cookie('csrftoken');
+                var btn_submit = $('#btn-submit');
+                var vacancy_id = {% if vacancy_id %}{{ vacancy_id }}{% else %}0{% endif %};
+                $('#id_file').fileupload({
+                    url: url,
+                    dataType: 'json',
+                    // {#                crossDomain: false,#}
+                    autoUpload: true,
+                    minFileSize: 10,
+                    formData: {vacancy_id: vacancy_id},
+                    change : function (e, data) {
+                        return validateFiles(data, existing_files);
+                    },
+                    drop : function (e, data) {
+                        return validateFiles(data, existing_files);
+                    },
+                    beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type)) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                        $('#progress').removeClass('hidden');
+                        btn_submit.attr('disabled', 'disabled').addClass('disabled').html('<i class="glyphicon glyphicon-plus"></i> Adding File... Please Wait');
+                    },
+                    done: function (e, data) {
+                        $.each(data.result.files, function (index, file) {
+                            {# Add new files to the template #}
+
+                            var ext = file.name.split('.').pop().toLowerCase();
+                            var fa_icon = "";
+                            if (ext == 'pdf')
+                                fa_icon = '<i class="fa fa-file-pdf-o"></i>';
+                            if (ext == 'doc' || ext == 'docx')
+                                fa_icon = '<i class="fa fa-file-word-o"></i>';
+                            if (ext == 'xls' || ext == 'xlsx')
+                                fa_icon = '<i class="fa fa-file-excel-o"></i>';
+                            if (ext == 'ppt' || ext == 'pptx')
+                                fa_icon = '<i class="fa fa-file-powerpoint-o"></i>';
+                            if (ext == 'jpg' || ext == 'jpeg' || ext == 'png')
+                                fa_icon = '<i class="fa fa-picture-o"></i>';
+
+                            var newFile = $('<p id=file_' + file.pk + '/>').html(
+                                fa_icon +
+                                '<a href="{{ MEDIA_URL }}' + file.name + '" target="_blank" class="ml10">' +
+                                    file.name +
+                                '</a>' +
+                                ' - <span class="size">' + getFileSize(file.size) + '</span>' +
+                                ' - ' +
+                                '<button class="btn btn-danger btn-xs" data-pk="' + file.pk + '">' +
+                                    '<i class="fa fa-times"></i>' +
+                                    '<span> Remove </span>' +
+                                '</button>'
+
+                            );
+
+                            $('#div-files').append(newFile);
+                            $('#div-files #no-file-label').addClass('hidden');
+                            data.context = newFile;
+
+                            existing_files = data.result.objFiles;
+                            $('#id-existing-files').text(existing_files);
+                            setTimeout(function(){
+                                $('#progress').addClass('hidden');
+                            },1000);
+                        });
+                    },
+                    progressall: function (e, data) {
+                        {#                     Submit button is enabled after the uploading progress completes #}
+                        var progress_bar = $('#progress .progress-bar');
+                        progress_bar.css('width', progress + '%');
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        $('#progress .progress-bar').css('width', progress + '%');
+                        if (progress == 100) {
+                            {% if not vacancy_status %}
+                                btn_submit.removeAttr("disabled").removeClass('disabled').html('<i class="glyphicon glyphicon-eye"></i>Save and Create Job');
+                            {%  else %}
+                                btn_submit.removeAttr("disabled").removeClass('disabled').html('<i class="glyphicon glyphicon-eye"></i>Save and Modify Job');
+                            {% endif %}
+                        }
+                    },
+                    fail: function (e, data) {
+                        console.log(data.errorThrown);
+                        alert(data.errorThrown);
+                        setTimeout(function(){
+                            $('#progress').addClass('hidden');
+                        },1000);
+                    }
+                }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+            $('#div-files').on('click', 'button', function (e) {
+                {# Catch when you click on a button to remove #}
+                e.preventDefault();
+                var $button = $(this);
+                $button.html('<i class="fa fa-pulse fa-spinner"></i> Please Wait');
+                $button.addClass('disabled');
+                $button.prop('disabled',true);
+                return $.ajax({
+                    dataType: 'json',
+                    url: '/delete/file/',
+                    type: 'POST',
+                    data: {
+                        'id': $button.data('pk'),
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(data) {
+                        $button.closest('p').fadeOut(550, function() {
+                            $button.closest('p').remove();
+                        });
+                        existing_files--;
+                        $('#id-existing-files').text(existing_files);
+                        if (existing_files == 0)
+                        {
+                            setTimeout(function(){
+                                $('#div-files #no-file-label').removeClass('hidden');
+                            },1000);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert(xhr.responseText);
+                        console.log(xhr.responseText);
+                        console.log(error);
+                        $button.html('<i class="fa fa-times"></i> Remove');
+                        $button.removeClass('disabled');
+                        $button.prop('disabled',false);
+                    }
+                });
+            });
+            {% if company.vacancy_set.all.count and not update and company|args:'JP_TEMPLATE'|call:'check_service' %}
+                $('#templates').selectize(templateSelect);
+                {% if template %}
+                    $('#templates')[0].selectize.setValue({{template}})
+                {% endif %}
+            {% endif %}
+        });
+    </script>  
+    <script>
+        var daterangeoptions = {
+            "ranges": {
+                "Next 7 Days": [
+                    moment(),
+                    moment().add(6, 'days'),
+                ],
+                "Next 30 Days": [
+                    moment(),
+                    moment().add(29, 'days'),
+                ],
+                'This Month': [
+                    moment().startOf('month'), 
+                    moment().endOf('month')
+                ],
+                "Next Month": [
+                    moment().add(1, 'month').startOf('month'),
+                    moment().add(1, 'month').endOf('month')
+                ],
+                "Next 3 Months": [
+                    moment().add(1, 'month').startOf('month'),
+                    moment().add(3, 'month').endOf('month')
+                ],
+                "Next 6 Months": [
+                    moment().add(1, 'month').startOf('month'),
+                    moment().add(6, 'month').endOf('month')
+                ]
+            },
+            "autoApply": true,
+            "drops": 'up',
+            "autoUpdateInput": true,
+            "alwaysShowCalendars": true,
+            "startDate": moment(),
+            "endDate": moment().add(29,'days'),
+            "minDate": moment(),
+            "opens": "right",
+            "applyClass": "btn-info-inverse",
+            "buttonClasses": "btn",
+            "cancelLabel": 'Cancel'
+        }
+        $(document).ready(function(){
+            $('#id_pub_date').daterangepicker(daterangeoptions);
+
+            // $('#id_template').selectize();
+        })
+    </script>
+    <script>
+        {% if not vacancy_status == 'closed' and company|args:'JM_CUSTOM_APPLICATION_FORM'|call:'check_service' %}
+
+            childElementSelector = 'input,select,textarea,label,div';
+
+            var updateElementIndex = function(elem, prefix, ndx) {
+                ndx = ndx | 0;
+                var idRegex = new RegExp(prefix + '-(\\d+|__prefix__)-'),
+                    replacement = prefix + '-' + ndx + '-';
+                if (elem.attr("for")) elem.attr("for", elem.attr("for").replace(idRegex, replacement));
+                if (elem.attr('id')) elem.attr('id', elem.attr('id').replace(idRegex, replacement));
+                if (elem.attr('name')) elem.attr('name', elem.attr('name').replace(idRegex, replacement));
+                if (elem.attr('class') == 'prefix') {
+                    elem.val(elem.val().replace(idRegex, replacement)); 
+                }
+            }
+
+             var add_formset = function(buttonRow, template){
+                 new_form = template.clone(true)
+                 insert = new_form.insertBefore(buttonRow).show().removeClass('hide').removeAttr('id');
+                 newRow = buttonRow.prev();
+                 prefix = newRow.parent().find('.prefix').val();
+                 formCounter = newRow.parent().parent().find('#id_' + prefix + '-TOTAL_FORMS');
+                 i = parseInt(formCounter.val());
+                 formCounter.val(i+1);
+                 newRow.find(childElementSelector).each(function() {
+                    updateElementIndex($(this), prefix, i);
+                });
+             }
+            var toggle_preview = function(){
+                if($('#id_form_template').val() > 0){
+                    $('#template-preview').removeClass('hidden');
+                }
+                
+            }
+            var $modal = "";
+            var update_form_management = function($button){
+                $form = $button.closest('.formset-form')
+                $siblings = $form.siblings('.formset-form:not(.hide)','.formset-form:not(.hidden)');
+                $count = $siblings.length;
+                $form.closest('.formset-row').find('[name$=TOTAL_FORMS]').first().val($count);
+                prefix = $form.closest('.formset-row').find('.prefix').first().val();
+                $siblings.each(function(i,el){
+                    $(el).find(childElementSelector).each(function() {
+                        updateElementIndex($(this), prefix, i);
+                    });
+                });
+                $form.remove();
+            }
+            var option_selector_redesign = function(){
+                console.log('going custom')
+                if (this.value > 1 && this.value < 5){
+                    row = $(this).closest('.formset-form').find('.formset-row');
+                    row.collapse('show')
+                    console.log($(this).data('value'))
+
+                    if($(this).closest('.option-selector').data('value') == 1 || $(this).closest('.option-selector').data('value') == 5){
+                        row.find('.formset-add').first().trigger('click');
+                    }
+                }
+                else {
+                    row = $(this).closest('.formset-form').find('.formset-row');
+                    row.collapse('hide')
+                    row.each(function(i,el){
+                        $(el).find('input:not([type=hidden])').val('');
+                    })
+                    row.find('[name$=TOTAL_FORMS]').val(0)
+                    row.find('.formset-form:not(.hide):not(.hidden)').remove()
+                }
+                rows = $(this).closest('.formset-form').find('.formset-row');
+                rows.find('.card-left > span').addClass('hidden');
+                rows.find('.col-xs-8').removeClass('pl40')
+                rows.find('.col-xs-8').addClass('pr40')
+                if(this.value == 3){
+                    rows.find('.card-left > span.card-3').removeClass('hidden');
+                    rows.find('.col-xs-8').addClass('pl40')
+                    rows.find('.col-xs-8').removeClass('pr40')
+                }
+                else if(this.value == 4){
+                    rows.find('.card-left > span.card-4').removeClass('hidden');
+                    rows.find('.col-xs-8').addClass('pl40')
+                    rows.find('.col-xs-8').removeClass('pr40')
+                }
+                $(this).closest('.option-selector').data('value',this.value);
+            }
+            var call_custom_field_script = function(){
+                $('.option-selector select').change(option_selector_redesign);
+                $('.formset-add').click(function(){
+                    template = $(this).parents('.formset-row').attr('data-template');
+                    add_formset($(this).parent(), $(this).closest('.formset-row').find(template));
+                });
+                $('.formset-delete').click(function(){
+                    $(this).closest('.formset-form').addClass('hidden');
+                    $(this).parent().find('[name$=DELETE]')[0].checked= true;
+                    update_form_management($(this));
+                })
+                $('#template_create').click(function(){
+                    $this = $(this)
+                    $this.html('<i class="fa fa-spinner fa-pulse"></i> Please Wait...').attr('disabled','disabled')
+                    data = "";
+                    dataarray = $(this).closest('form').serialize().split('&')
+                    $(dataarray).each(function(i,el){
+                        key = el.split('=')[0]
+                        if(key.indexOf('__prefix__') == -1)
+                            data +=el + '&'
+                    })
+                    $.ajax({
+                        data: data,
+                        url: '/ajax/template/',
+                        type: 'POST',
+                        complete: function(){
+                            $this.html('Create and Use this Template').removeAttr('disabled')
+                        },
+                        success: function(data){
+                            if(data.success == true){
+                                $('#new_template_modal').modal('hide');
+                                console.log('yay')
+                                console.log('appending')
+                                $('#id_form_template').append('<option value=' + data.id + '>' + data.name + '</option>');
+                                $('#id_form_template').val(data.id)
+                                console.log('showing warning')
+                                $('#template-warning').removeClass('hidden');
+                            }
+                            if (data.html){
+                                $('#new_template_modal .modal-body').html(data.html[0]);
+                                call_custom_field_script();
+                                toggle_preview();
+                            }
+                            if (data.msg) {
+                                alert(data.msg);
+                            }
+                        },
+                        error: function(er){
+                            console.log(er);
+                        }
+                    })
+                });
+                $('#template_preview').click(function(){
+                    $this = $(this);
+                    $this.html('<i class="fa fa-spinner fa-pulse"></i> Please Wait...').attr('disabled','disabled');
+                    data = "";
+                    dataarray = $(this).closest('form').serialize().split('&')
+                    $(dataarray).each(function(i,el){
+                        key = el.split('=')[0]
+                        if(key.indexOf('__prefix__') == -1)
+                            data +=el + '&'
+
+                    })
+
+                    data += "preview=1"
+                    $.ajax({
+                        data: data,
+                        url: '/ajax/template/',
+                        type: 'POST',
+                        complete: function(){
+                            $this.html('Preview this Template').removeAttr('disabled')
+                        },
+                        success: function(data){
+                            if(data.success == true){
+                                $modal = $this.parents('.modal');
+                                $modal.modal('hide');
+                                $('#preview-template .modal-body').html(data.preview[0]);
+                            }
+                            if (data.html){
+                                console.log('html found')
+                                $('#new_template_modal .modal-body').html(data.html[0]);
+                                console.log('calling')
+                                call_custom_field_script();
+                                toggle_preview();
+                            }
+                            if (data.msg) {
+                                alert(data.msg);
+                            }
+                        },
+                        error: function(er){
+                            console.log(er);
+                        }
+                    })
+                })
+                $('#id_form_template').change(function(){
+                    {% if update %}
+                        if ($(this).val() !=$('#template-warning').attr('data-value')){
+                            $('#template-warning').removeClass('hidden')
+                        } 
+                        else {
+                            $('#template-warning').addClass('hidden')
+                        }
+                    {% endif %}
+                    toggle_preview();
+                })
+                // $('.option-selector select').each(option_selector_redesign);
+                $('.option-selector select').each(function(i,el){
+                    if ((el).value == 2){
+                        rows = $(el).closest('.formset-form').find('.formset-row');
+                        rows.find('.col-xs-8').removeClass('pl40')
+                        rows.find('.col-xs-8').addClass('pr40')
+                    }
+                })
+            }
+             $(document).ready(function(){
+                call_custom_field_script();
+                toggle_preview();
+             })
+            $('#preview-template').on('shown.bs.modal', function(){
+                template = $('#id_form_template').val();
+                if(!template){
+                    template = 0;
+                }
+                if (!$modal){
+                    data = {
+                            'template':template,
+                        }
+                    $.ajax({
+                        data: data,
+                        url: '/ajax/template/',
+                        type:'get',
+                        success: function(data){
+                            if(data.html){
+                                $('#preview-template .modal-body').html(data.html);
+                            }
+                            else {
+                                $('#preview-template .modal-body').html('<p class="text-center text-light">Could not retrieve template Information</p>');
+                            }
+                        },
+                        error: function(er){
+                            console.log(er)
+                            $('#preview-template .modal-body').html('<p class="text-center text-light">Could not retrieve template Information</p>');
+                        }
+                    })
+                }
+            })
+             
+            $('#preview-template').on('hidden.bs.modal', function(){
+                $(this).find('.modal-body').html('<h3 class="text-center text-info"><i class="fa fa-spinner fa-pulse"></i> Please Wait...</h3>')
+                if($modal){
+                    $modal.modal('show');
+                    $modal = ""
+                }
+            })
+            $('#new_template_modal').on('hidden.bs.modal', function(){
+                if($modal){
+                    $('#preview-template').modal('show');
+                }
+            })
+        {% endif %}
+    </script>
+{% endblock %}

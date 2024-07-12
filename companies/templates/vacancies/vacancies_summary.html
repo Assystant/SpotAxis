@@ -1,0 +1,409 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block meta %}
+    <meta name="keyword" content="{% for vacancy in vacancies %}{{vacancy.employment}}, {%endfor %}{{company.name}}, {{vacancy_status}} Jobs, Career, Jobs at {{company.name}}, Talent Aquisition, Hiring at {{company.name}}, Vacancy at {{company.name}}, Recruitment at {{company.name}}"/>
+    <meta name="description" content="Career site for {{company.name}} with the list of available jobs."/>
+{% endblock %}
+{% block title %}{{company.name}} | {{vacancy_status.name}} Jobs{% endblock %}
+{% comment %} Job summary Page {% endcomment %}
+{%block subnav %}
+    {% if recruiter%}
+        <nav class="navbar navbar-short navbar-default" id="navbar-short">
+            <div class="container-fluid" id="navbar_short">
+                {%if recruiter%}
+                    <ul class="nav navbar-nav">
+                        {%for status in statuses %}
+                            <li class="{% if status.codename == vacancy_status.codename %}active{%endif%}"><a href="{% url 'companies_vacancies_by_status' status.codename %}">{{status}}</a></li>
+                        {%endfor%}
+                    </ul>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
+{%endblock%}
+{% block content %}
+    {% if my_vacancy and vacancy_status.codename == 'open' %}
+        <div class="modal fade" tabindex="-1" role="dialog" id="public_apply" tabindex="-1">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center">Apply for <span class="vacancy_name">{{vacancy.employment}}</span></h4>
+                </div>
+                <div class="modal-body">
+                    <section id="public-form">
+                        {% if my_vacancy or not user_profile %}
+                            {% include "form_public_file.html" %}
+                        {% endif %}
+                    </section>
+                </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        
+        <div class="modal fade" id="privacy-policy-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body" id="privacy-policy-modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        {% include 'privacy_policy_include.html' %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal - Terms and Conditions-->
+        <div class="modal fade" id="terms-and-conditions-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body" id="terms-and-conditions-modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        {% include 'terms_and_conditions_include.html' %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {%if not recruiter %}
+        <div class="jumbotron no-padding bg-white">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 mt40 mb40 col-md-push-1 col-md-10">
+                        {% if request.user.is_anonymous %}
+                            <a class="btn  btn-info btn-default pull-right" href="{% url 'auth_login' %}">Employer Login</a>
+                        {% endif %}
+                        <img class="img-responsive inline-block company-logo bordered br-2" src="{{MEDIA_URL}}{{company.logo}}" alt="{{company.name}} Logo"><h2 class="inline-block va-mid ml20">{{company|capfirst}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {%endif%}
+    <div id="spyblock" style="position:relative" class="">
+        <section class="container-fluid">
+            {% if recruiter or vacancy_status.public %}
+                <div class="row" id="vacancy-{{status}}">
+                    <div class='col-md-10 col-md-push-1'>
+                        {%if recruiter %}
+                                <h3 class="text-light mb40 mt40 pt20 ml20 inline-block"> {{vacancy_status}} Jobs</h3>
+                            {# <hr class="header-seperator"> #}
+                        {% else %}
+                            <h3 class="text-light mb40 pt20 ml20 inline-block">Open Jobs </h3>
+                        {%endif%}
+                        {% get_status_count vacancy_status company.id as status_count %}
+                        {%if status_count  > 0 %}
+                            {%for vacancy in vacancies%}
+                                <blockquote class="mb40 row bg-white">
+                                    <div class="col-xs-9">
+                                        <h4><i class="fa text-light fa-briefcase fa-lg"></i> <a class="" href="{% url 'vacancies_get_vacancy_details' vacancy.id %}">{{vacancy.employment}}</a> <span class="small inline-block">(No. of Openings - {{vacancy.vacancies_number}})</span>
+                                        {% if vacancy_status.codename == 'open' %}
+                                            {% if vacancy.expired %}<label class="label label-danger-trans inline-block label-xs">Unpublished</label>{% endif %}
+                                            {% if vacancy.scheduled %}<label class="label label-info-trans inline-block label-xs">Scheduled</label>{% endif %}
+                                        {% endif %}
+                                        </h4>
+
+                                        <span><i class="fa text-light fa-map-marker"></i> {{vacancy.city}}{%if vacancy.city%},{%endif%} {{vacancy.state}}{%if vacancy.state%},{%endif%} {{vacancy.nationality}}</span><br>
+                                        <span><i class="fa text-light fa-gears"></i> {{vacancy.industry}}</span> 
+                                        <small class="pl20 inline-block"> <i class="fa text-light fa-cog"></i> {{vacancy.function}}</small><br>
+                                        <span class="label label-trans"><i class="fa text-light fa-black-tie fa-sm"></i> {{vacancy.employmentType|default:'Full Time'}}</span>
+                                    </div>
+                                    <div class="col-xs-3 text-right pt20">
+                                        {% if recruiter and vacancy.hasbeenPublished and vacancy.status.codename == 'open' %}
+                                            <a class="btn btn-xs btn-trans-info text-center" data-toggle="modal" data-target="#public_apply" data-vacancy="{{vacancy.id}}" data-name="{{vacancy}}">
+                                                <span class="fa-stack fa-lg mb5">
+                                                    <i class="fa fa-circle fa-inverse"></i>
+                                                    <i class="fa fa-stack-2x fa-user-plus"></i>
+                                                </span>
+                                                <br>Add a<br>Candidate
+                                            </a>
+                                        {% endif %}
+                                        {% if recruiter and vacancy.hasbeenPublished %}
+                                            <a class="btn btn-xs btn-trans-info text-center" href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id 0 %}">
+                                                <span class="fa-stack fa-lg mb5">
+                                                    <i class="fa fa-circle fa-inverse"></i>
+                                                    <i class="fa fa-stack-2x fa-list-alt"></i>
+                                                    {% if vacancy.hasUnseen %}
+                                                        <span class="badge badge-sm badge-danger va-top inline-block relative mt-8 ml8">{{vacancy.hasUnseen}}</span>
+                                                    {% endif %}
+                                                </span>
+                                                <br>Hiring<br>Process
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </blockquote>
+                            {%endfor%}
+                        {%else%}
+                            <div class="container-fluid border-bottom border-light pt20 pb20 pl20 pr20 br-2 bg-white ">
+                                <h5 class="text-center text-light">No Jobs to show. </h5>
+                            </div>
+                        {%endif%}
+                    </div>
+                </div>
+            {%endif%}
+            {%if recruiter and recruiter.is_manager and company|args:'JP_POST'|call:'check_service' %}
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2">
+                        <div class="row mt20 mb20">
+                            <div class="col-xs-6 col-xs-push-3">
+                                <a href="{%url 'companies_add_update_vacancy'%}" class="btn btn-info btn-block">Create a Job</a>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+            {%endif%}
+        </section>
+    </div>
+    <!-- End Content -->
+{% endblock %}
+{%block java_script_code%}
+    <script>
+        {%if my_vacancy and public_form.errors and public_form.vacancy_id %}
+            $(document).ready(function(){
+                $('#public_apply').modal('show');
+                $('#public_apply').find('form').attr('action','/jobs/{{public_form.vacancy_id}}/new_application/')
+                $('#public_apply').find('[name="vacancy"]').val({{public_form.vacancy_id}})
+                $('#public_apply').find('.vacancy_name').html('job')
+            });
+        {% endif%}
+        function toreadabledate(d){
+            var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+            date = new Date(d);
+            month = monthNames[date.getMonth()]
+
+            return month + ' ' + date.getDate() + ', ' + date.getYear();
+        }
+        $('#company_form').submit(function(e){
+            update_company(this,e);
+            return false
+        });
+        function update_company(_this,e){
+            // alert('a');
+            $this = $(_this);
+            // alert('submitting');
+            e.preventDefault();
+            var formdata = $this.serializeArray();
+            console.log(formdata);
+            // var url = $this.attr('action');
+            // console.log(url);
+            // var id = $this.attr('data-id');
+            // console.log(id)
+            // if(!id){
+            //     id=0;
+            // }
+            $this.find('.error-list').remove();
+            $this.find('.has-error').removeClass('has-error');
+            $.ajax({
+                type:'post',
+                data:formdata,
+                complete: function(data){
+                    $this.find('.btn-info').html('<i class="fa text-light fa-check-circle fa-lg"></i> Save and Update');
+                    $this.find('.btn-info').prop('disabled',false);
+                    $this.find('.btn-info').removeClass('disabled');
+                },
+                success: function(data){
+                    console.log(data);
+                    if (data.success == true){
+                        $view = $(".company-profile:not('.form-section')");
+                        // $view.find('#account-name').html($this.find('#id_first_name').val() + ' ' + $this.find('#id_last_name').val());
+                        // $view.find('#account-phone').html($this.find('#id_cellphone').val());
+                        // $('.account-profile').collapse('toggle')
+                    }
+                    else {
+
+                        if ('name' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_name]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_name').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.name).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('social_name' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_social_name]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_social_name').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.social_name).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('phone' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_phone]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_phone').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.phone).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('company_email' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_company_email]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_company_email').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.company_email).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('industry' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_industry]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_industry').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.industry).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('nationality' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_nationality]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_nationality').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.nationality).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('state' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_state]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_state').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.state).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('city' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_city]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_city').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.city).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('description' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_description]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_description').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.description).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('facebook' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_facebook]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_facebook').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.facebook).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('twitter' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_twitter]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_twitter').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.twitter).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('url' in data.errors)
+                        {
+                            html = "<ul class = 'error-list text-danger'></ul>"
+                            label = $this.find('[for=id_url]');
+                            $elist = $(html).insertAfter($(label).next());
+                            $this.find('#id_url').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.url).each(function(k,v){
+                                $elist.append('<li>'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                    }  
+                },
+                error: function(e){
+                    console.log(e);
+                }
+            })
+            return false;
+        }
+        $('#id_photo').change(function(){
+            readURL(this);
+        })
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('.user-photo').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $('#spyblock').scrollspy();
+        {% if my_vacancy %}
+            $('#public_apply').on('hidden.bs.modal',function(){
+                $(this).find('[name=vacancy]').val('');
+                $(this).find('.vacancy_name').html('');
+                $(this).find('form').attr('action','')
+            })
+            $('#public_apply').on('show.bs.modal',function(e){
+                $source = $(e.relatedTarget)
+                $(this).find('form').attr('action','/jobs/' + $source.data('vacancy') + '/new_application/')
+                $(this).find('[name="vacancy"]').val($source.data('vacancy'))
+                $(this).find('.vacancy_name').html($source.data('name'))
+            })
+        {% endif %}
+        
+        {% if my_vacancy or not user_profile %}
+            $('#id_file').change(function(){
+                if(this.files && this.files[0] && this.files[0].size > 5*1024*1024) {
+                    alert('File exceeds 5MB file size')
+                    this.value="";
+                }
+            })
+        {% endif %}
+    </script>
+{% endblock %}

@@ -1,0 +1,57 @@
+[
+	{
+		"model": "payments.package", 
+		"pk": 1, 
+		"fields": 
+		{
+			"name": "Basic", 
+			"free_users": 20, 
+			"max_users": 20, 
+			"services": 
+			[
+				1,
+				2,
+				3,
+				5,
+				6,
+				10,
+				11,
+				16,
+				19,
+				20,
+				24
+			]
+		}
+	}, 
+	{
+		"model": "payments.package", 
+		"pk": 2, 
+		"fields": 
+		{
+			"name": "Premium", 
+			"free_users": 20, 
+			"max_users": 0, 
+			"services": 
+			[
+				1,
+				2,
+				3,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				16,
+				17,
+				19,
+				20,
+				23,
+				24,
+				25,
+				26
+			]
+		}
+	}
+]

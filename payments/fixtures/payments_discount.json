@@ -1,0 +1,1 @@
+[{"model": "payments.discount", "pk": 1, "fields": {"name": "Giving DIscount", "label": "EB50", "expiry": "2016-12-31", "type": "P", "transaction_type": "S", "currency": 1, "amount": "50.00", "max_usage": 1, "available_to_signups": true, "max_usage_per_company": 2, "enabled": false, "timestamp": "2016-11-11T19:26:45.502", "plans": [3, 4]}}]

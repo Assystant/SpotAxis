@@ -1,0 +1,702 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% block title %}{% trans 'Search Curricula' %}{% endblock %}
+{% comment %} Page where curriulum search is performed {% endcomment %}
+{% block css %}
+<link href="{{ STATIC_URL }}lou-multi-select/css/multi-select.css" rel="stylesheet" type="text/css"
+      xmlns="http://www.w3.org/1999/html"/>{% endblock %}
+{% block page-header %}{% trans 'Search Curricula' %}{% endblock %}
+{% block content %}
+
+<!-- Content starts -->
+
+    <section id="vacancies-by-company" class="page-content">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="mb5">
+                    {% trans 'Search Curricula' %} {{ company.name }}
+                    {% if not first_search_cvs %}
+                        <button class="btn btn-info btn-lg" style="margin-left: 20px;" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fa fa-search fa-lg"></i> {% trans 'Modify search' %}
+                        </button>
+                        <a class="btn btn-info btn-lg" style="margin-left: 20px; text-transform: none" type="button" href="{% url 'companies_first_search_curricula' %}">
+                            <i class="fa fa-search fa-lg"></i> {% trans 'New search' %}
+                        </a>
+                    {% endif %}
+                    <small><span class="pull-right color-blue">Total registered candidates: <strong>{{ total_candidates }}</strong></span></small>
+                </h2>
+            </div>
+        </div>
+
+        <hr class="mt10">
+
+        <div class="row white-background{% if not first_search_cvs %} collapse{% endif %} mb20" id="collapseExample">
+            <div class="col-md-10 col-md-offset-1 col-xs-12">
+
+                <form id="form-search-cvs"  enctype="multipart/form-data" action="." method="post" role="form">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>{% trans 'Select the filters according to your search criteria' %}... </h5>
+                        </div>
+                    </div>
+
+                    {% if form_search_cvs.errors %}
+                        <ul class="list-unstyled error-list-searchcv">Please correct the following errors:
+                            {% for field in form_search_cvs %}
+                                    {% if field.errors %}
+                                        <li>{{ field.errors|striptags }}</li>
+                                    {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="id_degree">{% trans 'Level of study' %}</label>
+                                {{ form_search_cvs.degree }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="id_status">{% trans 'Status' %}</label>
+                                {{ form_search_cvs.status }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Level of study and Status -->
+
+                    <hr class="hr-cv-search-form">
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'Academic Area - Only Levels (Doctorate - Technical Career)' %}</label>
+                                {{ form_search_cvs.area }}
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6 col-xs-12 borderleft-cv-search-form">
+                            <div class="form-group">
+                                <label for="id_career">{% trans 'State' %}</label>
+                                {{ form_search_cvs.state }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Area and State -->
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'Careers' %}</label>
+                                {{ form_search_cvs.career }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12 borderleft-cv-search-form">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'City' %}</label>
+                                {{ form_search_cvs.municipal }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Careers and City -->
+
+                    <hr class="hr-cv-search-form">
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'Gender' %}</label>
+                                {{ form_search_cvs.gender }}
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-6">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'Minimum Age' %}</label>
+                                {{ form_search_cvs.min_age }}
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-6">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'Maximum Age' %}</label>
+                                {{ form_search_cvs.max_age }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Genero and Age Min and Max -->
+
+                    <hr class="hr-cv-search-form">
+
+                    <div class="row">
+                        <div class="col-md-3 col-xs-6">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'Language required 1' %}</label>
+                                {{ form_search_cvs.language_1 }}
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-6">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'Level' %}</label>
+                                {{ form_search_cvs.level_1 }}
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-6 borderleft-cv-search-form">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'Language required 2' %}</label>
+                                {{ form_search_cvs.language_2 }}
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-6">
+                            <div class="form-group">
+                                <label for="id_area">{% trans 'Level' %}</label>
+                                {{ form_search_cvs.level_2 }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="hr-cv-search-form">
+
+                    <!-- Language and Level 1 and 2 -->
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <label for="id_travel">Availability to Travel:</label>
+                            {{ form_search_cvs.travel }}
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <label for="id_travel">Availability to change residence:</label>
+                            {{ form_search_cvs.residence }}
+                        </div>
+                    </div>
+
+                    <div class="mt25 mb30 text-center">
+                        <button type="submit" class=" btn btn-info btn-lg" style="width: 300px;" id="submit_btn">
+                            <i class="fa fa-search fa-lg"></i> {% trans 'Search Curricula' %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    <div class="row search-cv-filters mb30 bottom-line">
+
+        <div class="col-md-12">
+            <h4>Applied Filters...</h4>
+
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>{% trans 'Level of study' %}</td>
+                                <td>
+                                    {% if degrees %}
+                                        {% for degree in degrees %}
+                                            {{ degree }},
+                                        {% endfor %}
+                                    {% else %}
+                                        Everybody
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>{% trans 'Status' %}</td>
+                                <td>
+                                    {% if status %}
+                                        {% for stat in status %}
+                                            {{ stat }},
+                                        {% endfor %}
+                                    {% else %}
+                                        Everybody
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>{% trans 'Academic Area' %}</td>
+                                <td>{% if area %}
+                                        {{ area }}
+                                    {% else %}
+                                        All
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-sm-6 col-xs-12">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>{% trans 'Careers' %}</td>
+                                <td>
+                                    {% if careers %}
+                                        {% for career in careers %}
+                                            {{ career }} ,
+                                        {% endfor %}
+                                    {% else %}
+                                        All
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>{% trans 'State' %}</td>
+                                <td>
+                                    {% if state %}
+                                        {{ state }}
+                                    {% else %}
+                                        All
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-sm-6 col-xs-12">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>{% trans 'City' %}</td>
+                                <td>
+                                    {% if municipal %}
+                                        {% for municip in municipal %}
+                                            {{ municip }},
+                                        {% endfor %}
+                                    {% else %}
+                                        Everybody
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>{% trans 'Gender' %}</td>
+                                <td>
+                                    {% if gender %}
+                                        {{ gender }}
+                                    {% else %}
+                                        Indistinct
+                                    {% endif %}
+                                     | <strong><span class="color-green">Age:</span> </strong>
+                                    {% if min_age %}{{ min_age }}{% else %}18{% endif %}
+                                     -
+                                    {% if max_age %}{{ max_age }}{% else %}65{% endif %}
+                                     years
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-sm-6 col-xs-12">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>{% trans 'Availability to travel' %}</td>
+                                <td>
+                                    {% if travel %}Yes{% else %}Indistinct{% endif %}
+                                     /
+                                    <strong><span class="color-green">
+                                        {% trans 'Change residence' %}:</span>
+                                    </strong>
+                                    {% if residence %} Yes{% else %} Indistinct{% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {% if language_1 or language_2%}
+                <div class="row">
+                    {% if language_1 %}
+                        <div class="col-sm-6 col-xs-12">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>{% trans 'Language required 1' %}</td>
+                                        <td>{{ language_1 }} - <strong><span class="color-green">Levels:</span></strong> {% for level in level_1 %}{{ level }}, {% endfor %}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+
+                    {% if language_2 %}
+                        <div class="col-sm-6 col-xs-12">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>{% trans 'Language required 2' %}</td>
+                                        <td>{{ language_2 }} - <strong><span class="color-green">Levels:</span></strong> {% for level in level_2 %}{{ level }}, {% endfor %}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    {% if curricula %}
+
+    <!--pagination-->
+    {% include "curricula_paginator.html" %}
+    <!--pagination-->
+
+        <div class="row">
+
+            {% for curriculum in curricula %}
+
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="candidates-item">
+
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <!-- Photo -->
+                                    <td class="hidden-xs thumb-seen">
+                                        <div class="thumb">
+                                            <a href="{% url 'companies_curriculum_detail' candidate_id=curriculum.0.pk %}">
+                                                <img src="{{ MEDIA_URL }}{{ curriculum.0.user.photo }}" alt="{{curriculum.0.user.first_name}} {{curriculum.0.user.last_name}} Pic" data-name="{{curriculum.0.user.first_name}} {{curriculum.0.user.last_name}}">
+                                            </a>
+                                        </div>
+                                    </td><!-- Photo -->
+                                    <td style="padding-left: 14px;">
+                                        <!-- name, age, residence, past study and salary -->
+                                        <h5 class="title"><a href="{% url 'companies_curriculum_detail' candidate_id=curriculum.0.pk %}">{{ curriculum.0.first_name }} {{ curriculum.0.last_name }}</a></h5>
+                                        <p>
+                                            {% if curriculum.0.birthday %}
+                                                {{ curriculum.0.birthday|timesince|upto:',' }}
+                                                 -
+                                            {% endif %}
+                                            {% if curriculum.0.municipal and curriculum.0.state %}
+                                                {{ curriculum.0.municipal }}, {{ curriculum.0.state }}
+                                            {% endif %}
+                                        </p>
+                                        <p>{{ curriculum.2.school }}</p>
+                                        <p>
+                                            {% with curriculum.2|first as academic %}
+                                                {{ academic.degree }}
+                                                {% if academic.degree.codename != 'bachelor' and academic.degree.codename != 'high_school' and academic.degree.codename != 'elementary_school' %}
+                                                     -
+                                                    {% if academic.other %}
+                                                        {{ academic.other }}
+                                                    {% else %}
+                                                        {{ academic.career }}
+                                                    {% endif %}
+                                                {% endif %}
+                                                 - <span style="font-style: italic;"> {{ academic.status }}</span>
+                                            {% endwith %}
+                                        </p>
+                                        {% if curriculum.0.min_salary and curriculum.0.max_salary %}
+                                        <p>{% trans 'Required Salary' %}: ${{ curriculum.0.min_salary|currency }} - {% trans 'Expected' %}: ${{ curriculum.0.max_salary|currency }}</p>
+                                        {% endif %}
+                                    </td><!-- name, age, residence, past study and salary -->
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- See more button -->
+                        <ul class="btns-icons-info">
+                            <li><a href="#" class="btn btn-info fa fa-plus toggle" data-toggle="tooltip" data-placement="top" title="{% trans 'See more' %}"></a></li>
+                        </ul><!-- See more button -->
+
+
+                        <div class="content">
+
+                            <div class="module">
+                                <h5 class="title">{% trans 'Professional Experience' %}</h5>
+                                {% if curriculum.1 %}
+                                    {% for expertise in curriculum.1 %} {# If expertise #}
+                                        <dl class="dl-horizontal">
+                                            <dt>{% trans 'Post' %}:</dt>
+                                            <dd>{{ expertise.employment }}</dd>
+
+                                            <dt>{% trans 'Company' %}:</dt>
+                                            <dd>{{ expertise.company }}</dd>
+
+                                            <dt>{% trans 'Duration' %}:</dt>
+                                            <dd>
+                                                {% if expertise.present %}
+                                                    {{ today|timeuntil:expertise.start_date }} | <span style="font-style: italic">{% trans 'Current' %}</span>
+                                                {% else %}
+                                                    {{ expertise.end_date|timeuntil:expertise.start_date }}
+                                                {% endif %}
+                                            </dd>
+                                        </dl>
+                                    {% endfor %}
+                                {% else %}
+                                    {% trans 'No Experience' %}
+                                {% endif %}
+                            </div><!-- Professional Experience -->
+
+                            <div class="module">
+                                <h5 class="title">{% trans 'Academic Information' %}</h5>
+                                {% if curriculum.1 %}
+                                    {% for academic in curriculum.2 %} {# If study #}
+                                        <dl class="dl-horizontal">
+                                            <dt></dt>
+                                            <dd>
+                                                <strong>
+                                                    {{ academic.degree }}
+                                                    {% if academic.degree.codename != 'bachelor' and academic.degree.codename != 'high_school' and academic.degree.codename != 'elementary_school' %}
+                                                         -
+                                                        {% if academic.other %}
+                                                            {{ academic.other }}
+                                                        {% else %}
+                                                            {{ academic.career }}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </strong>
+                                            </dd>
+
+                                            <dt>{% trans 'Status' %}:</dt>
+                                            <dd>{{ academic.status }}</dd>
+
+                                            <dt>{% trans 'Institution' %}:</dt>
+                                            <dd>
+                                                {{ academic.school }} - {{ academic.country }}
+                                            </dd>
+                                        </dl>
+                                    {% endfor %}
+                                {% else %}
+                                    {% trans 'No Academic Information' %}
+                                {% endif %}
+                            </div><!-- Academic Information -->
+
+                            <div class="clearfix">
+                                <a href="{% url 'companies_curriculum_detail' candidate_id=curriculum.0.pk %}" class="btn btn-default pull-left"><i class="fa fa-search"></i> {% trans 'See full CV' %}</a>
+                                {% if curriculum.0.linkedin or curriculum.0.facebook or curriculum.0.twitter or curriculum.0.google %}
+                                    <ul class="social-icons pull-right">
+                                        <li><span>{% trans 'My profiles' %}</span></li>
+                                        {% if curriculum.0.linkedin %}
+                                            <li><a href="{{ curriculum.0.linkedin }}" target="_blank" class="btn btn-icon-info fa fa-linkedin"></a></li>
+                                        {% endif %}
+                                        {% if curriculum.0.facebook %}
+                                            <li><a href="{{ curriculum.0.facebook }}" target="_blank" class="btn btn-icon-info fa fa-facebook"></a></li>
+                                        {% endif %}
+                                        {% if curriculum.0.twitter %}
+                                            <li><a href="https://www.twitter.com/{{ curriculum.0.twitter }}" target="_blank" class="btn btn-icon-info fa fa-twitter"></a></li>
+                                        {% endif %}
+                                        {% if curriculum.0.google %}
+                                            <li><a href="{{ curriculum.0.google }}" target="_blank" class="btn btn-icon-info fa fa-google-plus"></a></li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </div><!-- See more CV and Social Buttons -->
+
+                        </div><!-- Content -->
+
+                    </div><!-- Candidates-item -->
+                </div>
+
+            {% endfor %}
+        </div><!-- Row -->
+
+
+     <!--pagination-->
+    {% include "curricula_paginator.html" %}
+    <!--pagination-->
+
+    {% else %}
+        <h4>There are no records that match your search criteria.</h4>
+    {% endif %}
+
+
+    </section>
+<!-- Content ends -->
+
+{% endblock %}
+
+{% block java_script_srcs %}
+    <script src="{{STATIC_URL}}lou-multi-select/js/jquery.multi-select.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.quicksearch.js"></script>
+{% endblock %}
+
+{% block java_script_code %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+                $('#id_career').multiSelect("destroy").multiSelect({
+                    selectableHeader:'Available',
+                    selectionHeader:'Selected'
+                });
+                $('#id_area').change(
+                    function() {
+                        var id = (this.value);
+                        $('#id_career').empty();
+                        $.ajax({
+                            data: {
+                                'id': id,
+                                'csrfmiddlewaretoken': '{{ csrf_token }}'
+                            },
+                            url: '/ajax/companies-change-academic-area/',
+                            type: 'POST',
+                            success: function(data){
+                                for(var i = 0; i<data.length; i++){
+                                    $('#id_career').append('<option value="' + data[i].pk + '">' + data[i].fields.name + '</option>');
+                                }
+                                $('#id_career').multiSelect('refresh');
+                            },
+                            error: function(){
+                                $('#id_career').empty().multiSelect('refresh');
+                            }
+                        });
+                    }
+                );
+
+                $('#id_degree').multiSelect({
+                    selectableHeader:'Available',
+                    selectionHeader:'Selected',
+                    afterSelect: function(values){
+                        change_degree();
+                    },
+                    afterDeselect: function(values){
+                        change_degree();
+                    }
+                });
+
+                function change_degree(){
+                    var selected_ids = ($('#id_degree').val());
+                    $.ajax({
+                        data: {
+                            'selected_ids': selected_ids,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        url: '/ajax/companies-allow-career/',
+                        type: 'POST',
+                        success: function(data){
+                            console.log(data);
+                            allowed = true;
+                            for(var i = 0; i<data.length; i++){
+                                codename = data[i].fields.codename;
+                                if (codename == 'indistinct' || codename == 'bachelor' || codename == 'high_school' || codename == 'elementary_school') {
+                                    allowed = false;
+                                    break;
+                                }
+                            }
+                            if (allowed) {
+                                $('#id_area').prop( "disabled", false );
+                                $('#id_career').prop( "disabled", false );
+
+                            } else {
+                                $('#id_area').prop( "disabled", true );
+                                $('#id_career').prop( "disabled", true );
+                            }
+                            $('#id_career').multiSelect('refresh');
+                        }
+                    });
+                }
+
+                $('#id_status').multiSelect({
+                    selectableHeader:'Available',
+                    selectionHeader:'Selected'
+                });
+
+                $('#id_state').change(
+                    function() {
+                        var id = (this.value);
+                        $('#id_municipal').empty();
+                        $.ajax({
+                            data: {
+                                'id': id,
+                                'csrfmiddlewaretoken': '{{ csrf_token }}'
+                            },
+                            url: '/ajax/companies-change-state/',
+                            type: 'POST',
+                            success: function(data){
+                                for(var i = 0; i<data.length; i++){
+                                    $('#id_municipal').append('<option value="' + data[i].pk + '">' + data[i].fields.name + '</option>');
+                                }
+                                 $('#id_municipal').multiSelect('refresh');
+                            }
+                        });
+                    }
+                );
+
+                $('#id_municipal').multiSelect({
+                    selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Search'>",
+                    selectionHeader: "<input type='text' class='search-input' autocomplete='off''>",
+                    afterInit: function(ms){
+                    var that = this,
+                        $selectableSearch = that.$selectableUl.prev(),
+                        $selectionSearch = that.$selectionUl.prev(),
+                        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+                        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+                    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                    .on('keydown', function(e){
+                      if (e.which === 40){
+                        that.$selectableUl.focus();
+                        return false;
+                      }
+                    });
+
+                    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                    .on('keydown', function(e){
+                      if (e.which == 40){
+                        that.$selectionUl.focus();
+                        return false;
+                      }
+                    });
+                  },
+                  afterSelect: function(){
+                    this.qs1.cache();
+                    this.qs2.cache();
+                  },
+                  afterDeselect: function(){
+                    this.qs1.cache();
+                    this.qs2.cache();
+                  }
+                });
+
+            });
+
+        });
+    </script>
+{% endblock %}

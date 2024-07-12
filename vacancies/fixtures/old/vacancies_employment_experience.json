@@ -1,0 +1,65 @@
+[
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 1,
+    "fields": {
+      "name": "Not specified",
+      "codename": "not_specified",
+      "order": 1
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 2,
+    "fields": {
+      "name": "Not Required",
+      "codename": "not_required",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 3,
+    "fields": {
+      "name": "Minimum",
+      "codename": "minimum",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 4,
+    "fields": {
+      "name": "1 year",
+      "codename": "1_year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 5,
+    "fields": {
+      "name": "2 years",
+      "codename": "2_year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 6,
+    "fields": {
+      "name": "3 years",
+      "codename": "3_year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 7,
+    "fields": {
+      "name": "More than 4 years",
+      "codename": "4_year",
+      "order": 100
+    }
+  }
+]

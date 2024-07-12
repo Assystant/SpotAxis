@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Template 1</title>
+	<link rel="stylesheet" href="{{STATIC_URL}}sa-ui-kit/output.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}sa-ui-kit/builder.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}sa-ui-kit/modal.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="{{STATIC_URL}}sa-ui-kit/parent-script.js"></script>
+   <script src="{{STATIC_URL}}sa-ui-kit/modal.js"></script>
+   <link href="{{ STATIC_URL }}ionicons-2.0.1/css/ionicons.min.css" rel="stylesheet">
+	<style type="text/css">
+		body, html{
+			overflow-y: hidden;
+         height: 100%;
+		}
+      iframe {
+         margin-top:50px;
+         height:calc(100% - 50px);
+      }
+	</style>
+	<script type="text/javascript">
+	//these functions must be here & no other place
+	function showPalette(){
+		$('.palette-container').show();
+	}
+	function hidePalette(){
+		$('.palette-container').hide();
+	}
+	</script>
+</head>
+<body>
+
+
+<!-- Modal starts here -->
+
+<!-- To add anchor to text from palette -->
+	<div class="modal short-modal" id="this_modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2>Add link</h2>
+			</div>
+			<div class="modal-body">
+				<input type="url" class="input-field" id="input_url">
+			</div>
+			<div class="modal-footer">
+				<a class="button scale-3 -bg-persian hover-dark elevation-1" id="link">Okay!</a>
+			</div>
+		</div>
+	</div>
+
+<!-- Modal ends here -->
+
+<!-- Left hand menu -->
+<div class="palette-container">
+   <input type="color" id="picker" />
+   <div class="palette">
+      <button id="bold" title="Bold" class="fa fa-bold"></button>
+      <button id="italic" title="Italic" class="fa fa-italic"></button>
+      <button id="underline" title="Underline" class="fa fa-underline"></button>
+      <button id="strikethrough" title="Strikethrough" class="fa fa-strikethrough"></button>
+      <button id="font-family" title="Font" class="fa fa-font"></button>
+      <button id="font-size" title="Font size" class="fa fa-text-height"></button>
+      <button id="eraser" title="Eraser" class="fa fa-eraser"></button>
+      <button id="color" title="Color" class="fa fa-tint"></button>
+      <button id="" title="Align" class="fa fa-align-justify align"></button>
+      <button id="list" title="List" class="fa fa-list list"></button>
+      <button id="" data-modal="#this_modal" title="Link" class="fa fa-link"></button>
+      <button id="unlink" title="Remove Link" class="fa fa-chain-broken"></button>
+   </div>
+   <div class="palette palette-align">
+      <button id="align-left" title="Left" class="fa fa-align-left"></button>
+      <button id="align-right" title="Right" class="fa fa-align-right"></button>
+      <button id="align-justify" title="Justify" class="fa fa-align-justify"></button>
+      <button id="align-center" title="Center" class="fa fa-align-center"></button>
+   </div>
+   <div class="palette palette-list">
+      <button id="unordered-list" title="Bulleted" class="fa fa-list-ul"></button>
+      <button id="ordered-list" title="Numbered" class="fa fa-list-ol"></button>
+      <button id="indent" title="Indent" class="fa fa-indent"></button>
+      <button id="outdent" title="Outdent" class="fa fa-outdent"></button>
+   </div>
+   <div class="palette palette-fontsize">
+      <button class="fa fontSize-button" value="1">1</button>
+      <button class="fa fontSize-button" value="2">2</button>
+      <button class="fa fontSize-button" value="3">3</button>
+      <button class="fa fontSize-button" value="4">4</button>
+      <button class="fa fontSize-button" value="5">5</button>
+      <button class="fa fontSize-button" value="6">6</button>
+      <button class="fa fontSize-button" value="7">7</button>
+   </div>
+   <div class="palette palette-fontfamily">
+      <button class="fa fontFamily-button" value="Raleway">Raleway</button>
+      <button class="fa fontFamily-button" value="Quicksand">Quicksand</button>
+   </div>
+</div>
+<!-- Left hand menu ends -->
+
+
+<!-- Iframe for document start here -->
+<nav class="fixed-nav">
+   <ul class="left">
+      <li><a class="button btn-sm btn-round back_to_template" href="{% url 'companies_site_management' 'template' %}"><h3 class=" no-margin"><i class="ionicons ion-ios-arrow-thin-left -text-light"></i></h3></a></li>
+   </ul>
+   <ul class="right">
+      <!--li><a class="button btn-sm scale-2" href="{% url 'companies_site_management' 'template' %}">Change Template</a></li-->
+      <li><a class="button btn-sm -bg-mantis scale-2" href="#" id="savepage">Save</a></li>
+   </ul>
+</nav>
+<iframe src="{% url 'companies_get_site_template' %}" width="100%" height="100%" id="doc-iframe"></iframe>
+
+<!-- iframe for document end here -->
+
+
+</body>
+</html>

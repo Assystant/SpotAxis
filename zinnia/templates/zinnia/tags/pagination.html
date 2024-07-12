@@ -1,0 +1,58 @@
+{% load i18n %}
+<nav aria-label="Page navigation" class="text-center">
+
+    <p class="index no-margin">
+      {% blocktrans with current_page=page.number total_page=page.paginator.num_pages %}<span class="text-light">Page <b>{{ current_page }}</b> of <b>{{ total_page }}</b></span>{% endblocktrans %}
+    </p>
+  <ul class="pagination mt5">
+
+    <li class="{% if not page.has_previous %} disabled{% endif %}">
+      <a href="{% if page.has_previous%}?page=1{{ GET_string }}{% endif %}" {% if page.has_previous %}aria-label="Previous" title="{% trans "More recent resources" %}" data-toggle="tooltip" {% endif%}>
+        <i class="fa fa-long-arrow-left"></i>
+      </a>
+    </li>
+    <li class="{% if not page.has_previous %} disabled{% endif %}">
+      <a href="{% if page.has_previous%}?page={{ page.previous_page_number }}{{ GET_string }}{% endif %}" {% if page.has_previous %}aria-label="Previous" title="{% trans "Next" %}" data-toggle="tooltip" {% endif%}>
+        <i class="fa fa-angle-double-left"></i>
+      </a>
+    </li>
+    {% if begin %}
+      {% for page_number in begin %}
+      <li class="page{% ifequal page.number page_number %} active{% endifequal %}">
+        <a href="?page={{ page_number }}{{ GET_string }}"
+           title="{% trans "Resources page" %} {{ page_number }}" data-toggle="tooltip">{{ page_number }}</a>
+      </li>
+      {% endfor %}
+    {% endif %}
+    {% if middle %}
+      <li class="disabled"><a href="#"><i class="ionicons ion-ios-more"></i></a></li>
+      {% for page_number in middle %}
+        <li class="page{% ifequal page.number page_number %} active{% endifequal %}">
+          <a href="?page={{ page.next_page_number }}{{ GET_string }}"
+             title="{% trans "Resources page" %} {{ page_number }}" data-toggle="tooltip">{{ page_number }}</a>
+        </li>
+      {% endfor %}
+    {% endif %}
+
+    {% if end %}
+      <li class="disabled"><a href="#"><i class="ionicons ion-ios-more"></i></a></li>
+      {% for page_number in end %}
+        <li class="page{% ifequal page.number page_number %} active{% endifequal %}">
+          <a href="?page={{ page_number }}{{ GET_string }}"
+             title="{% trans "Resources page" %} {{ page_number }}" data-toggle="tooltip">{{ page_number }}</a>
+        </li>
+      {% endfor %}
+    {% endif %}
+
+    <li class="{% if not page.has_next %} disabled{% endif %}">
+      <a href="{% if page.has_next%}?page={{ page.next_page_number }}{{ GET_string }}{% endif %}" {% if page.has_next %}aria-label="Previous" title="{% trans "Previous" %}" data-toggle="tooltip" {% endif%}>
+        <i class="fa fa-angle-double-right"></i>
+      </a>
+    </li>
+    <li class="{% if not page.has_next %} disabled{% endif %}">
+      <a href="{% if page.has_next%}?page={{page.paginator.page_range|last}}{{ GET_string }}{% endif %}" {% if page.has_next %}aria-label="next" title="{% trans "More older resources" %}" data-toggle="tooltip" {% endif%}>
+        <i class="fa fa-long-arrow-right"></i>
+      </a>
+    </li>
+  </ul>
+</nav>

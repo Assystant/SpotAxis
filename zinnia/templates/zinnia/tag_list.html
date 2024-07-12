@@ -1,0 +1,26 @@
+{% extends "zinnia/base.html" %}
+{% load i18n %}
+
+{% block meta-description %}{% trans "Tag list" %}{% endblock meta-description %}
+
+{% block title %}{% trans "Tags" %}{% endblock title %}
+
+{% block body-class %}tag-list{% endblock body-class %}
+
+{% block content %}
+<h1>{% trans "Tag list" %}</h1>
+
+<ul>
+  {% for object in object_list %}
+  <li>
+    <a href="{% url 'zinnia:tag_detail' object %}"
+       title="{% blocktrans with tag=object %}Show all resources tagged by {{ tag }}{% endblocktrans %}">{{ object }}</a>
+    {% blocktrans count entry_count=object.count %}{{ entry_count }} resource{% plural %}{{ entry_count }} resources{% endblocktrans %}
+  </li>
+  {% empty %}
+  <li>
+    {% trans "No tags yet." %}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock content %}

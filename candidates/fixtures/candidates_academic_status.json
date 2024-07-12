@@ -1,0 +1,26 @@
+[
+  {
+    "model": "candidates.academic_status",
+    "pk": 3,
+    "fields": {
+      "name": "Dropped Out",
+      "codename": "dropped"
+    }
+  },
+  {
+    "model": "candidates.academic_status",
+    "pk": 4,
+    "fields": {
+      "name": "Completed",
+      "codename": "complete"
+    }
+  },
+  {
+    "model": "candidates.academic_status",
+    "pk": 5,
+    "fields": {
+      "name": "In Progress",
+      "codename": "progress"
+    }
+  }
+]

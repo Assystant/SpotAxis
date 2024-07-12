@@ -1,0 +1,16 @@
+appdirs==1.4.3
+beautifulsoup4==4.6.0
+bs4==0.0.1
+datefinder==0.6.1
+Django==1.9.5
+django-extensions==1.7.9
+packaging==16.8
+pdfminer==20140328
+pyparsing==2.2.0
+pyth==0.6.0
+python-dateutil==2.6.0
+pytz==2017.2
+regex==2016.1.10
+requirement.txt==0.2.0
+six==1.10.0
+Werkzeug==0.12.2

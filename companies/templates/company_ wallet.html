@@ -1,0 +1,100 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block title %}{% trans 'Electronic Wallet' %}{% endblock %}
+{% comment %} Page for COmpany Recommendations {% endcomment %}
+{% block page-header %}{% trans 'Electronic Wallet' %}{% endblock %}
+{% block content %}
+
+<!-- Content starts -->
+
+    <div class="title-lines">
+        <h3>{% trans 'My Electronic Wallet' %}</h3>
+    </div>
+
+    <div class="mb50">
+            <!-- Recomendations -->
+            <h5>Balance Sheet...</h5>
+            <table class="table-bordered table-striped mb5">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Date of Last Move' %}</th>
+                        <th class="text-center">{% trans 'Deposit' %}</th>
+                        <th class="text-center">{% trans 'Redeem' %}</th>
+                        <th class="text-center">{% trans 'Available'%}</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>
+                            {{ last_movement.date }}
+                        </td>
+                        <td class="text-center">
+                            <span>${{ company_wallet.adds}} </span>
+                        </td>
+                        <td class="text-center">
+                              <span>$ {{ company_wallet.redeems }}</span>
+                        </td>
+                        <td class="text-center">
+                           <span>$ {{ company_wallet.available }} </span>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+    {% if wallet_movements %}
+        <div class="mb50">
+            <!-- Recomendations -->
+         <h5>Movement Summary...</h5>
+            <table class="table-bordered table-striped mb5">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Service' %}</th>
+                        <th class="text-center">{% trans 'User' %}</th>
+                        <th class="text-center">{% trans 'Type' %}</th>
+                        <th class="text-center">{% trans 'Amount'%}</th>
+                        <th class="text-center">{% trans 'Date' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movement in wallet_movements %}
+                        <tr>
+                            <td>
+                                {{ movement.service }}
+                            </td>
+                            <td class="text-center">
+                                {{ movement.user.get_full_name }}
+                            </td>
+                            <td class="text-center">
+                                {% if movement.type == 'A' %}
+                                    {% trans 'Deposit' %}
+                                {% else %}
+                                    {% trans 'Redeem' %}
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <span>$ {{ movement.amount }}</span>
+                            </td>
+                            <td class="text-center">
+                                {{ movement.date|date:"D d M Y - h:i a" }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    {% else %}
+        <h5>{% trans 'You do not have any movements in yout purse yet.' %}</h5>
+
+        <hr class="mb60">
+    {% endif %}
+
+<!-- Content ends -->
+
+{% endblock %}

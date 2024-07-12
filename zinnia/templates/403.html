@@ -1,0 +1,20 @@
+{% extends "zinnia/skeleton.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumbs">
+  <li>{% trans "Error 403" %}</li>
+</ul>
+{% endblock breadcrumbs %}
+
+{% block title %}{% trans "Permission denied" %}{% endblock title %}
+
+{% block body-class %}error-403{% endblock body-class %}
+
+{% block content %}
+<h1>{% trans "Permission denied" %}</h1>
+
+<p>{% trans "Sorry, but you don't have the permission to do this action." %}</p>
+
+{{ block.super }}
+{% endblock content %}

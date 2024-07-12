@@ -1,0 +1,21 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block title %}SpotAxis | Server Error{% endblock %}
+
+{% block content %}
+
+    <div class="mt50 mb50 white-container-blue-bottom text-center" style="height: 500px; min-height: 500px; padding-top: 10%;">
+        <h1 class="mb30" style="font-size: 80px;">Oops!!!</h1>
+
+        <span style="font-size: 24px;">
+            <strong>
+                {% trans 'An error occured on the server. We have been notified and will answer as soon as possible.' %}
+                <br/>
+                <br/>
+                {% trans 'Inconvenience caused is deeply regretted.' %}
+            </strong>
+        </span>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load static %}
+<input type="hidden" value="1" name="is_custom_form">
+{% csrf_token %}
+<input type="hidden" name="vacancy" value="{{vacancy.id}}">
+{% if form.non_form_errors %}
+    <ul class="list-unstyled error-list text-danger">
+        {% for error in field.errors %}
+            <li>{{ error|escape }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% for field in form %}
+    <div class="col-xs-12 mt5 mb5">
+        <div class="form-group">
+            {% if field.errors %}
+                <ul class="list-unstyled error-list text-danger">
+                {% for error in field.errors %}
+                    <li>{{ error|escape }}</li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                {{field.label}}
+            {% endif %}
+            {% for object in field %}
+                <div class="">
+                    {{object}}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,271 @@
+{% extends "base/outer_base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% load zinnia %}
+{% comment %} Home {% endcomment %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+{% block css %}
+    {{block.super}}
+    <style>
+        article.s-promo-block-v6.swiper-slide h3{
+            position:absolute;
+            bottom:100px;
+            left: 20px;
+            right: 20px;
+        }
+
+        article.s-promo-block-v6{
+            min-height:350px;
+        }
+        article .zinnia_more{
+            bottom:40px;
+            left:25%;
+            right:25%;
+            position:absolute;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+    <!--========== PROMO BLOCK ==========-->
+    <section class="s-promo-block-v4 g-fullheight--md" data-vidbg-bg="mp4: {{ STATIC_URL }}newtheme/img/1920x1080/2.mp4, webm: {{ STATIC_URL }}newtheme/img/1920x1080/2.webm, poster: {{ STATIC_URL }}newtheme/img/1920x1080/18.jpg" data-vidbg-options="loop: true, muted: true, overlay: false">
+        <div class="container g-text-right--xs g-ver-center--xs">
+	        <div class="row">
+	            <div class="col-md-7 col-md-offset-5">
+	                <div class="g-margin-b-50--xs">
+	                    <h2 class="g-font-size-32--xs g-font-size-45--sm g-font-size-55--md g-font-weight--800 g-color--white">Hire the best talent<br>With Us</h2>
+	                    <p class="g-font-size-18--xs g-font-size-22--sm g-font-weight--400 g-color--white">A fine crafted solution for Hiring Teams to increase efficiency upto <span class="g-font-size-32--xs">3X</span> times</p>
+	                </div>
+	                <span class="g-font-weight--750 g-padding-x-10--xs g-font-size-18--xs g-color--white">Free forever!</span>
+	                <a href="{% url 'companies_record_recruiter'%}" class="text-uppercase s-btn s-btn--md s-btn--white-brd g-radius--50 g-padding-x-50--xs">Get Started</a>
+	            </div>
+	        </div>
+	    </div>
+    </section>
+    <!--========== END PROMO BLOCK ==========-->
+
+    <!--========== PAGE CONTENT ==========-->
+    <!-- About -->
+    <div class="g-text-center--xs g-margin-t-80--xs">
+        <h2 class="g-font-size-32--xs g-font-size-36--md g-color--black">What we offer</h2>
+        <p class="text-uppercase g-font-size-14--xs g-font-weight--750 g-color--black-opacity g-letter-spacing--2 g-margin-b-0--xs">Our solution is dead simple to use and efficient for complex hiring problems</p>
+    </div>
+    <div class="container g-padding-y-80--xs">
+        <div class="row g-hor-centered-row--md g-row-col--5 g-margin-b-60--xs g-margin-b-100--md">
+            <div class="col-sm-3 col-xs-6 g-hor-centered-row__col">
+                <div class="wow fadeInLeft s-promo-block-v4" data-wow-duration=".3" data-wow-delay=".1s">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/400x500/051.jpeg" alt="Image">
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-6 g-hor-centered-row__col g-margin-b-60--xs g-margin-b-0--md">
+                <div class="wow fadeInLeft s-promo-block-v4" data-wow-duration=".3" data-wow-delay=".2s">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/400x550/012.jpeg" alt="Image">
+                </div>
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-5 g-hor-centered-row__col">
+                <!--<p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">Culture</p>-->
+                <h2 class="g-font-size-32--xs g-font-size-36--sm g-margin-b-25--xs">Better Candidate experience</h2>
+                <p class="g-font-size-18--sm">Candidates will have a delightful Apply experience and post apply status tracking.</p>
+            </div>
+        </div>
+
+        <div class="row g-hor-centered-row--md g-row-col--5 g-margin-b-60--xs g-margin-b-100--md">
+            <div class="col-sm-3 col-xs-6 col-sm-push-6 g-hor-centered-row__col">
+                <div class="wow fadeInRight s-promo-block-v4" data-wow-duration=".3" data-wow-delay=".2s">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/400x550/021.jpeg" alt="Image">
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-6 col-sm-push-6 g-hor-centered-row__col g-margin-b-60--xs g-margin-b-0--md">
+                <div class="wow fadeInRight s-promo-block-v4" data-wow-duration=".3" data-wow-delay=".1s">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/400x500/063.jpeg" alt="Image">
+                </div>
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-5 col-sm-pull-7 g-hor-centered-row__col g-text-left--xs g-text-right--md">
+                <!--<p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">Speakers</p>-->
+                <h2 class="g-font-size-32--xs g-font-size-36--sm g-margin-b-25--xs">Increase Recruiter's Productivity</h2>
+                <p class="g-font-size-18--sm">Recruiters will manage all candidates, jobs and hiring processes at one place.</p>
+            </div>
+        </div>
+
+        <div class="row g-hor-centered-row--md g-row-col--5">
+            <div class="col-sm-3 col-xs-6 g-hor-centered-row__col">
+                <div class="wow fadeInLeft s-promo-block-v4" data-wow-duration=".3" data-wow-delay=".1s">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/400x500/071.jpeg" alt="Image">
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-6 g-hor-centered-row__col g-margin-b-60--xs g-margin-b-0--md">
+                <div class="wow fadeInLeft s-promo-block-v4" data-wow-duration=".3" data-wow-delay=".2s">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/400x550/031.jpeg" alt="Image">
+                </div>
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-5 g-hor-centered-row__col">
+                <!--<p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">Culture</p>-->
+                <h2 class="g-font-size-32--xs g-font-size-36--sm g-margin-b-25--xs">Quality Hiring</h2>
+                <p class="g-font-size-18--sm">Recruiters will hire faster and better candidates with data driven hiring process.</p>
+            </div>
+        </div>
+    </div>
+    <div class="g-text-center--xs g-margin-b-80--xs">
+        <a href="{% url 'product' %}" class="text-uppercase s-btn s-btn-icon--md s-btn--primary-brd g-radius--50 g-padding-x-50--xs">Learn More</a>
+    </div>
+    <!-- End About -->
+
+    <!-- Process -->
+    <div class="g-bg-color--sky-light">
+        <div class="container g-padding-y-80--xs">
+            <div class="g-text-center--xs g-margin-b-80--xs">
+                <!--<p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--white-opacity g-letter-spacing--2 g-margin-b-25--xs">Process</p>-->
+                <h2 class="g-font-size-32--xs g-font-size-36--md g-color--dark">How it Works</h2>
+            </div>
+            <ul class="list-inline row g-margin-b-80--xs">
+                <!-- Process -->
+                <li class="col-sm-3 col-xs-6 g-full-width--xs s-process-v1 g-margin-b-60--xs g-margin-b-0--md">
+                    <div class="center-block g-text-center--xs">
+                        <div class="g-margin-b-30--xs">
+                            <span class="g-display-inline-block--xs g-width-100--xs g-height-100--xs g-font-size-38--xs g-color--primary g-bg-color--white g-box-shadow__dark-lightest-v4 g-padding-x-20--xs g-padding-y-20--xs g-radius--circle">01</span>
+                        </div>
+                        <div class="g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs g-color--dark">Create Job</h3>
+                            <p class="g-color--black-opacity">Create and manage all jobs at one place with all set preference</p>
+                        </div>
+                    </div>
+                </li>
+                <!-- End Process -->
+
+                <!-- Process -->
+                <li class="col-sm-3 col-xs-6 g-full-width--xs s-process-v1 g-margin-b-60--xs g-margin-b-0--md">
+                    <div class="center-block g-text-center--xs">
+                        <div class="g-margin-b-30--xs">
+                            <span class="g-display-inline-block--xs g-width-100--xs g-height-100--xs g-font-size-38--xs g-color--primary g-bg-color--white g-box-shadow__dark-lightest-v4 g-padding-x-20--xs g-padding-y-20--xs g-radius--circle">02</span>
+                        </div>
+                        <div class="g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs g-color--dark">Attract Talent</h3>
+                            <p class="g-color--black-opacity">Attract candidates from varied source and accept applications seamlessly</p>
+                        </div>
+                    </div>
+                </li>
+                <!-- End Process -->
+
+                <!-- Process -->
+                <li class="col-sm-3 col-xs-6 g-full-width--xs s-process-v1 g-margin-b-60--xs g-margin-b-0--sm">
+                    <div class="center-block g-text-center--xs">
+                        <div class="g-margin-b-30--xs">
+                            <span class="g-display-inline-block--xs g-width-100--xs g-height-100--xs g-font-size-38--xs g-color--primary g-bg-color--white g-box-shadow__dark-lightest-v4 g-padding-x-20--xs g-padding-y-20--xs g-radius--circle">03</span>
+                        </div>
+                        <div class="g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs g-color--dark">Hiring Process</h3>
+                            <p class="g-color--black-opacity">Manage candidates, interviews and team collaboration without hassle</p>
+                        </div>
+                    </div>
+                </li>
+                <!-- End Process -->
+
+                <!-- Process -->
+                <li class="col-sm-3 col-xs-6 g-full-width--xs s-process-v1">
+                    <div class="center-block g-text-center--xs">
+                        <div class="g-margin-b-30--xs">
+                            <span class="g-display-inline-block--xs g-width-100--xs g-height-100--xs g-font-size-38--xs g-color--primary g-bg-color--white g-box-shadow__dark-lightest-v4 g-padding-x-20--xs g-padding-y-20--xs g-radius--circle">04</span>
+                        </div>
+                        <div class="g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs g-color--dark">Hire</h3>
+                            <p class="g-color--black-opacity">Take data driven decision to hire the best talent and grow your team.</p>
+                        </div>
+                    </div>
+                </li>
+                <!-- End Process -->
+            </ul>
+
+            <div class="g-text-center--xs">
+                <a href="{% url 'companies_record_recruiter'%}" class="text-uppercase s-btn s-btn-icon--md s-btn--primary-brd g-radius--50 g-padding-x-50--xs">Get Started</a>
+            </div>
+        </div>
+    </div>
+    <!-- End Process -->
+    {% comment %}
+    <!-- Testimonials -->
+    <div class="g-hor-divider__dashed--sky-light g-padding-y-80--xs g-padding-y-125--xsm">
+        <div class="container g-text-center--xs">
+        <h2 class="g-font-size-32--xs g-font-size-36--md g-color--dark">Our Clients</h2>
+            <!--<p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--primary g-letter-spacing--2 g-margin-b-50--xs">Testimonials</p>-->
+
+            <div class="s-swiper js__swiper-testimonials">
+                <!-- Swiper Wrapper -->
+                <div class="swiper-wrapper g-margin-b-50--xs">
+                    <div class="swiper-slide g-padding-x-130--sm g-padding-x-150--lg">
+                        <div class="g-padding-x-20--xs g-padding-x-50--lg">
+                            <img class="g-width-70--xs g-height-70--xs g-hor-border-4__solid--white g-box-shadow__dark-lightest-v4 g-radius--circle g-margin-b-30--xs" src="{{ STATIC_URL }}newtheme/img/400x400/04.jpg" alt="Image">
+                            <div class="g-margin-b-40--xs">
+                                <p class="g-font-size-22--xs g-font-size-28--sm g-color--heading"><i>" I have purchased many great templates over the years but this product and this company have taken it to the next level. Exceptional customizability. "</i></p>
+                            </div>
+                            <div class="center-block g-hor-divider__solid--heading-light g-width-100--xs g-margin-b-30--xs"></div>
+                            <h4 class="g-font-size-15--xs g-font-size-18--sm g-color--primary g-margin-b-5--xs">Jake Richardson / Google</h4>
+                        </div>
+                    </div>
+                    <div class="swiper-slide g-padding-x-130--sm g-padding-x-150--lg">
+                        <div class="g-padding-x-20--xs g-padding-x-50--lg">
+                            <img class="g-width-70--xs g-height-70--xs g-hor-border-4__solid--white g-box-shadow__dark-lightest-v4 g-radius--circle g-margin-b-30--xs" src="{{ STATIC_URL }}newtheme/img/400x400/05.jpg" alt="Image">
+                            <div class="g-margin-b-40--xs">
+                                <p class="g-font-size-22--xs g-font-size-28--sm g-color--heading"><i>" I have purchased many great templates over the years but this product and this company have taken it to the next level. Exceptional customizability. "</i></p>
+                            </div>
+                            <div class="center-block g-hor-divider__solid--heading-light g-width-100--xs g-margin-b-30--xs"></div>
+                            <h4 class="g-font-size-15--xs g-font-size-18--sm g-color--primary g-margin-b-5--xs">Anna Kusaikina / Apple</h4>
+                        </div>
+                    </div>
+                    <div class="swiper-slide g-padding-x-130--sm g-padding-x-150--lg">
+                        <div class="g-padding-x-20--xs g-padding-x-50--lg">
+                            <img class="g-width-70--xs g-height-70--xs g-hor-border-4__solid--white g-box-shadow__dark-lightest-v4 g-radius--circle g-margin-b-30--xs" src="{{ STATIC_URL }}newtheme/img/400x400/06.jpg" alt="Image">
+                            <div class="g-margin-b-40--xs">
+                                <p class="g-font-size-22--xs g-font-size-28--sm g-color--heading"><i>" I have purchased many great templates over the years but this product and this company have taken it to the next level. Exceptional customizability. "</i></p>
+                            </div>
+                            <div class="center-block g-hor-divider__solid--heading-light g-width-100--xs g-margin-b-30--xs"></div>
+                            <h4 class="g-font-size-15--xs g-font-size-18--sm g-color--primary g-margin-b-5--xs">Lucas Richardson / Microsoft</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Swipper Wrapper -->
+
+                <!-- Arrows -->
+                <div class="g-font-size-22--xs g-color--heading js__swiper-fraction"></div>
+                <a href="javascript:void(0);" class="g-display-none--xs g-display-inline-block--sm s-swiper__arrow-v1--right s-icon s-icon--md s-icon--primary-brd g-radius--circle ti-angle-right js__swiper-btn--next"></a>
+                <a href="javascript:void(0);" class="g-display-none--xs g-display-inline-block--sm s-swiper__arrow-v1--left s-icon s-icon--md s-icon--primary-brd g-radius--circle ti-angle-left js__swiper-btn--prev"></a>
+                <!-- End Arrows -->
+            </div>
+        </div>
+    </div>
+    <!-- End Testimonials -->
+    {% endcomment %}
+    {# {% include 'base/clients.html' %} #}
+    <!-- News -->
+    <div class="container-fluid g-padding-y-80--xs">
+        <div class="g-text-center--xs g-margin-b-80--xs">
+            <!--<p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">Therapy News</p>-->
+            <h2 class="g-font-size-32--xs g-font-size-36--md g-color--dark">Resources</h2>
+            <!--<p>Get the best articles</p>-->
+        </div>
+
+        <!-- Swiper -->
+        <div class="s-swiper js__swiper-news">
+            <!-- Wrapper -->
+            <div class="swiper-wrapper g-margin-b-40--xs">
+                {% get_recent_entries 10 'base/home_zinnia_listing.html'  %}
+            </div>
+            <!-- End Wrapper -->
+
+            <!-- Pagination -->
+            <div class="s-swiper__pagination-v1 s-swiper__pagination-v1--dark g-text-center--xs js__swiper-pagination"></div>
+        </div>
+        <!-- End Swiper -->
+    </div>
+    <div class="g-text-center--xs g-margin-b-80--xs">
+        <a href="{{settings.HOSTED_URL}}{% url 'zinnia:entry_archive_index' %}" class="text-uppercase s-btn s-btn-icon--md s-btn--primary-brd g-radius--50 g-padding-x-50--xs">Read More</a>
+    </div>
+    <!-- End News -->
+
+    <!--========== END PAGE CONTENT ==========-->
+{% endblock %}

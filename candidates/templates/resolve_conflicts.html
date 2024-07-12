@@ -1,0 +1,420 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{#{% load pagination_tags %}#}
+{% load TRM_tags %}
+
+{% block title %}{{vacancy.company.name}} | {{ vacancy.employment }}{% endblock %}
+{% block css %}
+    <link href="{{STATIC_URL}}datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}daterange/daterangepicker.css" rel="stylesheet">
+{% endblock %}
+
+{% block subnav %} 
+	<nav class="navbar navbar-short navbar-default" id="navbar-short">
+	    <div class="container-fluid text-center" id="navbar_short">
+	        <ul class="nav navbar-nav pull-left">
+	            <li class="">
+	                <a class="" href="{% url 'vacancies_new_application' vacancy.id %}"><i class="fa fa-arrow-left fa-sm"></i> Back to Apply</a>
+	            </li>
+	        </ul>
+	        <ul class="navbar-nav nav nav-center no-padding nav-spaced-center">
+	        	<li>
+	        		<h4 class="inline-block mt5 mb5">{{vacancy|title}}</h4>
+	        	</li>
+	        </ul>
+	    </div>
+	</nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container pt40">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 mt10 mb10">
+            	{% if card_type == 1 or card_type == '1' %}
+	                <h3 class="text-light">Academic Qualifications</h3>
+	                {% for education in candidate.all_academic_with_conflicts %}
+	                    {% with conflicts.education|get_dict_key:education.id as conflict_fields %}
+	                        {% if not education.candidate.parent_profile %}
+	                            <div class="row academic-{{education.id}} collapse fade in resolution-card original-card" data-id="{{education.id}}" data-type="1">
+	                                <div class="container-fluid bg-white border-bottom border-light br-2 pt15 pb15 pr20 pl20 relative clickable toggle-checkbox-card">
+	                                    <div class="card-left checkbox checkbox-card checkbox-circle checkbox-info no-margin pl5">
+	                                        <input type="checkbox" id="academic-{{education.id}}" class="card-checkbox academic-{{education.id}}"><label for="academic-{{education.id}}"></label>
+	                                    </div>
+	                                    <h4 class="pl15 pr15 no-margin ">
+	                                        <i class="fa fa-certificate"></i> <span class="academic_coursename {% if 'course_name' in conflict_fields.conflict_fields %}text-danger{% endif %}">{{education.course_name|default:'Not Provided'}}{% if education.area %}<span class="{% if 'area' in conflict_fields.conflict_fields %}text-danger{% endif %}">, {{education.area}}</span>{% endif %}</span>
+	                                        {% if education.status %}<small class="pull-right pt5"><i class="fa fa-flag-checkered"></i> <span class="academic_status {% if 'status' in conflict_fields.conflict_fields %}text-danger{% endif %}">{{ education.status }}</span></small>{% endif %}
+	                                    </h4>
+	                                    <div class="container-fluid">
+	                                        <div class="row">
+	                                            <div class="{% if education.start_date %}col-md-6{% else %} col-md-12{% endif %}">
+	                                                {% if education.degree %}
+	                                                    <h5 class='pl15 pr15 no-margin-bottom'><i class="fa fa-mortar-board"></i> <span class="academic_degree {% if 'degree' in conflict_fields.conflict_fields %}text-danger{% endif %}">{{education.degree}}</span></h5>
+	                                                {% endif %}
+	                                                {% if education.school %}
+	                                                    <h5 class="{% if education.degree %} mt5 {% endif %} no-margin-bottom"><i class="fa fa-university"></i> <span class="academic_school {% if 'school' in conflict_fields.conflict_fields %}text-danger{% endif %}">{{ education.school }}</span></h5>
+	                                                {% endif %}
+	                                                {% if education.city or education.state or education.country %}
+	                                                    <span><i class="fa fa-map-marker"></i> <span class="academic_location">{%if education.city%}{{education.city}}, {%endif%}{%if education.state%}{{education.state}}, {%endif%}{{education.country}}</span></span>
+	                                                {% endif %}
+	                                            </div>
+	                                            {% if education.start_date %}
+	                                                <div class="col-md-6 text-right pt10">
+	                                                    <small class="">
+	                                                        <i class="fa fa-calendar"></i> 
+	                                                        <span class="academic_date {% if 'start_date' in conflict_fields.conflict_fields or 'end_date' in conflict_fields.conflict_fields %}text-danger{% endif %}">
+	                                                            {{education.start_date }}
+	                                                            {% if education.status.codename == 'progress' %}
+	                                                                - {% trans 'Ongoing' %}
+	                                                            {% else %}
+	                                                                 - {{ education.end_date}}
+	                                                            {% endif %}
+	                                                        </span>
+	                                                    </small>
+	                                                </div>
+	                                            {% endif %}
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <div class="row pl30 pr30 pt10 pb20 conflicting-card-section">
+	                                {% for academic in candidate.all_academic_with_conflicts %}
+	                                    {% with conflicts.education|get_dict_key:academic.id as conflict_fields %}
+	                                        {% if academic.candidate.parent_profile  and conflict_fields.conflicting_to == education.id%}
+	                                            <div class="row academic-{{academic.id}} collapse fade in mb5 resolution-card conflict-card" data-id="{{academic.id}}" data-type="1">
+	                                                <div class="container-fluid bg-white border-bottom border-light br-2 pt15 pb15 pr20 pl20 relative clickable toggle-checkbox-card">
+	                                                    <div class="card-left checkbox checkbox-card checkbox-circle checkbox-info no-margin pl5">
+	                                                        <input type="checkbox" id="academic-{{academic.id}}" class="card-checkbox academic-{{academic.id}}"><label for="academic-{{academic.id}}"></label>
+	                                                    </div>
+	                                                    <h4 class="pl15 pr15 no-margin ">
+	                                                        <i class="fa fa-certificate"></i> <span class="academic_coursename {% if 'course_name' in conflict_fields.conflict_fields %}text-danger{% endif %}">{{academic.course_name|default:'Not Provided'}}{% if academic.area %}<span class="{% if 'area' in conflict_fields.conflict_fields %}text-danger{% endif %}">, {{academic.area}}</span>{% endif %}</span>
+	                                                        {% if academic.status %}<small class="pull-right pt5"><i class="fa fa-flag-checkered"></i> <span class="academic_status {% if 'status' in conflict_fields.conflict_fields %}text-danger{% endif %}">{{ academic.status }}</span></small>{% endif %}
+	                                                    </h4>
+	                                                    <div class="container-fluid">
+	                                                        <div class="row">
+	                                                            <div class="{% if academic.start_date %}col-md-6{% else %} col-md-12{% endif %}">
+	                                                                {% if academic.degree %}
+	                                                                    <h5 class='pl15 pr15 no-margin-bottom'><i class="fa fa-mortar-board"></i> <span class="academic_degree {% if 'degree' in conflict_fields.conflict_fields %}text-danger{% endif %}">{{academic.degree}}</span></h5>
+	                                                                {% endif %}
+	                                                                {% if academic.school %}
+	                                                                    <h5 class="{% if academic.degree %} mt5 {% endif %} no-margin-bottom"><i class="fa fa-university"></i> <span class="academic_school {% if 'school' in conflict_fields.conflict_fields %}text-danger{% endif %}">{{ academic.school }}</span></h5>
+	                                                                {% endif %}
+	                                                                {% if academic.city or academic.state or academic.country %}
+	                                                                    <span><i class="fa fa-map-marker"></i> <span class="academic_location">{%if academic.city%}{{academic.city}}, {%endif%}{%if academic.state%}{{academic.state}}, {%endif%}{{academic.country}}</span></span>
+	                                                                {% endif %}
+	                                                            </div>
+	                                                            {% if academic.start_date %}
+	                                                                <div class="col-md-6 text-right pt10">
+	                                                                    <small class="">
+	                                                                        <i class="fa fa-calendar"></i> 
+	                                                                        <span class="academic_date {% if 'start_date' in conflict_fields.conflict_fields or 'end_date' in conflict_fields.conflict_fields %}text-danger{% endif %}">
+	                                                                            {{academic.start_date }}
+	                                                                            {% if academic.status.codename == 'progress' %}
+	                                                                                - {% trans 'Ongoing' %}
+	                                                                            {% else %}
+	                                                                                 - {{ academic.end_date}}
+	                                                                            {% endif %}
+	                                                                        </span>
+	                                                                    </small>
+	                                                                </div>
+	                                                            {% endif %}
+	                                                        </div>
+	                                                    </div>
+	                                                </div>
+	                                            </div>
+	                                        {% endif %}
+	                                    {% endwith %}
+	                                {% endfor %}
+	                            </div>
+	                        {% endif %}
+	                    {% endwith %}
+	                {% endfor %}
+	            {% elif card_type == 2 or card_type == '2' %}
+	                <h3 class="text-light">Experience</h3>
+
+	                {% for experience in candidate.all_expertise_with_conflicts %}
+	                    {% with conflicts.experience|get_dict_key:experience.id as conflict_fields %}
+	                        {% if not experience.candidate.parent_profile %}
+	                            <div class="row experience-{{experience.id}} collapse fade in resolution-card original-card" data-id="{{experience.id}}" data-type="2">
+	                                <div class="container-fluid bg-white border-bottom border-light br-2 pt15 pb15 pr20 pl20 relative clickable toggle-checkbox-card">
+	                                    <div class="card-left checkbox checkbox-card checkbox-circle checkbox-info no-margin pl5">
+	                                        <input type="checkbox" id="experience-{{experience.id}}" class="card-checkbox experience-{{experience.id}}"><label for="experience-{{experience.id}}"></label>
+	                                    </div>
+	                                    <h4 class="pl15 pr15 no-margin">
+	                                        <i class="fa fa-briefcase"></i> <span class="experience_employment {% if 'employment' in conflict_fields.conflict_fields %}text-danger{% endif %} ">{{ experience.employment|default:'Position Unknown' }}</span>
+	                                        {% if experience.start_date %}
+	                                            <small class="pull-right"><i class="fa fa-clock-o"></i> <span class="experience_duration">{% if experience.present %}
+	                                                {{ today|timeuntil:experience.start_date }}
+	                                                {% else %}
+	                                                    {{ experience.end_date|timeuntil:experience.start_date }}
+	                                                {% endif %}</span>
+	                                            </small>
+	                                        {% endif %}
+	                                    </h4>
+	                                    <div class="container-fluid">
+	                                        <div class="row">
+	                                            <div class="col-md-6">
+	                                                {% if experience.company %}
+	                                                    <h4 class=""><i class="fa fa-building"></i> <span class="experience_company">{{ experience.company }}</span></h4>
+	                                                {% endif %}
+	                                                {% if experience.city or experience.state or experience.country %}
+	                                                    <span><i class="fa fa-map-marker"></i> <span class="experience_location">{% if experience.city %}{{experience.city}}, {% endif%}{%if experience.state %}{{experience.state}}, {%endif%}{{experience.country}}</span></span>
+	                                                {% endif %}
+	                                            </div>
+	                                            <div class="col-md-6 text-right pt10">
+	                                                {% if experience.start_date %}
+	                                                    <small class=""><i class="fa fa-calendar"></i> <span class="experience_date">{{experience.start_date }}{% if experience.present %}
+	                                                        - {% trans 'Current Job' %}
+	                                                    {% else %}
+	                                                         - {{ experience.end_date}}
+	                                                    {% endif %}</span></small>
+	                                                {% endif %}
+	                                            </div>
+	                                        </div>
+	                                        {% if exerience.tasks %}
+	                                            <p class="mt10"><span class="experience_tasks">{{ experience.tasks }}</span></p>   
+	                                        {% endif %}
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <div class="row pl30 pr30 pt10 pb20 conflicting-card-section">
+	                                {% for expertise in candidate.all_expertise_with_conflicts %}
+	                                    {% with conflicts.experience|get_dict_key:expertise.id as conflict_fields %}
+	                                        {% if expertise.candidate.parent_profile and conflict_fields.conflicting_to == experience.id %}
+	                                            <div class="row experience-{{expertise.id}} collapse fade in resolution-card conflict-card" data-id="{{expertise.id}}" data-type="2">
+	                                                <div class="container-fluid bg-white border-bottom border-light br-2 pt15 pb15 pr20 pl20 relative clickable toggle-checkbox-card">
+	                                                <div class="card-left checkbox checkbox-card checkbox-circle checkbox-info no-margin pl5">
+	                                                    <input type="checkbox" id="experience-{{expertise.id}}" class="card-checkbox experience-{{expertise.id}}"><label for="experience-{{expertise.id}}"></label>
+	                                                </div>
+	                                                    <h4 class="pl15 pr15 no-margin">
+	                                                        <i class="fa fa-briefcase"></i> <span class="experience_employment {% if 'employment' in conflict_fields.conflict_fields %}text-danger{% endif %} ">{{ expertise.employment|default:'Position Unknown' }}</span>
+	                                                        {% if expertise.present or expertise.end_date %}
+	                                                            <small class="pull-right"><i class="fa fa-clock-o"></i> <span class="experience_duration">{% if expertise.present %}
+	                                                                    {{ today|timeuntil:expertise.start_date }}
+	                                                                {% else %}
+	                                                                    {{ expertise.end_date|timeuntil:expertise.start_date }}
+	                                                                {% endif %}</span></small>
+	                                                        {% endif %}
+	                                                    </h4>
+	                                                    <div class="container-fluid">
+	                                                        <div class="row">
+	                                                            <div class="col-md-6">
+	                                                                {% if expertise.company %}
+	                                                                    <h4 class=""><i class="fa fa-building"></i> <span class="experience_company">{{ expertise.company }}</span></h4>
+	                                                                {% endif %}
+	                                                                {% if expertise.city or expertise.state or epertise.country %}
+	                                                                    <span><i class="fa fa-map-marker"></i> <span class="experience_location">{% if expertise.city %}{{expertise.city}}, {% endif%}{%if expertise.state %}{{expertise.state}}, {%endif%}{{expertise.country}}</span></span>
+	                                                                {% endif %}
+	                                                            </div>
+	                                                            <div class="col-md-6 text-right pt10">
+	                                                                {% if expertise.start_date %}
+	                                                                    <small class=""><i class="fa fa-calendar"></i> <span class="experience_date">{{expertise.start_date }}{% if expertise.present %}
+	                                                                        - {% trans 'Current Job' %}
+	                                                                    {% else %}
+	                                                                         - {{ expertise.end_date}}
+	                                                                    {% endif %}</span></small>
+	                                                                {% endif %}
+	                                                            </div>
+	                                                        </div>
+	                                                        {% if expertise.tasks %}
+	                                                            <p class="mt10"><span class="experience_tasks">{{ expertise.tasks }}</span></p>   
+	                                                        {% endif %}
+	                                                    </div>
+	                                                </div>
+	                                            </div>
+	                                        {% endif %}
+	                                    {% endwith %}
+	                                {% endfor %}
+	                            </div>
+	                        {% endif %}
+	                    {% endwith %}
+	                {% endfor %}
+	            {% endif %}
+            </div>
+            <div class="col-md-2 col-lg-3 fixed checkbox-card-options hidden">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <button class="btn btn-block btn-default" id="delete_selected_cards">Delete</button>
+                        <button class="btn btn-block btn-default" id="merge_selected_cards">Merge</button>
+                        <button class="btn btn-block btn-default" id="unconflict_selected_cards">Not Conflict</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<div class="modal fade" id="merge-modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post" action=".">	
+            	{% csrf_token %}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4>Merge</h4>
+                </div>
+                <div class="modal-body row">
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-coursename">
+                		<h5>Course Name</h5>
+                	</div>
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-degree">
+                		<h5>Degree</h5>
+                	</div>
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-area">
+                		<h5>Area of Specialisation</h5>
+                	</div>
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-school">
+                		<h5>School</h5>
+                	</div>
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-country">
+                		<h5>Country</h5>
+                	</div>
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-state">
+                		<h5>State</h5>
+                	</div>
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-city">
+                		<h5>City</h5>
+                	</div>
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-status">
+                		<h5>Status</h5>
+                	</div>
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-startdate">
+                		<h5>Start Date</h5>
+                	</div>
+                	<div class="col-xs-12 col-sm-10 col-sm-offset-1 hidden academic-field-enddate">
+                		<h5>End Date</h5>
+                	</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">{% trans 'Update' %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block java_script_code %}
+    <script src="{{STATIC_URL}}js/jquery-ui.min.js"></script>
+    <script src="{{STATIC_URL}}datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor-init.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/moment.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/daterangepicker.js"></script>
+    <script>
+        $('.toggle-checkbox-card').click(function(e){
+            if(!$(e.target).parents('.checkbox-card').length > 0){
+                $(this).find('>.checkbox-card label').click();
+            }
+        });
+        $('.toggle-checkbox-card>.checkbox-card input').change(function(){
+            if($('.toggle-checkbox-card>.checkbox-card input:checked').length> 0){
+                $('.checkbox-card-options').removeClass('hidden')
+            }
+            else {
+                $('.checkbox-card-options').addClass('hidden')
+            }
+        });
+        $('#delete_selected_cards').click(function(){
+            $cards = $('.toggle-checkbox-card>.checkbox-card input:checked').parents('.resolution-card');
+            if($cards.length> 0){
+                $ids = [];
+                $cards.each(function(i,$card){
+                    $ids.push($($card).attr('data-id'))
+                });
+                $data = {
+                        'ids': $ids,
+                        'card_type': "{{card_type}}"
+                    }
+                console.log($data)
+                $.ajax({
+                    url: '/ajax/resolve_conflicts_delete/',
+                    type: 'post',
+                    data: $data,
+                    success: function(data){
+                        if (data.reload){
+                            location.href = location.href.split('#')[0]
+                        }
+                        else if (data.msg){
+                            alert(data.msg)
+                        }
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+            }
+            else {
+                alert('Select at least 1 card to remove')
+            }
+
+        })
+        $('#merge_selected_cards').click(function(){
+            $cards = $('.toggle-checkbox-card>.checkbox-card input:checked').parents('.resolution-card');
+            if($cards.length> 1){
+            	$ids = [];
+                $cards.each(function(i,$card){
+                	$ids.push($($card).attr('data-id'));
+                });
+                $data = {
+                	'ids': $ids,
+                	'card_type': "{{card_type}}"
+                }
+                $.ajax({
+                	url: '/ajax/resolve_conflicts_merge/',
+                	type: 'post',
+                	data: $data,
+                	success: function(data){
+                		if(data.reload){
+                			location.href=location.href.split('#')[0]
+                		}
+                		else if (data.msg){
+                			alert(data.msg);
+                		}
+                		else {
+                			console.log(data);
+                			$modal = $('#merge-modal');
+                			$modal.find('.modal-body').html(data.merge_field_template)
+                			$modal.modal('show');
+                		}
+                	},
+                	error: function(er){
+                		console.log(er);
+                	}
+                })
+            }
+            else {
+                alert('Select at least 2 cards to merge')
+            }
+
+        });
+        $('#unconflict_selected_cards').click(function(){
+            $cards = $('.toggle-checkbox-card>.checkbox-card input:checked').parents('.resolution-card');
+            if($cards.length> 0){
+                $ids = [];
+                $cards.each(function(i,$card){
+                    $ids.push($($card).attr('data-id'))
+                });
+                $data = {
+                        'ids': $ids,
+                        'card_type': "{{card_type}}"
+                    }
+                console.log($data)
+                $.ajax({
+                    url: '/ajax/resolve_conflicts_unconflict/',
+                    type: 'post',
+                    data: $data,
+                    success: function(data){
+                        if (data.reload){
+                            location.href = location.href.split('#')[0]
+                        }
+                        else if (data.msg){
+                            alert(data.msg)
+                        }
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+            }
+            else {
+                alert('Select at least 1 card to mark as not conflicting.')
+            }
+        });
+    </script>
+{% endblock %}

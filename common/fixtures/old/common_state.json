@@ -1,0 +1,778 @@
+[
+  {
+    "model": "common.state",
+    "pk": 1,
+    "fields": {
+      "country": 142,
+      "name": "Aguascalientes"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 2,
+    "fields": {
+      "country": 142,
+      "name": "Baja California"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 3,
+    "fields": {
+      "country": 142,
+      "name": "Baja California Sur"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 4,
+    "fields": {
+      "country": 142,
+      "name": "Campeche"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 5,
+    "fields": {
+      "country": 142,
+      "name": "Chiapas"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 6,
+    "fields": {
+      "country": 142,
+      "name": "Chihuahua"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 7,
+    "fields": {
+      "country": 142,
+      "name": "Coahuila de Zaragoza"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 8,
+    "fields": {
+      "country": 142,
+      "name": "Colima"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 9,
+    "fields": {
+      "country": 142,
+      "name": "Distrito Federal"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 10,
+    "fields": {
+      "country": 142,
+      "name": "Durango"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 11,
+    "fields": {
+      "country": 142,
+      "name": "Estado de M\u00e9xico"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 12,
+    "fields": {
+      "country": 142,
+      "name": "Guanajuato"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 13,
+    "fields": {
+      "country": 142,
+      "name": "Guerrero"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 14,
+    "fields": {
+      "country": 142,
+      "name": "Hidalgo"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 15,
+    "fields": {
+      "country": 142,
+      "name": "Jalisco"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 16,
+    "fields": {
+      "country": 142,
+      "name": "Michoac\u00e1n"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 17,
+    "fields": {
+      "country": 142,
+      "name": "Morelos"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 18,
+    "fields": {
+      "country": 142,
+      "name": "Nayarit"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 19,
+    "fields": {
+      "country": 142,
+      "name": "Nuevo Le\u00f3n"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 20,
+    "fields": {
+      "country": 142,
+      "name": "Oaxaca"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 21,
+    "fields": {
+      "country": 142,
+      "name": "Puebla"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 22,
+    "fields": {
+      "country": 142,
+      "name": "Quer\u00e9taro"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 23,
+    "fields": {
+      "country": 142,
+      "name": "Quintana Roo"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 24,
+    "fields": {
+      "country": 142,
+      "name": "San Luis Potos\u00ed"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 25,
+    "fields": {
+      "country": 142,
+      "name": "Sinaloa"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 26,
+    "fields": {
+      "country": 142,
+      "name": "Sonora"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 27,
+    "fields": {
+      "country": 142,
+      "name": "Tabasco"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 28,
+    "fields": {
+      "country": 142,
+      "name": "Tamaulipas"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 29,
+    "fields": {
+      "country": 142,
+      "name": "Tlaxcala"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 30,
+    "fields": {
+      "country": 142,
+      "name": "Veracruz"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 31,
+    "fields": {
+      "country": 142,
+      "name": "Yucat\u00e1n"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 32,
+    "fields": {
+      "country": 142,
+      "name": "Zacatecas"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 33,
+    "fields": {
+      "country": 231,
+      "name": "Alabama"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 34,
+    "fields": {
+      "country": 231,
+      "name": "Alaska"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 35,
+    "fields": {
+      "country": 231,
+      "name": "American Samoa"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 36,
+    "fields": {
+      "country": 231,
+      "name": "Arizona"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 37,
+    "fields": {
+      "country": 231,
+      "name": "Arkansas"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 38,
+    "fields": {
+      "country": 231,
+      "name": "Armed Forces Africa"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 39,
+    "fields": {
+      "country": 231,
+      "name": "Armed Forces Americas (except Canada)"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 40,
+    "fields": {
+      "country": 231,
+      "name": "Armed Forces Canada"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 41,
+    "fields": {
+      "country": 231,
+      "name": "Armed Forces Europe"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 42,
+    "fields": {
+      "country": 231,
+      "name": "Armed Forces Middle East"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 43,
+    "fields": {
+      "country": 231,
+      "name": "Armed Forces Pacific"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 44,
+    "fields": {
+      "country": 231,
+      "name": "California"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 45,
+    "fields": {
+      "country": 231,
+      "name": "Colorado"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 46,
+    "fields": {
+      "country": 231,
+      "name": "Connecticut"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 47,
+    "fields": {
+      "country": 231,
+      "name": "Delaware"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 48,
+    "fields": {
+      "country": 231,
+      "name": "District of Columbia"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 49,
+    "fields": {
+      "country": 231,
+      "name": "Federated States of Micronesia"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 50,
+    "fields": {
+      "country": 231,
+      "name": "Florida"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 51,
+    "fields": {
+      "country": 231,
+      "name": "Georgia"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 52,
+    "fields": {
+      "country": 231,
+      "name": "Guam"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 53,
+    "fields": {
+      "country": 231,
+      "name": "Hawaii"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 54,
+    "fields": {
+      "country": 231,
+      "name": "Idaho"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 55,
+    "fields": {
+      "country": 231,
+      "name": "Illinois"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 56,
+    "fields": {
+      "country": 231,
+      "name": "Indiana"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 57,
+    "fields": {
+      "country": 231,
+      "name": "Iowa"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 58,
+    "fields": {
+      "country": 231,
+      "name": "Kansas"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 59,
+    "fields": {
+      "country": 231,
+      "name": "Kentucky"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 60,
+    "fields": {
+      "country": 231,
+      "name": "Louisiana"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 61,
+    "fields": {
+      "country": 231,
+      "name": "Maine"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 62,
+    "fields": {
+      "country": 231,
+      "name": "Marshall Islands"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 63,
+    "fields": {
+      "country": 231,
+      "name": "Maryland"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 64,
+    "fields": {
+      "country": 231,
+      "name": "Massachusetts"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 65,
+    "fields": {
+      "country": 231,
+      "name": "Michigan"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 66,
+    "fields": {
+      "country": 231,
+      "name": "Minnesota"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 67,
+    "fields": {
+      "country": 231,
+      "name": "Mississippi"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 68,
+    "fields": {
+      "country": 231,
+      "name": "Missouri"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 69,
+    "fields": {
+      "country": 231,
+      "name": "Montana"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 70,
+    "fields": {
+      "country": 231,
+      "name": "Nebraska"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 71,
+    "fields": {
+      "country": 231,
+      "name": "Nevada"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 72,
+    "fields": {
+      "country": 231,
+      "name": "New Hampshire"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 73,
+    "fields": {
+      "country": 231,
+      "name": "New Jersey"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 74,
+    "fields": {
+      "country": 231,
+      "name": "New Mexico"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 75,
+    "fields": {
+      "country": 231,
+      "name": "New York"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 76,
+    "fields": {
+      "country": 231,
+      "name": "North Carolina"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 77,
+    "fields": {
+      "country": 231,
+      "name": "North Dakota"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 78,
+    "fields": {
+      "country": 231,
+      "name": "Northern Mariana Islands"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 79,
+    "fields": {
+      "country": 231,
+      "name": "Ohio"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 80,
+    "fields": {
+      "country": 231,
+      "name": "Oklahoma"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 81,
+    "fields": {
+      "country": 231,
+      "name": "Oregon"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 82,
+    "fields": {
+      "country": 231,
+      "name": "Palau"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 83,
+    "fields": {
+      "country": 231,
+      "name": "Pennsylvania"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 84,
+    "fields": {
+      "country": 231,
+      "name": "Puerto Rico"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 85,
+    "fields": {
+      "country": 231,
+      "name": "Rhode Island"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 86,
+    "fields": {
+      "country": 231,
+      "name": "South Carolina"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 87,
+    "fields": {
+      "country": 231,
+      "name": "South Dakota"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 88,
+    "fields": {
+      "country": 231,
+      "name": "Tennessee"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 89,
+    "fields": {
+      "country": 231,
+      "name": "Texas"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 90,
+    "fields": {
+      "country": 231,
+      "name": "Utah"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 91,
+    "fields": {
+      "country": 231,
+      "name": "Vermont"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 92,
+    "fields": {
+      "country": 231,
+      "name": "Virgin Islands"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 93,
+    "fields": {
+      "country": 231,
+      "name": "Virginia"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 94,
+    "fields": {
+      "country": 231,
+      "name": "Washington"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 95,
+    "fields": {
+      "country": 231,
+      "name": "West Virginia"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 96,
+    "fields": {
+      "country": 231,
+      "name": "Wisconsin"
+    }
+  },
+  {
+    "model": "common.state",
+    "pk": 97,
+    "fields": {
+      "country": 231,
+      "name": "Wyoming"
+    }
+  }
+]

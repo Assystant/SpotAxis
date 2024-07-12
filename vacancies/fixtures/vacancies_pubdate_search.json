@@ -1,0 +1,74 @@
+[
+  {
+    "model": "vacancies.pubdate_search",
+    "pk": 1,
+    "fields": {
+      "name": "Today",
+      "days": 1,
+      "codename": "1_days"
+    }
+  },
+  {
+    "model": "vacancies.pubdate_search",
+    "pk": 2,
+    "fields": {
+      "name": "2 Days",
+      "days": 2,
+      "codename": "2_days"
+    }
+  },
+  {
+    "model": "vacancies.pubdate_search",
+    "pk": 3,
+    "fields": {
+      "name": "3 Days",
+      "days": 3,
+      "codename": "3_days"
+    }
+  },
+  {
+    "model": "vacancies.pubdate_search",
+    "pk": 4,
+    "fields": {
+      "name": "4 Days",
+      "days": 4,
+      "codename": "4_days"
+    }
+  },
+  {
+    "model": "vacancies.pubdate_search",
+    "pk": 5,
+    "fields": {
+      "name": "5 Days",
+      "days": 5,
+      "codename": "5_days"
+    }
+  },
+  {
+    "model": "vacancies.pubdate_search",
+    "pk": 6,
+    "fields": {
+      "name": "Week",
+      "days": 7,
+      "codename": "7_days"
+    }
+  },
+  {
+    "model": "vacancies.pubdate_search",
+    "pk": 7,
+    "fields": {
+      "name": "15 Days",
+      "days": 15,
+      "codename": "15_days"
+    }
+  },
+  {
+    "model": "vacancies.pubdate_search",
+    "pk": 8,
+    "fields": {
+      "name": "30 Days",
+      "days": 30,
+      "codename": "30_days"
+    }
+  }
+]

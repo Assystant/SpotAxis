@@ -1,0 +1,36 @@
+{% extends "zinnia/base.html" %}
+{% load i18n zinnia comments %}
+
+{% block title %}{% trans "Comment preview" %}{% endblock title %}
+
+{% block body-class %}comment-preview{% endblock body-class %}
+
+{% block content %}
+  {% if form.errors %}
+  <h2>{% blocktrans count errors=form.errors|length %}Please correct following error.{% plural %}Please correct following errors.{% endblocktrans %}</h2>
+  {% else %}
+  <h2>{% trans "Preview of the comment" %}</h2>
+  <ol id="comment-list">
+    {% with comment=form.get_comment_object %}
+    <li id="comment-preview" class="comment vcard box1">
+      <img src="{% get_gravatar comment.email 60 "G" %}"
+           class="gravatar photo" alt="{{ comment.name }}" />
+      <p class="comment-info">
+	{% if comment.url %}
+	<a href="{{ comment.url }}" rel="external nofollow"
+           class="fn url">{{ comment.name }}</a>
+	{% else %}
+	{{ comment.name }}
+	{% endif %}
+	{% trans "on" context "on date" %}
+        <time class="comment-published" datetime="{{ comment.submit_date|date:"c" }}">
+          {{ comment.submit_date|date:"SHORT_DATETIME_FORMAT" }}
+        </time>
+      </p>
+      {{ comment.comment|linebreaks }}
+    </li>
+    {% endwith %}
+  </ol>
+  {% endif %}
+  {% include "comments/zinnia/entry/form.html" %}
+{% endblock content %}

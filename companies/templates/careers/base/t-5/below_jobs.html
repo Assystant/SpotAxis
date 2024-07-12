@@ -1,0 +1,54 @@
+<div class="takeme">
+	<footer class="-bg-viking">
+		<section>
+		<h5 class="-text-light bold editable">EXPLORE</h5>
+			<ul>
+				<li class="-text-light"><a href="">About Us</a></li>
+				<li class="-text-light"><a href="/">Careers</a></li>
+			</ul>
+		</section>
+
+		<section>
+		<h5 class="-text-light bold editable">HELP</h5>
+			<ul>
+				<li class="-text-light"><a href="">Contact</a></li>
+				<li class="-text-light"><a href="">FAQ</a></li>
+			</ul>
+		</section>
+
+		<section>
+			<h5 class="-text-light bold editable">CONTACT US</h5>
+			<address class="editable">
+				{{company.city}},<br />
+				{{company.state}},<br /> {{company.nationality}}
+			</address>
+		</section>
+
+	</footer>
+
+	
+	<script type="text/javascript">
+		$('[data-mode=list]').hide(); //default grid mode
+
+		$(document).on('click', '.listmode', function(){
+			$('.grid>i').removeClass('activeMode');
+			$(this).addClass('activeMode');
+			$('[data-mode=list]').show();
+			$('[data-mode=grid]').hide();
+		});
+
+		$(document).on('click', '.gridmode', function(){
+			$('.grid>i').removeClass('activeMode');
+			$(this).addClass('activeMode');
+			$('[data-mode=list]').hide();
+			$('[data-mode=grid]').show();
+		});
+
+		$('#jobselector').on('change', function(){
+			$('[data-type]').show();
+			if($(this).val().toLowerCase().trim()!="all")
+				$('[data-type]:not([data-type="' + $(this).val().toLowerCase() +'"])').hide();
+		});
+
+	</script>
+</div>

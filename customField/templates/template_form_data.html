@@ -1,0 +1,15 @@
+<div class="container-fluid">
+    {% for fields in candidate.custom_form_application.all %}
+        <label>{{fields.field}}</label>
+        <p class="mb10 pl10 pr10">{{fields.value}}</p>
+        {% if not forloop.last and not candidate.description.strip %}<hr>{% endif %}
+    {% endfor %}
+    {% if candidate.description.strip %}
+        {% if candidate.is_recruiter %}
+            <label>Notes</label>
+        {% else %}
+            <label>Cover</label>
+        {% endif %}
+        <p class="mb10 pl10 pr10">{{candidate.description|safe}}</p>
+    {% endif %}
+</div>

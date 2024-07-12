@@ -1,0 +1,12 @@
+A new Comment was made
+
+Name: {{ name }}
+
+Email: {{ email }}
+
+Mesage:
+
+{{ body|escape }}
+
+
+

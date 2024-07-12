@@ -1,0 +1,116 @@
+{% extends "base/outer_base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% comment %} Home {% endcomment %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+
+{% block content %}
+
+        <!--========== PROMO BLOCK ==========-->
+        <div class="js__parallax-window" style="background: url({{ STATIC_URL }}newtheme/img/1920x1080/06.jpg) 50% 0 no-repeat fixed;">
+            <div class="g-container--md g-text-center--xs g-padding-y-150--xs">
+                <div class="g-margin-b-80--xs">
+                    <h1 class="g-font-size-40--xs g-font-size-50--sm g-font-size-70--md g-color--white g-letter-spacing--1 g-margin-b-30--xs">Welcome to SpotAxis</h1>
+                    <p class="text-uppercase g-font-size-14--xs g-font-weight--750 g-color--white g-letter-spacing--2">We are serious about your hiring needs and your growth.</p>
+                </div>
+                <a href="#js__scroll-to-section">
+                    <span class="s-icon s-icon--md s-icon--white-brd g-radius--circle ti-angle-double-down"></span>
+                </a>
+            </div>
+        </div>
+        <!--========== END PROMO BLOCK ==========-->
+
+        <!--========== PAGE CONTENT ==========-->
+        <!-- Problems and solutions -->
+        <div id="js__scroll-to-section" class="g-container--md g-padding-y-80--xs">
+            <h2 class="g-font-size-32--xs g-font-size-36--md g-text-center--xs g-margin-b-80--xs">We are automating <br> The recruitment process.</h2>
+            <div class="row g-margin-b-50--xs">
+                <div class="col-sm-6 g-margin-b-30--xs g-margin-b-0--sm">
+                    <p>At SpotAxis, we are determined to solve some serious hiring problems and help companies to hire the best candidates.<br> So, we work with companies of various sizes and domains to understand their hiring problem, to innovate a solution that exactly counters the problem.</p>
+                    
+                    <div class="s-faq__pseudo g-padding-y-40--xs">
+                        <p class="g-color--primary g-font-family--playfair"><i>Worried about increase in time of recruitment cycle?</i></p>
+                        <div class="g-margin-l-70--xs">
+                            <p class="g-color--primary g-font-family--playfair"><i>Worried about increase in cost of recruitment and still no best candidate?</i></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <p>If your company/ recruiter is facing any of the following problems, then you should try us:</p>
+                    <p>1. Many irrelevant profiles/resumes/applications. <br> 2. Applications scattered at different places, like emails, job boards etc.<br>3. Not efficiently sourcing from company's career site for talent sourcing.<br>4. Not efficiently utilizing employee referral.<br>5. Unorganized or adhoc hiriing process. <br>6. Recruiter's co-ordination with interviewer and candidates for scheduling interview<br>7. Recruiter's co-ordination with interviewers to collect scores for review.<br>8. Candidates having a poor interview experience </p>
+                </div>
+            </div>
+            <div class="g-text-center--xs">
+                <p class="g-margin-b-5--xs">We aim high to bring better experience for Recruiters(Internal), interviewers and candidates through technological innovation that can address the mentioned the vital problems</p>
+                <p>We believe in building partnership with companies to understand their core hiring problems and <br>evolve our solution to counter the exact problem.</p>
+            </div>
+        </div>
+        <!-- End Problems and solutions -->
+        
+        {# {% include 'base/clients.html' %} #}
+
+        <!-- Company -->
+        <div class="g-promo-section g-bg-color--sky-light">
+            <div class="container g-padding-y-80--xs g-padding-y-125--sm">
+                <div class="row">
+                    <div class="col-md-4 g-margin-t-15--xs g-margin-b-60--xs g-margin-b-0--lg">
+                        <!--<p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">Culture</p>-->
+                        <div class="wow fadeInLeft" data-wow-duration=".3" data-wow-delay=".1s">
+                            <h2 class="g-font-size-40--xs g-font-size-50--sm g-font-size-60--md">About</h2>
+                        </div>
+                        <div class="wow fadeInLeft" data-wow-duration=".3" data-wow-delay=".3s">
+                            <h2 class="g-font-size-40--xs g-font-size-50--sm g-font-size-60--md">Company</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-md-offset-1">
+                        <p>SpotAxis is a prouduct of Travelder Infosolutions Private Limited based in Bengaluru (formerly Bangalore), India.</p>
+                        <p>Vision: To create a solution which will be a default recruitment product of choice for every organization.</p>
+                        <p>Mission: To automate all redundant recruitment functions. To Support data driven decision while hiring.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 g-promo-section__img-right--lg g-bg-position--center g-height-100-percent--md js__fullwidth-img">
+                <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/970x970/05.jpg" alt="Image">
+            </div>
+        </div>
+        <!-- End Company -->
+
+        <!-- team -->
+        <div class="js__parallax-window" style="background: url({{ STATIC_URL }}newtheme/img/1920x1080/03.jpg) 50% 0 no-repeat fixed;">
+            <div class="container g-text-center--xs g-padding-y-80--xs">
+                <!--<p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--primary g-letter-spacing--2 g-margin-b-50--xs">Testimonials</p>-->
+                <div class="row g-margin-t-40--xs">
+                    <div class="col-xs-12 col-sm-6 g-margin-b-50--xs g-margin-b-80--sm">
+                        <img class="g-width-70--xs g-height-70--xs g-hor-border-4__solid--white g-box-shadow__dark-lightest-v4 g-radius--circle g-margin-b-30--xs" src="{{ STATIC_URL }}img/people/hp.jpg" alt="Image">
+                        <div class="g-margin-b-40--xs">
+                            <h4 class="g-font-size-15--xs g-font-size-18--sm g-color--primary g-margin-b-5--xs">Holesh Priyankar</h4>
+                            <div class="center-block g-hor-divider__solid--heading-light g-width-100--xs g-margin-b-30--xs"></div>
+                            <p class="g-font-size-18--xs g-font-size-22--sm g-color--white">" MBA and BTech grad who have worked with corporates and several early stage startups."</p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 g-margin-b-50--xs g-margin-b-80--sm">
+                        <img class="g-width-70--xs g-height-70--xs g-hor-border-4__solid--white g-box-shadow__dark-lightest-v4 g-radius--circle g-margin-b-30--xs" src="{{ STATIC_URL }}img/people/sa.jpg" alt="Image">
+                        <div class="g-margin-b-40--xs">
+                            <h4 class="g-font-size-15--xs g-font-size-18--sm g-color--primary g-margin-b-5--xs">Saket Shukla</h4>
+                            <div class="center-block g-hor-divider__solid--heading-light g-width-100--xs g-margin-b-30--xs"></div>
+                            <p class="g-font-size-18--xs g-font-size-22--sm g-color--white">" BTech grad with experience from several early stage startups and passionate about technologies."</p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                        <img class="g-width-70--xs g-height-70--xs g-hor-border-4__solid--white g-box-shadow__dark-lightest-v4 g-radius--circle g-margin-b-30--xs" src="{{ STATIC_URL }}img/people/ss.jpg" alt="Image">
+                        <div class="g-margin-b-40--xs">
+                            <h4 class="g-font-size-15--xs g-font-size-18--sm g-color--primary g-margin-b-5--xs">Srinivas Sahoo</h4>
+                            <div class="center-block g-hor-divider__solid--heading-light g-width-100--xs g-margin-b-30--xs"></div>
+                            <p class="g-font-size-18--xs g-font-size-22--sm g-color--white">" MBA grad with wide range of experience in sales and recruitment, contributed as VP for the growth of naukri.com in its core team."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End team -->
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% load TRM_tags %} 
+<p class="small">External referrers can use "Job detail links" or  "Apply form links" to add candidates. Manage all candidates at SpotAxis, track duplicates and know the referrer of application.</p>
+<h4 class="no-margin text-muted pt20">Add New External Referrer</h4>
+<div class="form-group col-lg-8 no-padding no-margin pt10">
+    <div class="input-group">
+        <input type="text" class="form-control referal_name" placeholder="Agency Name / Recruiter Name">
+        <div class="input-group-btn">
+            <button class="btn btn-info-inverse" id="generate_new_external_referal" data-type="ER" data-vacancy='{{vacancy.id}}'>Generate</button>
+        </div>
+    </div>
+</div>
+<div class="external_referers clearfix">
+    {% for x in external_referers reversed %} 
+        {% include 'external_referer_subblock.html' %}
+    {% endfor %}
+</div>

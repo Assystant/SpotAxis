@@ -1,0 +1,31 @@
+#comment-list, #pingback-list, #trackback-list {
+  li {
+    list-style: none;
+    padding: 1em 1em 0 1em;
+    margin-bottom: 1em;
+  }
+}
+
+#comment-list {
+  li {
+    min-height: 90px;
+  }
+  img {
+    float: left;
+    margin-right: 1em;
+    padding: 0.5em;
+  }
+}
+
+p {
+  &.comment-info, &.trackback-info, &.pingback-info {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+  }
+}
+
+.anchor-link {
+  font-weight: normal;
+  font-size: 1em;
+}

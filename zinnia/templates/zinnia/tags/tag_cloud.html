@@ -1,0 +1,14 @@
+{% load i18n %}
+<ul class="{% if not tags %}no-{% endif %}tag-cloud pt5">
+  {% for tag in tags %}
+  <li class="inline-block ml5 mr10">
+    <a href="{% url 'zinnia:tag_detail' tag.name %}"
+       title="{% blocktrans count entry_count=tag.count %}{{ entry_count }} resource tagged by {{ tag }}{% plural %}{{ entry_count }} resources tagged by {{ tag }}{% endblocktrans %}"
+       class="tag-{{ tag.font_size }}{% if tag.name == context_tag.name %} current{% endif %}">{{ tag }}</a>
+  </li>
+  {% empty %}
+  <li>
+    {% trans "No tags yet." %}
+  </li>
+  {% endfor %}
+</ul>

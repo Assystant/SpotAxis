@@ -1,0 +1,878 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load humanize %}
+{% load TRM_tags %}
+{% block title %}{% trans 'Activities' %}{% endblock %}
+{% comment %} Page for COmpany Recommendations {% endcomment %}
+{% block page-header %}{% trans 'Activities' %}{% endblock %}
+{% block css %}
+    <link href="{{STATIC_URL}}daterange/daterangepicker.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+	{% if recruiter.is_manager or recruiter.is_admin and company|args:'CH_ADD_TEAM'|call:'check_service' %}
+		<div class="modal fade" id="add-member-modal" role="dialog" tabindex="-1">
+	        <div class="modal-dialog">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                    <h5 class="modal-title">Invite Member to Team</h5>
+	                </div>
+	                <div class="modal-body text-left" id="postulate-modal-text">
+	                    <form id="inviteForm" action="." method="post" role="form">
+		                    {% csrf_token %}
+		                    <div class="row no-margin">
+		                        <div class="form-group {% if form_invite.email.errors %}has-error{% endif %} col-xs-10 col-xs-offset-1">
+		                            {{form_invite.email}}
+		                            <ul class="text-danger error-list">
+		                            {% for error in form_invite.email.errors %}
+		                                <li>{{error}}</li>
+		                            {% endfor %}
+		                            </ul>
+		                        </div>
+		                        <div class="col-xs-10 col-xs-push-1">
+								    <label class="label-sm relative block ml20 mr40" for="member_radio">
+								        <span class="text"> Member - <small class="text-muted">Access as assigned</small></span> <input type="radio" id="member_radio" name="membershipoptions" value="1" class="radio-right" checked>
+								    </label>
+								    <label class="label-sm relative block ml20 mr40" for="manager_radio">
+								        <span class="text">Manager - <small class="text-muted">Access to Job Settings and Hiring Process</small></span> 
+								         <input type="radio" id="manager_radio" name="membershipoptions" value="2" class="radio-right">
+								    </label>
+								    <label class="label-sm relative block ml20 mr40" for="admin_radio">
+								        <span class="text"> Admin - <small class="text-muted">Full Manager rights and access to manage career site, company profile and team </small></span> <input type="radio" id="admin_radio" name="membershipoptions" value="3" class="radio-right">
+								    </label>
+								</div>
+		                        <div class="col-xs-10 col-xs-offset-1 mt20 mb20">
+		                            <button class="btn btn-info btn-sm btn-block "><i class="fa fa-envelope"></i> Invite</button>
+		                        </div>
+		                    </div>
+		                </form>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+   {% endif %}
+    <div>
+        <section class="container-fluid">
+            <div class="row pt20">
+                <div class='col-sm-3 right-border hidden-xs'>
+                    <div data-offset-top="60" data-offset-bottom="100">
+                        <h4 class="no-margin-bottom bg-white border-bottom border-light br-2 pt15 pb15 pl15 pr15 no-margin mb10">
+	                        <img class="img-card inline-block va-mid " src="{{user.photo.url}}" data-name="{{user.get_full_name}}">
+	                        <a class="inline-block mt15 ml5" href="">{{user.get_full_name}}</a>
+                        </h4>
+                        {% if not activity_id %}
+	                        <div class="border-bottom border-light br-2 pt10 pb10 pl10 pr10 bg-white clearfix">
+	                            <small class="text-light">Team Members - {{recruiter.fellow_recruiters.count}}</small><br>
+	                            {% if recruiter.fellow_recruiters.count == 0 %}
+	                            	{% if company|args:'CH_ADD_TEAM'|call:'check_service' %}
+			                            <span class="small"><i>Looks like you are a little lonely here. Invite your Team Members now.</i> <br>
+	                            	{% else %}
+	                            		<span class="small"><i>Looks like you are a little lonely here. Upgrade to invite your Team Members now.</i> <br>
+	                            	{% endif %}
+		                        {% endif %}
+	                            <span class="pull-left clearfix">
+		                            {% if recruiter.is_admin and company|args:'CH_ADD_TEAM'|call:'check_service' %}
+		                                <a class="btn btn-sm btn-md mt5 mb5 btn-default text-info btn-round border-info pt5" data-toggle="modal" data-target="#add-member-modal"><i class="fa fa-plus "></i></a>
+		                            {% endif %}
+	                                {% for member in recruiter.fellow_recruiters|slice:"13" %}
+	                                    <img class="img-circle mb5 mt5 navbar-img navbar-img-lg" data-id="{{member.id}}" src="{{member.user.photo.url}}" data-name="{{member.user.get_full_name}}" data-toggle="tooltip" data-placement="top" title="{{member.user.get_full_name}}" data-container="body">
+	                                {% endfor %}
+	                                {% if recruiter.fellow_recruiters.count > 13 %}
+			                            <span class="text-center center-block">
+			                                <a class="mt5 mb5 text-info size-hg" href="{% url 'companies_company_team_space' %}"><i class="ionicons ion-ios-more"></i></a>
+			                            </span>
+			                        {% endif %}
+	                            </span>
+	                        </div>
+	                    {% endif %}
+                    </div>
+                </div>
+                <div class="col-sm-6 right-border mb20">
+                	{% if not activity_id %}
+	                	<div class="mb10 bg-white border-bottom border-light pl10 pr10 pt10 pb10">
+	                		<form action="." method="post" id="new_post" class="clearfix">
+			            		<textarea class="form-control autosize border-light" placeholder="Share thoughts with your team"></textarea>
+			            		<button class="btn btn-info pull-right btn-sm mt5">Post</button>
+			            	</form>
+	                	</div>
+	                {% endif %}
+                	<div id="activities">
+	                	{% for activity in activity_stream %}
+	                		{% if activity.activity_type == 0 %}
+	                			<div class="comment-card mb10 activity-comment" data-activity="{{activity.id}}">
+			                		<div class="bg-white border-bottom border-light pl10 pr10 pb10 pt10 mh60">
+		                				<div class="ml40">
+				                			{% if activity.actor %}
+				                				<img class="navbar-img navbar-img-hg card-left ml20 mt3 pl5" src="{{activity.actor.photo.url}}" data-name="{{activity.actor}}">
+				                				<a class="text-muted mb10">
+				                					<b>{% if activity.actor == user %}You{% else %}{{activity.actor|title}}{% endif %}</b> <i class="text-light">{{activity.action|default:''}}</i>
+				                				</a>
+				                			{% endif %}
+				                			{% if activity.target %}
+				                				<a class="text-muted mb10"><b>{% if activity.target == user%}You{% else %}{{activity.target|title}}{% endif %}</b> <i class="text-light">{{activity.target_action|default:''}}</i></a>
+					                		{% endif %}
+					                		{% for chunk in activity.message_chunks.all %}
+					                			<a class="text-muted mb10" {% if chunk.action_url %} href="{{chunk.action_url}}{% endif %}">
+						                			<b>{{chunk.subject}}</b></a>
+						                		<i class="text-light">{{chunk.subject_action|default:''}}</i>
+					                			
+					                		{% endfor %}
+					                		<span class="pull-right"><i>{{activity.timestamp|naturaltime}}</i></span>
+					                		{% if activity.message %}
+					                			<p class="no-margin">{{activity.message|default:''}}</p>
+					                		{% endif %}
+				                		</div>
+			                		</div>
+		                            <div class="row bg-white border-bottom border-light no-margin pl20">
+		                            	<a class="btn btn-xs spot_activity no-padding"><span class="spot_label">{% if request.user in activity.spotters.all %}<i class="fa fa-circle"></i> Spotted {% else %}<i class="fa fa-circle-thin spot"></i> Spot {% endif %}</span> <small class="badge badge-light ml5 spot-count hidden">{{activity.spotters.all.count}}</small></a>
+		                            	<span class="text-light spot_list">{% if not request.user in activity.spotters.all and activity.spotters.all.count  %} Spotted by {{activity.spotters.all.0.first_name}} {% elif activity.spotters.count > 0 %} by You {% endif %}{% if activity.spotters.count > 1 %} and <button class="btn btn-trans-info no-padding va-base clickable" data-toggle="popover" title="Spotters" data-placement="right" data-content='
+		                            	{% for spotter in activity.spotters.all %}
+			                            	<div class="bg-white  pl15 pr15 pt10">
+			                            		<img src="{{spotter.photo.url}}" class="navbar-img va-top no-margin-top card-left ml15" data-name="{{spotter.get_full_name}}">
+	                                            <div class="ml25 mt2 pt5 pb10 pr20 pl10 border-bottom border-light">
+	                                                <h5 class="no-margin-y text-muted">{{spotter.get_full_name}}</h5>
+	                                            </div>
+	                                            <span class="clearfix"></span>
+			                            	</div>
+			                           	{% endfor %}
+		                            	' data-trigger="focus">{{activity.spotters.count|sub:1}} others</button>{% endif %}</span>
+		                                <a class="btn btn-xs show-comments ml5"><i class="glyphicon glyphicon-comment"></i> Comment <small class="badge badge-light ml2 comment-count">{{activity.comments.all.count}}</small></a>
+		                            </div>
+		                            <div class="collapse fade comment-cards" id="comment-a-{{activity.id}}">
+		                                <div class="row text-center bg-white no-margin pl20 pr20 comment collapse fade in">
+		                                    {% if activity.comments.all.count > 3 %}
+		                                        <small>
+		                                            <a class="clickable" data-toggle="collapse" data-target="#comment-a-{{activity.id}} .comment">See all <span class="comment-count">{{activity.comments.all.count}}</span> comments</a>
+		                                        </small>
+		                                    {% endif %}
+		                                </div>
+		                                {% for comment in activity.comments.all %}
+		                                    <div class="row bg-white no-margin border-bottom border-light pl20 pr20 comment {% if forloop.counter < activity.comments.all.count|add:-2 %}collapse fade{% endif %}">
+		                                        <div class="col-xs-12 pt5 pb5 text-light ">
+		                                            <img src="{{comment.recruiter.user.photo.url}}" class="navbar-img va-top no-margin-top card-left" data-name="{{comment.recruiter.user.get_full_name}}">
+		                                            <div class="ml20 row">
+		                                                <h5 class="inline-block no-margin-y">{{comment.recruiter}}</h5>
+		                                                <small> - <span class="text-light">{{comment.logtime|naturaltime}}</span></small>
+		                                                <br>
+		                                                <small class="text-muted comment-text">{{comment.text|linebreaks}}</small>
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                {% endfor %}
+		                                <form class="row bg-white no-margin bordered border- pt5 pl5 pr5 pb5 comment-section">
+		                                    <div class="col-xs-12 pt5 pb5">
+		                                        <textarea class="form-control autosize" required></textarea>
+		                                        <a class="clickable mt5 hide-all" data-toggle="collapse" data-target="#comment-a-{{activity.id}}">Hide Comments</a>
+		                                        <button class="btn btn-sm pull-right mt5 btn-info">Comment</button> 
+		                                    </div>
+		                                </form>
+		                            </div>
+			                    </div>
+		                	{% elif activity.activity_type == 1 or activity.activity_type == '1' %}
+		                		<div class="mb10 comment-card collapse fade in" data-public="0" data-candidate="{{activity.postulate.id}}" data-stage="{{activity.postulate.vacancy_stage.order}}" data-vacancy="{{activity.postulate.vacancy.id}}">
+		                            <div class="no-margin bg-white border-bottom border-light pt10 pb10 pl10 pr10 mh60">
+		                                <div class="row no-margin">
+		                                    <div class="col-xs-12 no-padding no-margin">
+		                                        <img class="navbar-img card-left no-margin-top" src="{% if activity.postulate.candidate.user %}{{activity.postulate.candidate.user.photo.url}}{% else %}{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}{% endif %}" data-name="{{activity.postulate.candidate.first_name}} {{activity.postulate.candidate.last_name}}">
+		                                        <h4 class="no-margin-y ml20 pl10 no-margin-bottom inline-block text-light mr5 mt5">
+		                                            {% with activity.postulate.candidate.first_name|add:' '|add:activity.postulate.candidate.last_name as candidate_name %}
+		                                                {% if candidate_name|length < 20 %}
+		                                                    <a target="_blank" href="{% url 'companies_curriculum_detail' activity.postulate.candidate.id activity.postulate.vacancy.id %}">{{candidate_name}}</a>
+		                                                {% else %}
+		                                                    <div>
+		                                                        <a target="_blank" href="{% url 'companies_curriculum_detail' activity.postulate.candidate.id activity.postulate.vacancy.id %}" class="collapse fade name-s-{{activity.postulate.candidate.id}}">{{candidate_name}}</a><a target="_blank" href="{% url 'companies_curriculum_detail' activity.postulate.candidate.id activity.postulate.vacancy.id %}" class="collapse fade in name-s-{{activity.postulate.candidate.id}}">{{candidate_name|upto:' '}} <small class="size-xs inline-block text-info clickable" data-toggle="collapse" data-target=".name-s-{{activity.postulate.candidate.id}}" onclick="return false;"> <small><small class="text-info">more ...</small></small></small></a>
+
+		                                                    </div>
+		                                                {% endif %}
+		                                            {% endwith %}
+		                                        </h4>
+		                                        {% if activity.postulate.candidate.user %}
+			                                        <span class="va-mid inline-block label label-info size-xs lh1">SpotAxis</span>
+			                                    	{% if activity.postulate.recruiter %}
+								                        <span class="va-bot inline-block text-light size-xs ml5">Referred by <span class="va-top mt6 text-info">{{activity.postulate.recruiter}}</span></span>
+								                    {% endif %}
+								                    <br>
+			                                    {% else %}
+			                                    	{% if activity.postulate.recruiter %}
+								                        <span class="va-bot inline-block text-light size-xs ml5">{% if activity.postulate.is_recruiter %}Added{% else %}Refered{% endif %} by <span class="va-top mt6 text-info">{{activity.postulate.recruiter}}</span></span>
+								                    {% else %}
+								                        <span class="va-mid inline-block label label-trans size-xs lh1 ml5">Public</span>
+													{% endif %} 
+													{% if candidate.medium %}
+														<span class="va-top inline-block mt6 label label-trans lh1 ml5">{{candidate.medium}}</span>
+													{% endif %}
+								                    <br>
+			                                    {% endif %}
+		                                        <span class="ml5 text-light"><i>for job - <a href="{{activity.postulate.vacancy.get_absolute_url}}">{{activity.postulate.vacancy.employment}}</a></i><small class="ml5 text-light">(<i>{% if activity.postulate.last_stage %}{{activity.postulate.last_status}}</i> <span class="text-muted">in</span> {% endif %} <b>{{activity.postulate.vacancy_stage}}</b>)</small></span><br>
+		                                        <span class="size-xs no-margin-top ml5"><i class="fa fa-envelope"></i> {% if activity.postulate.candidate.user %}{{activity.postulate.candidate.user.email}}{% else %}{{activity.postulate.email}}{% endif %} </span>
+		                                        {% if activity.postulate.candidate.role %}
+		                                            <span class="size-xs ml5"><i class="fa fa-briefcase"></i> {{activity.postulate.candidate.role|default:'No Current Positions'}}</span>
+		                                        {% endif %}
+		                                        {% if activity.postulate.candidate.education %}
+		                                            <span class="size-xs ml5"><i class="fa fa-university"></i> {{activity.postulate.candidate.education|default:"Not Provided"}}</span>
+		                                        {% endif %}
+					                            {% if company|args:'AS_RATINGS'|call:'check_service' %}
+			                                        <span class="inline-block clickable" data-toggle="tooltip" data-trigger="hover" data-placement="right" title="{{activity.postulate.avg_score}}"> {{activity.postulate.avg_stars|safe}}</span>
+		                                    	{% endif %}
+		                                    </div>
+				                            {% if company|args:'AS_RATINGS'|call:'check_service' %}
+			                                    <div class="col-xs-12 mt5 mb5 ml10 mr10 collapse fade hidden" id="overallrating">
+			                                        {% for criterion in activity.postulate.vacancy_stage.criteria_as_list %}
+			                                            <small>{{criterion}}</small>
+			                                            <span class="inline-block ml5"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span><br>
+			                                        {% endfor %}
+			                                    </div>
+			                                {% endif %}
+		                                </div> 
+		                            </div>
+		                            <div class="row bg-white border-bottom border-light no-margin pl20">
+			                            {% if company|args:'AS_RATINGS'|call:'check_service' %}
+			                                <a class="btn btn-xs show-ratings">{% if not activity.postulate.vacancy_stage == '100' and recruiter.is_manager and activity.postulate.vacancy.status.codename == 'open' %}Rate{%else%}Rating{%endif%} <small class="badge badge-light ml5">{{activity.postulate.process.get_comments.count}}</small></a>
+			                            {% endif %}
+			                            {% if company|args:'AS_COMMENTS'|call:'check_service' %}
+			                                <a class="btn btn-xs show-comments">Comment <small class="badge badge-light ml5 comment-count">{{activity.postulate.comments.all.count}}</small></a>
+			                               {% endif %}
+		                                <a class="btn btn-xs show-tags">Tags <small class="badge badge-light ml5 tag-count">{{activity.postulate.tags.count}}</small></a>
+		                                <a class="btn btn-xs show-timeline">Timeline</a>
+		                            </div>
+		                            {% if company|args:'AS_COMMENTS'|call:'check_service' %}
+			                            <div class="collapse fade comment-cards" id="comment-s-{{activity.postulate.id}}">
+			                                <div class="row text-center bg-white no-margin pl20 pr20 comment collapse fade in">
+			                                    {% if activity.postulate.comments.all.count > 3 %}
+			                                        <small>
+			                                            <a class="clickable" data-toggle="collapse" data-target="#comment-s-{{activity.postulate.id}} .comment">See all <span class="comment-count">{{activity.postulate.comments.all.count}}</span> comments</a>
+			                                        </small>
+			                                    {% endif %}
+			                                </div>
+			                                {% for comment in activity.postulate.comments %}
+			                                    {% if comment.comment_type == 1 %}
+			                                        <div class="row bg-white no-margin border-bottom border-light pl20 pr20 comment {% if forloop.counter < activity.postulate.comments.all.count|add:-2 %}collapse fade{% endif %}">
+			                                            <div class="col-xs-12 pt5 pb5 text-light ">
+			                                                <img src="{{comment.recruiter.user.photo.url}}" class="navbar-img va-top no-margin-top card-left" data-name="{{comment.recruiter.user.get_full_name}}">
+			                                                <div class="ml20 row">
+			                                                    <h5 class="inline-block no-margin-y">{{comment.recruiter}}</h5>
+			                                                    <small class="text-muted"> in <a href="{% url 'vacancies_get_vacancy_stage_details' activity.postulate.vacancy.id comment.stage.order comment.stage_section %}">{{comment.stage_string}}</a> - <span class="text-light">{{comment.logtime|naturaltime}}</span></small>
+			                                                    <br>
+			                                                    <small class="text-muted comment-text">{{comment.text|linebreaks}}</small>
+			                                                </div>
+			                                            </div>
+			                                        </div>
+			                                    {% elif comment.comment_type == 2 %}
+			                                        <div class="row bg-white no-margin border-bottom border-light pl20 pr20 comment {% if forloop.counter < activity.postulate.comments.all.count|add:-2 %}collapse fade{% endif %}">
+			                                            <div class="col-xs-12  pt5 pb5 text-light ">
+			                                                <img src="{{comment.recruiter.user.photo.url}}" class="navbar-img va-top no-margin-top card-left" data-name="{{comment.recruiter.user.get_full_name}}">
+			                                                <div class="ml20 row">
+			                                                    <h5 class="inline-block no-margin-y">{{comment.recruiter}}</h5>
+			                                                    <small class="pt5 clickable text-muted" data-toggle="collapse" data-target="#comment-{{comment.id}}"> rated <span class="text-light">{{activity.postulate.candidate.first_name}}</span> - <span class="inline-block" data-toggle="tooltip" title="{{comment.avg_score}}" data-placement="right"> {{comment.avg_stars|safe}} </span> in <a href="{% url 'vacancies_get_vacancy_stage_details' activity.postulate.vacancy.id comment.stage.order comment.stage_section %}">{{comment.stage_string}}</a> - <span class="text-light">{{comment.logtime|naturaltime}}</span></small><br>
+			                                                    <div class="mt5 mb5 ml10 mr10 collapse fade" id="comment-{{comment.id}}">
+			                                                        {% for criterion in comment.get_scores %}
+			                                                            <small>{{criterion.name}}</small>
+			                                                            <span class="inline-block ml5" data-toggle="tooltip" title="{{criterion.score}}" data-placement="right"> {{criterion.get_stars|safe}}</span><br>
+			                                                        {% endfor %}
+			                                                    </div>
+			                                                    <small class="text-muted comment-text">{{comment.text|linebreaks}}</small>
+			                                                </div>
+			                                            </div>
+			                                        </div>
+			                                    {% endif %}
+			                                {% endfor %}
+			                                <div class="row bg-white no-margin border-bottom border-light pl20 pr20 hidden">
+			                                    <div class='col-xs-12 pt5 pb5 text-muted'>
+			                                        <h4 classs="text-light"><small class="pull-right">{{score|default:'Not Rated Yet'}}</small></h4>
+			                                    </div>
+			                                </div>
+			                                <form class="row bg-white no-margin bordered border- pt5 pl5 pr5 pb5 comment-section">
+			                                    <div class="col-xs-12 pt5 pb5">
+			                                        <textarea class="form-control autosize" required></textarea>
+			                                        <a class="clickable mt5 hide-all" data-toggle="collapse" data-target="#comment-s-{{activity.postulate.id}}">Hide Comments</a>
+			                                        <button class="btn btn-sm pull-right mt5 btn-info">Comment</button> 
+			                                    </div>
+			                                </form>
+			                            </div>
+			                        {% endif %}
+		                            {% if company|args:'AS_RATINGS'|call:'check_service' %}
+			                            <div class="collapse fade rate-cards" id="rate-s-{{activity.postulate.id}}">
+			                                {% for process in activity.postulate.processes %}
+			                                    {% if process.avg_score %}
+			                                        <div class="row bg-white no-margin border-bottom border-light pl20 pr20 rate">
+			                                            <div class="col-xs-12 pt10 pb10 text-light">
+			                                                <div class="row no-margin">
+			                                                    <h4 class="inline-block no-margin-y clickable" data-toggle="collapse" data-target=".s-{{activity.postulate.id}}-{{process.id}}" data-parent="#rate-s-{{activity.postulate.id}}">{{process|title}} </h4>
+			                                                    <small class="pt5 text-muted clickable" data-toggle="collapse" data-target=".s-{{activity.postulate.id}}-{{process.id}}" data-parent="#rate-s-{{activity.postulate.id}}"> - <span class="inline-block" data-toggle="tooltip" data-placement="right" title="{{process.avg_score}}">{{process.avg_stars|safe}}</span></small>
+			                                                    {% if process.criteria_avg_scores|length > 1 %}
+			                                                        <div class="mt5 mb5 ml10 mr10 collapse fade s-{{activity.postulate.id}}-{{process.id}}">
+			                                                            {% for criterion in process.criteria_avg_scores %}
+			                                                                <small>{{criterion.0}} <small>(Avg.)</small></small>
+			                                                                <span class="inline-block ml5" data-toggle="tooltip" title="{{criterion.1}}" data-placement="right"> {{criterion.2|safe}}</span><br>
+			                                                            {% endfor %}
+			                                                        </div>
+			                                                    {% endif %}
+			                                                </div>
+			                                            </div>
+			                                        </div>
+			                                        {% for comment in process.get_comments %}
+			                                            <div class="row bg-white no-margin border-bottom border-light pl20 pr20 rate collapse fade s-{{activity.postulate.id}}-{{process.id}}">
+			                                                <div class="col-xs-12 pt5 pb5 ml40 pr40 text-light ">
+			                                                    <img src="{{comment.recruiter.user.photo.url}}" class="navbar-img va-top no-margin-top card-left" data-name="{{comment.recruiter.user.get_full_name}}">
+			                                                    <div class="ml20 row">
+			                                                        <h5 class="inline-block no-margin-y">{{comment.recruiter}}</h5>
+			                                                        <small class="pt5 text-muted {% if comment.get_scores.count > 1 %} clickable {%endif%}" data-toggle="collapse" data-target="#{{comment.id}}" data-parent="#rate-s-{{activity.postulate.id}}"> rated - <span class="inline-block" data-toggle="tooltip" title="{{comment.avg_score}}" data-placement="right"> {{comment.avg_stars|safe}} </span> - <span class="text-light">{{comment.logtime|naturaltime}}</span></small>
+			                                                        <br>
+			                                                        {% if comment.get_scores.count > 1 %}
+			                                                            <div class="mt5 mb5 ml10 mr10 collapse fade" id="{{comment.id}}">
+			                                                                {% for criterion in comment.get_scores %}
+			                                                                    <small>{{criterion.name}}</small>
+			                                                                    <span class="inline-block ml5" data-toggle="tooltip" title="{{criterion.score}}" data-placement="right"> {{criterion.get_stars|safe}}</span><br>
+			                                                                {% endfor %}
+			                                                            </div>
+			                                                        {% endif %}
+			                                                        <small class="text-muted comment-text">{{comment.text|linebreaks}}</small>
+			                                                    </div>
+			                                                </div>
+			                                            </div>
+			                                        {% endfor %}
+			                                    {% endif %}
+			                                {% endfor %}
+			                                {% if not activity.postulate.vacancy_stage == '100' and activity.postulate.vacancy.status.codename == 'open' and activity.postulate.stage_section == '0' %}
+			                                    {% if recruiter|isProcessManager:activity.postulate.vacancy_stage or recruiter.is_manager %}
+			                                        <form class="row bg-white no-margin border-bottom border-light pt5 pl5 pr5 pb5 rate-section {% if recruiter|hasRated:activity %}collapse fade{% endif %}">
+			                                            <div class="col-xs-12 pt5 pb5">
+			                                                {% if current_process.criteria %}
+			                                                    {% for criterion in current_process.criteria_as_list %}
+			                                                        <small>{{criterion}}</small>
+			                                                        <span class="inline-block star-system"> <i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i></span>
+			                                                        <input type="hidden" data-name="{{criterion}}" value="0">
+			                                                        <br>
+			                                                    {% endfor %}
+			                                                {% else %}
+			                                                    <small>Overall </small>
+			                                                    <span class="inline-block star-system"> <i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i></span>
+			                                                    <input type="hidden" value="0" data-name="Overall">
+			                                                    <br>
+			                                                {% endif %}
+			                                                <textarea class="form-control autosize mt5 mb10" required>{{activity.postulate.comment|default:''}}</textarea>
+		                                                    <select class="tag-selector" multiple>
+		                                                        {% for tag in activity.postulate.vacancy.available_tags %}
+		                                                            <option value="{{tag.id}}" {% if tag in activity.postulate.tags.all %}selected="selected"{%endif%}>{{tag.name}}</option>
+		                                                        {% endfor %}
+		                                                    </select>
+			                                                <button class="btn btn-sm pull-right mt5 btn-info">{% if not recruiter|hasRated:activity %}Rate{% else %}Change Rating{% endif %}</button> 
+			                                            </div>
+			                                        </form>
+			                                    {% endif %}
+			                                {% endif %}
+			                                <div class="small bg-white text-info pl40 pt5 pb5 pr40"><span class="btn btn-xs btn-trans-info hide-all" data-toggle="collapse" data-target="#rate-s-{{activity.postulate.id}}">Hide Ratings</span>{% if recruiter|isProcessManager:activity.postulate.vacancy_stage or recruiter.is_manager %}<button class="btn btn-xs btn-trans-info pull-right" data-toggle="collapse" data-target="#rate-s-{{activity.postulate.id}} .rate-section">Change Rating</button>{% endif %}<span class="clearfix"></span></div>
+			                            </div>
+			                        {% endif %}
+		                            <div class="collapse fade tag-cards" id="tag-s-{{activity.postulate.id}}">
+		                                <div class="bg-white border-bottom  border-light">
+		                                    {% if activity.postulate.tags.all %}
+		                                        <div class="row bg-white no-margin border-bottom border-light pt10 pb10 pl20 pr20 tag-section collapse fade in">
+		                                            {% for tag in activity.postulate.tags.all %}
+		                                                <label class="label label-info label-trans mt5 mb5 ml5 mr5"><i class="fa fa-tag"></i> {{tag.name}}</label>
+		                                            {% endfor %}
+		                                        </div>
+		                                    {% endif %}
+		                                    <form class="row bg-white no-margin border-bottom border-light pt20 pl20 pr20 pb20 tag-section {% if not activity.postulate.tags.all %} in {% endif %}collapse fade">
+		                                        {% csrf_token %}
+		                                        <select class="tag-selector" multiple>
+		                                            {% for tag in activity.postulate.vacancy.available_tags %}
+		                                                <option value="{{tag.id}}" {% if tag in activity.postulate.tags.all %}selected="selected"{%endif%}>{{tag.name}}</option>
+		                                            {% endfor %}
+		                                        </select>
+		                                        <button class="btn btn-sm pull-right mt5 btn-info"> Tag </button> 
+
+		                                    </form>
+		                                    <div class="bg-white text-info pl40 pt5 pb5">
+		                                        <a class="small clickable hide-all" data-toggle="collapse" data-target="#tag-s-{{activity.postulate.id}}">
+		                                        Hide Tags</a>
+		                                        {% if  activity.postulate.tags.all %}
+		                                            <div class="inline-block pull-right mr10">
+		                                                <button class="tag-section collapse fade in btn btn-xs btn-default pull-right" data-toggle="collapse" data-target="#tag-s-{{activity.postulate.id}} .tag-section">Change Tags</button>
+		                                                <button class="tag-section collapse fade btn btn-xs btn-default pull-right" data-toggle="collapse" data-target="#tag-s-{{activity.postulate.id}} .tag-section">Cancel</button>
+		                                            </div>
+		                                        {% endif %}
+		                                    </div>
+		                                </div>
+		                            </div>
+		                            <div class="collapse fade timeline-cards" id="timeline-s-{{activity.postulate.id}}">
+		                                <div class="bg-white border-bottom border-light">
+		                                    <ul class="timeline timeline-fix"  >
+		                                        {% for tline in activity.postulate.timeline %}
+		                                            <li class="">
+		                                                <a class="direction-r mt5 text-light">
+		                                                    <div class="flag-wrapper">
+		                                                        <span class="flag">{{tline.logtime}}</span>
+		                                                        <span class="time-wrapper hidden"><span class="time"></span></span>
+		                                                    </div>
+		                                                </a>
+	                                                	<div class="desc mb5 no-margin-top">{% if tline.comment_type == 2 %}{{tline.recruiter}} rated <span data-toggle="tooltip" data-placement='top' title="{{tline.avg_score}}">{{tline.avg_stars|safe}}</span> in {{tline.stage}}<br>{% endif %}{{tline.text}}</div>
+		                                            </li>
+		                                        {% endfor %}
+		                                        {% if not activity.postulate.timeline %}
+		                                        <i>Nothing to Show</i>
+		                                        {% endif %}
+		                                    </ul>
+		                                </div>
+		                                <div class="clickable bg-white small text-info pl40 pt5 pb5 hide-all" data-toggle="collapse" data-target="#timeline-s-{{activity.postulate.id}}">Hide Timeline</div>
+		                            </div>
+		                        </div>
+		                	{% endif %}
+	                	{%empty%}
+	                		<div class="bg-white mb10 border-bottom border-light pl10 pr10 pb10 pt10 null-card">
+	                			<h4 class="text-light text-center">No Content to show!</h4>
+	                		</div>
+	                	{% endfor %}
+                	</div>
+                </div>
+                {% if not activity_id %}
+	                <div class="col-sm-3 hidden-xs">
+	                    <div data-offset-top="60" data-offset-bottom="100">
+	                        <div class="border-bottom border-light br-2 pt10 pb10 pl10 pr10 bg-white">
+	                        	<h4 class="text-light">Evaluations </h4>
+	                        	{% for process in recruiter.vacancystage_set.all %}
+	                        		{% if forloop.counter == 4 %}
+	                        			<a class="clickable collapse fade in evaluation-list" data-toggle="collapse" data-target=".evaluation-list">More <i class="glyphicon glyphicon-chevron-down"></i></a>
+	                        		{% endif %}
+	                        		{% if forloop.counter < 4 %}
+		                        		<p class="mb5"><a href="{% url 'vacancies_get_vacancy_stage_details' process.vacancy.id process.order %}" class="text-muted">
+			                        		<b>{{process.stage}}</b> in <i>{{process.vacancy}}</i>
+		                        		</a></p>
+		                        	{% else %}
+		                        		<p class="evaluation-list collapse fade mb5"><a href="{% url 'vacancies_get_vacancy_stage_details' process.vacancy.id process.order %}" class="text-muted">
+			                        		<b>{{process.stage}}</b> in <i>{{process.vacancy}}</i>
+		                        		</a></p>
+		                        	{% endif %}
+		                        	{% if forloop.last and forloop.counter > 3 %}
+		                        		<a class="clickable collapse fade evaluation-list" data-toggle="collapse" data-target=".evaluation-list"> Less <i class="glyphicon glyphicon-chevron-up"></i></a>
+		                        	{% endif %}
+	                    		{% empty %}
+	                    			<i>Not evaluating any job opening</i>
+
+	                        	{% endfor %}
+	                        </div>
+	                        <div class="mt10 border-bottom border-light br-2 pt10 pb10 pl10 pr10 bg-white mh200" id="upcoming_schedules">
+	                        	<h4 class="text-light no-margin-bottom">Upcoming Tasks </h4>
+	                        	<div id="upcoming_schedules_box" class="mb5"><h5 class="text-light text-center"><i class="fa fa-spinner fa-pulse fa-lg"></i> Please Wait...</h5></div>
+	                        </div>
+	                    </div>
+	                </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+	<!-- Content ends -->
+{% endblock %}
+{%block java_script_srcs%}
+    <script src="{{STATIC_URL}}js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/moment.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/daterangepicker.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/scheduler.js"></script>
+{% endblock %}
+{% block java_script_code %}
+	<script>
+        $(document).ready(function(){
+        	
+	        {% if first_time %}
+		        $('#billing-modal').modal('show')
+		    {% endif %}
+	    });
+		var spot = function(){
+			$this = $(this);
+			$this_label = $this.find('.spot_label');
+			$this_list = $this.next();
+			// $this_badge = $this.find('.spot_badge');
+			old_text = $this_label.html()
+			data = {
+				'activity_id': $this.parents('.comment-card').attr('data-activity'),
+			}
+			$this_label.html('<i class="fa fa-spinner fa-pulse"></i> Please Wait').attr('disabled', true).addClass('disabled');
+			$this_list.addClass('hidden')
+			$.ajax({
+				url: '/ajax/spot/',
+				data: data,
+				type: 'post',
+				complete: function(){
+					$this_label.attr('disabled', false).removeClass('disabled');
+					$this_list.removeClass('hidden');
+				},
+				success: function(data){
+					if(data.msg){
+						alert(data.msg);
+					}
+					if (data.success){
+						$this_list.html(data.spot_list)
+						$this_list.find('[data-toggle="popover"]').popover(popover_options);
+						$this_list.find('[data-toggle="popover"]').on('shown.bs.popover', popover_initials);
+						// count = $this_badge.html()
+						try{
+							count = parseInt(count);
+						}
+						catch(er){
+							count = 0;
+						}
+						if(data.type == '0'){
+							$this_label.html('<i class="fa fa-circle-thin"></i> Spot');
+							count = count - 1;
+						}
+						else if(data.type == '1'){
+							$this_label.html('<i class="fa fa-circle"></i> Spotted');
+							count = count + 1;
+						}
+						$()
+						if(count < 0){
+							count = 0;
+						}
+						// $this_badge.html(count);
+					}
+					else {
+						$this_label.html(old_text);
+					}
+				},
+				error: function(er){
+					console.log(er);
+					$this_label.html(old_text)
+				}
+			})
+		}
+		$('.spot_activity').click(spot);
+		var hide_all = function($this){
+			if(!$this){
+				$this = $(this);
+			}
+			else {
+				$this = $($this);
+			}
+			console.log($this)
+            $this.parents('.comment-card').find('.show-comments').removeClass('active').removeClass('hide-all');
+            $this.parents('.comment-card').find('.show-ratings').removeClass('active').removeClass('hide-all');
+            $this.parents('.comment-card').find('.show-tags').removeClass('active').removeClass('hide-all');
+            $this.parents('.comment-card').find('.show-timeline').removeClass('active').removeClass('hide-all');
+            $this.parents('.comment-card').find('.comment-cards').collapse('hide');
+            $this.parents('.comment-card').find('.rate-cards').collapse('hide');
+            $this.parents('.comment-card').find('.tag-cards').collapse('hide');
+            $this.parents('.comment-card').find('.timeline-cards').collapse('hide');
+    	}
+        $('.hide-all').click(hide_all);
+		var show_comments = function(_this){
+            $(this).parents('.comment-card').find('.comment-cards').collapse('show');
+            $(this).parents('.comment-card').find('.rate-cards').collapse('hide');
+            $(this).parents('.comment-card').find('.tag-cards').collapse('hide');
+            $(this).parents('.comment-card').find('.timeline-cards').collapse('hide');
+            $(this).addClass('active');
+            $('.show-ratings').removeClass('active hide-all');
+            $('.show-tags').removeClass('active hide-all');
+            $('.show-timeline').removeClass('active hide-all');
+            if(!$(this).hasClass('hide-all')){
+            	$(this).addClass('hide-all');
+            }
+            else {
+            	hide_all(this);
+            }
+        };
+		$('.show-comments').click(show_comments);
+        var comment_submit = function(e){
+            e.preventDefault();
+            $this = $(this);
+            $this.find('textarea').addClass('disabled').prop('disabled',true);
+            $this.find('.btn').addClass('disabled').prop('disabled', true).html('<i class="fa fa-pulse fa-spinner"></i> Please Wait')
+            if($this.parents('.comment-card').hasClass('activity-comment')){
+            	data ={
+            		'type':0,
+            		'text':$this.find('textarea').val(),
+            		'recruiter':{{recruiter.id}},
+            		'activity': $this.parents('.comment-card').data('activity'),
+            	}
+            }
+            {% if company|args:'AS_COMMENTS'|call:'check_service' %}
+	            else {
+	           	    data = {
+		                    'text':$this.find('textarea').val(),
+		                    'type':1,
+		                    'recruiter':{{recruiter.id}},
+		                    'stage': $this.parents('.comment-card').data('stage'),
+		                    'ispublic': $this.parents('.comment-card').data('public'),
+		                    'candidate': $this.parents('.comment-card').data('candidate'),
+		                    'vacancy': $this.parents('.comment-card').data('vacancy')
+		                }
+	            }
+	        {% endif %}
+            $.ajax({
+                url:'/ajax/comment/',
+                type:'post',
+                data: data,
+                complete: function(){
+                    $this.find('textarea').removeClass('disabled').prop('disabled', false);
+                    $this.find('.btn').removeClass('disabled').prop('disabled', false).html('Comment');
+                },
+                success: function(data){
+                    console.log(data)
+                    if(data.success){
+                        $this.before(data.html);
+                        $this.prev().find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                        $this.find('textarea').val('');
+                        console.log($this.parents('.comment-card').find('.comment-count').html());
+                        $this.parents('.comment-card').find('.comment-count').html(parseInt($this.parents('.comment-card').find('.show-comments .badge').html()) + 1);
+                        console.log($this.parents('.comment-card').find('.show-comments .badge').html())
+                    }
+                    alert(data.msg);
+                },
+                error: function(er){
+                    console.log(er);
+                }
+            });
+            return false;
+        }
+        $('form.comment-section').submit(comment_submit);
+        {% if company|args:'AS_RATINGS'|call:'check_service' %}
+	        $('.show-ratings').click(function(){
+	            $(this).parents('.comment-card').find('.rate-cards').collapse('show');
+	            $(this).parents('.comment-card').find('.comment-cards').collapse('hide');
+	            $(this).parents('.comment-card').find('.tag-cards').collapse('hide');
+	            $(this).parents('.comment-card').find('.timeline-cards').collapse('hide');
+	            $(this).addClass('active');
+	            $('.show-comments').removeClass('active hide-all');
+	            $('.show-tags').removeClass('active hide-all');
+	            $('.show-timeline').removeClass('active hide-all');
+	            if(!$(this).hasClass('hide-all')){
+	            	$(this).addClass('hide-all');
+	            }
+	            else {
+	            	hide_all(this);
+	            }
+	        });
+	    {% endif %}
+        $('.show-tags').click(function(){
+            $(this).parents('.comment-card').find('.tag-cards').collapse('show');
+            $(this).parents('.comment-card').find('.timeline-cards').collapse('hide');
+            $(this).parents('.comment-card').find('.comment-cards').collapse('hide');
+            $(this).parents('.comment-card').find('.rate-cards').collapse('hide');
+            $(this).addClass('active');
+            $('.show-comments').removeClass('active hide-all');
+            $('.show-ratings').removeClass('active hide-all');
+            $('.show-timeline').removeClass('active hide-all');
+            if(!$(this).hasClass('hide-all')){
+                $(this).addClass('hide-all');
+            }
+            else {
+                hide_all(this);
+            }
+        });
+        $('.show-timeline').click(function(){
+            $(this).parents('.comment-card').find('.timeline-cards').collapse('show');
+            $(this).parents('.comment-card').find('.comment-cards').collapse('hide');
+            $(this).parents('.comment-card').find('.rate-cards').collapse('hide');
+            $(this).parents('.comment-card').find('.tag-cards').collapse('hide');
+            $(this).addClass('active');
+            $('.show-comments').removeClass('active hide-all');
+            $('.show-ratings').removeClass('active hide-all');
+            $('.show-tags').removeClass('active hide-all');
+            if(!$(this).hasClass('hide-all')){
+            	$(this).addClass('hide-all');            	
+		        $('.hide-all').click(hide_all);
+            }
+            else{
+            	hide_all(this);
+            }
+        });
+	    $('#new_post').submit(function(e){
+	    	e.preventDefault();
+	    	$this = $(this);
+	    	data = {'message':$this.find('textarea').val().toString()}
+	    	console.log(data);
+	    	$this.find('.btn-info').html('<i class="fa fa-spinner fa-pulse"></i> Please Wait').addClass('disabled').prop('disabled', true);
+	    	$.ajax({
+	    		url: '/ajax/post/',
+	    		type:'post',
+	    		data: data,
+	    		complete: function(){
+	    			$this.find('.btn-info').html('Post').removeClass('disabled').prop('disabled', false);
+	    		},
+	    		success: function(data){
+	    			console.log(data);
+	    			if(data.success){
+	    	
+	    				$x = $('#activities').prepend(data.post_html);
+	    				$x = $x.find(':nth-child(1)');
+	    				$x.find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+	    				$x.find('.show-comments').click(show_comments);
+	    				$x.find('.spot_activity').click(spot);
+	    				$x.find('form.comment-section').submit(comment_submit);
+	    				$this.find('textarea').val('');
+	    			}
+	    			if (data.msg)
+		    			alert(data.msg);
+	    		},
+	    		error: function(er){
+	    			console.log(er);
+	    		}
+	    	})
+	    	return false;
+	    });
+        {% if company|args:'AS_RATINGS'|call:'check_service' %}
+	        $('.star-system .fa').click(function(){
+	            $this = $(this);
+	            $this.removeClass('fa-star-o').removeClass('fa-star').addClass('fa-star');
+	            $this.prevAll('.fa').removeClass('fa-star-o').removeClass('fa-star-half-o').addClass('fa-star');
+	            $this.nextAll('.fa').removeClass('fa-star').removeClass('fa-star-half-o').addClass('fa-star-o');
+	            $this.parents('.star-system').next().val($this.prevAll().length+1)
+	        })	
+
+	        $('form.rate-section').submit(function(e){
+	            e.preventDefault();
+	            $this = $(this);
+	            stars=$this.find('input[type="hidden"][data-name]');
+	            ratings=[]
+                tags = $this.find('select.tag-selector')[0].selectize.items
+	            proceed=true;
+	            $(stars).each(function(k,star){
+	                if($(star).val()==="0"){
+	                    if (proceed)
+	                        alert('Please provide all ratings to proceed')
+	                    proceed=false;
+	                }
+	                ratings.push($(star).attr('data-name').toString() + ' -&&- ' + $(star).val())
+	            });
+	            if(proceed){
+	                console.log(ratings)
+	                $this.find('textarea').addClass('disabled').prop('disabled',true);
+	                $this.find('.btn').addClass('disabled').prop('disabled', true).html('<i class="fa fa-pulse fa-spinner"></i> Please Wait')
+	                $.ajax({
+	                    url:'/ajax/rate/',
+	                    type:'post',
+	                    data:{
+	                        'text':$this.find('textarea').val(),
+	                        'type':2,
+	                        'recruiter':{{recruiter.id}},
+	                        'stage': $this.parents('.comment-card').data('stage'),
+	                        'ispublic': $this.parents('.comment-card').data('public'),
+	                        'candidate': $this.parents('.comment-card').data('candidate'),
+	                        'vacancy': $this.parents('.comment-card').data('vacancy'),
+	                        'ratings': ratings,
+                            'tags': tags,
+	                    },
+	                    complete: function(){
+	                        $this.find('textarea').removeClass('disabled').prop('disabled', false);
+	                        $this.find('.btn').removeClass('disabled').prop('disabled', false).html('Rate');
+	                    },
+	                    success: function(data){
+	                        if(data.success){
+	                            $this.before(data.html);
+	                            $this.find('textarea').val('')
+	                            setCookie('rate',$this.parents('.rate-cards').attr('id'),1);
+	                            location.href=location.href
+	                        }
+                            else {
+	                            alert(data.msg);
+                            }
+	                    },
+	                    error: function(er){
+	                        console.log(er);
+	                    }
+	                })
+	            }
+	            else {
+	                console.log('not proceeding')
+	            }
+
+	            return false;
+	        });
+	    {% endif %}
+
+        {% if recruiter.is_manager or isProcessMember %}
+            var tagSelect = {
+                openOnFocus: false,
+                allowEmptyOption: false,
+                hideSelected: true,
+                placeholder: 'Tags',
+                create: function (input, callback){
+                    callback({
+                        'value': '__' + input,
+                        'text': input,
+                    })
+
+                },
+                selectOnTab: true,
+                render: {
+                    option_create: function(data, escape) {
+                        return '<div class="create">Add new Tag <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+                    }
+                },
+                onInitialize: function(){
+                    var selectize = this;
+                    $
+                }
+            }
+            $('form.tag-section').submit(function(e){
+                e.preventDefault();
+                $this = $(this);
+                $selectize = $this.find('select')[0].selectize;
+                $selectize.disable();
+                $this.find('.btn').addClass('disabled').prop('disabled', true).html('<i class="fa fa-pulse fa-spinner"></i> Please Wait')
+                $.ajax({
+                    url:'/ajax/tag/',
+                    type:'post',
+                    data:{
+                        'tags':$selectize.items,
+                        'candidate': $this.parents('.comment-card').data('candidate'),
+                        'vacancy': $this.parents('.comment-card').data('vacancy')
+                    },
+                    complete: function(){
+                        $selectize.enable();
+                        $this.find('.btn').removeClass('disabled').prop('disabled', false).html('Tag');
+                    },
+                    success: function(data){
+                        console.log(data)
+                        if(data.success){
+                            $this.before(data.html);
+                            $this.parents('.tag-card').find('.tag-count').html(data.tagcount);
+                        }
+                        location.href= location.href
+                        // alert(data.msg);
+
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+                return false;
+            });
+        {% endif %}
+		$(document).ready(function(){
+			
+			{% if user.recruiter.is_admin and form_invite.errors %}
+				$('#add-member-modal').modal('show');
+			{% endif %}
+			var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+	        {% if recruiter.is_manager or isProcessMember %}
+                $('.tag-selector').selectize(tagSelect);
+            {% endif %}
+		});
+	</script>
+	<script>
+		var try_again_block = "<div class='text-light text-center'>Could Not Load Data. <br><a class='btn btn-info-inverse btn-xs clickable' onclick='populate_schedule(this);'><i class='fa fa-refresh'></i> Try Again</a></div>";
+		var preload_block = '<h5 class="text-light text-center"><i class="fa fa-spinner fa-pulse fa-lg"></i> Please Wait...</h5>'
+		var populate_schedule = function($this=null){
+			$('#upcoming_schedules_box').html(preload_block);
+			$.ajax({
+				type:'post',
+				url:'/ajax/get-schedule/',
+				success:function(data){
+					$('#upcoming_schedules_box').html(data.html_response)
+					$('#upcoming_schedules_box').find('[data-toggle=popover]').popover();
+					$('#upcoming_schedules_box').find('[data-toggle=popover]').on('shown.bs.popover',fetch_schedule)
+					if(data.msg){
+						alert(data.msg)
+					}
+				},
+				error: function(er){
+					$('#upcoming_schedules_box').html(try_again_block)
+					console.log(er)
+				}
+			})
+		}
+		$(document).ready(function(){
+			populate_schedule();
+		})
+	</script>
+{% endblock %}

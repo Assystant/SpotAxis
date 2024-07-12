@@ -1,0 +1,20 @@
+[
+   {
+      "model": "vacancies.vacancy_status",
+      "pk": 1,
+      "fields": {
+         "name": "Open",
+         "codename": "open",
+         "public": 1
+      }
+   },
+   {
+      "model": "vacancies.vacancy_status",
+      "pk": 2,
+      "fields": {
+         "name": "Closed",
+         "codename": "closed",
+         "public": 0
+      }
+   }
+]

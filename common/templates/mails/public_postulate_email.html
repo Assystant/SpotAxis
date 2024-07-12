@@ -1,0 +1,21 @@
+{% extends 'mails/base_email.html' %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% block title %}
+   SpotAxis | {{ vacancy.employment }}
+{% endblock %}
+
+{% block content %}
+    <p>You received a new application for your Job...</p>
+    <p><b><span style="color: #2884D3">{% trans 'Name' %}:</span></b> {{ full_name }}</p>
+    <p><b><span style="color: #2884D3">{% trans 'Age' %}:</span></b>  {{ age }}</p>
+    <p><b><span style="color: #2884D3">{% trans 'Desired Salary' %}:</span></b>  $ {{ salary }}.00 M.N.</p>
+    <p><b><span style="color: #2884D3">{% trans 'Email' %}:</span></b>  {{ email }}</p>
+    <p><b><span style="color: #2884D3">{% trans 'Message' %}:</span></b>  {{ description }}</p>
+    <p>
+        <b style="color: #2884D3;">{% trans 'Attached is their CV/Portafolio' %} {{ full_name }}</b>
+    </p>
+{% endblock %}
+
+{% block button-text %}{% trans 'See Job' %}{% endblock %}

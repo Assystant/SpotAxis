@@ -1,0 +1,169 @@
+header>.content{
+    flex-direction: column;
+    padding: 40px;
+}
+
+.content>div>h1{
+	line-height: 1.5;
+}
+a.nav-brand{
+    color:#000;
+}
+
+.box{
+	justify-content: center;
+	text-align: center;
+}
+.box>div{
+	width: 30%;
+	padding: 16px 80px 64px;
+}
+.listing-container{
+	flex-direction: column;
+}
+.listing-container>h5,h2{
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+.listing-item{
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 20px; 
+}
+.listing-item{
+	margin-top: 16px;
+}
+.listing-item>span {
+	line-height:30px;
+}
+.listing>h4{
+	font-weight: bold;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 16px; 
+}
+.listing:not(:last-of-type){
+	margin-bottom: 64px;
+}
+
+.location>span:first-of-type{
+	font-weight: bold;
+	line-height: 1.5;
+}
+
+.location{
+	text-align: right;
+}
+
+footer{
+	padding: 40px;
+}
+footer>div{
+	flex: 0 0 50%;
+}
+
+ul>li{
+	list-style: none;
+}
+
+nav{
+	padding: 20px;
+	background-color: white;
+	display: block;
+	text-align: center;
+}
+
+nav>div{
+	display: inline-block;
+}
+
+nav>div:nth-of-type(1){
+	display: inline;
+	float: left;
+}
+
+nav>div:nth-of-type(2){
+	display: block;
+	width: 40%;
+	margin:  0 auto;
+	text-align: center;
+}
+
+
+nav>div>span{
+	cursor: pointer;
+	font-size: 1.2rem;
+}
+
+
+nav>div>h3{
+	margin: 0;
+}
+
+.box>div>h3{
+	text-align: center;
+}
+
+.sideNav{
+	height: 100%; 
+    position: fixed; 
+    z-index: 1; 
+    width: 0px; /* target this from js */
+    top: 0;
+    left: 0;
+    background-color: #212121;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+    opacity: 1;
+    display: block;
+}
+
+.sideNav>li{
+	font-size: 1.5rem;
+	text-align: center;
+	line-height: 2.5;
+}
+
+.sideNav>li>a{
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+.closeNavbar{
+	font-size: 1.5rem;
+	position: absolute;
+	top: 10px;
+	right: 20px;
+	cursor: pointer;
+}
+
+.cta{
+	padding-left: 1.6rem;
+	padding-right: 1.6rem;
+}
+
+.badges{
+	height: 25px;
+	width: 25px;
+	border-radius: 50%;
+	padding: 0;
+	margin: 0 0 0 1rem;
+	background: #212121;
+	font-family: Quicksand, sans-serif;
+}
+.no-border {
+	border:none!important;
+	margin-bottom: 40px;
+}
+
+@media screen and (max-width: 1000px) {
+	.box{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	}
+
+	.box>div{
+	width: 50%;
+	}
+}	

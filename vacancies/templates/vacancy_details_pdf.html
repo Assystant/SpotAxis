@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
+
+    <style type="text/css">
+
+
+            @page {
+                size: letter;
+        {#        @frame header_frame {           /* Static Frame */#}
+        {#            margin-left: 1.5cm;#}
+        {#    		margin-right: 1.5cm;#}
+        {#            top: 1cm;#}
+        {#            height: 2cm;#}
+        {#            -pdf-frame-border: 1;    /* for debugging the layout */#}
+        {#        }#}
+                @frame content_frame {          /* Content Frame */
+                    margin-left: 1.5cm;
+                    margin-right: 1.5cm;
+                    top: 1cm;
+                    height: 24.5cm;
+        {#            -pdf-frame-border: 1;    /* for debugging the layout */#}
+                }
+                @frame footer_frame {           /* Another static Frame */
+                    -pdf-frame-content: footer_content;
+        {#            left: 1.5cm;#}
+        {#            width: 512pt;#}
+        {#            width: 18.5cm;#}
+                    margin-left: 1.5cm;
+                    margin-right: 2.1cm;
+                    top: 26cm;
+                    bottom: 1.5cm;
+                    height: 3cm;
+        {#            -pdf-frame-border: 1;    /* for debugging the layout */#}
+                }
+            }
+
+        </style>
+
+    <style>
+
+        * {
+            border-radius: 0 !important;
+        }
+
+        body {
+            color: #4b5b64;
+            font-size: 13px;
+            font-family: 'Lato', Helvetica, Arial, sans-serif;
+            line-height: 18px;
+        }
+
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+            color: inherit;
+            font-weight: 700;
+            font-family: 'Roboto Condensed', sans-serif;
+            line-height: 1.1;
+        }
+
+        h4, .h4 {
+            font-size: 20px;
+        }
+
+        h5, .h5 {
+            font-size: 16px;
+        }
+
+        table, tr, td {
+{#            border: 1px solid #000000;#}
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .w25 {
+            width: 25%;
+            padding-bottom: 2px;
+        }
+
+        .subtitle {
+            padding-bottom: 5px;
+            border-bottom: 2px solid #2c85b6;
+        }
+
+        .logo {
+            height: 100px;
+            width: auto;
+            max-height: 100px;
+            max-width: 200px;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+
+    <div id="content_frame">
+
+       <table>
+            <tr>
+                <td style="width: 30%">
+                    {% if vacancy.confidential %}
+                        <img src="{{ MEDIA_URL }}{{ LOGO_COMPANY_DEFAULT }}" alt="Logo" class="logo">
+                    {% else %}
+                        <img src="{{ MEDIA_URL }}{{ vacancy.company.logo }}" alt="{{vacancy.company.name}} Logo" class="logo">
+                    {% endif %}
+
+                </td>
+                <td style="vertical-align: middle; text-align: right; width: 70%">
+                    <h4 style="margin: 0;">{{ vacancy.employment }}</h4>
+                    <h5 style="margin: 10px 0 0;">
+                        {% if vacancy.confidential %}
+                            Company: Confidential
+                        {% else %}
+                            {{ vacancy.company }}
+                        {% endif %}
+                    </h5>
+                </td>
+            </tr>
+       </table>
+
+        <h5 class="subtitle">Vacancy Details</h5>
+        <table class="table-info">
+            <tbody>
+                <tr>
+                    <td class="bold w25">ID</td>
+                    <td class="w25">{{ vacancy.pk }}</td>
+
+                    <td class="bold w25">Date of Publication</td>
+                    <td class="w25">{{ vacancy.pub_date }}</td>
+                </tr>
+
+                <tr>
+                    <td class="bold w25">State</td>
+                    <td class="w25">{{ vacancy.state }}</td>
+
+                    <td class="bold w25">City</td>
+                    <td class="w25">{{ vacancy.municipal }}</td>
+                </tr>
+
+                <tr>
+                    <td class="bold w25">Industry</td>
+                    <td class="w25">{{ vacancy.industry }}</td>
+
+                    <td class="bold w25">Area</td>
+                    <td class="w25">{{ vacancy.area }}</td>
+                </tr>
+
+                <tr>
+                    <td class="bold w25">Geneder</td>
+                    <td class="w25">{{ vacancy.gender|default:'Any' }}</td>
+
+                    <td class="bold w25">Age</td>
+                    <td class="w25">
+                        {% if vacancy.min_age %}
+                            {{ vacancy.min_age }} - {{ vacancy.max_age }} years
+                        {% else %}
+                            Indistinct
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="bold w25">Education</td>
+                    <td class="w25">{{ vacancy.degree|default:'Any' }}</td>
+
+                    <td class="bold w25">Experience</td>
+                    <td class="w25">{{ vacancy.employmentExperience }}</td>
+                </tr>
+
+                <tr>
+                    <td class="bold w25">Type of Employment</td>
+                    <td class="w25">{% if vacancy.employmentType %}{{ vacancy.employmentType}}{% else %}Anyone{% endif %}</td>
+
+                    <td class="bold w25">Salary</td>
+                    <td class="w25">
+                        {% if vacancy.salaryType.codename == 'fixed' %}
+                            {{vacancy.currency.symbol|safe|default:'&#8377;'}} {{ vacancy.min_salary }}{% if vacancy.min_salary != vacancy.max_salary %} - {{vacancy.currency.symbol|safe|default:'&#8377;'}} {{ vacancy.max_salary }}{% endif %}
+                        {% else %}
+                            {{ vacancy.salaryType }}
+                        {% endif %}
+                    </td>
+                </tr>
+
+
+                {% if not vacancy.confidential %}
+                    <tr>
+                        <td class="bold w25">Contact</td>
+                        <td class="w25">{{ vacancy.company.user.first_name }} {{ vacancy.company.user.last_name }}</td>
+
+                        <td class="bold w25">Company</td>
+                        <td class="w25">
+                            {% if vacancy.confidential %}
+                                Confidential
+                            {% else %}
+                                {{ vacancy.company }}
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% if user_profile %}
+                        <tr>
+    {#                        <td class="bold w25">Teléfono</td>#}
+    {#                        <td class="w25">#}
+    {#                            {{ vacancy.company.contact_phone }}#}
+    {#                           {% if vacancy.company.contact_phone_ext %}#}
+    {#                               - Ext. {{ vacancy.company.contact_phone_ext }}#}
+    {#                            {% endif %}#}
+    {#                        </td>#}
+
+                            <td class="bold w25">Email</td>
+                            <td class="w25" colspan="3">{{ vacancy.email }}</td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+
+                {% if my_vacancy %}
+                    <tr>
+                        <td class="bold w25">Status</td>
+                        <td class="w25">{{ vacancy.status }}</td>
+
+                        <td class="bold w25">Seen</td>
+                        <td class="w25">{{ vacancy.seen }} times</td>
+                    </tr>
+
+                    <tr>
+                        <td class="bold w25">date of Publication</td>
+                        <td class="w25">{{ vacancy.pub_date }}</td>
+
+                        <td class="bold w25">End Date</td>
+                        <td class="w25">{{ vacancy.end_date }}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="bold w25">Confidential</td>
+                        <td class="w25">{% if vacancy.confidential %}Yes{% else %}No{% endif %}</td>
+
+                        <td class="bold w25">Allow applications</td>
+                        <td class="w25">{% if vacancy.postulate %}Yes{% else %}No{% endif %}</td>
+                    </tr>
+
+                {% endif %}
+
+            </tbody>
+        </table>
+
+        <div class="vacancy-description">
+            <h5 class="subtitle">Description</h5>
+            <p>{{ vacancy.description|safe }}</p>
+        </div>
+
+    </div>
+
+
+    <div id="footer_content">
+        <table>
+            <tr>
+                <td>
+                    <img src="{{ MEDIA_URL }}{{ logo_pdf }}" alt="SpotAxis Logo">
+                </td>
+                <td style="text-align: right;">
+                    <h6 style="margin-bottom: 1px;">www.spotaxis.com</h6>
+                    <p style="font-size: 12px; line-height: 12px; margin-top: 0;">email@spotaxis.com</p>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'mails/base_email.txt' %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% block title %}SpotAxis | {{ vacancy.employment }}{% endblock %}
+
+{% block content %}
+New Application received:
+
+    Name: {{ candidate.first_name|capfirst }} {{ candidate.last_name|capfirst }}
+    {% if candidate.birthday %}
+    Age: {{ candidate.birthday|timesince|upto:',' }}
+    {% endif %}
+    {% if academic %}
+    Past Education: {{ academic.course_name }} - {{ academic.area }}
+    {% endif %}
+    {% if candidate.city or candidate.state %}
+    Current Residence: {% if candidate.city %}{{ candidate.city }},{% endif %}{% if candidate.state %}{{ candidate.state }}, {% endif %}{{ candidate.nationality}}
+    {% endif %}
+    {% if file_path %}
+    {% trans 'Attached to the email is the profile of the candidate' %}
+    {% endif %}
+{% endblock %}
+
+{% block button-text %}{% trans 'View Profile on SpotAxis' %} {% endblock %}

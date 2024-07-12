@@ -1,0 +1,13 @@
+{% load i18n %}
+{% load TRM_tags %}
+{% for entry in entries %}
+	<article class="s-promo-block-v6 g-bg-position--center swiper-slide" style="background: url('{% if entry.image %}{{ entry.image.url }}{% else %}{{STATIC_URL}}{{DEFAULT_POST_IMAGE}}{% endif %}');">
+        <div class="g-text-center--xs g-padding-x-15--xs g-padding-x-30--lg g-padding-y-50--xs g-margin-t-120--xs">
+            <div class="g-margin-b-25--xs">
+                <h3 class="g-font-size-16--xs g-color--white g-margin-b-5--xs">{{ entry.title|title }}</h3>
+                <p class="g-color--white hidden"></p>
+            </div>
+            <a href="{{ entry.get_absolute_url }}" class="zinnia_more text-uppercase s-btn s-btn--xs s-btn--white-brd g-radius--50">Read More</a>
+        </div>
+    </article>
+{% endfor %}

@@ -1,0 +1,59 @@
+{% load comments i18n %}
+<form action="{% comment_form_target %}" method="post" id="comment-form" class="mb20">
+  <div>{% csrf_token %}</div>
+  {% if form.non_field_errors %}
+  <div class="error text-danger">
+    {{ form.non_field_errors }}
+  </div>
+  {% endif %}
+  <fieldset>
+    <h3 class="text-light no-margin-bottom">{% trans "Post your comment" %}</h3>
+    <p class="auth">
+    {% if request.user.is_authenticated %}
+      <small class="text-light">{% trans "Comment as" %} <strong>{% firstof user.get_full_name|title user.get_username|title %}</strong>. <i>(Not this person? <a href="{% url 'auth_logout' %}?next={{request.path}}">{% trans "Log out" %}</a>).</i></small>
+    {% endif %}
+    </p>
+    <hr class="no-margin-top">
+    <input type="hidden" name="next" value="{% url 'zinnia:comment_success' %}"/>
+    {% for field in form %}
+      {% if field.is_hidden %}
+        {{ field }}
+      {% else %}
+        {% if user.email and field.name in "namemailurl" %}
+        {% else %}
+          <div class="{% if field.errors %}error text-danger has-error{% endif %} form-group"{% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+            <label for="{{field.auto_id}}">{{ field.label }}{% if field.field.required %} *{% endif %}:</label>
+            {% if field.errors %}
+              {{ field.errors }}
+            {% endif %}
+            {% ifequal field.name "name" %}
+              <input id="id_name" type="text" name="name" value="{% if not field.value and request.user.is_authenticated %}{{ user.get_full_name }}{% else %}{{ field.value|default:'' }}{% endif %}" placeholder="Name" class="form-control input-sm" required maxlength="50" />
+            {% else %}
+              {% ifequal field.name "email" %}
+                <input id="id_email" type="email" name="email" value="{% if not field.value and request.user.is_authenticated %}{{ user.email }}{% else %}{{ field.value|default:'' }}{% endif %}" placeholder="Email" class="form-control input-sm" required/>
+              {% else %}
+
+                {% ifequal field.name "url" %}
+                  <input id="id_url" type="url" name="url" value="{{ field.value|default:'' }}" placeholder="URL" class="form-control input-sm"/>
+                {% else %}
+                  {% ifequal field.name "comment" %}
+                    <textarea id="id_comment" type="text" name="comment" value="{{ field.value|default:'' }}" placeholder="Comment" class="form-control input-sm autosize" required rows="3"/></textarea> 
+                  {% else %}
+                    {{ field }}
+                  {% endifequal %}
+                {% endifequal %}
+              {% endifequal %}
+            {% endifequal %}
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    {% if user.is_authenticated %}
+    
+    {% endif %}
+    <p class="submit pull-right">
+      <input type="submit" name="submit" value="{% trans "Post" %}" class="btn btn-sm btn-info"/>
+      <!--input type="submit" name="preview" class="btn btn-default" value="{% trans "Preview" %}" /-->
+    </p>
+  </fieldset>
+</form>

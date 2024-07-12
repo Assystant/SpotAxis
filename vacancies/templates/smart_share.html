@@ -1,0 +1,126 @@
+{% load TRM_tags %}
+<div class="row">
+    <div class="col-xs-12 text-right"><a class="btn btn-xs refresh-smart-share"><i class="fa fa-refresh"></i> Refresh</a></div>
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+        <h4 class="text-center text-muted">Post to</h4>
+        <ul class="nav nav-tabs nav-bubble text-center no-padding-bottom">
+          <li class="active"><a data-toggle="tab" href="#fbsocial"><span class="facebook fa-stack fa-2x"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x"></i></span></a><span class="wedge"></span><span class="wedge-2"></span></li>
+          <li><a data-toggle="tab" href="#menu1"><span class="linkedin fa-stack fa-2x"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x"></i></span></a><span class="wedge"></span><span class="wedge-2"></span></li>
+          <li><a data-toggle="tab" href="#menu2"><span class="twitter fa-stack fa-2x"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x"></i></span></a><span class="wedge"></span><span class="wedge-2"></span></li>
+        </ul>
+
+        <div class="tab-content mt10">
+          <div id="fbsocial" class="tab-pane collapse fade in active pt10 pb10 pl15 pr15 text-center">
+           {% if recruiter_social_profile.fbstatus > 1 %}
+           <div class="row mb10 mt10">
+                <div class="col-xs-12 mb10">
+                    <img src="{% if recruiter_social_profile.fb.remote_photo %}{{recruiter_social_profile.fb.remote_photo }}{% else %}{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}{% endif %}" class="img-card">
+                    <p class="text-left inline-block va-top mt15 ml5">{{recruiter_social_profile.fb.social_name|default:request.user|title}}
+                    </p>
+                </div>
+            </div> 
+            <div class="row no-margin">
+                <div class="col-xs-12 text-center">
+                    <div class="form-group checkbox checkbox-info checkbox-circle">
+                        <input type="checkbox" name="fbpersonal" id="fbpersonal"><label for="fbpersonal" class="lh1"> Post to your Wall</label>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div class="row text-left no-margin relative">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="border-bottom border-light mb10"><label >GROUPS </label> <small class="text-light">Posted as You</small></div>
+                    {% if not recruiter_social_profile.fbgroups == 'Not permitted' %}
+                        {% for group in recruiter_social_profile.fbgroups %}
+                            <div class="form-group checkbox checkbox-info checkbox-circle">
+                                <input type="checkbox" name="fbgroup-{{group.id}}" id="fbgroup-{{group.id}}"><label for="fbgroup-{{group.id}}" class="lh1"> {{group.name}}</label>
+                            </div>
+                        {% empty %}
+                            <p>You are not managing any groups.</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>You have not granted access to publish to your groups. Update your app settings in Facebook or Reauthenticate</p>
+                        <a href="{% url 'social_verification' vacancy.id 'fb' %}?reauth=True" class="btn btn-facebook">Reauthenticate with Facebook</a>
+                    {% endif %}
+                </div>
+                <div class="vr border-light"></div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="border-bottom border-light mb10"><label >Pages </label> <small class="text-light">Posted as Page Admin</small></div>
+                    {% if not recruiter_social_profile.fbpages == 'Not permitted' %}
+                        {% for page in recruiter_social_profile.fbpages %}
+                            <div class="form-group checkbox checkbox-info checkbox-circle">
+                                <input type="checkbox" name="fbpage-{{page.id}}" id="fbpage-{{page.id}}"><label for="fbpage-{{page.id}}" class="lh1"> {{page.name}}</label>
+                            </div>
+                        {% empty %}
+                            <p>You are not managing any pages.</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>You have not granted access to publish to your pages. Update your app settings in Facebook or Reauthenticate</p>
+                        <a href="{% url 'social_verification' vacancy.id 'fb' %}?reauth=True" class="btn btn-facebook">Reauthenticate with Facebook</a>
+                    {% endif %}
+                </div>
+            </div>
+           {% else %}
+                <a href="{% url 'social_verification' vacancy.id 'fb' %}" class="btn btn-facebook">Connect with Facebook</a>
+           {% endif %} 
+          </div>
+          <div id="menu1" class="tab-pane collapse fade pt10 pb10 pl15 pr15 text-center">
+            {% if recruiter_social_profile.listatus == 2 %}
+            <div class="row mb10 mt10">
+                <div class="col-xs-12 mb10">
+                    <img src="{% if recruiter_social_profile.li.remote_photo %}{{recruiter_social_profile.li.remote_photo }}{% else %}{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}{% endif %}" class="img-card">
+                    <p class="text-left inline-block va-top mt15 ml5">{{recruiter_social_profile.li.social_name|default:request.user|title}}
+                    </p>
+                </div>
+            </div> 
+            <div class="row no-margin">
+                <div class="col-xs-12 text-center">
+                    <div class="form-group checkbox checkbox-info checkbox-circle">
+                        <input type="checkbox" name="lipersonal" id="lipersonal"><label for="lipersonal" class="lh1"> Post to your Stream</label>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div class="row text-left no-margin relative">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="border-bottom border-light mb10"><label >COMPANIES </label> <small class="text-light">Posted as Company Admin</small></div>
+                    {% for company in recruiter_social_profile.licompanies %}
+                        <div class="form-company checkbox checkbox-info checkbox-circle">
+                            <input type="checkbox" name="licompany-{{company.id}}" id="licompany-{{company.id}}"><label for="licompany-{{company.id}}" class="lh1"> {{company.name}}</label>
+                        </div>
+                    {% empty %}
+                        <p>You are not managing any Company Pages.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+                <a href="{% url 'social_verification' vacancy.id 'li' %}" class="btn btn-linkedin">Connect with Linkedin</a>
+            {% endif %} 
+          </div>
+          <div id="menu2" class="tab-pane collapse fade pt10 pb10 pl15 pr15 text-center">
+            {% if recruiter_social_profile.twstatus == 2 %}
+            <div class="row mb10 mt10">
+                <div class="col-xs-12 mb10">
+                    <img src="{% if recruiter_social_profile.tw.remote_photo %}{{recruiter_social_profile.tw.remote_photo }}{% else %}{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}{% endif %}" class="img-card">
+                    <p class="text-left inline-block va-top mt15 ml5">{{recruiter_social_profile.tw.social_name|default:request.user|title}}
+                    </p>
+                </div>
+            </div> 
+            <div class="row no-margin">
+                <div class="col-xs-12 text-center">
+                    <div class="form-group checkbox checkbox-info checkbox-circle">
+                        <input type="checkbox" name="twpersonal" id="twpersonal"><label for="twpersonal" class="lh1"> Tweet</label>
+                    </div>
+                </div>
+            </div>
+           {% else %}
+                <a href="{% url 'social_verification' vacancy.id 'tw' %}" class="btn btn-twitter">Connect with Twitter</a>
+           {% endif %} 
+          </div>
+        </div>
+        <hr>
+    </div>
+    <div class="col-xs-12 mt30">
+        <button class="center-block btn btn-info pl30 pr30 mb30" type="submit">Post</button>
+    </div>
+</div>

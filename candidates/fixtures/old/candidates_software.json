@@ -1,0 +1,72 @@
+[
+  {
+    "model": "candidates.software",
+    "pk": 1,
+    "fields": {
+      "name": "Dise\u00f1o Gr\u00e1fico"
+    }
+  },
+  {
+    "model": "candidates.software",
+    "pk": 2,
+    "fields": {
+      "name": "Dise\u00f1o Multimedia"
+    }
+  },
+  {
+    "model": "candidates.software",
+    "pk": 3,
+    "fields": {
+      "name": "Gesti\u00f3n de Bases de Datos"
+    }
+  },
+  {
+    "model": "candidates.software",
+    "pk": 4,
+    "fields": {
+      "name": "Gesti\u00f3n Empresarial"
+    }
+  },
+  {
+    "model": "candidates.software",
+    "pk": 5,
+    "fields": {
+      "name": "Herramientas de Oficina (Office)"
+    }
+  },
+  {
+    "model": "candidates.software",
+    "pk": 6,
+    "fields": {
+      "name": "Herramientas Educativas"
+    }
+  },
+  {
+    "model": "candidates.software",
+    "pk": 7,
+    "fields": {
+      "name": "Herramientas M\u00e9dicas"
+    }
+  },
+  {
+    "model": "candidates.software",
+    "pk": 8,
+    "fields": {
+      "name": "Ingenieria y Ciencias"
+    }
+  },
+  {
+    "model": "candidates.software",
+    "pk": 9,
+    "fields": {
+      "name": "Otros"
+    }
+  },
+  {
+    "model": "candidates.software",
+    "pk": 10,
+    "fields": {
+      "name": "Programaci\u00f3n (Web, M\u00f3vil, Escritorio, Otros)"
+    }
+  }
+]

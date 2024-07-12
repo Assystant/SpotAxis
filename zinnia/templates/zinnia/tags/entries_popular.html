@@ -1,0 +1,34 @@
+{% load i18n %}
+{% load TRM_tags %}
+<div class="{% if not entries %}no-{% endif %}entries-popular">
+  {% for entry in entries %}
+  <div class="row">
+    <div class="col-xs-4 no-padding-right">
+      <div class="entry-image no-margin border-bottom border-light">
+        <a href="{{ entry.get_absolute_url }}" title="{{ entry.title|title }}" rel="bookmark">
+          <figure itemprop="image" itemscope itemtype="http://schema.org/Imageentry">
+            <img src="{% if entry.image %}{{ entry.image.url }}{% else %}{{STATIC_URL}}{{DEFAULT_POST_IMAGE}}{% endif %}" alt="{{ entry.image_caption|default:entry.title }}" itemprop="contentUrl" />
+        </figure>
+    </a>
+</div>
+</div>
+<div class="col-xs-8 no-padding-left">
+    <h6 class="entry-title no-margin pt5 pl5 pr5 pb5" itemprop="name">
+        <a href="{{ entry.get_absolute_url }}" title="{{ entry.title }}" rel="bookmark" itemprop="url" class="text-light">
+            {{ entry.title|title }}</a>
+      <a href="{{ entry.get_absolute_url }}#comments"
+        title="{% blocktrans with object=entry.title %}Comments on {{ object }}{% endblocktrans %}" class="text-muted pl10 small inline-block">
+        {% blocktrans count comment_count=entry.comment_count %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}</a>
+    </h6>
+</div>
+{% if not forloop.last %}
+<div class="col-xs-12"><hr class="mt5 mb5"></div>
+{% endif %}
+</div>
+{% empty %}
+<div>
+    {% trans "No resources yet." %}
+</div>
+{% endfor %}
+</div>
+

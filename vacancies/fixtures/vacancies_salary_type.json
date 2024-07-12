@@ -1,0 +1,38 @@
+[
+  {
+    "model": "vacancies.salary_type",
+    "pk": 1,
+    "fields": {
+      "name": "Not specified",
+      "codename": "unspecified",
+      "order": 1
+    }
+  },
+  {
+    "model": "vacancies.salary_type",
+    "pk": 3,
+    "fields": {
+      "name": "Confidential",
+      "codename": "confidential",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.salary_type",
+    "pk": 5,
+    "fields": {
+      "name": "Negotiable",
+      "codename": "negotiable",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.salary_type",
+    "pk": 6,
+    "fields": {
+      "name": "Fixed",
+      "codename": "fixed",
+      "order": 100
+    }
+  }
+]

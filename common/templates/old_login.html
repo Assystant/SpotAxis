@@ -1,0 +1,40 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block meta %}
+    <meta name="keyword" content="Login, SpotAxis"/>
+    <meta name="description" content="Login on SpotAxis"/>
+{% endblock %}
+{% block title %}SpotAxis | Login{% endblock %}
+{% comment %} Login (Company or Candidate) {% endcomment %}
+{% block content %}
+    <div class="row mb10">
+        <div class="col-xs-12 col-lg-2 col-lg-offset-5 mt10">
+            <h1 class="text-center text-light">Login</h1>
+        </div>
+        <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-3 col-md-offset-3 col-lg-2 col-lg-offset-0 col-lg-pull-4 mt40 hidden">
+            <a class="btn btn-sm btn-block btn-info" href="{% url 'candidates_register_candidate' %}">Register as Talent</a>
+            <small clas="text-info">Are you a Talent?</small>
+        </div>
+        <div class="col-xs-10 col-xs-push-1 col-sm-6 col-sm-push-3 col-md-3 col-md-push-0 col-lg-2 col-lg-pull-2 mt40 text-right hidden">
+            <a class="btn btn-sm btn-block btn-info" href="{{settings.HOSTED_URL}}{% url 'companies_record_recruiter' %}">Register as Employer {{HOSTED_URL}}</a>
+            <small clas="text-info">Are you a Recruiter?</small>
+        </div>
+        <div class="col-xs-12 clearfix"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-push-3 col-sm-8 col-sm-push-2">
+            <div class="panel panel-default">
+                {%include 'login_form.html' %}
+                
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block java_script_code %}
+    <script>
+    $('#login_form').submit(function(){
+        $('.btn-info').html('<i class="fa fa-spinner fa-pulse"></i> Please Wait').prop('disabled',true).addClass('disabled');
+    })
+    </script>
+{% endblock %}

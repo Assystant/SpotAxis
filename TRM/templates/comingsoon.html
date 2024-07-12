@@ -1,0 +1,176 @@
+{% extends "base/outer_base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% comment %} Home {% endcomment %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+
+{% block content %}
+
+        <!--========== PROMO BLOCK ==========-->
+        <div class="s-promo-block-v1 g-bg-color--primary-to-blueviolet-ltr g-fullheight--md">
+            <div class="container g-ver-center--md g-padding-y-100--xs">
+                <div class="row g-hor-centered-row--md g-margin-t-30--xs g-margin-t-20--sm">
+                    <div class="col-lg-6 col-sm-6 g-hor-centered-row__col g-text-center--xs g-text-left--md g-margin-b-60--xs g-margin-b-0--md">
+                        <div class="s-promo-block-v1__square-effect g-margin-b-60--xs">
+                            <h1 class="g-font-size-32--xs g-font-size-45--sm g-font-size-50--lg g-color--white g-font-weight--400">Coming Soon...</h1>
+                            <p class="typed g-color--white g-font-weight--750 g-font-size-32--xs g-font-size-45--sm g-font-size-50">Hi, I am your bot recruiter, Spax.</p>
+                            <span class="typed-cursor g-color--dark">|</span>
+
+                        </div>
+                        <span class="g-display-block--xs g-display-inline-block--lg g-margin-b-10--xs g-margin-b-10--lg">
+                            <a href="/" class="s-btn s-btn--xs s-btn--white-brd g-padding-x-30--xs g-radius--50">
+                                <span class="s-btn__element--left">
+                                    <i class="g-font-size-32--xs fa-spotaxis"></i>
+                                </span>
+                                <span class="s-btn__element--right g-padding-x-10--xs">
+                                    <span class="g-display-block--xs g-font-size-11--xs">Go to</span>
+                                    <span class="g-font-size-16--xs">SpotAxis.com</span>
+                                </span>
+                            </a>
+                        </span>
+                    </div>
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-4 col-sm-4 g-hor-centered-row__col">
+                        <div class="wow fadeInUp" data-wow-duration=".3" data-wow-delay=".1s">
+                            <form class="center-block g-width-450--xs g-bg-color--white-opacity-lightest g-box-shadow__blueviolet-v1 g-padding-x-40--xs g-padding-y-60--xs g-radius--4" id="early_access" method="post">
+                                {% csrf_token %}
+                                <div class="g-text-center--xs g-margin-b-40--xs">
+                                    <h2 class="g-font-size-30--xs g-color--white">Early Bird Access</h2>
+                                </div>
+                                <div class="g-margin-b-30--xs">
+                                    {{form_request.name}}
+                                </div>
+                                <div class="g-margin-b-30--xs">
+                                    {{form_request.email}}
+                                </div>
+                                <div class="g-margin-b-30--xs">
+                                    {{form_request.organization}}
+                                </div>
+                                <div class="g-margin-b-30--xs">
+                                    {{form_request.position}}
+                                </div>
+                                <div class="g-text-center--xs">
+                                    <button type="submit" class="text-uppercase btn-block s-btn s-btn--md s-btn--white-bg g-radius--50 g-padding-x-50--xs g-margin-b-20--xs">Request</button>
+                                    <!--<a class="g-color--white g-font-size-13--xs" href="#">Forgot Password?</a>-->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--========== END PROMO BLOCK ==========-->
+
+
+        <!--========== PAGE CONTENT ==========-->
+        <!-- Counter -->
+        <!-- <div class="js__parallax-window" style="background: url(img/1920x1080/02.jpg) 50% 0 no-repeat fixed;">  -->
+            <div class="container g-padding-y-125--xs">
+                <div class="row">
+                    <div class="col-md-3 col-xs-6 g-full-width--xs g-margin-b-70--xs g-margin-b-0--lg">
+                        <div class="g-text-center--xs">
+                            <div class="g-margin-b-10--xs">
+                                <figure class="g-display-inline-block--xs g-font-size-70--xs g-color--dark js__counter">88</figure>
+                                <span class="g-font-size-40--xs g-color--dark">%</span>
+                            </div>
+                            <div class="center-block g-hor-divider__solid--dark g-width-40--xs g-margin-b-25--xs"></div>
+                            <h4 class="g-font-size-18--xs g-color--dark">Recruitment Process Automation</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-xs-6 g-full-width--xs">
+                        <div class="g-text-center--xs">
+                            <div class="g-margin-b-10--xs">
+                                <figure class="g-display-inline-block--xs g-font-size-70--xs g-color--dark js__counter">5</figure>
+                                <span class="g-font-size-40--xs g-color--dark">x</span>
+                            </div>
+                            <div class="center-block g-hor-divider__solid--dark g-width-40--xs g-margin-b-25--xs"></div>
+                            <h4 class="g-font-size-18--xs g-color--dark">Faster Recruitment Cycle</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-xs-6 g-full-width--xs">
+                        <div class="g-text-center--xs">
+                            <div class="g-margin-b-10--xs">
+                                <figure class="g-display-inline-block--xs g-font-size-70--xs g-color--dark js__counter">98</figure>
+                                <span class="g-font-size-40--xs g-color--dark">%</span>
+                            </div>
+                            <div class="center-block g-hor-divider__solid--dark g-width-40--xs g-margin-b-25--xs"></div>
+                            <h4 class="g-font-size-18--xs g-color--dark">Relevant Candidates</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-xs-6 g-full-width--xs">
+                        <div class="g-text-center--xs">
+                            <div class="g-margin-b-10--xs">
+                                <figure class="g-display-inline-block--xs g-font-size-70--xs g-color--dark js__counter">12</figure>
+                                <span class="g-font-size-40--xs g-color--dark">x</span>
+                            </div>
+                            <div class="center-block g-hor-divider__solid--dark g-width-40--xs g-margin-b-25--xs"></div>
+                            <h4 class="g-font-size-18--xs g-color--dark">Recruiter's Productivity</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- </div> -->
+            <div class="g-text-center--xs g-margin-b-80--xs">
+                    <h2 class="g-font-size-32--xs g-font-size-36--md">Why signup for "Early Bird Access"</h2>
+                    <p class="text-uppercase g-font-size-14--xs g-font-weight--700 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">1. First 3 months free without credit card<br>2. 50% discount forever<br>3. News and updates about Spax.</p>
+            </div>
+        <!-- End Counter -->
+        
+        <!-- Subscribe -->
+        <div class="g-bg-color--primary-to-blueviolet-ltr">
+            <div class="g-container--sm g-text-center--xs g-padding-y-80--xs g-padding-y-125--xsm">
+                <div class="g-margin-b-40--xs">
+                    <h2 class="g-font-size-32--xs g-font-size-36--md g-letter-spacing--1 g-color--white">Join over 3000+ early adopters</h2>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+                        <span class="g-display-block--xs g-display-inline-block--lg g-margin-b-60--xs g-margin-b-80--lg">
+                            <a class="js__back-to-top s-btn s-btn--xs s-btn--white-brd g-padding-x-30--xs g-radius--50">
+                                <span class="s-btn__element--right g-padding-x-10--xs">
+                                    <span class="g-font-size-16--xs">Request Access</span>
+                                </span>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                <div class="g-margin-b-20--xs">
+                    <h2 class="g-font-size-32--xs g-font-size-36--md g-letter-spacing--1 g-color--white">And, follow us on</h2>
+                    <a class="js__back-to-top s-btn s-btn--xs s-btn--white-brd g-padding-x-15--xs g-padding-y-10--xs g-radius--50 g-margin-r-10--xs g-margin-t-10--xs" href="https://www.linkedin.com/company-beta/16203576/">
+                        <span class="s-btn__element--right">
+                            <span class="g-font-size-16--xs"><i class="ti-linkedin"></i></span>
+                        </span>
+                    </a>
+                    <a class="js__back-to-top s-btn s-btn--xs s-btn--white-brd g-padding-x-15--xs g-padding-y-10--xs g-radius--50 g-margin-r-10--xs g-margin-t-10--xs" href="https://twitter.com/spotaxis">
+                        <span class="s-btn__element--right">
+                            <span class="g-font-size-16--xs"><i class="ti-twitter-alt"></i></span>
+                        </span>
+                    </a>
+                    <a class="js__back-to-top s-btn s-btn--xs s-btn--white-brd g-padding-x-15--xs g-padding-y-10--xs g-radius--50 g-margin-r-10--xs g-margin-t-10--xs" href="https://www.facebook.com/spotaxis/">
+                        <span class="s-btn__element--right">
+                            <span class="g-font-size-16--xs"><i class="ti-facebook"></i></span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- End Subscribe -->
+
+        <!--========== END PAGE CONTENT ==========-->
+
+{% endblock %}
+{% block java_script_srcs %}
+    
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/js/components/typed.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/js/components/typewriter.js"></script>
+        <script>
+            $(document).ready(function(){
+                $(".typed").typewriter({
+                   speed: 100
+                });
+            });
+        </script>
+{% endblock %}

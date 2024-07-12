@@ -1,0 +1,37 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{#{% trans "" %}#}
+
+{% block meta %}
+    <meta name="keyword" content="Change Email, SpotAxis"/>
+    <meta name="description" content="Change Email on SpotAxis"/>
+{% endblock %}
+{% block title %}SpotAxis | Email Change Requested{% endblock %}
+
+{% block content %}
+
+    <div class="row mb60 page-content">
+        <div class="col-md-8 col-md-offset-2 white-container-msgs">
+            <h2 class='text-center text-light'>{% trans 'Change E-mail' %}</h2>
+            <div class="panel panel-default">
+                <div class="panel-body panel-shadow pt40 pb40">
+                    <p>
+                        {% blocktrans %}
+                            An email has been sent to <strong>{{ email }}</strong> including a link to change your email.
+                            If you did not receive this email, try looking into your Spam folder.
+                            This link is valid for <strong>{{ expiration_days }} hours</strong>.
+                        {% endblocktrans %}
+                    </p>
+                    <p>
+        {#                {% if profile.profile.codename == 'candidate' %}#}
+                        {% if user_profile == 'candidate' %}
+                            <a href="{% url 'candidates_edit_curriculum' %}" class="btn btn-info pull-right">{% trans "My Profile" %}</a>
+                        {% else %}
+                            <a href="{% url 'companies_recruiter_profile' %}" class="btn btn-info pull-right">{% trans "My Profile" %}</a>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

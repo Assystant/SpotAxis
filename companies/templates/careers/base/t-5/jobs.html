@@ -1,0 +1,76 @@
+{% load TRM_tags %}
+{% if vacancies or isPreview or editing %}
+	<div class="buttongroup">
+		<select id="jobselector">
+			<option>All</option>
+			{% for function in company.company_functions %}
+				<option>{{function|title}}</option>
+			{% empty %}
+				<option>Engineer</option>
+				<option>Artist</option>
+			{% endfor %}
+		</select>
+
+		<div class="grid">
+			<i class="fa fa-th-large activeMode gridmode" aria-hidden="true"></i>
+			<i class="fa fa-list listmode" aria-hidden="true"></i>
+		</div>
+	</div>
+	<div class="listing-container" data-mode="grid">
+		{% for vacancy in vacancies %}
+			<div class="listing" data-type="{{vacancy.function|lower}}">
+				<div class="listing-content">
+					<h3 class="-text-viking">{{vacancy.employment|upper}}</h3>
+					<div>{{vacancy.description|safe}}</div>
+					<a href="{% url 'vacancies_get_vacancy_details' vacancy.id %}">Learn more.</a>
+				</div>
+			</div>
+		{% empty %}
+			<div class="listing" data-type="engineer">
+				<div class="listing-content">
+					<h3 class="-text-viking">FULL-STACK ENGINEER</h3>
+					<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta consequatur facilis tenetur quae autem odio debitis dolorem ut illum.</div>
+					<a>Learn more.</a>
+				</div>
+			</div>
+			<div class="listing"  data-type="artist">
+				<div class="listing-content">
+					<h3 class="-text-viking">Storyboard Writer</h3>
+					<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta consequatur facilis tenetur quae autem odio debitis dolorem ut illum.</div>
+					<a>Learn more.</a>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+	<div class="listing-container" data-mode="list">
+		{% for vacancy in vacancies %}
+			<div class="listing-list" data-type="{{vacancy.function|lower}}">
+				<div class="listing-content">
+					<h3 class="-text-viking">{{vacancy.employment|upper}}</h3>
+					<div>{{vacancy.description|safe}}</div>
+					<a href="{% url 'vacancies_get_vacancy_details' vacancy.id %}">Learn more</a>
+				</div>
+			</div>
+		{% empty %}
+			<div class="listing-list" data-type="engineer">
+				<div class="listing-content">
+					<h3 class="-text-viking">FULL-STACK ENGINEER</h3>
+					<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta consequatur facilis tenetur quae autem odio debitis dolorem ut illum.</div>
+					<a>Learn more.</a>
+				</div>
+			</div>
+			<div class="listing-list" data-type="artist">
+				<div class="listing-content">
+					<h3 class="-text-viking">Storyboard Writer</h3>
+					<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta consequatur facilis tenetur quae autem odio debitis dolorem ut illum.</div>
+					<a>Learn more.</a>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% else %}
+	<div class="listing">
+		No current job openings. Check back later.
+	</div>
+{% endif %}

@@ -1,0 +1,13 @@
+{% load static %}
+<div class="container-fluid">
+    <form class="row pt10 pb10" method="post" action = ".">
+        {% include 'templated_form_fields.html' %}
+        <div class="col-xs-12 mt5 mb5 pr40 pl40">
+            {% if not preview %}
+                <a class="btn btn-sm btn-info btn-block" id="custom_form_submit">Submit</a>
+            {% else %}
+                <a class="btn btn-sm btn-info btn-block" data-dismiss="modal">Go Back</a>
+            {% endif %}
+        </div>
+    </form>
+</div>

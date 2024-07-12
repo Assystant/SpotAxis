@@ -1,0 +1,155 @@
+{% load i18n %}
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+</head>
+<body>
+
+    <div class="">
+
+        <!-- Registration Form for anonymous candidate -->
+        <form action="{% if vacancy %}{% url 'vacancies_new_application' vacancy.id %}{% endif %}" method="post" role="form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="vacancy" value="">
+            <input type="hidden" name="referer" value="{{referer.id}}">
+            <input type="hidden" name="external_referer" value="{{external_referer.id}}">
+            <input type="hidden" name="refering_page" value="{{request.path}}">
+
+            <div class="row">
+             <!-- Name -->
+                <div class="col-md-6 col-xs-12 hidden">
+                    <div class="form-group ">
+                        {% if public_form.full_name.errors %}
+                            <ul class="list-unstyled error-list text-danger">
+                            {% for error in public_form.full_name.errors %}
+                                <li>{{error|escape}}</li>
+                            {% endfor %}
+                            </ul>
+                        {%else%}
+                            <label for="id_first_name">{% trans 'Full Name' %}<span class="required">*</span></label>
+                        {%endif%}
+                        <div class="input-group {% if public_form.full_name.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-tag fa-lg"></i></div>
+                            {{ public_form.full_name}}
+                        </div>
+                    </div>
+                </div>
+             <!-- Email -->
+                <div class="col-md-6 col-xs-12 hidden">
+                    <div class="form-group">
+                        {% if public_form.email.errors %}
+                            <ul class="list-unstyled error-list text-danger">
+                            {% for error in public_form.email.errors %}
+                                <li>{{error|escape}}</li>
+                            {% endfor %}
+                            </ul>
+                        {%else%}
+                            <label for="id_email">{% trans 'Email' %}<span class="required">*</span></label>
+                        {%endif%}
+                        <div class="input-group {% if public_form.email.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-at fa-lg"></i></div>
+                            {{ public_form.email }}
+                        </div>
+                    </div>
+                </div>
+            </div><!-- Name, Email -->
+
+            <!-- Age -->
+            <div class="row">
+                <!-- Age -->
+                <!--div class="col-md-6">
+                    <div class="form-group">
+                        {% if public_form.age.errors %}
+                            <ul class="list-unstyled error-list text-danger">
+                            {% for error in public_form.age.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_min_age">{% trans 'Age' %}</label>
+                        {% endif %}
+                        <div class="input-group {% if public_form.age.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-sort-numeric-asc fa-lg"></i></div>
+                            {{ public_form.age }}
+                        </div>
+                    </div>
+                </div-->
+                <!-- Desired Salary -->
+                <!--div class="col-md-6">
+                    <div class="form-group">
+                        {% if public_form.salary.errors %}
+                            <ul class="list-unstyled error-list text-danger">
+                            {% for error in public_form.salary.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_max_salary">{% trans 'Desired Salary' %}</label>
+                        {% endif %}
+                        <div class="input-group {% if public_form.salary.errors %}has-error{% endif %} mb20">
+                            <div class="input-group-addon"><i class="fa fa-usd fa-lg"></i></div>
+                            {{ public_form.salary }}
+                        </div>
+                    </div>
+                </div-->
+            </div><!-- Age and Desired Salary -->
+
+
+            <!-- Description -->
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 hidden">
+                    <div class="form-group {% if public_form.description.errors%}has-error{%endif%}">
+                        {% if public_form.description.errors %}
+                            <ul class="list-unstyled error-list text-danger">
+                            {% for error in public_form.description.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_description">{%if not recruiter%}Cover Letter{%else%}Notes about the candidate{%endif%}<span class="required"></span></label>
+                        {% endif %}
+                        {{ public_form.description }}
+                    </div>
+                </div>
+            </div><!-- Description -->
+
+            <!-- CV File -->
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        {% if public_form.file.errors %}
+                            <ul class="list-unstyled error-list text-danger">
+                            {% for error in public_form.file.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <label for="id_cv_file">{% trans 'Add CV/Resume/Profile' %}<span class="required">*</span></label>
+                        {% endif %}
+                            {{ public_form.file }}
+                    </div>
+                </div>
+            </div><!-- CV File -->
+
+            <div class="row mt20">
+                <div class="col-xs-12">
+                    <button type="submit" id="submit_btn" class="btn btn-info btn-block" >
+                        {%if recruiter%}Add {%else%}Apply{%endif%}
+                    </button>
+                    {%if not recruiter %}
+                    <p>
+                        {% trans 'When applying you indicate that you have read and accept our ' %}
+                        <a onclick="$(this).parents('.modal').modal('hide');$('#privacy-policy-modal').modal('show');setTimeout(function(){$('body').addClass('modal-open');},400);">{% trans 'Privacy Policy' %}</a>
+                        and
+                        <a onclick="$(this).parents('.modal').modal('hide');$('#terms-and-conditions-modal').modal('show');setTimeout(function(){$('body').addClass('modal-open');},400);">{% trans 'Terms and Conditions' %}</a>.
+                    </p>
+                    {%endif%}
+                </div>
+            </div>
+
+        </form><!-- End form candidate registration-->
+
+    </div> <!--  -->
+
+</body>

@@ -1,0 +1,54 @@
+{% extends "zinnia/entry_list.html" %}
+{% load i18n %}
+
+{% block meta-description %}{% trans "Archives" %} {{ month|date:"YEAR_MONTH_FORMAT" }}{% endblock meta-description %}
+
+{% block title %}{% trans "Archives" %} {{ month|date:"YEAR_MONTH_FORMAT" }}{% endblock title %}
+
+{% block body-class %}{{ block.super }} archive date month year-{{ month|date:"Y" }} month-{{ month|date:"m" }}{% endblock body-class %}
+
+{% block content-title %}
+<h1 class="text-light mb20">{% trans "Archives" %} {{ month|date:"YEAR_MONTH_FORMAT" }}</h1>
+{% endblock content-title %}
+
+{% block content-related %}
+  <hr class="mr20">
+  <div class="conainer-fluid">
+    <div class="row no-margin">
+      {% if date_list %}
+        <div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+          <div class=" bordered mb20 pb10 pl10 pr10 pt10">
+            <h2 class="text-muted border-bottom border-light mt10 pb5 mb10">{% trans "Daily archives" %}</h2>
+            <ul>
+              {% for date in date_list %}
+              <li>
+                <a href="{% url 'zinnia:entry_archive_day' date|date:"Y" date|date:"m" date|date:"d" %}" rel="archives">{{ date|date:"DATE_FORMAT" }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+      {% if previous_month %}
+        <div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+          <div class=" bordered mb20 pb10 pl10 pr10 pt10">
+            <h2 class="text-muted border-bottom border-light mt10 pb5 mb10">{% trans "Previous month" %}</h2>
+            <p class="ml20">
+              <a href="{% url 'zinnia:entry_archive_month' previous_month|date:"Y" previous_month|date:"m" %}" rel="archives">{{ previous_month|date:"YEAR_MONTH_FORMAT" }}</a>
+            </p>
+          </div>
+        </div>
+      {% endif %}
+      {% if next_month %}
+        <div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+          <div class=" bordered mb20 pb10 pl10 pr10 pt10">
+            <h2 class="text-muted border-bottom border-light mt10 pb5 mb10">{% trans "Next month" %}</h2>
+            <p>
+              <a href="{% url 'zinnia:entry_archive_month' next_month|date:"Y" next_month|date:"m" %}" rel="archives">{{ next_month|date:"YEAR_MONTH_FORMAT" }}</a>
+            </p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock content-related %}

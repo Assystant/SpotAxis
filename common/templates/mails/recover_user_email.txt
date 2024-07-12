@@ -1,0 +1,11 @@
+{% extends 'mails/base_email.html' %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Recover Username{% endblock %}
+
+{% block content %}
+Your username is: {{ user.username }}
+
+{% endblock %}
+
+{% block button-text %}{% trans 'Login Now' %}{% endblock %}

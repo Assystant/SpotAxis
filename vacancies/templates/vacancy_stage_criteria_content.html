@@ -1,0 +1,7 @@
+{% load TRM_tags %}
+{% for criterion in current_process.criteria_as_list %}
+    <p class=" pl10 pr10 mt5 no-margin-bottom"><small class="va-mid text-light">{{criterion}}</small><span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span></p>
+{% endfor %}
+{% if not current_process.criteria_as_list %}
+    <p class=" pl10 pr10 mt5 no-margin-bottom"><small class="va-mid text-light">Overall </small><span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span></p>
+{% endif %}

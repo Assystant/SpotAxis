@@ -1,0 +1,35 @@
+{% load i18n %}
+{% load staticfiles %}
+{% if entries %}
+<div id="featuredResourcesCarousel" class="carousel slide mr10 mb50" data-ride="carousel">
+    <!-- Carousel indicators -->
+    <ol class="carousel-indicators">
+      {% for entry in entries %}
+        <li data-target="#featuredResourcesCarousel" data-slide-to="{{forloop.counter0}}" {% if forloop.first %}class="active"{% endif %}></li>
+      {% endfor %}
+    </ol>   
+    <!-- Wrapper for carousel items -->
+    <div class="carousel-inner">
+      {% for entry in entries %}
+        <div class="item{% if forloop.first %} active{% endif %} slide-{{ forloop.counter }}">
+          <a href="{{ entry.get_absolute_url }}" title="{{ entry.title }}">
+            <img src="{% if entry.image %}{{ entry.image.url }}{% else %}{{STATIC_URL}}{{DEFAULT_POST_IMAGE}}{% endif %}" alt="{{ entry.title }}" />
+          </a>
+          <div class="carousel-caption bg-trans card-highlight">
+            <h2 class="no-margin">
+              <a href="{{ entry.get_absolute_url }}" rel="bookmark"
+                 title="{{ entry.title }}" class="text-inverse">{{ entry.title|title }}</a>
+            </h2>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- Carousel controls -->
+    <a class="carousel-control left" href="#featuredResourcesCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="carousel-control right" href="#featuredResourcesCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+</div>
+{% endif %}

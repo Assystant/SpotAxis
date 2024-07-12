@@ -1,0 +1,710 @@
+{% load i18n %}
+{% load TRM_tags %}
+<!doctype html>
+<html lang="en">
+    <head>
+    	<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+        
+
+        {% block meta %}
+            {% if not vacancy %}
+                <meta property="og:type" content="website" />
+                <meta property="og:image" content="{{request.scheme}}://{{request.get_host}}{{STATIC_URL}}img/logo/logo_square_200x200.png" />
+            {% endif %}
+            <meta name="description" content="A recruitment solution to collaborate with colleagues, manage career site, post jobs, attract talents, organise hiring process and take data driven decisions.">
+            <meta name="keyword" content="SpotAxis, Management, Applicant Tracking System, Talent Sourcing, Career Site Management, Recruitment, Talent Relationship Management, Talent Management Solution, Collaborative Hiring, Talent Acquisition, Head Hunting, Job, Career, Resume Builder, Job Portal, Job Board, Job Search, Recruitment, Recruitment Solution, HR Tech">
+        {% endblock %}
+
+        <title>{% block title %}SpotAxis | Team Building Made Easy {% endblock %}</title>
+
+        <!-- CSS Stylesheets -->
+        <link href="{{ STATIC_URL }}bootstrap-3.3.4/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    	<!--link href='//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Condensed:400,700' rel='stylesheet' type='text/css'-->
+        <link rel="stylesheet" href="{{STATIC_URL}}font-awesome-4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="{{ STATIC_URL }}ionicons-2.0.1/css/ionicons.min.css" rel="stylesheet">
+        <link href="{{STATIC_URL}}css/selectize.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/animate.css">
+        <link rel="stylesheet" href="{{STATIC_URL}}AmaranJS/dist/css/amaran.min.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}switchery-master/dist/switchery.min.css">
+        <link rel="stylesheet" href="{{STATIC_URL}}css/style.css" type="text/css">
+        <link rel="stylesheet" href="{{STATIC_URL}}Hover-master/css/hover.css" type="text/css">
+        <!--link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css"-->
+        <script src="{{ STATIC_URL }}js/jquery-1.12.4.min.js"></script>
+        
+    	<!--link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
+    	<link rel="stylesheet" href="{{ STATIC_URL }}css/responsive.css"-->
+
+        {% block css %}{# CSS Sources and Codes #}{% endblock %}
+        <!-- Favicon Icon -->
+        <link rel="shortcut icon" href="{{STATIC_URL}}img/logo/favicon.png">
+    </head>
+    <body class="text-muted {% block bodyclass %}{%endblock%}" data-spy="scroll" data-target="#navbar_short" data-offset="100">
+        <!-- Start Header -->
+        {%if not noheader%}
+            {% if user.is_authenticated or not active_subdomain  %}{% include "base/header.html" %}{%endif%}
+        {%endif%}
+        
+        {%block subnav %}{%endblock%}
+        <!--End Header -->
+        <div id="page-content" class="messages hidden">
+    		<div class="container">
+                {# Messages #}
+                {% if messages %}
+                    <div class="mt10 mb10">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                <h6>
+                                    <i class="fa fa-lg
+                                            {% if message.tags == 'error' %}
+                                                fa-times
+                                            {% elif message.tags == 'success' %}
+                                                fa-check
+                                            {% elif message.tags == 'info' %}
+                                                fa-exclamation-circle
+                                            {% elif message.tags == 'warning' %}
+                                                fa-exclamation-triangle
+                                            {% else %}
+                                                fa-exclamation-circle
+                                            {% endif %}
+                                        " style="margin-right: 12px;">
+                                    </i>
+                                    {{ message|safe}}
+                                </h6>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Content -->
+        {% block content %}{% endblock %}
+        <div class="modal fade" tabindex="-1" role="dialog" id="upgradeModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center">Upgrade</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row no-margin">
+                            <p>Upgrade your current plan to avail this feature</p>
+                            <form action="/pricing-request/" method = "POST">
+                                <p>Kindly leave your Ph no so we may contact you and discuss your requirements</p>
+                                <input type="tel" placeholder="e.g. +91-2521251258" class="form-control" value = "{{request.user.phone|default:''}}">
+
+                                <br>
+                                <button class="btn btn-info btn-sm btn-block">Send</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content -->
+        {%if not active_subdomain %}
+            {% include "base/footer.html" %}
+        {%endif%}
+        <!-- Modal - Pricing-->
+        <div class="modal fade" id="pricing-comparison" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        {% include 'pricing_include.html' %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Users Billing Modal-->
+        <div class="modal fade" id="users-billing-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <form class="modal-content" method="post" action="{% url 'companies_billing' %}">  
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <div class="row mt20 mb20">
+                            <div class="col-xs-10 col-xs-push-1 mt5 text-center">
+                                <label>Your selected plan is </label> <span class="text-info lead" id="package_text" data-content="{{company.subscription.price_slab.package}}">{{company.subscription.price_slab.package}}</span> <span id="period_text" class="text-light small" data-content="{{company.subscription.price_slab.slab_period|default:''}}">{{company.subscription.price_slab.slab_period|default:''}}</span> charged at
+                                <span class="lead text-info currency_text {% if not company.subscription.price_slab.amount %} hidden {% endif %}" data-content="{{company.subscription.price_slab.currency.symbol|default:'$'}}">{{company.subscription.price_slab.currency.symbol|default:'$'}}</span><span class="text-info lead package_price_text" data-content="{% if company.subscription.price_slab.amount %} {{company.subscription.price_slab.amount}} {% else %}FREE{% endif %}">{% if company.subscription.price_slab.amount %} {{company.subscription.price_slab.amount}} {% else %} FREE {% endif %}</span>
+                                <span class="text-light period_text" data-content="{% if company.subscription.price_slab.slab_period == 'M' %}/month{% elif company.subscription.price_slab.slab_period == 'Y' %}/annum{% endif %}">{% if company.subscription.price_slab.slab_period == 'M' %}/month{% elif company.subscription.price_slab.slab_period == 'Y' %}/{{company.subscription.price_slab.slab_period}}{% endif %}</span> <br>
+                                <span class="additional_users hidden">
+                                    <label>and additional users at</label> <span class="lead text-info currency_text" data-content="{{company.subscription.price_slab.currency.symbol|default:'$'}}">{{company.subscription.price_slab.currency.symbol|default:'$'}}</span> <span id="rate_text" class="text-info lead" data-content="{{company.subscription.price_slab.price_per_user}}">{{company.subscription.price_slab.price_per_user}}</span><span class="text-light"> /user</span>
+                                    <span class="text-light period_text" data-content="{% if company.subscription.price_slab.slab_period == 'M' %}/month{% elif company.subscription.price_slab.slab_period == 'Y' %}/annum{% endif %}">{% if company.subscription.price_slab.slab_period == 'M' %}/month{% elif company.subscription.price_slab.slab_period == 'Y' %}/{{company.subscription.price_slab.slab_period}}{% endif %}</span> 
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-xs-4 col-xs-offset-4 text-center mt20 mb20 additional_users hidden">
+                                {% csrf_token %}
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-btn"><a class="btn btn-default remove_users_button"><i class="fa fa-minus"></i></a></span>
+                                    <input type="number" name="user_count" min=0 {% if company.subscription.price_slab.package.max_users %} max = "company.subscription.price_slab.package.max_users" {% endif %} class="form-control text-center" id="user_count_text" placeholder="Add Users" value='{{company.subscription.added_users|default:0}}' data-content="{{company.subscription.added_users}}">
+                                    <span class="input-group-btn"><a class="btn btn-default add_users_button"><i class="fa fa-plus"></i></a></span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                                <input type="hidden" id="slab_text" name="slab" data-content="{{company.subscription.price_slab.id}}" value="{{company.subscription.price_slab.id}}">
+                                <input type="hidden" id="package_price_text" data-content="{{company.subscription.price_slab.amount}}" value="{{company.subscription.price_slab.amount}}">
+                            <div class="col-xs-6 col-xs-push-3 mt5 text-center additional_users hidden">
+                                <label>SubTotal: </label>
+                                <span class="ml10 lead text-info currency_text" data-content="{{company.subscription.price_slab.currency.symbol|default:'$'}}">{{company.subscription.price_slab.currency.symbol|default:'$'}}</span> <span id="subtotal_text" class="lead text-info" data-content="0.00">0.00</span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-xs-6 col-xs-push-3 mt5 text-center">
+                                <label>Total: </label>
+                                <span class="ml10 lead text-info currency_text" data-content="{{company.subscription.price_slab.currency.symbol|default:'$'}}">{{company.subscription.price_slab.currency.symbol|default:'$'}}</span> <span id="total_text" class="lead text-info" data-content="0.00">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-info btn-sm center-block">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--Billing Coonfirm Modal -->
+        <div class="modal fade" id = "billing-confirm-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title text-center"> Confirm</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mt20 mb20">
+                            <div class="col-xs-10 col-xs-push-1">
+                                <label>You have selected </label> <span class="text-info lead package_name">Basic</span> <label> plan charged </label> <span class="inline-block"><span class="text-info lead package_price">$50</span> <span class="text-light package_period">/month</span></span><br>
+                                <div class="checkbox checkbox-info checkbox-circle ml40">
+                                    <input type="checkbox" class="js-switch" id="update-plan-immediately" checked><label for="update-plan-immediately" data-toggle="collapse" data-target=".message">Update Immediately<small> <sup>*</sup></small></label><br>
+                                </div>
+                                <div class="mt10 mb10 consolidated_price">
+                                    <span>Consolidated Price of Upgrade for current billing cycle expiring on <span class="text-info expiry"></span> :  <span class="text-info lead balance"></span></span>
+                                </div>
+                                <div class="mt10 mb10">
+                                    <span> Your next billng cycle will be charged at <span class="next_cycle"></span>
+                                </div>
+                                <small class="text-light"><sup>* </sup> Unselect this feature to bring it into effect from next billing cycle. Please note any feature revoked due to change of plans will not be refunded.</small>
+                                <div class="message_box hidden">
+                                    <span class="compulsary_message message collapse fade in">Please remove extra <span class=""></span> users from your team before proceeding.</span>
+                                    <span class="message collapse fade">You have chosen a plan with a user limit more than </span>
+                                </div>
+                                <button class="btn btn-block btn-sm btn-info mt20">Proceed</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Billing Modal -->
+        <div class="modal fade" id="billing-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title text-center">Choose a Plan</h3>
+                    </div>
+                    <div class="modal-body text-left">
+                        <div class="row mt40 mb40">
+                            {% for package in packages %}
+                                <div class="col-md-4 {% with packages.count|mod:3 as mcount %} {% if packages.count|sub:forloop.counter|sub:mcount < 0 and forloop.counter|mod:3 == 1 %}{% if mcount == 1 %}col-md-offset-4{% elif mcount == 2 %}col-md-offset-2{% endif %}{% endif %}{% endwith %}">
+                                    {% for package_slab in package.package_slabs %}
+                                        <div class="panel no-margin bg-info text-center" data-class="package-{{package.id}}-{{package_slab.currency.id}}">
+                                            <div class="panel-body">
+                                                <div class="bg-info mb20">
+                                                    {% if package.priceslab_set.all.count > 1 %}
+                                                        <div class="btn-group btn-group-xs pull-right" role="group">
+                                                            {% for price_slab in package_slab.price_slabs %}
+                                                              <button type="button" class="slab_period btn btn-trans-info {% if forloop.first %}active{% endif %}" data-toggle="collapse" data-target =".package-{{package.id}}-{{package_slab.currency.id}}" data-slab="{{price_slab.id}}">{{price_slab.get_slab_period_display}}</button>
+                                                            {% endfor %}
+                                                        </div>
+                                                        <span class="clearfix"></span>
+                                                        <h2 class="text-info pl20 pr20 no-margin-top">{{package}}</h2>
+                                                        <h3 class="text-info pl20 pr20">
+                                                            {% for price_slab in package_slab.price_slabs %}
+                                                                <span class="collapse fade {% if forloop.first %} in {% endif %} package-{{package.id}}-{{package_slab.currency.id}}">
+                                                                     {{package_slab.currency.symbol|default:'$'}}{{price_slab.amount}}
+                                                                    <span class="text-info">/{% if price_slab.slab_period  == 'M' %}month{%else%}annum{%endif%}</span>
+                                                                </span>
+                                                                <small class="text-info mb10 collapse fade {% if forloop.first %} in {% endif %} package-{{package.id}}-{{package_slab.currency.id}}">for {{package.free_users}} users</small>
+                                                                <small class="collapse fade {% if forloop.first %} in {% endif %} package-{{package.id}}-{{package_slab.currency.id}}"><span class="text-info"><span class="text-light">Additional users at</span> <br>
+                                                                <span class="lh17">{{price_slab.currency.symbol|default:'$'}}{{price_slab.price_per_user}} /User /{% if price_slab.slab_period  == 'M' %}month{%else%}annum{%endif%}</span></span></small>
+                                                            {% endfor %}
+                                                        </h3>
+                                                    {% else %}
+                                                        <h2 class="text-info pl20 pr20">{{package}}</h2>
+                                                        <h3 class="text-info pl20 pr20">FREE
+                                                        <small class="text-info mb10 collapse fade {% if forloop.first %} in {% endif %} package-{{package.id}}-{{package_slab.currency.id}}">for {{package.free_users}} users</small></h3>
+                                                    {% endif %}
+                                                </div>
+                                                {% for price_slab in package_slab.price_slabs %}
+                                                    {% if company.subscription.price_slab == price_slab %}
+                                                        <div class=" collapse fade {% if forloop.first %} in {% endif %} package-{{package.id}}-{{package_slab.currency.id}}">
+                                                            <button type="button" class="btn btn-info btn-sm center-block" data-dismiss="modal"><i class="fa fa-check"></i> Current Plan</button>
+                                                        </div>
+                                                    {% else %}
+                                                        <form action="{% url 'companies_billing' %}" method ="post" class=" collapse fade {% if forloop.first %} in {% endif %} package-{{package.id}}-{{package_slab.currency.id}}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" value="{{package_slab.price_slabs.0.id}}" name="plan" id="plan_id">
+                                                            <button class="update-plan center-block btn btn-default btn-sm"> Select Plan</button>
+                                                        </form>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            <div class="col-xs-12 mt20">
+                                <!--button class="btn btn-trans-info clearfix center-block" onclick="setTimeout(function(){$('#pricing-comparison').modal('show');},400);" data-dismiss="modal">Compare All Plans</button-->
+                                <a class="btn btn-trans-info clearfix center-block" target="_blank" href="{{HOSTED_URL}}{% url 'pricing' %}">Compare All Plans</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <!--script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script-->
+        <script src="{{ STATIC_URL }}bootstrap-3.3.4/js/bootstrap.js"></script>
+        <script src="{{ STATIC_URL }}js/script.js"></script>
+        <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script-->
+        <script src="{{STATIC_URL}}js/selectize.js"></script>
+        <script src="{{STATIC_URL}}js/initial.js"></script>
+        <script src="{{STATIC_URL}}clipboard.js-master/dist/clipboard.min.js"></script>
+        <script src="{{STATIC_URL}}AmaranJS/dist/js/jquery.amaran.min.js"></script>
+        <script src="{{STATIC_URL}}switchery-master/dist/switchery.min.js"></script>
+        {% block java_script_srcs %}{# JavaScript Sources #}{% endblock %}
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create','UA-84854653-1','auto');
+            ga('send','pageview');
+        </script>
+        <script>
+            window.ModalStack = [];
+            {% if settings.ENVIRONMENT == 'productive' %}
+                $(function () {
+                    $("[rel='tooltip']").tooltip();
+                    $("label").tooltip({
+                        'container':'body'
+                    });
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+            {% endif %}
+            $(document).ready(function() {
+                $('[data-toggle="tooltip"]').tooltip({'template':'<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'});
+                $('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                // $("form").submit(function(e) {
+                //     {# It serves to disable any form by sending a button type=submit #}
+                //     {# to avoid multiple clicks #}
+                //     var val = $("button[type=submit][clicked=true]");
+                //     val.attr('disabled', 'disabled');
+                //     val.html("<i class='fa fa-spinner fa-pulse'></i> Please wait...").addClass('disabled');
+                //     return true;
+                // });
+                // $("form button[type=submit]").click(function() {
+                //     $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
+                //     $(this).attr("clicked", "true");
+                // });
+                function affix_nav(){
+                    $nav = $('.navbar-affix');
+                    // console.log($nav)
+                    if($nav[0]){
+                        nav = $nav[0]
+                        prevheight = $nav.prev()[0].offsetHeight + $nav.prev()[0].offsetTop;
+                        // console.log($nav.hasClass('navabar-fixed-top'))
+                        scrollLimit = window.scrollY
+                        offset = 0;
+                        if ($('.navbar-fixed-top #navbar_short')[0]){
+                            offset =  $('.navbar-fixed-top #navbar_short').height()+1
+                            scrollLimit +=offset 
+                        }
+                        // console.log(scrollLimit)
+                        // console.log(prevheight)
+                        {% if request.user.is_authenticated %}
+                            if(!$nav.hasClass('navbar-fixed-top') && scrollLimit > nav.offsetTop){
+                                $nav.addClass('navbar-fixed-top');
+                                $nav.css('top',offset);
+                                if (offset > 0){
+                                    offset = offset - 10
+                                }
+                                else {
+                                    offset = 41
+                                }
+                                added_margin = $nav.height() + offset;
+                                // alert(added_margin)
+                                $nav.prev().css('margin-bottom', added_margin); 
+                            }
+                            else if ($nav.hasClass('navbar-fixed-top') && scrollLimit <= prevheight+46){
+                                // console.log('a')
+                                $nav.removeClass('navbar-fixed-top');
+                                $nav.prev().css('margin-bottom', '0');
+                                $nav.css('top',0)
+                            }
+                            else if (!$nav.hasClass('navbar-fixed-top')){
+                                $nav.prev().css('margin-bottom', '0');
+                            }
+                        {% else %}
+                            $nav.addClass('navbar-fixed-top');
+                        {% endif %}
+                    }
+                }
+                function adjust_sub_nav() {
+                    {% if request.user.is_authenticated %}
+                        if(window.scrollY>50)
+                        {
+                            $('.navbar-short').addClass('navbar-fixed-top');
+
+                        }
+                        // else if(window.scrollY<=50)
+                        // {
+                        //     $('.sub-nav').css('top',50-window.scrollY)
+                        // }
+                        else {
+                            $('.navbar-short').removeClass('navbar-fixed-top');
+                        }
+                    {% else %}
+                        $('.navbar-short').addClass('navbar-fixed-top');
+                    {% endif %}
+                }
+                adjust_sub_nav();
+                affix_nav();
+                {%if isIndex %}
+                    var lastScrollTop = 0;
+                    function adjust_main_nav(){
+                        var st = $(this).scrollTop();
+                        if (st > lastScrollTop || (st<lastScrollTop && st<2)){
+                           // downscroll c
+                         $('.navbar-trans').removeClass('navbar-fixed-top navbar-default')
+
+                        } else{
+                          // upscroll code
+                           if (!$('.navbar-trans').hasClass('navbar-fixed-top')) {
+
+                                $('.navbar-trans').css('top','-50px')
+                           }
+                           $('.navbar-trans').addClass('navbar-fixed-top navbar-default');
+                             // setTimeout(function(){
+                                $('.navbar-trans').css('top','0px')
+
+                             // },200)
+                        }
+                        lastScrollTop = st;
+                    }
+                {%endif%}
+                $(window).scroll(function(){
+                    adjust_sub_nav();
+                    {%if isIndex %}
+                        adjust_main_nav();
+                    {% endif%}
+                    affix_nav();
+                })
+                function scrollToAnchor(aid){
+                    var aTag = $("[id='"+ aid +"']");
+                    // console.log(aTag);
+                    $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+                }
+                $("a").click(function() {
+                    if($(this).attr('href') && $(this).attr('href').indexOf('#')>0)
+                    {
+                        var href = $(this).attr('href').replace('#', '')
+                        scrollToAnchor(href);
+                    }
+                });
+            });
+            function alert(msg, color="#aaa", bgcolor="#fff", time=10000){
+                $.amaran({
+                    'position': 'bottom right',
+                    'theme': 'colorful',
+                    'content': {
+                        bgcolor: bgcolor,
+                        color: color,
+                        message: msg
+                    },
+                    // 'sticky': true,
+                    'delay': time,
+                    'cssanimationIn': 'bounceInUp',
+                    'cssanimationOut': 'bounceOutRight',
+                    'reset Timeout': true
+                });
+            }
+            $(document).ready(function(){
+                $('.alert').addClass('hidden');
+                $('.alert').each(function(){
+                    alert($(this).html())
+                });
+                $('.alert').remove();
+                $('.paid-section').click(function(){
+                    $('#upgradeModal').modal('show');
+                })
+                $('#upgradeModal form').submit(function(e){
+                    e.preventDefault();
+                    $this = $(this);
+                    $this.find('.btn-info').html('<i class="fa fa-spinner fa-pulse"></i> Please Wait').prop('disabled',true).addClass('disabled');
+                    $.ajax({
+                        data:{
+                            'phone': $this.find('input').val() 
+                        },
+                        type:"post",
+                        url: "{% url 'pricing_request' %}",
+                        complete: function(){
+                            $this.find('.btn-info').html('Send').prop('disabled',false).removeClass('disabled');
+                        },
+                        success: function(data){
+                            if (data.success){
+                                alert(data.msg)
+                            }
+                            else {
+                                alert('Failed to send request. Please try again later.')
+                            }
+                        }
+                    })
+                })
+            });
+            function setCookie(cname, cvalue, exdays) {
+                var d = new Date();
+                d.setTime(d.getTime() + (exdays*24*60*60*1000));
+                var expires = "expires="+ d.toUTCString();
+                document.cookie = cname + "=" + cvalue + "; " + expires;
+            }
+            function getCookie(cname) {
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for(var i = 0; i <ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0)==' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length,c.length);
+                    }
+                }
+                return "";
+            }
+        </script>
+        <script>
+            $(document).ready(function(){
+                $('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                {% if request.user.is_authenticated %}
+                    if(typeof(EventSource) !== "undefined") {
+                        var source = new EventSource("{% url 'notifications' %}")
+                        // alert('Yay! RealTime Notifications enabled')
+                        // console.log(source)
+                        // source.addEventListener('open', function(e) {
+                        //   // Connection was opened.
+                        //   alert('opened')
+                        // }, false);
+
+                        // source.addEventListener('message', function(e) {
+                        //   console.log(e.data);
+                        // }, false);
+
+
+                        // source.addEventListener('error', function(e) {
+                        //   if (e.readyState == EventSource.CLOSED) {
+                        //     // Connection was closed.
+                        //   }
+                        // }, false);
+                        source.onopen = function(event) {
+                            // alert(event);
+                            // alert('opened')
+                            // console.log(event)
+                        };
+                        // source.addEventListener('message', function(e) {
+                          
+                        //   console.log(e);
+                        //   var data = e.data;
+                        //   console.log(data)
+                        //   // console.log(data.id, data.msg);
+                        // }, false);
+                        source.onmessage = function(event) {
+                            // console.log(event.data)
+                            // alert(event.data);
+                            // console.log(event.data)
+                            data = JSON.parse(event.data)
+                            count = data.length
+                            // console.log(event.data)
+                            $badge = $('.notification-menu').prev().find('.badge');
+                            count = parseInt($badge.attr('data-value')) + count;
+                            $badge.attr('data-value',count.toString()).html(count.toString());
+                            for (i=0;i<data.length;i++) {
+                                notification = data[i]
+                                html = notification.html
+                                new_block  = $('.notification-menu').prepend(html);
+                                $('.notification-menu .unseen').on('mouseenter',mark_as_seen)
+                                console.log(new_block)
+                                $('.notification-menu img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                            }
+
+                        };
+                        source.onerror = function(event,ee,er) {
+                            // console.log(event)
+                            // console.log(ee)
+                            // console.log(er)
+                            // alert(event.data);
+                            // console.log(event.data)
+                        };
+                    } else {
+                        console.log('Your Browser does not support real time notifications.')
+                    }
+                {% endif %}
+            });
+        </script>
+        <script>
+            var popover_options = {
+                    template: '<div class="popover no-padding border-info" role="tooltip"><div class="arrow border-info"></div><h3 class="popover-title text-inverse bg-dark-info"></h3><div class="popover-content no-padding"></div></div>',
+                    html: true,
+                    // trigger: 'focus'
+            }
+            var mark_as_seen = function(){
+                //Updat as seen
+                $this = $(this);
+                // console.log($this);
+                // console.log($this.data('notification'))
+                $this.removeClass('unseen');
+                count = parseInt($this.parents('.notification-menu').prev().find('.badge').attr('data-value'));
+                // console.log(count)
+                if(count)
+                    count = count -1;
+                else
+                    count = 0
+                $this.parents('.notification-menu').prev().find('.badge').attr('data-value',count.toString()).html(count.toString());
+                $.ajax({
+                    url: '/ajax/mark_as_read/',
+                    data: {'n_id':$this.data('notification')},
+                    type: 'post',
+                    error: function(er){
+                        console.log(er)
+                    }
+                })
+            } 
+            $(document).ready(function(){
+                $('.notification-menu .unseen').on('mouseenter',mark_as_seen);
+                $('.slab_period').click(function(){
+                    $(this).parents('.panel').find('.slab_period').removeClass('active');
+                    $(this).addClass('active');
+                    $(this).parents('.panel').find('form #plan_id').val($(this).attr('data-slab'));
+                })
+                {% if not isIndex %}
+                    $('#pricing-comparison').on('hidden.bs.modal', function(){
+                        $('#billing-modal').modal('show');
+                    });
+                {% endif %}
+                var get_user_count = function(){
+                    $value = $('#user_count_text').val();
+                    try{
+                        $value = parseInt($value);
+                    }
+                    catch(err){
+                        $value = 0;
+                    }
+                    if(!$value)
+                        $value = 0;
+                    return $value;
+                }
+                $('.add_users_button').click(function(){
+                    $value = get_user_count();
+                    $value = $value + 1;
+                    $('#user_count_text')[0].value = $value;
+                    $('#user_count_text').change();
+                });
+                $('.remove_users_button').click(function(){
+                    $value = get_user_count();
+                    $value = $value - 1;
+                    if($value<0)
+                        $value = 0;
+                    $('#user_count_text').val($value)
+                    $('#user_count_text').change();
+                });
+                var update_total = function(){
+                    $amount = parseFloat($('#package_price_text').val());
+                    $total = parseFloat($('#subtotal_text').html()) + $amount;
+                    $("#total_text").html(parseFloat($total).toFixed(2))
+                }
+                var update_subtotal = function(){
+                    rate = $('#rate_text').html();
+                    rate = parseFloat(rate);
+                    // console.log(rate)
+                    try{
+                        count = parseFloat($('#user_count_text').val());
+                    }
+                    catch(er){
+                        count =0.00;
+                    }
+                    if (!count)
+                        count = 0.00;
+                    $value = rate*count
+                    $('#subtotal_text').html(parseFloat($value).toFixed(2))
+                    update_total();
+                }
+                $('#user_count_text').change(update_subtotal);
+                $('#users-billing-modal').on('shown.bs.modal', function(){
+                    update_subtotal();
+                });
+                $('#users-billing-modal').on('hidden.bs.modal', function(){
+                    $('#package_text').html($('#package_text').attr('data-content'));
+                    $('#period_text').html($('#period_text').attr('data-content'));
+                    $('#package_price_text').val($('#package_price_text').attr('data-content'));
+                    $('#rate_text').html($('#rate_text').attr('data-content'));
+                    $('#user_count_text').val($('#user_count_text').attr('data-content'));
+                    $('#subtotal_text').html($('#subtotal_text').attr('data-content'));
+                    $('#total_text').html($('#total_text').attr('data-content'));
+                    $('.package_price_text').each(function(k,el){
+                        $(el).html($(el).attr('data-content'));
+                        if($(el).attr('data-content') === '0' || $(el).attr('data-content') === 'FREE'){
+                            $(el).prev().addClass('hidden');
+                        }
+                        else {
+                            $(el).prev().removeClass('hidden');
+                        }
+                    });
+                    $('.additional_users').addClass('hidden')
+                    $('.period_text').each(function(k,el){
+                        $(el).html($(el).attr('data-content'));
+                    });
+                    $('.currency_text').each(function(k,el){
+                        $(el).html($(el).attr('data-content'));
+                    });
+                    $('#slab_text').val($('#slab_text').attr('data-content'));
+                });
+
+               
+                $('[data-toggle="popover"]:not(.no-style)').popover(popover_options);
+                $('[data-toggle="popover"].no-style').popover();
+            });
+            var popover_initials = function(){
+                $('.popover img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+            }
+            $('[data-toggle="popover"]').on('shown.bs.popover', popover_initials);
+            $('body').on('click', function (e) {
+                $('[data-toggle=popover]').each(function () {
+                    // hide any open popovers when the anywhere else in the body is clicked
+                    if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                        $(this).popover('hide');
+                    }
+                });
+            });
+        </script>
+
+        <!-- start Mixpanel -->
+        <!-- script type="text/javascript">
+            (function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+            0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+            for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+            mixpanel.init("0eab9a3d2e4a0c4e7bdcc32ef4787494");
+        </script -->
+        <!-- end Mixpanel -->
+        <script>
+            loading_block = '<i class="fa fa-spinner fa-pulse"></i> Please Wait';
+        </script>
+        {% block java_script_code %}{# JavaScript Code #}{% endblock %}
+        <!-- End JavaScript -->
+        <script>
+            console.log('{{request.session.referral_source}}');
+        </script>
+    </body>
+</html>

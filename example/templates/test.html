@@ -1,0 +1,54 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block title %}{% trans 'Test Page' %}{% endblock %}
+{% comment %} Test Page {% endcomment %}
+{% block page-header %}{% trans 'Test Page' %}{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+
+{#    <div class="row mb30 mt60">#}
+{#        <div class="col-md-offset-4 col-md-4">#}
+{#            <a id="id-create-vacancies"#}
+{#                onclick="create_vacancies()"#}
+{#                href="{% url 'vacancies_create_vacancies' %}"#}
+{#                class="btn btn-primary btn-lg btn-block">#}
+{#                	CAUTION DO NOT TOUCH - Create Job#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <div class="row mt50 mb60">#}
+{#        <div class="col-md-offset-4 col-md-4">#}
+{#            <a id="id-create-candidates"#}
+{#                onclick="create_candidates()"#}
+{#                href="{% url 'candidates_create_candidates' %}"#}
+{#                class="btn btn-lg btn-danger btn-block">#}
+{#                CAUTION DO NOT TOUCH - Create Candidate#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
+
+
+{% endblock %}
+
+
+{% block java_script_srcs %}{% endblock %}
+{% block java_script_code %}
+    <script type="application/javascript">
+
+{#        function create_vacancies(){#}
+{#            $("#id-create-vacancies").html("<i class='fa fa-spinner fa-pulse'></i> Creating vacancies, please wait...").addClass('disabled');#}
+{#            $("#id-create-candidates").addClass('disabled');#}
+{#        }#}
+{##}
+{#        function create_candidates(){#}
+{#            $("#id-create-candidates").html("<i class='fa fa-spinner fa-pulse'></i> Creating vacancies, please wait...").addClass('disabled');#}
+{#            $("#id-create-vacancies").addClass('disabled');#}
+{#        }#}
+
+
+    </script>
+{% endblock %}

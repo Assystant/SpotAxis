@@ -1,0 +1,17 @@
+{% extends 'mails/base_email.txt' %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% block title %}
+   SpotAxis | {{ vacancy.employment }}
+{% endblock %}
+
+{% block content %}
+You received a new application for your Job...
+    {% trans 'Name' %}: {{ full_name }}
+    {% trans 'Email' %}:  {{ email }}
+    {% trans 'Message' %}:  {{ description }}
+    {% trans 'Attached is their CV/Portafolio' %} {{ full_name }}
+{% endblock %}
+
+{% block button-text %}{% trans 'See Job' %}{% endblock %}

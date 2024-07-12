@@ -1,0 +1,254 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load humanize %}
+{% load TRM_tags %}
+
+{% block title %}{% trans "Profile" %} | {{ company.name }}{% endblock %}
+{% block page-header %}{{ company.name }}{% endblock %}
+{% block css %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link href="{{STATIC_URL}}datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Jquery-File-Uploads -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui.css">
+    <!-- CSS adjustments for browsers with JavaScript disabled -->
+    <noscript><link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui-noscript.css"></noscript>
+    <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.8/dist/clipboard.min.js"></script>
+    <!-- Jquery-File-Uploads -->
+
+{% endblock %}
+{% block content %}
+    <section id="social-multi-share-section">
+        <form action="." method="post">
+            {%csrf_token%}
+            <div class="container">
+                <div class="row mt20 mb20">
+                    {%ifequal tokencount 0%}
+                        {%if not fbtoken%}
+                            <div class="col-xs-4 col-md-2 col-md-push-3 text-center">
+                                <button class="btn btn-info fb-connect" type="button">Connect with Facebook</button>
+                            </div>
+                        {%endif%}
+                        {%if not twtoken%}
+                            <div class="col-xs-4 col-md-2 col-md-push-3 text-center">
+                                <button class="btn btn-info tw-connect" type="button">Connect with Twitter</button>
+                            </div>
+                        {%endif%}
+                        {%if not litoken%}    
+                            <div class="col-xs-4 col-md-2 col-md-push-3 text-center">
+                                <button class="btn btn-info li-connect" type="button">Connect with Linkedin</button>
+                            </div>
+                        {%endif%}
+                    {%endifequal%}
+                    {%ifequal tokencount 1%}
+                        {%if not fbtoken%}
+                            <div class="col-xs-6 text-center">
+                                <button class="btn btn-info fb-connect" type="button">Connect with Facebook</button>
+                            </div>
+                        {%endif%}
+                        {%if not twtoken%}
+                            <div class="col-xs-6 text-center">
+                                <button class="btn btn-info tw-connect" type="button">Connect with Twitter</button>
+                            </div>
+                        {%endif%}
+                        {%if not litoken%}    
+                            <div class="col-xs-6 text-center">
+                                <button class="btn btn-info li-connect" type="button">Connect with Linkedin</button>
+                            </div>
+                        {%endif%}
+                    {%endifequal%}
+                    {%ifequal tokencount 2%}
+                        {%if not fbtoken%}
+                            <div class="col-xs-6 col-xs-push-3 text-center">
+                                <button class="btn btn-info fb-connect" type="button">Connect with Facebook</button>
+                            </div>
+                        {%endif%}
+                        {%if not twtoken%}
+                            <div class="col-xs-6 col-xs-push-3 text-center">
+                                <button class="btn btn-info tw-connect" type="button">Connect with Twitter</button>
+                            </div>
+                        {%endif%}
+                        {%if not litoken%}    
+                            <div class="col-xs-6 col-xs-push-3 text-center">
+                                <button class="btn btn-info li-connect" type="button">Connect with Linkedin</button>
+                            </div>
+                        {%endif%}
+                    {%endifequal%}
+                </div>
+                <div class="row mt10 mb20 text-center">
+                    {%if fbtoken or twtoken or litoken%}
+                        <div class="col-xs-12">
+                            Post on:
+                        </div>
+                        {%if fbtoken%}
+                            <div class="col-xs-4 col-md-2 col-md-push-3">
+                                <div class="checkbox" data-toggle="collapse" data-target="#fb-list">
+                                <label>
+                                    <input type="checkbox" class="postmedia" value="fb" name="socialmedia[]"> Facebook
+                                </label>
+                                </div>
+                            </div>
+                        {%endif%}
+                        {%if twtoken%}
+                            <div class="col-xs-4 col-md-2 col-md-push-3">
+                                <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="postmedia" value="tw" name="socialmedia[]"> Twitter
+                                </label>
+                                </div>
+                            </div>
+                        {%endif%}
+                        {%if litoken%}
+                            <div class="col-xs-4 col-md-2 col-md-push-3">
+                                <div class="checkbox" data-toggle="collapse" data-target="#li-list">
+                                <label>
+                                    <input type="checkbox" class="postmedia" value="li" name="socialmedia[]"> Linkedin
+                                </label>
+                                </div>
+                            </div>
+                        {%endif%}
+                    {%endif%}
+                </div>
+                <div class="row mt10 mb20 text-left collapse" id="fb-list">
+                    <div class="col-xs-12 col-md-6 col-md-push-3 well">
+                        <div class="checkbox text-center">
+                            <label>
+                                <input type="checkbox" class="selectall"> Select All
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="True" name="fbprofile"> My Profile
+                            </label>
+                        </div>
+                        <hr>
+                        <h6>Facebook Groups:</h6>
+                        {%if fbgroups%}
+                            {%for fbgroup in fbgroups%}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="groupid-{{fbgroup.id}}" name="fbgroups[]"> {{fbgroup.name}}
+                                    </label>
+                                </div>
+                            {%endfor%}
+                        {%else%}
+                            <p>You are not managing any groups on this account.</p>
+                        {%endif%}<hr>
+                        <h6>Facebook Pages <small>(post as page admin)</small>:</h6>
+                        {%if fbpages%}
+                            {%for fbpage in fbpages%}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value = "page-{{fbpage.id}}" name="fbpages[]"> {{fbpage.name}}
+                                        {%if not "CREATE_CONTENT" in fbpage.perms%}
+                                            <small>(will be posted as visitor, you do not have full admin rights)</small>
+                                        {%endif%}
+                                    </label>
+                                </div>
+                            {%endfor%}
+                        {%else%}
+                            <p>You are not part of any pages on this account.</p>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="row mt10 mb20 text-left collapse" id="li-list">
+                    <div class="col-xs-12 col-md-6 col-md-push-3 well">
+                        <div class="checkbox text-center">
+                            <label>
+                                <input type="checkbox" class="selectall"> Select All
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="True" name="liprofile"> My Profile
+                            </label>
+                        </div>
+                        <hr>
+                        <h6>LinkedIn Company Pages <small>(post as admin)</small>:</h6>
+                        {%if lipages%}
+                            {%for lipage in lipages%}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value = "page-{{lipage.id}}" name="lipages[]"> {{lipage.name}}
+                                    </label>
+                                </div>
+                            {%endfor%}
+                        {%else%}
+                            <p>You are not part of any pages on this account.</p>
+                        {%endif%}
+                    </div>
+                </div>
+                <hr>
+                <div class="row mt10 mb20 text-center postdata" style="display:none;">
+                    <div class="col-xs-12 col-md-6 col-md-push-3">
+                        <div class="vacancy-link input-group input-group-sm">
+                            <span class="input-group-addon">
+                            Vacante Share Link -
+                            </span>
+                            <input type="text" class="form-control input-sm" readonly value="/jobs/{{vacancy_id}}/" id="share-link">
+                            <span class="input-group-btn">
+                                <button type="button" id="copy-btn" class="btn btn-sm btn-info" data-clipboard-target="#share-link">Copy</button>
+                            </span>
+                        </div>
+                        <hr>
+                        <textarea class="form-control" name="message" placeholder="Your Content, Link, etc. you wish to share. e.g. New Vacancy posted at /jobs/{{vacancy_id}}/. #vacancy"></textarea>
+                    </div>
+                </div>
+                <div class="row mt10 mb20 text-center postbutton" style="display:none;">
+                    <button class="btn btn-success">
+                        Publish my Job in Social Networks -  
+                        <i class="fa fa-facebook"></i>&nbsp;
+                        <i class="fa fa-twitter"></i>&nbsp;
+                        <i class="fa fa-linkedin"></i>&nbsp;
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="row text-right mb20">
+            <a href="/jobs/{{vacancy_id}}/" class="text-danger">Skip</a>
+        </div>
+    </section>
+
+    <script>
+    $('.fb-connect').click(function(){
+        window.location.href="/facebook_connect/{{vacancy_id}}/";
+    });
+    $('.tw-connect').click(function(){
+        // window.open('/twitter_connect/{{vacancy_id}}/','Twitter Share','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistorry=no');
+        window.location.href="/twitter_connect/{{vacancy_id}}/";
+    });
+    $('.li-connect').click(function(){
+        // window.open('/twitter_connect/{{vacancy_id}}/','Twitter Share','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistorry=no');
+        window.location.href="/linkedin_connect/{{vacancy_id}}/";
+    });
+    $('.postmedia').change(function(){
+        $pm = $('.postmedia');
+        if($pm[0].checked == false && $pm[1].checked == false && $pm[2].checked==false){
+            $('.postbutton').hide();
+            $('.postdata').hide();
+        }
+        else{
+            $('.postbutton').show();
+            $('.postdata').show();
+        }
+    });
+    $('.selectall').change(function(){
+        checkboxes = $(this).parents('.well').find('input[type=checkbox]');
+        if ($(this)[0].checked){
+            checkboxes.each(function(){
+                $(this)[0].checked = true;
+            });
+        }
+        else{
+            checkboxes.each(function(){
+                $(this)[0].checked = false;
+            });
+        }
+    });
+    var clip = new Clipboard('#copy-btn');
+    clip.on('success', function(e) {
+        alert('Copied');
+        });
+    </script>
+<!-- Fin Content -->
+{% endblock %}

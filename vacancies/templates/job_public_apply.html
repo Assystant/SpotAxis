@@ -1,0 +1,303 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{#{% load pagination_tags %}#}
+{% load TRM_tags %}
+
+{% block meta %}
+    <!-- Meta FB -->
+    <meta property="og:title" content="{{ vacancy.employment }} - {{vacancy.function }}"/>
+    <meta property="og:description" content="{{ vacancy.description|striptags|rem_nbsp|safe }}" />
+    {% if not vacancy.confidential %}
+        <meta property="og:image" content="{{STATIC_URL}}img/logo/logo_square_200x200.png" />
+    {% endif %}
+    <!-- Meta FB -->
+    <meta name="keyword" content="{% for skill in vacancy.skills %}{{skill}}, {% endfor %}{{vacancy.employment}}, {{vacancy.function}}, {{vacancy.company}} Job Openings"/>
+    <meta name="description" content="{{ vacancy.description|striptags|rem_nbsp|safe }}"/>
+{% endblock %}
+
+{% block title %}{{vacancy.company.name}} | {{ vacancy.employment }}{% endblock %}
+{% block subnav %}
+    <nav class="navbar navbar-short navbar-default hidden" id="navbar-short">
+        <div class="container-fluid" id="navbar_short">
+            <ul class="nav navbar-nav">
+                <li class="">
+                    <a class="" href="{% url 'vacancies_get_vacancy_details' vacancy.id %}"><i class="fa fa-arrow-left fa-sm"></i> Back to Job Detail</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+        {% include 'vacancies/referer_sub_nav.html' %}
+{% endblock %}
+{% block content %}
+    <!-- Content starts -->
+    {% if user_profile == 'candidate' %}
+
+        <!-- Postulate Job Modal -->
+        <div class="modal fade" id="post-vac-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">{% trans 'Apply' %}...</h4>
+                    </div>
+                    <div class="modal-body" id="postulate-modal-text">
+                        <p>{% trans 'Do you want to send your resume and apply to this job?' %}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Postulate Job Modal -->
+
+    {% endif %}
+
+    {% if vacancy.public_cvs %}
+        <!-- Modal - Privacy Policy -->
+        <div class="modal fade" id="privacy-policy-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body" id="privacy-policy-modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        {% include 'privacy_policy_include.html' %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal - Terms and Conditions-->
+        <div class="modal fade" id="terms-and-conditions-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body" id="terms-and-conditions-modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        {% include 'terms_and_conditions_include.html' %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="jumbotron no-padding bg-white no-margin-bottom pt20">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-9 mt40 mb40">
+
+                    <div class="inline-block va-top mb20">
+                        <img class="img-responsive inline-block company-logo bordered br-2" src = "{{MEDIA_URL}}{{vacancy.company.logo}}" alt="{{vacancy.company.name}} Logo">
+                    </div>
+                    <div class="inline-block ml40">
+                        <h2 class="text-light no-margin-y"> {{vacancy.employment}} <small><small>{% if vacancy.status.codename == 'closed' %} Closed {% else %}(No of Openings: <span class="text-light">{{ vacancy.vacancies_number }}</span>){%endif%}</small></small> </h2>
+                        <a href="{% with vacancy.company.web|default:active_host as uri %}{%if 'http://' in uri or 'https://' in uri %}{{uri}}{%else%}//{{uri}}{%endif%}{%endwith%}">{{vacancy.company|title}}</a><br>
+                        <div class="inline-block">
+                            <span><i class="fa fa-map-marker"></i> {{vacancy.city}}, {{vacancy.state}}, {{vacancy.nationality}}</span><br>
+                            <span><i class="fa fa-gears"></i> {{vacancy.industry}}</span>
+                            <small class="pl20 inline-block"><i class=" fa fa-cog"></i> {{vacancy.function}}</small>
+                        </div><br>
+                        <span class="tags"><span class="label label-trans"><i class="fa fa-black-tie"></i> {{vacancy.employmentType}}</span></span>
+                    </div>
+                    {% if request.user.is_anonymous %}
+                        <a class="btn  btn-info btn-default pull-right visible-xs visible-sm" href="{% url 'auth_login' %}?next={{request.path}}">Login</a>
+                    {% endif %}
+                </div>
+                <div class="col-md-3 mt40 no-padding hidden-sm hidden-xs">
+                    {% if request.user.is_anonymous %}
+                        <a class="btn  btn-info btn-default pull-right" href="{% url 'auth_login' %}?next={{request.path}}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="container no-padding mt10">
+        <div class="row no-margin ml15 mt15">
+            <div class="col-md-8 col-md-push-2 bg-white border-bottom border-light pt20 pb20 page-content">
+            {% comment %}
+                {% if vacancy.status.codename == 'open' %}
+                    {% if  vacancy.postulate %}
+                        {% if user.is_authenticated or not user_profile == 'recruiter' %}
+                            {% if not postulate %}
+                                <h4 class="text-light text-center">Apply via SpotAxis</h4>
+                                <button id="trm_apply_button" class="mb10 btn center-block btn-info" onclick="{% if user.is_authenticated%}postulate({{ vacancy.pk }},this){%else%}changeloginredirect('apply'){%endif%}" {%if not user.is_authenticated %} data-target="#trm_apply" data-toggle="modal" {%endif%}> {%if not user.is_authenticated%}<i class="fa fa-sign-in fa-lg mr5"></i> Login to {%endif%}Apply</button>
+                            {%else%}
+                                {% if not postulate.withdraw %}
+                                    {% if not postulate.finalize %}
+                                        <button class="btn btn-block btn-default withdraw" ><i class='fa fa-pointer fa-check-square-o'></i> Withdraw Application</button>
+                                    {% endif %}
+                                {% else %}
+                                    <button class="btn btn-block btn-default disabled"> Withdrawn by You</button>
+                                {% endif %}
+                            {%endif%}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                {% if request.user.is_anonymous or user_profile == 'candidate' %}
+                    {% if vacancy.postulate and vacancy.public_cvs %}
+                        <div class="row mb30 no-margin">
+                            <div class="col-xs-6 border-bottom border-light">
+                                &nbsp;
+                            </div>
+                            <div class="col-xs-6 border-bottom border-light">
+                                <div class="card-left mt10 pl10 pr10 l-20 bg-white">Or</div>
+                                &nbsp;
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% endcomment %}
+                {% if vacancy.public_cvs %}
+                    {% include "form_public_file.html" %}
+                {% endif %}
+            </div> <!-- Vacancy Description -->
+        </div>
+    </section>
+    {% if not user.is_authenticated and vacancy.status.codename == 'open' %}
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="trm_apply">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Apply for {{vacancy.employment}}</h4>
+                </div>
+                <div class="modal-body">
+                    <section id="public-form">
+                        {% if my_vacancy or not user_profile %}
+                            {% include "login_form.html" %}
+                        {% endif %}
+                    </section>
+                </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    {% endif %}
+{% endblock %}
+{% block java_script_code %}
+    <script type="text/javascript">
+        {% if vacancy.public_cvs and public_form.errors %}
+            {% if recruiter or request.user.is_anonymous %}
+                console.log("has errors");
+                window.location.hash = "public-form";
+            {% endif %}
+        {% endif %}
+
+        {% if vacancy.postulate and user_profile == 'candidate' %}
+            // Nominate a candidate for the vacancy if application is allowed
+            function postulate(vacancy_id, _this, xhr) {
+                console.log(_this)
+                // console.log(this);
+                $this = $(_this);
+                var btn_postularse = $this;
+                btn_postularse.html("<i class='fa fa-spinner fa-pulse'></i> Please wait...");
+                btn_postularse.attr('disabled', 'disabled');
+                var reset_btn_postularse = true;
+                var btn_fav = $("#btn_fav_" + vacancy_id);
+                $.ajax({
+                    data: {
+                        'vacancy_id': vacancy_id
+                    },
+                    url: '/ajax/vacancies-postulate/',
+                    type: 'GET',
+                    complete: function(){
+                        
+                    },
+                    success: function(data){
+                        console.log(data);
+                        var message = '';
+                        if (data == 'not-postulate'){
+                            message = 'This post does not allow applications';
+                        }
+                        if (data == 'incomplete'){
+                            message = 'Your profile is not complete. Before applying please complete your Profile';
+                        }
+                        if (data == 'not-exist'){
+                            message = 'You can not apply before creating your Profile';
+                        }
+                        if (data == 'postulated'){
+                            message = 'You have already applied for this position';
+                        }
+                        if (data == 'error'){
+                            message = 'An error has occured, please try again';
+                        }
+                        if (data == 'success'){
+                            message = 'Success! You have successfully applied to this job opening';
+                            btn_postularse.html("<i class='fa fa-pointer fa-check-square-o'></i> Applied");
+                            // btn_postularse.addClass('btn-info');
+                            reset_btn_postularse = false;
+                            btn_fav.remove();
+
+                        }
+                        else {
+                            btn_postularse.html('Apply').removeAttr('disabled')
+                        }
+
+                        if (reset_btn_postularse == true){
+                            btn_postularse.html("<i class='fa fa-pointer fa-check-square-o'></i> Apply");
+                            btn_postularse.removeAttr("disabled");
+                        }
+                        alert(message);
+                        // $('#postulate-modal-text').html(message);
+                        // $('#post-vac-modal').modal('show');
+                        // setTimeout(function() {$('#post-vac-modal').modal('hide');}, 5000);
+                    },
+                    error: function(data) {
+                        console.log(data)
+                        alert ("{% trans 'An error has occured, please try again' %}");
+                    }
+                });
+            }
+        {% endif %}
+        {%if not user.is_authenticated %}
+            $('#loginform').submit(function(e){
+                $this = $(this);
+                e.preventDefault();
+                var formdata = $this.serializeArray();
+                console.log(formdata);
+                var url = '{%url "ajax_login"%}';
+                console.log(url);
+                $this.find('.error-list').remove();
+                $this.find('has-error').removeClass('has-error');
+                $.ajax({
+                    url:url,
+                    type:'post',
+                    data:formdata,
+                    complete:function(data){
+                        $this.find('.btn[type=submit]').html('<i class="fa fa-sign-in fa-lg mr5"></i> Login').prop('disabled',false).removeClass('disabled');
+
+                    },
+                    success:function(data){
+                        console.log(data);
+                        if(data.success == true)
+                        {
+                            key = $this.data('key')
+                            if (key)
+                                location.href = location.href+"?"+key +"=true"
+                            location.href = location.href   
+                        }
+                        else {
+                            $this.find('.form-control').parents('.input-group').addClass('has-error');
+                            $this.prepend('<div class="alert alert-danger error-list">Invalid Username/Password</div>')
+                        }
+                    }
+                })
+                return false;
+            });
+            function changeloginredirect(key){
+                $('#loginform').data('key',key)
+            }
+        {%endif%}
+        
+        {% if my_vacancy or not user_profile %}
+            $('#id_file').change(function(){
+                if(this.files && this.files[0] && this.files[0].size > 5*1024*1024) {
+                    alert('File exceeds 5MB file size')
+                    this.value="";
+                }
+            })
+        {% endif %}
+    </script>
+{% endblock %}

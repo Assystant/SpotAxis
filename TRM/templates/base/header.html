@@ -1,0 +1,66 @@
+{% load humanize %}
+{% load TRM_tags %}
+<nav class="navbar {%if isIndex%} navbar-trans{%else%}navbar-default{%endif%} no-margin">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {%if user_profile and user_profile == "recruiter" and active_subdomain %}
+          <a class="navbar-brand" href="{{request.user.recruiter.company.all.0.geturl}}"><img class="navbar-img img-responsive" src="{{STATIC_URL}}img/logo/{%if not isIndex%}logo.png{%else%}logo-white.png{%endif%}" alt="SpotAxis Logo"></a>
+        {% else %}
+            {% if active_subdomain %}
+
+                <a class="navbar-brand" href="/"><img class="navbar-img img-responsive" src="{{STATIC_URL}}img/logo/{%if not isIndex%}logo.png{%else%}logo-white.png{%endif%}" alt="SpotAxis Logo"></a>
+            {% else %}
+                <a class="navbar-brand" href="/"><img class="navbar-img img-responsive" src="{{STATIC_URL}}img/logo/{%if not isIndex%}logo.png{%else%}logo-white.png{%endif%}" alt="SpotAxis Logo"></a>
+            {% endif %}
+            
+      {% endif %}
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav ml10">
+        {%if user_profile and user_profile == "recruiter"%}
+            {%if user.recruiter.company.all%}
+                <li class="{%if isCompanyProfile%} active {% endif %}">
+                    <a href="{{user.recruiter.company.all.0.get_absolute_url}}">Company</a>
+                </li>
+                {% if user.recruiter.is_admin %}
+                    {# <li class="{% if isCompanyManagement %}active {%endif%}"><a href="{{user.recruiter.company.all.0.geturl}}{{user.recruiter.company.all.0|get_settings_url}}">Site Settings</a></li> #}
+                    <li class="{% if isCompanyManagement %}active {%endif%}"><a href="{{user.recruiter.company.all.0.geturl}}{% url 'companies_site_management' 'template' %}">Careers Site</a></li>
+                    {# <li class="{% if isCompanyManagement %}active {%endif%}"><a href="{{user.recruiter.company.all.0.geturl}}{{user.recruiter.company.all.0|get_settings_url}}">Site Settings</a></li> #}
+                {% endif %}
+                {%if recruiter and active_subdomain%}
+                    <li class="{% if isVacancy %}active{%endif%}">
+                        <a href="{% url 'companies_vacancies_by_status' 'open' %}">Jobs</a>
+                    </li>
+                    {% if user.recruiter.is_manager and user.recruiter.company.all.0|args:'JP_POST'|call:'check_service' %}
+                    <li class="btn-group"><a class="btn btn-sm btn-info" href="{% url 'companies_add_update_vacancy' %}">Create a job</a></li>
+                    {% endif %}
+                {%elif user_profile == 'recruiter' %}
+                    <li><a href="http://{{user.recruiter.company.all.0.subdomain}}open/">Jobs</a></li>
+                    {% if user.recruiter.is_manager and user.recruiter.company.all.0|args:'JP_POST'|call:'check_service' %}
+                        <li class="btn-group"><a class="btn btn-sm btn-info" href="http://{{user.recruiter.company.all.0.subdomain}}{% url 'companies_add_update_vacancy' %}">Create a job</a></li>
+                    {% endif %}
+                {%endif%}
+            {%else%}
+                <li><a class="btn btn-info btn-sm mt10" href="{%url 'companies_record_company'%}">Create a Company Profile</a></li>
+            {%endif%}
+            
+        {%elif user_profile and user_profile == 'candidate' %}
+            <li class="{% if isJobBoard %}active {% endif %}"><a href="{% url 'job_board' %}">Jobs</a></li>
+            <li class="{% if isApplication %}active {% endif %}"><a href="{% url 'candidates_vacancies_postuladed' %}">Applied Jobs</a></li>
+            <li class="{% if isFav %}active {%endif%}"><a href="{% url 'candidates_vacancies_favourites' %}">Apply Later</a></li>
+            <li class="{% if isCV %} active{%endif%}"><a href="{% url 'candidates_edit_curriculum' %}">Profile</a></li>
+        {%endif%}
+      </ul>
+      {% include 'base/header_user_section.html' %}
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

@@ -1,0 +1,64 @@
+{% load i18n %}
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+</head>
+<body>
+    <!-- Pagination of curricula -->
+    {% if curricula.paginator.page_range > 1 %}
+        <div class="clearfix mb10 paginator">
+            <div class="pull-right">
+                <nav>
+                    <ul class="pagination pagination-sm">
+                    {% ifequal link_anterior curricula.number %}
+                       <li class="disabled"><a href="#">&laquo;</a></li>
+                    {% else %}
+                       <li><a href="?page={{ link_anterior }}">&laquo;</a></li>
+                    {% endifequal %}
+
+                    {% for num in curricula.paginator.page_range %}
+                         {% if curricula.paginator.num_pages > num_pages_visible %}
+                            {% if num >= minimo_paginas%}
+                                {% if num <= maximo_paginas  %}
+                                    {% ifequal num curricula.number %}
+                                        <li class="active">
+                                            <span>{{ num }} <span class="sr-only">(current)</span></span>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a href="?page={{ num }}"> {{ num }} </a>
+                                        </li>
+                                    {% endifequal %}
+                                {% endif %}
+
+                            {% endif %}
+                         {% else %}
+                             {% ifequal num curricula.number %}
+                                 <li class="active">
+                                     <span>{{ num }} <span class="sr-only">(current)</span></span>
+                                 </li>
+                             {% else %}
+                                 <li>
+                                    <a href="?page={{ num }}"> {{ num }} </a>
+                                 </li>
+                             {% endifequal %}
+                         {% endif %}
+                    {% endfor %}
+
+                    {% ifequal link_siguiente curricula.number %}
+                         <li class="disabled"><a href="#">&raquo;</a></li>
+                    {% else %}
+                         <li><a href="?page={{ link_siguiente }}">&raquo;</a></li>
+                    {% endifequal %}
+
+                </ul>
+                </nav>
+            </div>
+
+            <span><strong>Showing results <span class="number">{{ curricula.start_index }}</span> to <span class="number">{{ curricula.end_index }}</span> from <span class="number">{{ curricula_total }}</span></strong></span>
+        </div>
+    {% endif %}
+    <!-- End Pagination of curricula -->
+</body>
+</html>

@@ -1,0 +1,82 @@
+[
+	{
+		"model": "payments.servicecategory", 
+		"pk": 1,
+		"fields": 
+		{
+			"name": "Career Site Management", 
+			"codename": "CSM",
+			"enabled": 1
+		}
+	},
+	{
+		"model": "payments.servicecategory", 
+		"pk": 2,
+		"fields": 
+		{
+			"name": "Job Posting", 
+			"codename": "JP",
+			"enabled": 1
+		}
+	},
+	{
+		"model": "payments.servicecategory", 
+		"pk": 3,
+		"fields": 
+		{
+			"name": "Job Management", 
+			"codename": "JM",
+			"enabled": 1
+		}
+	},
+	{
+		"model": "payments.servicecategory", 
+		"pk": 4,
+		"fields": 
+		{
+			"name": "Talent Sourcing", 
+			"codename": "TS",
+			"enabled": 1
+		}
+	},
+	{
+		"model": "payments.servicecategory", 
+		"pk": 5,
+		"fields": 
+		{
+			"name": "Application Tracking", 
+			"codename": "AT",
+			"enabled": 1
+		}
+	},
+	{
+		"model": "payments.servicecategory", 
+		"pk": 6,
+		"fields": 
+		{
+			"name": "Team Collaboration", 
+			"codename": "CH",
+			"enabled": 1
+		}
+	},
+	{
+		"model": "payments.servicecategory", 
+		"pk": 7,
+		"fields": 
+		{
+			"name": "Assessment", 
+			"codename": "AS",
+			"enabled": 1
+		}
+	},
+	{
+		"model": "payments.servicecategory", 
+		"pk": 8,
+		"fields": 
+		{
+			"name": "Reports and Analytics", 
+			"codename": "RNA",
+			"enabled": 0
+		}
+	}
+]

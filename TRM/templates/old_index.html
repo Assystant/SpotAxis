@@ -1,0 +1,482 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% comment %} Home {% endcomment %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+    {% block header_search %}
+        <div class="header-search-bar hidden">
+            <div class="container">
+                <form action="{% url 'vacancies_search_vacancies' %}" method="post" class="form-horizontal" role="form">
+                    {% csrf_token %}
+                    <div class="basic-form clearfix">
+                        <a href="#" class="toggle"><span></span></a>
+                        <div class="hsb-input-1">
+                            {{ form.state }}
+                        </div>
+
+                        <div class="hsb-text-1">{% trans 'Industry' %}</div>
+                        <div class="hsb-input-1">
+                            {{ form.industry }}
+                        </div>
+                        <div class="hsb-text-2">{% trans 'When' %}</div>
+                        <div class="hsb-input-1">
+                            {{ form.vacancyPubDateSearch }}
+                        </div>
+
+                        <div class="hsb-submit">
+                            <button type="submit" class="btn btn-block btn-default btnl-lg">
+                                <i class="fa fa-search"></i> {% trans 'Search' %}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="advanced-form">
+                        <div class="container">
+                            <div class="row">
+                                <label class="col-md-1">{% trans 'Area' %}</label>
+                                <div class="col-md-5">
+                                    {{ form.area }}
+                                </div>
+                                <label class="col-md-1">{% trans 'Level' %}</label>
+                                <div class="col-md-5">
+                                    {{ form.degree }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-1">{% trans 'Gender' %}</label>
+                                <div class="col-md-5">
+                                    {{ form.gender }}
+                                </div>
+                                <label class="col-md-1">{% trans 'Word' %}</label>
+                                <div class="col-md-5">
+                                    {{ form.search }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> <!-- end .header-search-bar -->
+    {% endblock %}
+{% block content %}
+    <div class="jumbotron no-margin bg-banner trans-head screen-height">
+        <div class="container mt3p mb40">
+            <div class="row">
+                <div class="col-md-10 col-md-push-1">
+                    <!--h1 class="text-center mt40 text-inverse"><br>SpotAxis</h1>
+                    <hr class="header-seperator"-->
+                    <br>
+                    <h1 class="text-inverse text-center mt50 pt50 h2">Engagement and Recruitment Solution for Great Teams </h1>
+                    <h4 class="text-center small-xs text-inverse pt40">A recruitment solution to collaborate with colleagues, manage career site, post jobs, attract talents, organise hiring process and take data driven decisions.</h4>
+                    <div class="text-center mt40 pt20">
+                        <a class="mt40 btn btn btn-info-inverse pl20 pr20" href="{% url 'companies_record_recruiter' %}">Get Started for FREE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron no-margin bg-alt pb20 bg-white" id="whyus">
+        <h2 class="text-center mb40"> Why Us? </h2>
+        <div class="container mb20">
+            <div class="row">
+                <div class="col-xs-12 col-md-4 text-center">
+                    <span class="bg-white bordered border-round border-info center-block clearfix img-card-large hvr-float-shadow">
+                        <span class="fa fa-check fa-5x text-info mt25">
+                        </span>
+                    </span>
+                    <div class="h2 text-light mt10">Simple</div> 
+                    <p><small class="text-muted"> Intuitive and easy to use solution</small></p> 
+                </div>
+                <div class="col-xs-12 col-md-4 text-center">
+                    <span class="bg-white bordered border-round border-info center-block clearfix img-card-large hvr-float-shadow">
+                        <span class="fa fa-lightbulb-o fa-5x text-info mt25">
+                        </span>
+                    </span>
+                    <div class="text-light mt10 h2">Efficient</div>
+                    <p><small class="text-muted"> Flexibility coupled with superiority</small></p>
+                </div>
+                <div class="col-xs-12 col-md-4 text-center">
+                    <span class="bg-white bordered border-round border-info center-block clearfix img-card-large hvr-float-shadow">
+                        <span class="fa fa-dollar fa-5x text-info mt25">
+                        </span>
+                    </span>
+                    <div class="text-light mt10 h2">Affordable</div>
+                    <p><small class="text-muted"> Plans for every size of team</small></p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron no-margin bg-banner-2 pb20" id="features">
+        <h2 class="text-center">Our Top Features</h2>
+        <div class="container text-muted">
+            <div class="row pb20">
+                <div class="col-sm-6 col-xs-12">
+                    <div class="row hover-shadow">
+                        <div class="col-xs-4 mt40 text-center hvr-float-shadow"><i class="material-icons fs100 text-muted">important_devices</i></div>
+                        <div class="col-xs-8">
+                            <h3 class="text-info">Career Site Management</h3>
+                            <hr class="header-seperator">
+                            <p class="text-justified text-muted">Manage career site and publish job with own branding like <i>careers.yourdomain.com</i></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center hidden">
+                    <h3 class="text-info text-center text-muted">Job Posting and Management</h3>
+                    <hr class="header-seperator">
+                    <p class="text-justified text-muted">Publish Jobs, Manage teplates</p>
+                </div>
+                <div class="col-md-4 text-center hidden">
+                    <h3 class="text-info text-center text-muted">Talent Sourcing</h3>
+                    <hr class="header-seperator">
+                    <ul class="text-center unstyled">
+                        <li> Candidates visiting Career Sites </li>
+                        <li> Access to all {{PROJECT_NAME}} candidates</li>
+                        <li> Profile upload by recruiter</li>
+                        <li> Shareable job link</li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="row hover-shadow">
+                        <div class="col-xs-4 mt40 text-center hvr-float-shadow"><i class="ionicons ion-funnel fs100 text-muted"></i></div>
+                        <div class="col-xs-8">
+                            <h3 class="text-info">Application Tracking System</h3>
+                            <hr class="header-seperator">
+                            <p class="text-justified text-muted"> Receive candidate applications and Process through own customised funnel</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="row hover-shadow">
+                        <div class="col-xs-4 mt40 text-center hvr-float-shadow"><i class="ionicons ion-ios-people fs100 text-muted"></i></div>
+                        <div class="col-xs-8">
+                            <h3 class="text-info">Collaborative Hiring</h3>
+                            <hr class="header-seperator">
+                            <p class="text-justified text-muted"> Team members can actively participate in the hiring process to find the appropriate candidate</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="row hover-shadow">
+                        <div class="col-xs-4 mt40 text-center hvr-float-shadow"><i class="fa fa-star-half-o fs100 text-muted"></i></div>
+                        <div class="col-xs-8">
+                            <h3 class="text-info">Review and Assessment</h3>
+                            <hr class="header-seperator">
+                            <p class="text-justified text-muted">Team members can rate and review each candidate based on custom criteria in any stage of the funnel</p>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+        <div class="text-center center-block">
+            <a class="clickable text-muted text-info" data-toggle="modal" data-target="#pricing-comparison"><b>See All Features</b></a>
+        </div>
+    </div>
+    <div class="jumbotron no-margin bg-white " id="pricing">
+        <h2 class="text-center text-light mb20">Pricing</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-10 col-md-8 col-xs-offset-1 col-md-offset-2 pt10 pb10 mb20 text-center">
+                    <h3 class="text-center"><i class="fa fa-quote-left"></i> We at SpotAxis believe, it is not a solution if it is not affordable <i class="fa fa-quote-right"></i></h3>
+                </div>
+                {% for package in packages %}
+                    <div class="col-md-4 {% with packages.count|mod:3 as mcount %} {% if packages.count|sub:forloop.counter|sub:mcount < 0 and forloop.counter|mod:3 == 1 %}{% if mcount == 1 %}col-md-offset-4{% elif mcount == 2 %}col-md-offset-2{% endif %}{% endif %}{% endwith %}">
+                        {% for package_slab in package.package_slabs %}
+                            <div class="panel no-margin box-shadow-light border-light" data-class="package-{{package.id}}-{{package_slab.currency.id}}">
+                                <div class="panel-body">
+                                    {% if package.priceslab_set.all.count > 1 %}
+                                        <div class="btn-group btn-group-xs pull-right" role="group">
+                                            {% for price_slab in package_slab.price_slabs %}
+                                              <button type="button" class="btn btn-trans-info {% if forloop.first %}active{% endif %}" data-toggle="collapse" data-target =".package-{{package.id}}-{{package_slab.currency.id}}" data-slab="{{price_slab.id}}">{{price_slab.get_slab_period_display}}</button>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="text-info pl20 pr20 h2">{{package}}</div>
+                                        <h3 class="text-info pl20 pr20">
+                                            {% for price_slab in package_slab.price_slabs %}
+                                                <span class="collapse fade {% if forloop.first %} in {% endif %} package-{{package.id}}-{{package_slab.currency.id}}">
+                                                    <small class="text-info mr10">
+                                                        <del>
+                                                            {{package_slab.currency.symbol}}{{price_slab.buffered_amount}}
+                                                            /{% if price_slab.slab_period  == 'M' %}month{%else%}annum{%endif%}
+                                                        </del>
+                                                    </small>
+                                                     {{package_slab.currency.symbol}}{{price_slab.amount}}
+                                                    <small class="text-info">/{% if price_slab.slab_period  == 'M' %}month{%else%}annum{%endif%}</small>
+                                                </span>
+                                            {% endfor %}
+                                        </h3>
+                                    {% else %}
+                                        <div class="text-info pl20 pr20 h2">{{package}}</div>
+                                        <h3 class="text-info pl20 pr20">FREE</h3>
+                                    {% endif %}
+                                    <ul class="unstyled pl20 mt20 pr20 ">
+                                        <li><i class="fa fa-check text-info fa-lg"></i> <span class="ml5"> {{package.free_users}} Users</span></li>
+
+                                        {% for service_category in package_slab.service_categories %}
+                                            {% if service_category.full_package %}
+                                                <li><i class="fa {% if service_category.full_package %}fa-check text-info{% else %}fa-minus mr5 text-warning-light{% endif %}  fa-lg"></i> <span class="ml5">{{service_category}}</span></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% for service_category in package_slab.service_categories %}
+                                            {% if not service_category.full_package %}
+                                                <li><i class="fa {% if service_category.full_package %}fa-check text-info{% else %}fa-minus mr5 text-warning-light{% endif %}  fa-lg"></i> <span class="ml5">{{service_category}}</span></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if package.max_users > package.free_users or package.max_users = 0 %}
+                                            <li><hr class="mt10 mb10"></li>
+                                            <li>Additional users at <br>
+                                                {% for price_slab in package_slab.price_slabs %}
+                                                    <small class="package-{{package.id}}-{{package_slab.currency.id}} collapse fade {% if forloop.first %} in {% endif %} text-info">
+                                                        <del class="mr10">
+                                                            {{package_slab.currency.symbol}}{{price_slab.buffered_price_per_user}}
+                                                            /{% if price_slab.slab_period  == 'M' %}month{%else%}annum{%endif%}
+                                                        </del>
+                                                        {{package_slab.currency.symbol}}{{price_slab.price_per_user}}
+                                                        /{% if price_slab.slab_period  == 'M' %}month{%else%}annum{%endif%}
+                                                    </small>
+                                                {% endfor %}
+                                            </li>
+                                        {% endif %}
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <div class="col-md-12 text-center clearfix mt15 ">
+                    <a class="clickable" data-toggle="modal" data-target="#pricing-comparison">Compare All Plans</a>
+                    <span class="clearfix"></span>
+                    <a class="btn btn btn-info mt20" href="{% url 'companies_record_recruiter' %}">Get Started for Free</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron no-margin bg-alt bg-banner-3 bg-banner-filter" id="contact">
+        <h2 class="text-center text-light">Contact Us</h2>
+        <div class="container">
+            <form class="row" id="pricing-form">
+                <div class="col-md-6 col-md-push-3">
+                    <!--h3 class="text-center mb40"><small class="text-inverse">Please mention your suggestions/expectations we'll work around that.</small></h3-->
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            {{form_contact.name}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="fa fa-at mt2"></i></span>
+                            {{form_contact.email}}
+                        </div>
+                    </div>
+                    <!--div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                            {{form_contact.phone}}
+                        </div>
+                        <div class="form-errors text-danger ml40"></div>
+                    </div-->
+                    <div class="form-group">
+                        {{form_contact.body}}
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4 col-xs-offset-3 col-sm-offset-4 text-center" >
+                            <button class="btn btn-info pl50 pr50">Request</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block java_script_srcs %}
+
+{% endblock %}
+
+{% block java_script_code %}
+    <script type="text/javascript">
+        $('#pricing-form').submit(function(){
+            $this = $(this);
+            formdata = $this.serializeArray();
+            $btn = $this.find('.btn');
+            $btn.html('<i class="fa fa-spin fa-spinner"></i> Please Wait')
+            $btn.prop('disabled',true);
+            $btn.addClass('disabled');
+            $('.form-errors').remove();
+            $('.form-error').remove();
+            $('.has-error').removeClass('has-error')
+            $.ajax({
+                url: '/ajax/pricingrequest/',
+                data: formdata,
+                type: 'POST',
+                complete: function(){
+                    $btn.removeClass('disabled');
+                    $btn.prop('disabled',false);
+                    $btn.html('Request');
+                },
+                success: function(data){
+                    console.log(data);
+                    if(data.success){
+                        alert(data.msg)
+                        $('#id_name').val('')
+                        $('#id_email').val('')
+                        $('#id_body').val('')
+                    }
+                    else {
+                        if ('name' in data.errors)
+                        {
+                            html = "<div class = 'form-errors text-danger ml40'></div>";
+                            console.log(data.errors.name)
+                            $control = $this.find('input[name=name]');
+                            $elist = $control.parents('.form-group').append($(html));
+                            // $elist = $(html).insertAfter($control.parents);
+                            $this.find('#id_name').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.name).each(function(k,v){
+                                $elist.append('<li class="text-danger form-error">'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                        if ('email' in data.errors)
+                        {
+                            html = "<div class = 'form-errors text-danger ml40'></div>";
+                            console.log(data.errors.email)
+                            $control = $this.find('input[name=email]');
+                            $elist = $control.parents('.form-group').append($(html));
+                            // $elist = $(html).insertAfter($control.parents);
+                            $this.find('#id_email').parents('.input-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.email).each(function(k,v){
+                                $elist.append('<li class="text-danger form-error">'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                            // if ('phone' in data.errors)
+                            // {
+                            //     html = "<div class = 'form-errors text-danger ml40'></div>";
+                            //     console.log(data.errors.phone)
+                            //     $control = $this.find('input[name=phone]');
+                            //     $elist = $control.parents('.form-group').append($(html));
+                            //     // $elist = $(html).insertAfter($control.parents);
+                            //     $this.find('#id_area').parents('.input-group').addClass('has-error')
+                            //     console.log($elist)
+                            //     $(data.errors.area).each(function(k,v){
+                            //         $elist.append('<li>'+v+'</li>');
+                            //         // $this.find(
+                            //     });
+                            // }
+                        if ('body' in data.errors)
+                        {
+                            html = "<div class = 'form-errors text-danger ml40'></div>";
+                            console.log(data.errors.body)
+                            $control = $this.find('input[name=body]');
+                            $elist = $control.parents('.form-group').append($(html));
+                            // $elist = $(html).insertAfter($control.parents);
+                            $this.find('#id_body').parents('.form-group').addClass('has-error')
+                            console.log($elist)
+                            $(data.errors.body).each(function(k,v){
+                                $elist.append('<li class="text-danger form-error">'+v+'</li>');
+                                // $this.find(
+                            });
+                        }
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                    $this.after('<div class="text-danger ml40">'+error+'</div>');
+                }
+            })
+            return false;
+        })
+        function get_common_areas(value) {
+            var id = (value);
+            $('#id_area').empty();
+            $.ajax({
+                data: {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                url: '/ajax/get-common-areas/',
+                type: 'POST',
+                {#            dataType: 'html',#}
+                success: function (data) {
+                    if (data.length > 0) {
+                        $('#id_area').append('<option value="-1">All</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#id_area').append('<option value="' + data[i].pk + '">' + data[i].fields.name + '</option>');
+                        }
+                    } else {
+                        $('#id_area').append('<option value="-1">All</option>');
+                    }
+                },
+                error: function () {
+                    $('#id_area').append('<option value="-1">All</option>');
+                }
+            });
+        }
+
+        {% if user_profile == 'candidate' %}
+            function mark_unmark_favorite(vacancy_id) {
+                var btn_fav = $("#btn_fav_" + vacancy_id);
+                $.ajax({
+                    data: {
+                        'id': vacancy_id,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    url: '/ajax/mark-vacancy-asfavorite/',
+                    type: 'GET',
+                    success: function(data){
+                        console.log(data);
+                        var message = '';
+                        if (data == 'marked'){
+                            btn_fav.removeClass('icon-vac-nofav').addClass('icon-vac-fav');
+                            btn_fav.attr('title', 'Added to favourites').tooltip('fixTitle').tooltip('show');
+                        }
+                        if (data == 'unmarked'){
+                            btn_fav.removeClass('icon-vac-fav').addClass('icon-vac-nofav');
+                            btn_fav.attr('title', 'Add to favourites').tooltip('fixTitle').tooltip('show');
+                        }
+                        if (data == 'error'){
+                            alert("Failed to change favourites. Please try again a moment later.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Failed to change favourites. Please try again a moment later.");
+                    }
+                });
+            }
+        {% endif %}
+
+        $(document).ready(function () {
+            $(function() {
+                $('#id_industry').change(
+                    function () {
+                        get_common_areas(this.value);
+                    }
+                );
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+            $('.btn-group .btn').click(function(){
+                $(this).parents('.btn-group').find('.btn').removeClass('active')
+                $(this).addClass('active')
+            })
+        });
+        {% if request.user.is_anonymous %}
+            $('.get-started').click(function(e){
+                if($(this).attr('data-slab')==='1'){
+                    ref_class = '[data-target=".' + $(this).parents('.panel').attr('data-class')+'"].btn.active'
+                    id = $(ref_class).attr('data-slab')
+                }
+                location.href = '{% url "companies_record_recruiter" %}' + '?price_slab='+id
+            })
+        {% endif %}
+    </script>
+{% endblock %}
+

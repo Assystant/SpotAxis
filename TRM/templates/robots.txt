@@ -1,0 +1,12 @@
+User-Agent: *
+
+Disallow: /admin/*
+Disallow: /ajax/*
+Disallow: /i18n/*
+Disallow: /ajax-uploads/*
+Disallow: /rosetta/*
+Disallow: /ckeditor/*
+Disallow: /upload/file/
+Disallow: /delete/file/
+Allow: /help/kb/*
+Disallow: /help/*

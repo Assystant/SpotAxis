@@ -1,0 +1,7 @@
+We have updated all Career sites to modern design templates. The new Career sites have a default generic design and content.
+
+You can see the changes here: {{careers_page}}
+
+If you wish to change the design and/or content then kindly login to your account to update {{careers_page}}/login/
+
+Have any questions or need any help? Please write to us at happyuser@spotaxis.com

@@ -1,0 +1,224 @@
+{% load static %}
+{% load TRM_tags %}
+<div class="container-fluid">
+    <form method="post">
+        {% csrf_token %}
+        {% if template_form.name.errors %}
+            <ul class="list-unstyled error-list text-danger">
+                {% for error in template_form.name.errors %}
+                    <li>{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {{template_form.name}}
+        {% if template_formset.non_form_errors %}
+            <ul class="list-unstyled error-list text-danger">
+                {% for error in template_formset.non_form_errors %}
+                    <li>{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="mt10 mb10 pl20 pr20 formset-row" data-template="#field-formset-structure">
+            {{template_formset.management_form}}
+            <input type="hidden" class="prefix" value="{{template_formset.prefix}}">
+            {% with template_formset.empty_form as form %}
+                <div class="row mb10 field-formset bordered hide formset-form" id="field-formset-structure" {% if form.nested %}data-nested='true'{% endif %}> 
+                    <div class="padded container-fluid pt10 pl10 pr10 pb10 border-bottom border-light"> 
+                        <div class="row">
+                            <div class="col-xs-8">
+                                {% if form.name.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                        {% for error in form.name.errors %}
+                                            <li>{{ error|escape }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                {{form.name}}
+                            </div>
+                            <div class="col-xs-4 option-selector"  data-value="{{form.field_type.value}}">
+                                {% if form.field_type.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                        {% for error in form.field_type.errors %}
+                                            <li>{{ error|escape }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                {{form.field_type}}
+                            </div>
+                        </div>
+                        <div class="row mt10 mb10 formset-row collapse fade" data-template="#option-formset-structure">
+                            {{form.nested.management_form}}
+                            <input type="hidden" class="prefix" value="{{form.nested.prefix}}">
+                            {% with form.nested.empty_form as fs %}
+                                <div class="col-xs-12 option-formset hide formset-form" id="option-formset-structure">
+                                    <div class="row">
+                                        <div class="col-xs-8 pl40">
+                                            {% if fs.name.errors %}
+                                                <ul class="list-unstyled error-list text-danger">
+                                                    {% for error in fs.name.errors %}
+                                                        <li>{{ error|escape }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            <div>
+                                                <span class="card-left pl20 pt10 text-light">
+                                                    <span class="card-4 hidden"><i class="ionicons ion-android-radio-button-off"></i></span>
+                                                    <span class="card-3 hidden"><i class="ionicons ion-android-checkbox-outline-blank"></i></span>
+                                                </span>
+                                                {{fs.name}}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <h5><a class="text-danger formset-delete" href="javascript:void(0)"><span class="hidden">{{fs.DELETE}}</span>&times; Remove Option</a></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                            {% for fs in form.nested %}
+                                <div class="col-xs-12 option-formset formset-form">
+                                    <div class="row">
+                                        <div class="col-xs-8 pl40">
+                                            {% if fs.name.errors %}
+                                                <ul class="list-unstyled error-list text-danger">
+                                                    {% for error in fs.name.errors %}
+                                                        <li>{{ error|escape }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            <div>
+                                                <span class="card-left pl20 pt10 text-light">
+                                                    <span class="card-4 hidden"><i class="ionicons ion-android-radio-button-off"></i></span>
+                                                    <span class="card-3 hidden"><i class="ionicons ion-android-checkbox-outline-blank"></i></span>
+                                                </span>
+                                                {{fs.name}}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <h5><a class="text-danger formset-delete" href="javascript:void(0);"><span class="hidden">{{fs.DELETE}}</span>&times; Remove Option</a></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="col-xs-12">
+                                <a class="text-info mb10 formset-add" href="javascript:void(0);"><i class="glyphicon glyphicon-plus"></i> Add Option</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row pt5">
+                            <div class="col-xs-12">
+                                <label for="{{form.is_required.auto_id}}"> {{form.is_required}} {{form.is_required.label}} </label>
+                                <a class="text-danger formset-delete inline-block pl15" href="javascript:void(0)"><span class="hidden">{{form.DELETE}}</span><i class="ionicons ion-android-delete"></i> Remove Field</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endwith %}
+            {% for form in template_formset.forms %}
+                <div class="row mb10 field-formset bordered formset-form" {% if form.nested %} data-nested='true'{% endif %}> 
+                    <div class="padded container-fluid pt10 pl10 pr10 pb10 border-bottom border-light">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                {% if form.name.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                        {% for error in form.name.errors %}
+                                            <li>{{ error|escape }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                {{form.name}}
+                            </div>
+                            <div class="col-xs-4 option-selector" data-value="{{form.field_type.value}}">
+                                {% if form.field_type.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                        {% for error in form.field_type.errors %}
+                                            <li>{{ error|escape }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                {{form.field_type}}
+                            </div>
+                        </div>
+                        <div class="row mt10 mb10 formset-row collapse fade {% if form.field_type.value|parseInt > 1 and form.field_type.value|parseInt < 5 %}in{% endif %}" data-template="#option-formset-structure">                                    
+                            {{form.nested.management_form}}
+                            <input type="hidden" class="prefix " value="{{form.nested.prefix}}">
+                            {% with form.nested.empty_form as fs %}
+                                <div class="col-xs-12 option-formset hide formset-form" id="option-formset-structure">
+                                    <div class="row">
+                                        <div class="col-xs-8 pl40">
+                                            {% if fs.name.errors %}
+                                                <ul class="list-unstyled error-list text-danger">
+                                                    {% for error in fs.name.errors %}
+                                                        <li>{{ error|escape }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            <div>
+                                                <span class="card-left pl20 pt10 text-light">
+                                                    <span class="card-4 {% if form.field_type.value == '4' or form.field_type.value == 4 %}{% else %}hidden{% endif %}"><i class="ionicons ion-android-radio-button-off"></i></span>
+                                                    <span class="card-3 {% if form.field_type.value == '3' or form.field_type.value == 3 %}{% else %}hidden{% endif %}"><i class="ionicons ion-android-checkbox-outline-blank"></i></span>
+                                                </span>
+                                                {{fs.name}}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <h5><a class="text-danger formset-delete" href="javascript:void(0)"><span class="hidden">{{fs.DELETE}}</span>&times; Remove Option</a></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                            {% if form.nested.non_form_errors %}
+                                <ul class="list-unstyled error-list text-danger">
+                                    {% for error in form.nested.non_form_errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% for fs in form.nested %}
+                                <div class="col-xs-12 option-formset formset-form">
+                                    <div class="row">
+                                        <div class="col-xs-8 pl40">
+                                            {% if fs.name.errors %}
+                                                <ul class="list-unstyled error-list text-danger">
+                                                    {% for error in fs.name.errors %}
+                                                        <li>{{ error|escape }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            <div>
+                                                <span class="card-left pl20 pt10 text-light">
+                                                    <span class="card-4 {% if form.field_type.value == '4' or form.field_type.value == 4 %}{% else %}hidden{% endif %}"><i class="ionicons ion-android-radio-button-off"></i></span>
+                                                    <span class="card-3 {% if form.field_type.value == 3 or form.field_type.value == '3' %}{% else %}hidden{% endif %}"><i class="ionicons ion-android-checkbox-outline-blank"></i></span>
+                                                </span>
+                                                {{fs.name}}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <h5><a class="text-danger formset-delete" href="javascript:void(0);"><span class="hidden">{{fs.DELETE}}</span>&times; Remove Option</a></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="col-xs-12">
+                                <a class="text-info mb10 formset-add" href="javascript:void(0)"><i class="glyphicon glyphicon-plus"></i> Add Option</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid" >
+                        <div class="row pt5">
+                            <div class="col-xs-12">
+                                <label for="{{form.is_required.auto_id}}"> {{form.is_required}} {{form.is_required.label}} </label>
+                                <a class="text-danger formset-delete inline-block pl15" href="javascript:void(0)"><span class="hidden">{{form.DELETE}}</span><i class="ionicons ion-android-delete"></i> Remove Field</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="row pl40 pr40">
+                <a class="text-primary mb10 formset-add" href="javascript:void(0)"><i class="glyphicon glyphicon-plus"></i> Add Field</a>
+            </div>
+        </div>
+        <a class="btn btn-default btn-sm btn-block" id="template_preview">Preview this Template</a>
+        <a class="btn btn-info btn-sm btn-block" id="template_create">Create and Use this Template</a>
+    </form>
+</div>

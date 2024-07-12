@@ -1,0 +1,2442 @@
+[
+  {
+    "model": "common.country",
+    "pk": 1,
+    "fields": {
+      "iso2_code": "AF",
+      "name": "Afghanistan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 2,
+    "fields": {
+      "iso2_code": "AX",
+      "name": "\u00c5land Islands",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 3,
+    "fields": {
+      "iso2_code": "AL",
+      "name": "Albania",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 4,
+    "fields": {
+      "iso2_code": "DZ",
+      "name": "Algeria",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 5,
+    "fields": {
+      "iso2_code": "AS",
+      "name": "American Samoa",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 6,
+    "fields": {
+      "iso2_code": "AD",
+      "name": "Andorra",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 7,
+    "fields": {
+      "iso2_code": "AO",
+      "name": "Angola",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 8,
+    "fields": {
+      "iso2_code": "AI",
+      "name": "Anguilla",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 9,
+    "fields": {
+      "iso2_code": "AQ",
+      "name": "Antarctica",
+      "continent": "AN",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 10,
+    "fields": {
+      "iso2_code": "AG",
+      "name": "Antigua and Barbuda",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 11,
+    "fields": {
+      "iso2_code": "AR",
+      "name": "Argentina",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 12,
+    "fields": {
+      "iso2_code": "AM",
+      "name": "Armenia",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 13,
+    "fields": {
+      "iso2_code": "AW",
+      "name": "Aruba",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 14,
+    "fields": {
+      "iso2_code": "AU",
+      "name": "Australia",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 15,
+    "fields": {
+      "iso2_code": "AT",
+      "name": "Austria",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 16,
+    "fields": {
+      "iso2_code": "AZ",
+      "name": "Azerbaijan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 17,
+    "fields": {
+      "iso2_code": "BS",
+      "name": "Bahamas",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 18,
+    "fields": {
+      "iso2_code": "BH",
+      "name": "Bahrain",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 19,
+    "fields": {
+      "iso2_code": "BD",
+      "name": "Bangladesh",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 20,
+    "fields": {
+      "iso2_code": "BB",
+      "name": "Barbados",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 21,
+    "fields": {
+      "iso2_code": "BY",
+      "name": "Belarus",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 22,
+    "fields": {
+      "iso2_code": "BE",
+      "name": "Belgium",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 23,
+    "fields": {
+      "iso2_code": "BZ",
+      "name": "Belize",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 24,
+    "fields": {
+      "iso2_code": "BJ",
+      "name": "Benin",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 25,
+    "fields": {
+      "iso2_code": "BM",
+      "name": "Bermuda",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 26,
+    "fields": {
+      "iso2_code": "BT",
+      "name": "Bhutan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 27,
+    "fields": {
+      "iso2_code": "BO",
+      "name": "Bolivia",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 28,
+    "fields": {
+      "iso2_code": "BA",
+      "name": "Bosnia and Herzegovina",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 29,
+    "fields": {
+      "iso2_code": "BW",
+      "name": "Botswana",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 30,
+    "fields": {
+      "iso2_code": "BV",
+      "name": "Bouvet Island",
+      "continent": "AN",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 31,
+    "fields": {
+      "iso2_code": "BR",
+      "name": "Brazil",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 32,
+    "fields": {
+      "iso2_code": "IO",
+      "name": "British Indian Ocean Territory",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 33,
+    "fields": {
+      "iso2_code": "BN",
+      "name": "Brunei Darussalam",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 34,
+    "fields": {
+      "iso2_code": "BG",
+      "name": "Bulgaria",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 35,
+    "fields": {
+      "iso2_code": "BF",
+      "name": "Burkina Faso",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 36,
+    "fields": {
+      "iso2_code": "BI",
+      "name": "Burundi",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 37,
+    "fields": {
+      "iso2_code": "KH",
+      "name": "Cambodia",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 38,
+    "fields": {
+      "iso2_code": "CM",
+      "name": "Cameroon",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 39,
+    "fields": {
+      "iso2_code": "CA",
+      "name": "Canada",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 40,
+    "fields": {
+      "iso2_code": "CV",
+      "name": "Cape Verde",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 41,
+    "fields": {
+      "iso2_code": "KY",
+      "name": "Cayman Islands",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 42,
+    "fields": {
+      "iso2_code": "CF",
+      "name": "Central African Republic",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 43,
+    "fields": {
+      "iso2_code": "TD",
+      "name": "Chad",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 44,
+    "fields": {
+      "iso2_code": "CL",
+      "name": "Chile",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 45,
+    "fields": {
+      "iso2_code": "CN",
+      "name": "China",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 46,
+    "fields": {
+      "iso2_code": "CX",
+      "name": "Christmas Island",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 47,
+    "fields": {
+      "iso2_code": "CC",
+      "name": "Cocos (Keeling) Islands",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 48,
+    "fields": {
+      "iso2_code": "CO",
+      "name": "Colombia",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 49,
+    "fields": {
+      "iso2_code": "KM",
+      "name": "Comoros",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 50,
+    "fields": {
+      "iso2_code": "CG",
+      "name": "Congo",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 51,
+    "fields": {
+      "iso2_code": "CD",
+      "name": "Democratic Republic of the Congo",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 52,
+    "fields": {
+      "iso2_code": "CK",
+      "name": "Cook Islands",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 53,
+    "fields": {
+      "iso2_code": "CR",
+      "name": "Costa Rica",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 54,
+    "fields": {
+      "iso2_code": "CI",
+      "name": "C\u00f4te d'Ivoire",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 55,
+    "fields": {
+      "iso2_code": "HR",
+      "name": "Croatia",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 56,
+    "fields": {
+      "iso2_code": "CU",
+      "name": "Cuba",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 57,
+    "fields": {
+      "iso2_code": "CY",
+      "name": "Cyprus",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 58,
+    "fields": {
+      "iso2_code": "CZ",
+      "name": "Czech Republic",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 59,
+    "fields": {
+      "iso2_code": "DK",
+      "name": "Denmark",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 60,
+    "fields": {
+      "iso2_code": "DJ",
+      "name": "Djibouti",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 61,
+    "fields": {
+      "iso2_code": "DM",
+      "name": "Dominica",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 62,
+    "fields": {
+      "iso2_code": "DO",
+      "name": "Dominican Republic",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 63,
+    "fields": {
+      "iso2_code": "EC",
+      "name": "Ecuador",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 64,
+    "fields": {
+      "iso2_code": "EG",
+      "name": "Egypt",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 65,
+    "fields": {
+      "iso2_code": "SV",
+      "name": "El Salvador",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 66,
+    "fields": {
+      "iso2_code": "GQ",
+      "name": "Equatorial Guinea",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 67,
+    "fields": {
+      "iso2_code": "ER",
+      "name": "Eritrea",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 68,
+    "fields": {
+      "iso2_code": "EE",
+      "name": "Estonia",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 69,
+    "fields": {
+      "iso2_code": "ET",
+      "name": "Ethiopia",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 70,
+    "fields": {
+      "iso2_code": "FK",
+      "name": "Falkland Islands (Malvinas)",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 71,
+    "fields": {
+      "iso2_code": "FO",
+      "name": "Faeroe Islands",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 72,
+    "fields": {
+      "iso2_code": "FJ",
+      "name": "Fiji",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 73,
+    "fields": {
+      "iso2_code": "FI",
+      "name": "Finland",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 74,
+    "fields": {
+      "iso2_code": "FR",
+      "name": "France",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 75,
+    "fields": {
+      "iso2_code": "GF",
+      "name": "French Guiana",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 76,
+    "fields": {
+      "iso2_code": "PF",
+      "name": "French Polynesia",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 77,
+    "fields": {
+      "iso2_code": "TF",
+      "name": "French Southern Territories",
+      "continent": "AN",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 78,
+    "fields": {
+      "iso2_code": "GA",
+      "name": "Gabon",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 79,
+    "fields": {
+      "iso2_code": "GM",
+      "name": "Gambia",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 80,
+    "fields": {
+      "iso2_code": "GE",
+      "name": "Georgia",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 81,
+    "fields": {
+      "iso2_code": "DE",
+      "name": "Germany",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 82,
+    "fields": {
+      "iso2_code": "GH",
+      "name": "Ghana",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 83,
+    "fields": {
+      "iso2_code": "GI",
+      "name": "Gibraltar",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 84,
+    "fields": {
+      "iso2_code": "GR",
+      "name": "Greece",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 85,
+    "fields": {
+      "iso2_code": "GL",
+      "name": "Greenland",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 86,
+    "fields": {
+      "iso2_code": "GD",
+      "name": "Grenada",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 87,
+    "fields": {
+      "iso2_code": "GP",
+      "name": "Guadeloupe",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 88,
+    "fields": {
+      "iso2_code": "GU",
+      "name": "Guam",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 89,
+    "fields": {
+      "iso2_code": "GT",
+      "name": "Guatemala",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 90,
+    "fields": {
+      "iso2_code": "GG",
+      "name": "Guernsey",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 91,
+    "fields": {
+      "iso2_code": "GN",
+      "name": "Guinea",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 92,
+    "fields": {
+      "iso2_code": "GW",
+      "name": "Guinea-Bissau",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 93,
+    "fields": {
+      "iso2_code": "GY",
+      "name": "Guyana",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 94,
+    "fields": {
+      "iso2_code": "HT",
+      "name": "Haiti",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 95,
+    "fields": {
+      "iso2_code": "HM",
+      "name": "Heard Island and Mcdonald Islands",
+      "continent": "AN",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 96,
+    "fields": {
+      "iso2_code": "VA",
+      "name": "Holy See",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 97,
+    "fields": {
+      "iso2_code": "HN",
+      "name": "Honduras",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 98,
+    "fields": {
+      "iso2_code": "HK",
+      "name": "Hong Kong Special Administrative Region of China",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 99,
+    "fields": {
+      "iso2_code": "HU",
+      "name": "Hungary",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 100,
+    "fields": {
+      "iso2_code": "IS",
+      "name": "Iceland",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 101,
+    "fields": {
+      "iso2_code": "IN",
+      "name": "India",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 102,
+    "fields": {
+      "iso2_code": "ID",
+      "name": "Indonesia",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 103,
+    "fields": {
+      "iso2_code": "IR",
+      "name": "Iran, Islamic Republic of",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 104,
+    "fields": {
+      "iso2_code": "IQ",
+      "name": "Iraq",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 105,
+    "fields": {
+      "iso2_code": "IE",
+      "name": "Ireland",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 106,
+    "fields": {
+      "iso2_code": "IM",
+      "name": "Isle of Man",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 107,
+    "fields": {
+      "iso2_code": "IL",
+      "name": "Israel",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 108,
+    "fields": {
+      "iso2_code": "IT",
+      "name": "Italy",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 109,
+    "fields": {
+      "iso2_code": "JM",
+      "name": "Jamaica",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 110,
+    "fields": {
+      "iso2_code": "JP",
+      "name": "Japan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 111,
+    "fields": {
+      "iso2_code": "JE",
+      "name": "Jersey",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 112,
+    "fields": {
+      "iso2_code": "JO",
+      "name": "Jordan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 113,
+    "fields": {
+      "iso2_code": "KZ",
+      "name": "Kazakhstan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 114,
+    "fields": {
+      "iso2_code": "KE",
+      "name": "Kenya",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 115,
+    "fields": {
+      "iso2_code": "KI",
+      "name": "Kiribati",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 116,
+    "fields": {
+      "iso2_code": "KP",
+      "name": "Democratic People's Republic of Korea",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 117,
+    "fields": {
+      "iso2_code": "KR",
+      "name": "Republic of Korea",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 118,
+    "fields": {
+      "iso2_code": "KW",
+      "name": "Kuwait",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 119,
+    "fields": {
+      "iso2_code": "KG",
+      "name": "Kyrgyzstan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 120,
+    "fields": {
+      "iso2_code": "LA",
+      "name": "Lao People's Democratic Republic",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 121,
+    "fields": {
+      "iso2_code": "LV",
+      "name": "Latvia",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 122,
+    "fields": {
+      "iso2_code": "LB",
+      "name": "Lebanon",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 123,
+    "fields": {
+      "iso2_code": "LS",
+      "name": "Lesotho",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 124,
+    "fields": {
+      "iso2_code": "LR",
+      "name": "Liberia",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 125,
+    "fields": {
+      "iso2_code": "LY",
+      "name": "Libyan Arab Jamahiriya",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 126,
+    "fields": {
+      "iso2_code": "LI",
+      "name": "Liechtenstein",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 127,
+    "fields": {
+      "iso2_code": "LT",
+      "name": "Lithuania",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 128,
+    "fields": {
+      "iso2_code": "LU",
+      "name": "Luxembourg",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 129,
+    "fields": {
+      "iso2_code": "MO",
+      "name": "Macao Special Administrative Region of China",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 130,
+    "fields": {
+      "iso2_code": "MK",
+      "name": "The former Yugoslav Republic of Macedonia",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 131,
+    "fields": {
+      "iso2_code": "MG",
+      "name": "Madagascar",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 132,
+    "fields": {
+      "iso2_code": "MW",
+      "name": "Malawi",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 133,
+    "fields": {
+      "iso2_code": "MY",
+      "name": "Malaysia",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 134,
+    "fields": {
+      "iso2_code": "MV",
+      "name": "Maldives",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 135,
+    "fields": {
+      "iso2_code": "ML",
+      "name": "Mali",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 136,
+    "fields": {
+      "iso2_code": "MT",
+      "name": "Malta",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 137,
+    "fields": {
+      "iso2_code": "MH",
+      "name": "Marshall Islands",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 138,
+    "fields": {
+      "iso2_code": "MQ",
+      "name": "Martinique",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 139,
+    "fields": {
+      "iso2_code": "MR",
+      "name": "Mauritania",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 140,
+    "fields": {
+      "iso2_code": "MU",
+      "name": "Mauritius",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 141,
+    "fields": {
+      "iso2_code": "YT",
+      "name": "Mayotte",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 142,
+    "fields": {
+      "iso2_code": "MX",
+      "name": "M\u00e9xico",
+      "continent": "NA",
+      "order": 1
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 143,
+    "fields": {
+      "iso2_code": "FM",
+      "name": "Micronesia, Federated States of",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 144,
+    "fields": {
+      "iso2_code": "MD",
+      "name": "Republic of Moldova",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 145,
+    "fields": {
+      "iso2_code": "MC",
+      "name": "Monaco",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 146,
+    "fields": {
+      "iso2_code": "MN",
+      "name": "Mongolia",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 147,
+    "fields": {
+      "iso2_code": "ME",
+      "name": "Montenegro",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 148,
+    "fields": {
+      "iso2_code": "MS",
+      "name": "Montserrat",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 149,
+    "fields": {
+      "iso2_code": "MA",
+      "name": "Morocco",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 150,
+    "fields": {
+      "iso2_code": "MZ",
+      "name": "Mozambique",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 151,
+    "fields": {
+      "iso2_code": "MM",
+      "name": "Myanmar",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 152,
+    "fields": {
+      "iso2_code": "NA",
+      "name": "Namibia",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 153,
+    "fields": {
+      "iso2_code": "NR",
+      "name": "Nauru",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 154,
+    "fields": {
+      "iso2_code": "NP",
+      "name": "Nepal",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 155,
+    "fields": {
+      "iso2_code": "NL",
+      "name": "Netherlands",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 156,
+    "fields": {
+      "iso2_code": "AN",
+      "name": "Netherlands Antilles",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 157,
+    "fields": {
+      "iso2_code": "NC",
+      "name": "New Caledonia",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 158,
+    "fields": {
+      "iso2_code": "NZ",
+      "name": "New Zealand",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 159,
+    "fields": {
+      "iso2_code": "NI",
+      "name": "Nicaragua",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 160,
+    "fields": {
+      "iso2_code": "NE",
+      "name": "Niger",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 161,
+    "fields": {
+      "iso2_code": "NG",
+      "name": "Nigeria",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 162,
+    "fields": {
+      "iso2_code": "NU",
+      "name": "Niue",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 163,
+    "fields": {
+      "iso2_code": "NF",
+      "name": "Norfolk Island",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 164,
+    "fields": {
+      "iso2_code": "MP",
+      "name": "Northern Mariana Islands",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 165,
+    "fields": {
+      "iso2_code": "NO",
+      "name": "Norway",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 166,
+    "fields": {
+      "iso2_code": "OM",
+      "name": "Oman",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 167,
+    "fields": {
+      "iso2_code": "PK",
+      "name": "Pakistan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 168,
+    "fields": {
+      "iso2_code": "PW",
+      "name": "Palau",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 169,
+    "fields": {
+      "iso2_code": "PS",
+      "name": "Occupied Palestinian Territory",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 170,
+    "fields": {
+      "iso2_code": "PA",
+      "name": "Panama",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 171,
+    "fields": {
+      "iso2_code": "PG",
+      "name": "Papua New Guinea",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 172,
+    "fields": {
+      "iso2_code": "PY",
+      "name": "Paraguay",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 173,
+    "fields": {
+      "iso2_code": "PE",
+      "name": "Peru",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 174,
+    "fields": {
+      "iso2_code": "PH",
+      "name": "Philippines",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 175,
+    "fields": {
+      "iso2_code": "PN",
+      "name": "Pitcairn",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 176,
+    "fields": {
+      "iso2_code": "PL",
+      "name": "Poland",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 177,
+    "fields": {
+      "iso2_code": "PT",
+      "name": "Portugal",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 178,
+    "fields": {
+      "iso2_code": "PR",
+      "name": "Puerto Rico",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 179,
+    "fields": {
+      "iso2_code": "QA",
+      "name": "Qatar",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 180,
+    "fields": {
+      "iso2_code": "RE",
+      "name": "R\u00e9union",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 181,
+    "fields": {
+      "iso2_code": "RO",
+      "name": "Romania",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 182,
+    "fields": {
+      "iso2_code": "RU",
+      "name": "Russian Federation",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 183,
+    "fields": {
+      "iso2_code": "RW",
+      "name": "Rwanda",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 184,
+    "fields": {
+      "iso2_code": "SH",
+      "name": "Saint Helena",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 185,
+    "fields": {
+      "iso2_code": "KN",
+      "name": "Saint Kitts and Nevis",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 186,
+    "fields": {
+      "iso2_code": "LC",
+      "name": "Saint Lucia",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 187,
+    "fields": {
+      "iso2_code": "PM",
+      "name": "Saint Pierre and Miquelon",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 188,
+    "fields": {
+      "iso2_code": "VC",
+      "name": "Saint Vincent and the Grenadines",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 189,
+    "fields": {
+      "iso2_code": "WS",
+      "name": "Samoa",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 190,
+    "fields": {
+      "iso2_code": "SM",
+      "name": "San Marino",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 191,
+    "fields": {
+      "iso2_code": "ST",
+      "name": "Sao Tome and Principe",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 192,
+    "fields": {
+      "iso2_code": "SA",
+      "name": "Saudi Arabia",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 193,
+    "fields": {
+      "iso2_code": "SN",
+      "name": "Senegal",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 194,
+    "fields": {
+      "iso2_code": "RS",
+      "name": "Serbia",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 195,
+    "fields": {
+      "iso2_code": "SC",
+      "name": "Seychelles",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 196,
+    "fields": {
+      "iso2_code": "SL",
+      "name": "Sierra Leone",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 197,
+    "fields": {
+      "iso2_code": "SG",
+      "name": "Singapore",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 198,
+    "fields": {
+      "iso2_code": "SK",
+      "name": "Slovakia",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 199,
+    "fields": {
+      "iso2_code": "SI",
+      "name": "Slovenia",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 200,
+    "fields": {
+      "iso2_code": "SB",
+      "name": "Solomon Islands",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 201,
+    "fields": {
+      "iso2_code": "SO",
+      "name": "Somalia",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 202,
+    "fields": {
+      "iso2_code": "ZA",
+      "name": "South Africa",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 203,
+    "fields": {
+      "iso2_code": "GS",
+      "name": "South Georgia and the South Sandwich Islands",
+      "continent": "AN",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 204,
+    "fields": {
+      "iso2_code": "ES",
+      "name": "Spain",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 205,
+    "fields": {
+      "iso2_code": "LK",
+      "name": "Sri Lanka",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 206,
+    "fields": {
+      "iso2_code": "SD",
+      "name": "Sudan",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 207,
+    "fields": {
+      "iso2_code": "SR",
+      "name": "Suriname",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 208,
+    "fields": {
+      "iso2_code": "SJ",
+      "name": "Svalbard and Jan Mayen Islands",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 209,
+    "fields": {
+      "iso2_code": "SZ",
+      "name": "Swaziland",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 210,
+    "fields": {
+      "iso2_code": "SE",
+      "name": "Sweden",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 211,
+    "fields": {
+      "iso2_code": "CH",
+      "name": "Switzerland",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 212,
+    "fields": {
+      "iso2_code": "SY",
+      "name": "Syrian Arab Republic",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 213,
+    "fields": {
+      "iso2_code": "TW",
+      "name": "Taiwan, Province of China",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 214,
+    "fields": {
+      "iso2_code": "TJ",
+      "name": "Tajikistan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 215,
+    "fields": {
+      "iso2_code": "TZ",
+      "name": "United Republic of Tanzania",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 216,
+    "fields": {
+      "iso2_code": "TH",
+      "name": "Thailand",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 217,
+    "fields": {
+      "iso2_code": "TL",
+      "name": "Timor-Leste",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 218,
+    "fields": {
+      "iso2_code": "TG",
+      "name": "Togo",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 219,
+    "fields": {
+      "iso2_code": "TK",
+      "name": "Tokelau",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 220,
+    "fields": {
+      "iso2_code": "TO",
+      "name": "Tonga",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 221,
+    "fields": {
+      "iso2_code": "TT",
+      "name": "Trinidad and Tobago",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 222,
+    "fields": {
+      "iso2_code": "TN",
+      "name": "Tunisia",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 223,
+    "fields": {
+      "iso2_code": "TR",
+      "name": "Turkey",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 224,
+    "fields": {
+      "iso2_code": "TM",
+      "name": "Turkmenistan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 225,
+    "fields": {
+      "iso2_code": "TC",
+      "name": "Turks and Caicos Islands",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 226,
+    "fields": {
+      "iso2_code": "TV",
+      "name": "Tuvalu",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 227,
+    "fields": {
+      "iso2_code": "UG",
+      "name": "Uganda",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 228,
+    "fields": {
+      "iso2_code": "UA",
+      "name": "Ukraine",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 229,
+    "fields": {
+      "iso2_code": "AE",
+      "name": "United Arab Emirates",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 230,
+    "fields": {
+      "iso2_code": "GB",
+      "name": "United Kingdom of Great Britain and Northern Ireland",
+      "continent": "EU",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 231,
+    "fields": {
+      "iso2_code": "US",
+      "name": "Estados Unidos de Am\u00e9rica",
+      "continent": "NA",
+      "order": 2
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 232,
+    "fields": {
+      "iso2_code": "UM",
+      "name": "United States Minor Outlying Islands",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 233,
+    "fields": {
+      "iso2_code": "UY",
+      "name": "Uruguay",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 234,
+    "fields": {
+      "iso2_code": "UZ",
+      "name": "Uzbekistan",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 235,
+    "fields": {
+      "iso2_code": "VU",
+      "name": "Vanuatu",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 236,
+    "fields": {
+      "iso2_code": "VE",
+      "name": "Venezuela (Bolivarian Republic of)",
+      "continent": "SA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 237,
+    "fields": {
+      "iso2_code": "VN",
+      "name": "Viet Nam",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 238,
+    "fields": {
+      "iso2_code": "VG",
+      "name": "British Virgin Islands",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 239,
+    "fields": {
+      "iso2_code": "VI",
+      "name": "United States Virgin Islands",
+      "continent": "NA",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 240,
+    "fields": {
+      "iso2_code": "WF",
+      "name": "Wallis and Futuna Islands",
+      "continent": "OC",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 241,
+    "fields": {
+      "iso2_code": "EH",
+      "name": "Western Sahara",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 242,
+    "fields": {
+      "iso2_code": "YE",
+      "name": "Yemen",
+      "continent": "AS",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 243,
+    "fields": {
+      "iso2_code": "ZM",
+      "name": "Zambia",
+      "continent": "AF",
+      "order": 1000
+    }
+  },
+  {
+    "model": "common.country",
+    "pk": 244,
+    "fields": {
+      "iso2_code": "ZW",
+      "name": "Zimbabwe",
+      "continent": "AF",
+      "order": 1000
+    }
+  }
+]

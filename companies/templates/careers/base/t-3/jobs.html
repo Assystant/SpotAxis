@@ -1,0 +1,158 @@
+<div class="listing-container row flex-row root">
+{% load TRM_tags %}
+<div class="listing-container job-container">
+	{% if company.company_functions %}
+		<div class="listing-column">
+			{% for function in company.company_functions %}
+				{% if forloop.counter|mod:4 == 1 %}
+					<div class="listing">
+						<h4 class="-text-light toggler">{{function|title}} <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+						<ul>
+							{% for vacancy in vacancies %}
+								{% if vacancy.function == function %}
+									<li><i class="fa fa-suitcase fa-fw -text-light"></i> <a href="{% url 'vacancies_get_vacancy_details' vacancy.id %}" class="-text-light">{{vacancy.employment|title}}</a></li>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+		<div class="listing-column">
+			{% for function in company.company_functions %}
+				{% if forloop.counter|mod:4 == 2 %}
+					<div class="listing">
+						<h4 class="-text-light toggler">{{function|title}} <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+						<ul>
+							{% for vacancy in vacancies %}
+								{% if vacancy.function == function %}
+									<li><i class="fa fa-suitcase fa-fw -text-light"></i> <a href="{% url 'vacancies_get_vacancy_details' vacancy.id %}" class="-text-light">{{vacancy.employment|title}}</a></li>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+		<div class="listing-column">
+			{% for function in company.company_functions %}
+				{% if forloop.counter|mod:4 == 3 %}
+					<div class="listing">
+						<h4 class="-text-light toggler">{{function|title}} <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+						<ul>
+							{% for vacancy in vacancies %}
+								{% if vacancy.function == function %}
+									<li><i class="fa fa-suitcase fa-fw -text-light"></i> <a href="{% url 'vacancies_get_vacancy_details' vacancy.id %}" class="-text-light">{{vacancy.employment|title}}</a></li>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+		<div class="listing-column">
+			{% for function in company.company_functions %}
+				{% if forloop.counter|mod:4 == 0 %}
+					<div class="listing">
+						<h4 class="-text-light toggler">{{function|title}} <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+						<ul>
+							{% for vacancy in vacancies %}
+								{% if vacancy.function == function %}
+									<li><i class="fa fa-suitcase fa-fw -text-light"></i> <a href="{% url 'vacancies_get_vacancy_details' vacancy.id %}" class="-text-light">{{vacancy.employment|title}}</a></li>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	{% endif %}
+	{% if not vacancies %}
+		{% if isPreview or editing %}
+			<div class="listing-column">
+				<div class="listing">
+					<h4 class="-text-light toggler">Management <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+					<ul>
+						<li>CEO</li>
+						<li>Execute Assistant</li>
+						<li>Marketing Assistant</li>
+					</ul>
+				</div>
+
+				<div class="listing">
+					<h4 class="-text-light toggler">Management <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+					<ul>
+						<li>CEO</li>
+						<li>Execute Assistant</li>
+						<li>Marketing Assistant</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="listing-column">
+				<div class="listing">
+					<h4 class="-text-light toggler">Management <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+					<ul>
+						<li>CEO</li>
+						<li>Execute Assistant</li>
+						<li>Marketing Assistant</li>
+					</ul>
+				</div>
+
+				<div class="listing">
+					<h4 class="-text-light toggler">Management <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+					<ul>
+						<li>CEO</li>
+						<li>Execute Assistant</li>
+						<li>Marketing Assistant</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="listing-column">
+				<div class="listing">
+					<h4 class="-text-light toggler">Management <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+					<ul>
+						<li>CEO</li>
+						<li>Execute Assistant</li>
+						<li>Marketing Assistant</li>
+					</ul>
+				</div>
+
+				<div class="listing">
+					<h4 class="-text-light toggler">Management <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+					<ul>
+						<li>CEO</li>
+						<li>Execute Assistant</li>
+						<li>Marketing Assistant</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="listing-column">
+				<div class="listing">
+					<h4 class="-text-light toggler">Management site site a <i class="fa fa-minus-square-o -text-light pull-right" aria-hidden="true"></i></h4>
+					<ul>
+						<li>CEO</li>
+						<li>Execute Assistant</li>
+						<li>Marketing Assistant</li>
+					</ul>
+				</div>
+
+				<div class="listing">
+					<h4 class="-text-light toggler">Management <i class="fa fa-minus-square-o -text-light" aria-hidden="true"></i></h4>
+					<ul>
+						<li>CEO</li>
+						<li>Execute Assistant</li>
+						<li>Marketing Assistant</li>
+					</ul>
+				</div>
+			</div>
+		{% else %}
+			<p class="empty-container">No current job openings. Check back later.</p>
+		{% endif %}
+	{% endif %}
+	<div class="clearfix"></div>
+
+</div>
+</div>

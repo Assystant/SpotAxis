@@ -1,0 +1,50 @@
+[
+  {
+    "model": "candidates.academic_area",
+    "pk": 1,
+    "fields": {
+      "name": "Art Architecture and Design",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 2,
+    "fields": {
+      "name": "Science Economic Administrative",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 3,
+    "fields": {
+      "name": "Health Sciences",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 4,
+    "fields": {
+      "name": "Exact Sciences and Engineering",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 5,
+    "fields": {
+      "name": "Biological Sciences and Agriculture",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 6,
+    "fields": {
+      "name": "Social Sciences and Humanities",
+      "order": 100
+    }
+  }
+]

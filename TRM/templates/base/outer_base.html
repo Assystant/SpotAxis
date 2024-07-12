@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+    <!-- Begin Head -->
+    <head>
+        <!-- Basic -->
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        
+        <title>{% block title %}SpotAxis-Recruitment Process Automation{% endblock %}</title>
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="{{request.scheme}}://{{request.get_host}}{{STATIC_URL}}img/logo/logo_square_200x200.png" />
+        
+        {% block meta %}
+            <meta name="keywords" content="SpotAxis, Management, Applicant Tracking System, Talent Sourcing, Career Site Management, Recruitment, Talent Relationship Management, Talent Management Solution, Collaborative Hiring, Talent Acquisition, Head Hunting, Job, Career, Resume Builder, Job Portal, Job Board, Job Search, Recruitment, Recruitment Solution, HR Tech, Application Tracking System, Recruitment Process Automation, Candidate Management" />
+            <meta name="description" content="A recruitment solution to collaborate with colleagues, manage career site, post jobs, attract talents, organise hiring process and take data driven decisions.">
+        {% endblock %}
+
+        <!-- Web Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i|Montserrat:400,700" rel="stylesheet">
+
+        <!-- Vendor Styles -->
+        <link href="{{ STATIC_URL }}newtheme/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="{{STATIC_URL}}font-awesome-4.7.0/css/font-awesome.min.css">
+        <link href="{{ STATIC_URL }}newtheme/css/animate.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ STATIC_URL }}newtheme/vendor/themify/themify.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ STATIC_URL }}newtheme/vendor/scrollbar/scrollbar.min.css" rel="stylesheet" type="text/css"/> 
+        <link href="{{ STATIC_URL }}newtheme/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ STATIC_URL }}newtheme/vendor/swiper/swiper.min.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ STATIC_URL }}newtheme/vendor/cubeportfolio/css/cubeportfolio.min.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="{{STATIC_URL}}AmaranJS/dist/css/amaran.min.css">
+        <!-- Theme Styles -->
+        <link href="{{ STATIC_URL }}newtheme/css/style.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ STATIC_URL }}newtheme/css/global/global.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ STATIC_URL }}newtheme/css/sugarcoat.css" rel="stylesheet" type="text/css"/>
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{{STATIC_URL}}img/logo/favicon.png" type="image/x-icon">
+        <link rel="apple-touch-icon" href="{{STATIC_URL}}img/logo/favicon.png">
+        {% block css %}
+        {% endblock %}
+    </head>
+    <!-- End Head -->
+
+    <!-- Body -->
+    <body>
+        {% if not no_header %}
+            {% include 'base/new_header.html' %}
+        {% endif %}
+        {% if messages %}
+            <div class="mt10 mb10 hidden">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        <h6>
+                            {{ message|safe}}
+                        </h6>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+        {% if not no_footer %}
+            {% include 'base/new_footer.html' %}
+        {% endif %}
+
+        <!-- Back To Top -->
+        <a href="javascript:void(0);" class="s-back-to-top js__back-to-top"></a>
+
+        <!--========== JAVASCRIPTS (Load javascripts at bottom, this will reduce page load time) ==========-->
+        <!-- Vendor -->
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/jquery.migrate.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/jquery.smooth-scroll.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/jquery.back-to-top.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/scrollbar/jquery.scrollbar.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/jquery.parallax.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/swiper/swiper.jquery.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/jquery.wow.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/vendor/vidbg.min.js"></script>
+
+        <!-- General Components and Settings -->
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/js/global.min.js"></script>
+        {% if not no_header %}
+            <script type="text/javascript" src="{{ STATIC_URL }}newtheme/js/components/header-sticky.min.js"></script>
+        {% endif %}
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/js/components/scrollbar.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/js/components/magnific-popup.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/js/components/swiper.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}newtheme/js/components/wow.min.js"></script>
+        <script src="{{STATIC_URL}}AmaranJS/dist/js/jquery.amaran.min.js"></script>
+        <script src="{{STATIC_URL}}js/initial.js"></script>
+        
+        {% block java_script_srcs %}{# JavaScript Sources #}{% endblock %}
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create','UA-84854653-1','auto');
+            ga('send','pageview');
+        </script>
+        <script>
+            function alert(msg, color="#aaa", bgcolor="#fff", time=10000){
+                $.amaran({
+                    'position': 'bottom right',
+                    'theme': 'colorful',
+                    'content': {
+                        bgcolor: bgcolor,
+                        color: color,
+                        message: msg
+                    },
+                    // 'sticky': true,
+                    'delay': time,
+                    'cssanimationIn': 'bounceInUp',
+                    'cssanimationOut': 'bounceOutRight',
+                    'reset Timeout': true
+                });
+            }
+            $(document).ready(function(){
+                $('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                $('.alert').addClass('hidden');
+                $('.alert').each(function(){
+                    alert($(this).html())
+                });
+                $('.alert').remove();
+                $('.paid-section').click(function(){
+                    $('#upgradeModal').modal('show');
+                })
+                $('#upgradeModal form').submit(function(e){
+                    e.preventDefault();
+                    $this = $(this);
+                    $this.find('.btn-info').html('<i class="fa fa-spinner fa-pulse"></i> Please Wait').prop('disabled',true).addClass('disabled');
+                    $.ajax({
+                        data:{
+                            'phone': $this.find('input').val() 
+                        },
+                        type:"post",
+                        url: "{% url 'pricing_request' %}",
+                        complete: function(){
+                            $this.find('.btn-info').html('Send').prop('disabled',false).removeClass('disabled');
+                        },
+                        success: function(data){
+                            if (data.success){
+                                alert(data.msg)
+                            }
+                            else {
+                                alert('Failed to send request. Please try again later.')
+                            }
+                        }
+                    })
+                })
+                $('a[href*=#]:not([href=#]):not([href*=js__scroll-to-])').on('click', function() {
+                    if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                      var target = $(this.hash);
+                      target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                      smoothScroll(target);
+                    }
+                });
+                path = location.href.split('#');
+                if(path.length > 1){
+                    smoothScroll($('#' + path[1]))
+                }
+            });
+            function smoothScroll(target){
+                if (target.length) {
+                    $('html,body').animate({
+                      scrollTop: target.offset().top - 90
+                    }, 1000);
+                    return false;
+                }
+            }
+        </script>
+        <script>
+            !function() {
+              var t;
+              if (t = window.driftt = window.drift = window.driftt || [], !t.init) return t.invoked ? void (window.console && console.error && console.error("Drift snippet included twice.")) : (t.invoked = !0, 
+              t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
+              t.factory = function(e) {
+                return function() {
+                  var n;
+                  return n = Array.prototype.slice.call(arguments), n.unshift(e), t.push(n), t;
+                };
+              }, t.methods.forEach(function(e) {
+                t[e] = t.factory(e);
+              }), t.load = function(t) {
+                var e, n, o, i;
+                e = 3e5, i = Math.ceil(new Date() / e) * e, o = document.createElement("script"), 
+                o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + i + "/" + t + ".js", 
+                n = document.getElementsByTagName("script")[0], n.parentNode.insertBefore(o, n);
+              });
+            }();
+            drift.SNIPPET_VERSION = '0.3.1';
+            drift.load('w46fdsn3rd67');
+        </script>
+        <!-- start Mixpanel -->
+        <!--script type="text/javascript">
+            (function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+            0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+            for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+            mixpanel.init("0eab9a3d2e4a0c4e7bdcc32ef4787494");
+        </script-->
+        <!-- end Mixpanel -->
+        {% block java_script_code %}{# JavaScript Code #}{% endblock %}
+        <!--========== END JAVASCRIPTS ==========-->
+
+    </body>
+    <!-- End Body -->
+</html>

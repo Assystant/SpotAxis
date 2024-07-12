@@ -1,0 +1,196 @@
+<input type="hidden" name="old_cards" value="{{old_cards}}">
+{% if card_type == 1 or card_type == '1' %}
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.course_name.values|length > 1 %}hidden{% endif %} academic-field-coursename">
+    	<h4>Course Name</h4>
+        {% for value in data.course_name.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="course_name" id="course_name-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="course_name-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="course_name" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.degree.values|length > 1 %}hidden{% endif %} academic-field-degree">
+    	<h4>Degree</h4>
+        {% for value in data.degree.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="degree" id="degree-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="degree-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="degree" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.area.values|length > 1 %}hidden{% endif %} academic-field-area">
+    	<h4>Area of Specialisation</h4>
+        {% for value in data.area.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="area" id="area-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="area-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="area" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.school.values|length > 1 %}hidden{% endif %} academic-field-school">
+    	<h4>School</h4>
+        {% for value in data.school.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="school" id="school-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="school-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="school" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.country.values|length > 1 %}hidden{% endif %} academic-field-country">
+    	<h4>Country</h4>
+        {% for value in data.country.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="country" id="country-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="country-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="country" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.state.values|length > 1 %}hidden{% endif %} academic-field-state">
+    	<h4>State</h4>
+        {% for value in data.state.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="state" id="state-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="state-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="state" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.city.values|length > 1 %}hidden{% endif %} academic-field-city">
+    	<h4>City</h4>
+        {% for value in data.city.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="city" id="city-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="city-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="city" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.status.values|length > 1 %}hidden{% endif %} academic-field-status">
+    	<h4>Status</h4>
+        {% for value in data.status.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="status" id="status-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="status-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="status" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.start_date.values|length > 1 %}hidden{% endif %} academic-field-startdate">
+    	<h4>Start Date</h4>
+        {% for value in data.start_date.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="start_date" id="start_date-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="start_date-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="start_date" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.end_date.values|length > 1 %}hidden{% endif %} academic-field-enddate">
+    	<h4>End Date</h4>
+        {% for value in data.end_date.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="end_date" id="end_date-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="end_date-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="end_date" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+{% elif card_type == 2 or card_type == '2' %}
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.employment.values|length > 1 %}hidden{% endif %} expertise-field-employment">
+        <h4>Job Role</h4>
+        {% for value in data.employment.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="employment" id="employment-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="employment-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="employment" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.company.values|length > 1 %}hidden{% endif %} expertise-field-company">
+        <h4>Company</h4>
+        {% for value in data.company.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="company" id="company-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="company-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="company" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.industry.values|length > 1 %}hidden{% endif %} expertise-field-industry">
+        <h4>Industry</h4>
+        {% for value in data.industry.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="industry" id="industry-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="industry-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="industry" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.start_date.values|length > 1 %}hidden{% endif %} expertise-field-startdate">
+        <h4>Start Date</h4>
+        {% for value in data.start_date.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="start_date" id="start_date-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="start_date-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="start_date" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.end_date.values|length > 1 %}hidden{% endif %} expertise-field-enddate">
+        <h4>End Date</h4>
+        {% for value in data.end_date.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="end_date" id="end_date-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="end_date-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="end_date" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb10 border-bottom border-light col-xs-12 col-sm-10 col-sm-offset-1 {% if not data.tasks.values|length > 1 %}hidden{% endif %} expertise-field-tasks">
+        <h4>Tasks</h4>
+        {% for value in data.tasks.values %}
+            <div class="radio radio-info">
+                <input type="radio" name="tasks" id="tasks-{{forloop.counter}}" value="{{value}}" {% if forloop.first %}checked{% endif %}><label for="tasks-{{forloop.counter}}">{{value}}</label>
+            </div>
+        {% empty %}
+            <div class="radio radio-info">
+                <input type="radio" name="tasks" value="" checked>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

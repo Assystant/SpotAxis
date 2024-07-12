@@ -1,0 +1,35 @@
+<div class="horizontal-timeline three-steps">
+    <div class="steps {% if page == 1 %}active{% endif %}">
+        <a class="step-badge" {% if vacancy_id %}href="{% url 'companies_add_update_vacancy' vacancy_id %}"{% endif %}>
+            <h1>1</h1>
+        </a>
+        <div class="step-header">
+            <h3>Job Details</h3>
+        </div>
+        <div class="step-description">
+            <p></p>
+        </div>
+    </div>
+    <div class="steps {% if page == 1 %}inactive{% elif page == 2 %}active{% endif %}">
+        <a class="step-badge" {% if vacancy_id %}href="{% url 'companies_add_update_vacancy_hiring_process' vacancy_id %}"{% endif %}>
+            <h1>2</h1>
+        </a>
+        <div class="step-header">
+            <h3>Hiring Process</h3>
+        </div>
+        <div class="step-description">
+            <p></p>
+        </div>
+    </div>
+    <div class="steps {% if page == 1 or page == 2 %}inactive{% elif page == 3 %}active{% endif %}">
+        <a class="step-badge" {% if vacancy_id %}href="{% url 'companies_add_update_vacancy_talent_sourcing' vacancy_id %}"{% endif %}>
+            <h1>3</h1>
+        </a>
+        <div class="step-header">
+            <h3>Talent Sourcing</h3>
+        </div>
+        <div class="step-description">
+            <p></p>
+        </div>
+    </div>
+</div>

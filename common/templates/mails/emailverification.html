@@ -1,0 +1,10 @@
+{% extends 'mails/base_email.html' %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Change Email{% endblock %}
+
+{% block content %}
+    {% trans 'Click on the following link to confirm your email change.' %}
+{% endblock %}
+
+{% block button-text %}{% trans 'Change my E-mail' %}{% endblock %}

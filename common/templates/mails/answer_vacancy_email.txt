@@ -1,0 +1,11 @@
+{% extends 'mails/base_email.txt' %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% block title %}They answered your question on Job {{ question.vacancy.employment }}{% endblock %}
+
+{% block content %}{{ question.question }}
+    {{ question.answer }}
+{% endblock %}
+
+{% block button-text %}{% trans 'See Job' %}{% endblock %}

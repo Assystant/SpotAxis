@@ -1,0 +1,2378 @@
+[
+  {
+    "model": "common.area",
+    "pk": 1,
+    "fields": {
+      "name": "Office Administration",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 2,
+    "fields": {
+      "name": "Risk Management",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 3,
+    "fields": {
+      "name": "Insurance Administration and Finance",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 4,
+    "fields": {
+      "name": "General Administration",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 5,
+    "fields": {
+      "name": "Archivist and Document Management",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 6,
+    "fields": {
+      "name": "Administrative Assistant",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 7,
+    "fields": {
+      "name": "General Assistant",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 8,
+    "fields": {
+      "name": "Purchases",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 9,
+    "fields": {
+      "name": "Credit and Collections",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 10,
+    "fields": {
+      "name": "Address",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 11,
+    "fields": {
+      "name": "Directorate General",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 12,
+    "fields": {
+      "name": "Economy",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 13,
+    "fields": {
+      "name": "Strategic Planning",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 14,
+    "fields": {
+      "name": "Financial PLanning",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 15,
+    "fields": {
+      "name": "Receptionist Operator",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 16,
+    "fields": {
+      "name": "Industrial Relations",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 17,
+    "fields": {
+      "name": "Secretary",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 18,
+    "fields": {
+      "name": "Service",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 19,
+    "fields": {
+      "name": "Trading",
+      "industry": 1
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 20,
+    "fields": {
+      "name": "An\u00e1lisis Geol\u00f3gico y del Medio Ambiente",
+      "industry": 2
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 21,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 2
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 22,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 2
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 23,
+    "fields": {
+      "name": "Investigaci\u00f3n biol\u00f3gica",
+      "industry": 2
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 24,
+    "fields": {
+      "name": "Investigaci\u00f3n qu\u00edmica",
+      "industry": 2
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 25,
+    "fields": {
+      "name": "Investigaci\u00f3n y Desarrollo",
+      "industry": 2
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 26,
+    "fields": {
+      "name": "Qu\u00edmica y bioqu\u00edmica",
+      "industry": 2
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 27,
+    "fields": {
+      "name": "Comunicaci\u00f3n e Imagen",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 28,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 29,
+    "fields": {
+      "name": "Direcci\u00f3n de Arte",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 30,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 31,
+    "fields": {
+      "name": "Dise\u00f1ador Gr\u00e1fico",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 32,
+    "fields": {
+      "name": "Editor",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 33,
+    "fields": {
+      "name": "Periodismo",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 34,
+    "fields": {
+      "name": "Productor Audiovisual",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 35,
+    "fields": {
+      "name": "Productor Gr\u00e1fico",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 36,
+    "fields": {
+      "name": "Redactor",
+      "industry": 3
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 37,
+    "fields": {
+      "name": "Administraci\u00f3n de Obra",
+      "industry": 4
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 38,
+    "fields": {
+      "name": "Direcci\u00f3n de Obra",
+      "industry": 4
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 39,
+    "fields": {
+      "name": "Dise\u00f1o Arquitect\u00f3nico y Estructural",
+      "industry": 4
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 40,
+    "fields": {
+      "name": "Dise\u00f1o de Interiores",
+      "industry": 4
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 41,
+    "fields": {
+      "name": "Especialista en Urbanismo",
+      "industry": 4
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 42,
+    "fields": {
+      "name": "Oficios Calificados (electricista, herrero, plomero, pintor, etc.)",
+      "industry": 4
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 43,
+    "fields": {
+      "name": "Operador de Equipo Pesado",
+      "industry": 4
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 44,
+    "fields": {
+      "name": "Superintendente de Obra",
+      "industry": 4
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 45,
+    "fields": {
+      "name": "Supervisor Instalaciones e Infraestructura",
+      "industry": 4
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 46,
+    "fields": {
+      "name": "Administraci\u00f3n de Inmuebles y Activos Fijos",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 47,
+    "fields": {
+      "name": "An\u00e1lisis Actuarial",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 48,
+    "fields": {
+      "name": "An\u00e1lisis Financiero / Pron\u00f3sticos",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 49,
+    "fields": {
+      "name": "Auditor\u00eda",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 50,
+    "fields": {
+      "name": "Auxiliar Contable",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 51,
+    "fields": {
+      "name": "Banca",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 52,
+    "fields": {
+      "name": "Contabilidad / Finanzas / Sector Financiero",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 53,
+    "fields": {
+      "name": "Contabilidad de Costos / Inventarios",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 54,
+    "fields": {
+      "name": "Contabilidad General",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 55,
+    "fields": {
+      "name": "Contralor\u00eda",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 56,
+    "fields": {
+      "name": "Cr\u00e9dito y Cobranzas",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 57,
+    "fields": {
+      "name": "Cuentas por Pagar",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 58,
+    "fields": {
+      "name": "Facturaci\u00f3n",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 59,
+    "fields": {
+      "name": "Finanzas Corporativas",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 60,
+    "fields": {
+      "name": "Fusiones y Adquisiciones",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 61,
+    "fields": {
+      "name": "Impuestos",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 62,
+    "fields": {
+      "name": "Mercado de Cambios",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 63,
+    "fields": {
+      "name": "Mercados Financieros / Inversiones",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 64,
+    "fields": {
+      "name": "Tesorer\u00eda y Bancos",
+      "industry": 5
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 65,
+    "fields": {
+      "name": "Animaci\u00f3n por Computadora",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 66,
+    "fields": {
+      "name": "Arquitectura y Dise\u00f1o de Interiores",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 67,
+    "fields": {
+      "name": "Artes Creativas",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 68,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 69,
+    "fields": {
+      "name": "Direcci\u00f3n Creativo",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 70,
+    "fields": {
+      "name": "Direcci\u00f3n de Arte",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 71,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 72,
+    "fields": {
+      "name": "Dise\u00f1ador Gr\u00e1fico",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 73,
+    "fields": {
+      "name": "Dise\u00f1ador Industrial",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 74,
+    "fields": {
+      "name": "Dise\u00f1adores Web y/o Digitales",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 75,
+    "fields": {
+      "name": "Editor",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 76,
+    "fields": {
+      "name": "Escen\u00f3grafo",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 77,
+    "fields": {
+      "name": "Fot\u00f3grafo",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 78,
+    "fields": {
+      "name": "Ilustrador",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 79,
+    "fields": {
+      "name": "M\u00fasico",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 80,
+    "fields": {
+      "name": "Productor Audiovisual",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 81,
+    "fields": {
+      "name": "Productor Gr\u00e1fico",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 82,
+    "fields": {
+      "name": "Redactor",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 83,
+    "fields": {
+      "name": "Traducci\u00f3n",
+      "industry": 6
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 84,
+    "fields": {
+      "name": "Derecho Civil",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 85,
+    "fields": {
+      "name": "Derecho Corporativo",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 86,
+    "fields": {
+      "name": "Derecho Fiscal",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 87,
+    "fields": {
+      "name": "Derecho Laboral",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 88,
+    "fields": {
+      "name": "Derecho Mercantil",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 89,
+    "fields": {
+      "name": "Derecho Notarial",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 90,
+    "fields": {
+      "name": "Derecho Penal",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 91,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 92,
+    "fields": {
+      "name": "Jur\u00eddico",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 93,
+    "fields": {
+      "name": "Leyes/Derecho",
+      "industry": 7
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 94,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 95,
+    "fields": {
+      "name": "Educaci\u00f3n Especial",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 96,
+    "fields": {
+      "name": "Educador",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 97,
+    "fields": {
+      "name": "Gesti\u00f3n y Administraci\u00f3n",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 98,
+    "fields": {
+      "name": "Idiomas",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 99,
+    "fields": {
+      "name": "Profesor Bachillerato o Preparatoria",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 100,
+    "fields": {
+      "name": "Profesor de Educaci\u00f3n F\u00edsica",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 101,
+    "fields": {
+      "name": "Profesor Primaria",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 102,
+    "fields": {
+      "name": "Profesor Secundaria",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 103,
+    "fields": {
+      "name": "Profesor Universitario",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 104,
+    "fields": {
+      "name": "Psicopedagogo",
+      "industry": 8
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 105,
+    "fields": {
+      "name": "Agronom\u00eda",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 106,
+    "fields": {
+      "name": "Alimentos",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 107,
+    "fields": {
+      "name": "An\u00e1lisis de Elementos Finitos",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 108,
+    "fields": {
+      "name": "Automatizaci\u00f3n",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 109,
+    "fields": {
+      "name": "Consultor en Ingenier\u00eda",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 110,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 111,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 112,
+    "fields": {
+      "name": "Dise\u00f1o Mec\u00e1nico",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 113,
+    "fields": {
+      "name": "Ingenier\u00eda Aeron\u00e1utica",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 114,
+    "fields": {
+      "name": "Ingenier\u00eda Agr\u00f3noma",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 115,
+    "fields": {
+      "name": "Ingenier\u00eda Automotriz",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 116,
+    "fields": {
+      "name": "Ingenier\u00eda Civil",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 117,
+    "fields": {
+      "name": "Ingenier\u00eda de Mantenimiento",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 118,
+    "fields": {
+      "name": "Ingenier\u00eda de Materiales",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 119,
+    "fields": {
+      "name": "Ingenier\u00eda de Materiales / Fundici\u00f3n",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 120,
+    "fields": {
+      "name": "Ingenier\u00eda de Materiales / Metalurgia",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 121,
+    "fields": {
+      "name": "Ingenier\u00eda de Procesos",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 122,
+    "fields": {
+      "name": "Ingenier\u00eda de Producci\u00f3n y Manufactura",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 123,
+    "fields": {
+      "name": "Ingenier\u00eda El\u00e9ctrica",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 124,
+    "fields": {
+      "name": "Ingenier\u00eda Electromec\u00e1nica",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 125,
+    "fields": {
+      "name": "Ingenier\u00eda Electr\u00f3nica",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 126,
+    "fields": {
+      "name": "Ingenier\u00eda en Alimentos",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 127,
+    "fields": {
+      "name": "Ingenier\u00eda en General",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 128,
+    "fields": {
+      "name": "Ingenier\u00eda Industrial",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 129,
+    "fields": {
+      "name": "Ingenier\u00eda Mec\u00e1nica",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 130,
+    "fields": {
+      "name": "Ingenier\u00eda Qu\u00edmica",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 131,
+    "fields": {
+      "name": "Ingenier\u00eda Textil",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 132,
+    "fields": {
+      "name": "Investigaci\u00f3n y Desarrollo",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 133,
+    "fields": {
+      "name": "M\u00e1quinas y Herramientas",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 134,
+    "fields": {
+      "name": "Mec\u00e1nico de Motores y Planeadores",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 135,
+    "fields": {
+      "name": "Mec\u00e1nico de Reparaciones Estructurales",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 136,
+    "fields": {
+      "name": "Mejora Continua",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 137,
+    "fields": {
+      "name": "Rob\u00f3tica",
+      "industry": 9
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 138,
+    "fields": {
+      "name": "Abastecimientos",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 139,
+    "fields": {
+      "name": "Aduanas",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 140,
+    "fields": {
+      "name": "Almac\u00e9n, Inventarios",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 141,
+    "fields": {
+      "name": "Chofer, montacargas",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 142,
+    "fields": {
+      "name": "Comercio Exterior, Importaciones/Exportaciones",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 143,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 144,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 145,
+    "fields": {
+      "name": "Embarque y distribuci\u00f3n Log\u00edstica",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 146,
+    "fields": {
+      "name": "Embarque y distribuci\u00f3n Log\u00edstica / Distribuci\u00f3n",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 147,
+    "fields": {
+      "name": "Embarque y distribuci\u00f3n Log\u00edstica / Tr\u00e1fico",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 148,
+    "fields": {
+      "name": "Mensajer\u00eda",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 149,
+    "fields": {
+      "name": "Transporte y Carga",
+      "industry": 10
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 150,
+    "fields": {
+      "name": "Administraci\u00f3n de la Planta Productiva",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 151,
+    "fields": {
+      "name": "Control de Calidad",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 152,
+    "fields": {
+      "name": "Control de Materiales",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 153,
+    "fields": {
+      "name": "Control de Producci\u00f3n",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 154,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 155,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 156,
+    "fields": {
+      "name": "Ingenier\u00eda de Planta",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 157,
+    "fields": {
+      "name": "Investigaci\u00f3n y Desarrollo",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 158,
+    "fields": {
+      "name": "Mantenimiento",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 159,
+    "fields": {
+      "name": "Mantenimiento El\u00e9ctrico",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 160,
+    "fields": {
+      "name": "Mantenimiento Electr\u00f3nico",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 161,
+    "fields": {
+      "name": "Mantenimiento Mec\u00e1nico",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 162,
+    "fields": {
+      "name": "Manufactura",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 163,
+    "fields": {
+      "name": "Operaciones",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 164,
+    "fields": {
+      "name": "Prosec",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 165,
+    "fields": {
+      "name": "Supervisor de Piso",
+      "industry": 11
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 166,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 167,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 168,
+    "fields": {
+      "name": "Gerencia de Mercadotecnia",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 169,
+    "fields": {
+      "name": "Gerencia de Producci\u00f3n",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 170,
+    "fields": {
+      "name": "Gerencia de Producto",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 171,
+    "fields": {
+      "name": "Investigaci\u00f3n y An\u00e1lisis de Mercado",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 172,
+    "fields": {
+      "name": "Mercadotecnia de Eventos",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 173,
+    "fields": {
+      "name": "Mercadotecnia Directa",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 174,
+    "fields": {
+      "name": "Mercadotecnia y Publicidad",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 175,
+    "fields": {
+      "name": "Planeaci\u00f3n de Medios",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 176,
+    "fields": {
+      "name": "Producci\u00f3n Audiovisual y Digital",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 177,
+    "fields": {
+      "name": "Publicidad",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 178,
+    "fields": {
+      "name": "Relaciones Internacionales",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 179,
+    "fields": {
+      "name": "Relaciones P\u00fablicas",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 180,
+    "fields": {
+      "name": "Soporte de Ventas",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 181,
+    "fields": {
+      "name": "Telemarketing",
+      "industry": 12
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 182,
+    "fields": {
+      "name": "Administraci\u00f3n de Personal",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 183,
+    "fields": {
+      "name": "Capacitaci\u00f3n y Desarrollo",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 184,
+    "fields": {
+      "name": "Compensaciones y Beneficios",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 185,
+    "fields": {
+      "name": "Consultor\u00eda en Recursos Humanos",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 186,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 187,
+    "fields": {
+      "name": "N\u00f3mina",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 188,
+    "fields": {
+      "name": "Reclutamiento y Selecci\u00f3n de Personal",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 189,
+    "fields": {
+      "name": "Recursos Humanos",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 190,
+    "fields": {
+      "name": "Relaciones Laborales",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 191,
+    "fields": {
+      "name": "Seguridad",
+      "industry": 13
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 192,
+    "fields": {
+      "name": "Estilista",
+      "industry": 14
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 193,
+    "fields": {
+      "name": "Instructor Deportivo",
+      "industry": 14
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 194,
+    "fields": {
+      "name": "Manicurista",
+      "industry": 14
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 195,
+    "fields": {
+      "name": "Masajista",
+      "industry": 14
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 196,
+    "fields": {
+      "name": "Pedicurista",
+      "industry": 14
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 197,
+    "fields": {
+      "name": "Spa",
+      "industry": 14
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 198,
+    "fields": {
+      "name": "Terapeuta",
+      "industry": 14
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 199,
+    "fields": {
+      "name": "Dentista",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 200,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 201,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 202,
+    "fields": {
+      "name": "Ecolog\u00eda",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 203,
+    "fields": {
+      "name": "Enfermer\u00eda",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 204,
+    "fields": {
+      "name": "Farmac\u00e9utica",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 205,
+    "fields": {
+      "name": "Laboratorio/Patolog\u00eda",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 206,
+    "fields": {
+      "name": "Medicina",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 207,
+    "fields": {
+      "name": "Medicina del Deporte",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 208,
+    "fields": {
+      "name": "Nutrici\u00f3n",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 209,
+    "fields": {
+      "name": "Oftalmolog\u00eda",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 210,
+    "fields": {
+      "name": "Rehabilitaci\u00f3n",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 211,
+    "fields": {
+      "name": "Veterinaria",
+      "industry": 15
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 212,
+    "fields": {
+      "name": "Actuar\u00eda",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 213,
+    "fields": {
+      "name": "Auditor\u00eda Interna",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 214,
+    "fields": {
+      "name": "Compliance",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 215,
+    "fields": {
+      "name": "Contabilidad de Reaseguro",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 216,
+    "fields": {
+      "name": "Contratos / Reaseguro",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 217,
+    "fields": {
+      "name": "Corredor de Seguros y Reaseguros",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 218,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 219,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 220,
+    "fields": {
+      "name": "Emisi\u00f3n Seguros",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 221,
+    "fields": {
+      "name": "Facultativo / Reaseguro",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 222,
+    "fields": {
+      "name": "Fiscal",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 223,
+    "fields": {
+      "name": "Legal",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 224,
+    "fields": {
+      "name": "Siniestros / Reaseguro",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 225,
+    "fields": {
+      "name": "Siniestros / Seguros",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 226,
+    "fields": {
+      "name": "Suscripci\u00f3n / Seguros",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 227,
+    "fields": {
+      "name": "T\u00e9cnico / Reaseguro",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 228,
+    "fields": {
+      "name": "T\u00e9cnico / Seguros",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 229,
+    "fields": {
+      "name": "Ventas",
+      "industry": 16
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 230,
+    "fields": {
+      "name": "Administraci\u00f3n de bases de datos",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 231,
+    "fields": {
+      "name": "Administraci\u00f3n de Proyectos de TI",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 232,
+    "fields": {
+      "name": "Administrador de servidores",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 233,
+    "fields": {
+      "name": "Capacitaci\u00f3n en TI",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 234,
+    "fields": {
+      "name": "Consultor\u00eda en TI",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 235,
+    "fields": {
+      "name": "Control de Calidad",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 236,
+    "fields": {
+      "name": "Desarrollador / Programador de Software",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 237,
+    "fields": {
+      "name": "Desarrollador / Programador Web",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 238,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 239,
+    "fields": {
+      "name": "E-Business",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 240,
+    "fields": {
+      "name": "Gerencia y Administraci\u00f3n de Sistemas",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 241,
+    "fields": {
+      "name": "Inform\u00e1tica General",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 242,
+    "fields": {
+      "name": "Ingenier\u00eda y Dise\u00f1o de Hardware",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 243,
+    "fields": {
+      "name": "Mantenimiento y Operaci\u00f3n de Redes",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 244,
+    "fields": {
+      "name": "Procesamiento de datos",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 245,
+    "fields": {
+      "name": "SAP R/2",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 246,
+    "fields": {
+      "name": "SAP R/3",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 247,
+    "fields": {
+      "name": "Seguridad de Redes",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 248,
+    "fields": {
+      "name": "Sistemas Inform\u00e1ticos",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 249,
+    "fields": {
+      "name": "Soporte T\u00e9cnico",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 250,
+    "fields": {
+      "name": "Telecomunicaciones y Sistemas M\u00f3viles",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 251,
+    "fields": {
+      "name": "Webmaster y dise\u00f1o de WEB",
+      "industry": 17
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 252,
+    "fields": {
+      "name": "Agente Aeropuerto",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 253,
+    "fields": {
+      "name": "Agente de Viajes",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 254,
+    "fields": {
+      "name": "Alimentos y Bebidas - Restaurante y Bar",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 255,
+    "fields": {
+      "name": "Alimentos y Bebidas a Cuartos",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 256,
+    "fields": {
+      "name": "Alimentos y Bebidas - Banquetes",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 257,
+    "fields": {
+      "name": "Ama de Llaves",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 258,
+    "fields": {
+      "name": "Asesor\u00eda y Consultor\u00eda",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 259,
+    "fields": {
+      "name": "Atenci\u00f3n a Clientes",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 260,
+    "fields": {
+      "name": "Auxiliar de Aviaci\u00f3n",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 261,
+    "fields": {
+      "name": "Chef",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 262,
+    "fields": {
+      "name": "Cocina - Auxiliar",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 263,
+    "fields": {
+      "name": "Conserje",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 264,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 265,
+    "fields": {
+      "name": "Direcci\u00f3n General",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 266,
+    "fields": {
+      "name": "Eventos, Convenciones y Banquetes",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 267,
+    "fields": {
+      "name": "Gu\u00eda Tur\u00edstico",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 268,
+    "fields": {
+      "name": "Hoteler\u00eda",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 269,
+    "fields": {
+      "name": "Lavander\u00eda",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 270,
+    "fields": {
+      "name": "Piloto Aviador",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 271,
+    "fields": {
+      "name": "Pisos y Limpieza",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 272,
+    "fields": {
+      "name": "Recepci\u00f3n",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 273,
+    "fields": {
+      "name": "Reservaciones",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 274,
+    "fields": {
+      "name": "Servicios A\u00e9reos",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 275,
+    "fields": {
+      "name": "Turismo General",
+      "industry": 18
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 276,
+    "fields": {
+      "name": "Administraci\u00f3n y Apoyo a Ventas",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 277,
+    "fields": {
+      "name": "Atenci\u00f3n a Clientes",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 278,
+    "fields": {
+      "name": "Desarrollo de Negocios",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 279,
+    "fields": {
+      "name": "Direcci\u00f3n",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 280,
+    "fields": {
+      "name": "Gerencia de Ventas",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 281,
+    "fields": {
+      "name": "Gerente de Canales de Distribuci\u00f3n",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 282,
+    "fields": {
+      "name": "Gerente de Franquicias",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 283,
+    "fields": {
+      "name": "Gerente de Tienda",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 284,
+    "fields": {
+      "name": "Representante de Ventas",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 285,
+    "fields": {
+      "name": "Supervisor de Ventas",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 286,
+    "fields": {
+      "name": "Ventas",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 287,
+    "fields": {
+      "name": "Ventas Corporativas",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 288,
+    "fields": {
+      "name": "Ventas de Campo",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 289,
+    "fields": {
+      "name": "Ventas de Detalle",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 290,
+    "fields": {
+      "name": "Ventas de Mayoreo",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 291,
+    "fields": {
+      "name": "Ventas Departamentales",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 292,
+    "fields": {
+      "name": "Ventas Internacionales",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 293,
+    "fields": {
+      "name": "Ventas por Tel\u00e9fono",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 294,
+    "fields": {
+      "name": "Ventas T\u00e9cnicas",
+      "industry": 19
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 295,
+    "fields": {
+      "name": "Asistente M\u00e9dico",
+      "industry": 20
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 296,
+    "fields": {
+      "name": "Doctor",
+      "industry": 20
+    }
+  },
+  {
+    "model": "common.area",
+    "pk": 297,
+    "fields": {
+      "name": "Estilista Canino",
+      "industry": 20
+    }
+  }
+]

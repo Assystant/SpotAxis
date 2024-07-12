@@ -1,0 +1,26 @@
+[
+  {
+    "model": "candidates.software_level",
+    "pk": 1,
+    "fields": {
+      "name": "B\u00e1sico - Junior",
+      "codename": "junior"
+    }
+  },
+  {
+    "model": "candidates.software_level",
+    "pk": 2,
+    "fields": {
+      "name": "Medio - Semi Senior",
+      "codename": "semi"
+    }
+  },
+  {
+    "model": "candidates.software_level",
+    "pk": 3,
+    "fields": {
+      "name": "Avanzado - Senior",
+      "codename": "senior"
+    }
+  }
+]

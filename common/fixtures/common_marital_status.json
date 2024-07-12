@@ -1,0 +1,26 @@
+[
+  {
+    "model": "common.marital_status",
+    "pk": 1,
+    "fields": {
+      "name": "Unmarried",
+      "codename": "unmarried"
+    }
+  },
+  {
+    "model": "common.marital_status",
+    "pk": 2,
+    "fields": {
+      "name": "Married",
+      "codename": "married"
+    }
+  },
+  {
+    "model": "common.marital_status",
+    "pk": 3,
+    "fields": {
+      "name": "Not Specified",
+      "codename": "unspecified"
+    }
+  }
+]

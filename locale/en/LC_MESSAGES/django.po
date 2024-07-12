@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-01-23 18:46-0600\n"
+"PO-Revision-Date: 2013-01-23 19:05\n"
+"Last-Translator: Travelder <contact.travelder@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.6.8\n"
+
+#: .\TRM\settings.py:47
+msgid "English"
+msgstr "English"
+
+#: .\TRM\settings.py:48
+msgid "Español"
+msgstr "Spanish"
+
+#: .\TRM\templates\index.html.py:7
+msgid "Gracias por visitarnos."
+msgstr "Thanks for visiting."
+
+#: .\TRM\templates\base\header.html.py:3
+msgid "Iniciar sesión"
+msgstr "Log In"
+
+#: .\TRM\templates\base\header.html.py:4
+msgid "Cerrar sesión"
+msgstr "Log Out"
+
+#: .\TRM\templates\base\header.html.py:5
+msgid "Panel de control"
+msgstr "Control Panel"
+
+#: .\TRM\templates\base\header.html.py:29
+msgid "Registrarse"
+msgstr "Sign In"
+
+#: .\TRM\templates\base\header.html.py:48
+msgid "Inicio"
+msgstr "Home"
+
+#: .\TRM\templates\base\header.html.py:50
+msgid "Empresas"
+msgstr "Companies"
+
+#: .\TRM\templates\base\header.html.py:63
+msgid "Candidatos"
+msgstr "Candidates"
+
+#: .\TRM\templates\base\header.html.py:66
+msgid "Subir mi CV"
+msgstr "Upload my CV"

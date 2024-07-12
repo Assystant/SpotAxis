@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block meta %}
+    <meta name="keyword" content="Recove Username, SpotAxis"/>
+    <meta name="description" content="Username Recovery on SpotAxis"/>
+{% endblock %}
+{% block title %}SpotAxis | Recover User{% endblock %}
+
+{% block content %}
+
+    <div class="row mb60 page-content">
+        <div class="col-sm-6 col-sm-offset-3 white-container-msgs">
+            <h3 class="text-light text-center mt40 mb20">{% trans 'Recover Username' %}</h3>
+            <div class="panel panel-default">
+                <div class="panel-body panel-shadow pt40">
+                    <p>
+                            We have sent the username to your email. If you did not receive any email, please check your Spam folder.
+                    </p>
+                    <p>
+                        <a href="{% url 'auth_login' %}" class="btn btn-info pull-right btn-block mt20 mb20 no-margin-bottom"><i class="fa fa-sign-in fa-lg"></i> {% trans "Login" %}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

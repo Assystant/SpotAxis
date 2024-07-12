@@ -1,0 +1,92 @@
+[
+  {
+    "model": "common.degree",
+    "pk": 1,
+    "fields": {
+      "name": "Indistinto",
+      "codename": "indistinct",
+      "order": 1
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 2,
+    "fields": {
+      "name": "Doctorado",
+      "codename": "doctorate",
+      "order": 2
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 3,
+    "fields": {
+      "name": "Maestr\u00eda",
+      "codename": "mastery",
+      "order": 3
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 4,
+    "fields": {
+      "name": "Posgrado",
+      "codename": "graduate",
+      "order": 4
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 5,
+    "fields": {
+      "name": "Ingenieria",
+      "codename": "engineering",
+      "order": 5
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 6,
+    "fields": {
+      "name": "Licenciatura",
+      "codename": "degree",
+      "order": 6
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 7,
+    "fields": {
+      "name": "Carrera T\u00e9cnica",
+      "codename": "technical",
+      "order": 7
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 8,
+    "fields": {
+      "name": "Preparatoria o Bachiller",
+      "codename": "bachelor",
+      "order": 8
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 9,
+    "fields": {
+      "name": "Secundaria",
+      "codename": "high_school",
+      "order": 9
+    }
+  },
+  {
+    "model": "common.degree",
+    "pk": 10,
+    "fields": {
+      "name": "Primaria",
+      "codename": "elementary_school",
+      "order": 100
+    }
+  }
+]

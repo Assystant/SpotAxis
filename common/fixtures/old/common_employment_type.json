@@ -1,0 +1,65 @@
+[
+  {
+    "model": "common.employment_type",
+    "pk": 2,
+    "fields": {
+      "name": "Tiempo Completo",
+      "codename": "full_time",
+      "order": 1
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 3,
+    "fields": {
+      "name": "Medio Tiempo",
+      "codename": "half_time",
+      "order": 2
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 4,
+    "fields": {
+      "name": "Por Horas",
+      "codename": "hours",
+      "order": 4
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 5,
+    "fields": {
+      "name": "Temporal",
+      "codename": "temporal",
+      "order": 7
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 6,
+    "fields": {
+      "name": "Beca/Pr\u00e1cticas",
+      "codename": "practices",
+      "order": 5
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 7,
+    "fields": {
+      "name": "Desde Casa",
+      "codename": "home",
+      "order": 6
+    }
+  },
+  {
+    "model": "common.employment_type",
+    "pk": 8,
+    "fields": {
+      "name": "Fines de Semana",
+      "codename": "weekend",
+      "order": 3
+    }
+  }
+]

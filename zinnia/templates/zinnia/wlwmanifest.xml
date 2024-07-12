@@ -1,0 +1,60 @@
+{% load i18n staticfiles zinnia %}<?xml version="1.0" encoding="utf-8" ?>
+<manifest xmlns="http://schemas.microsoft.com/wlw/manifest/weblog">
+  <options>
+    <clientType>Metaweblog</clientType>
+    <supportsPostAsDraft>Yes</supportsPostAsDraft>
+    <supportsFileUpload>Yes</supportsFileUpload>
+    <supportsExtendedEntries>No</supportsExtendedEntries>
+    <supportsCustomDate>Yes</supportsCustomDate>
+    <supportsCategories>Yes</supportsCategories>
+    <supportsCategoriesInline>Yes</supportsCategoriesInline>
+    <supportsMultipleCategories>Yes</supportsMultipleCategories>
+    <supportsHierarchicalCategories>Yes</supportsHierarchicalCategories>
+    <supportsNewCategories>Yes</supportsNewCategories>
+    <supportsNewCategoriesInline>Yes</supportsNewCategoriesInline>
+    <supportsKeywords>Yes</supportsKeywords>
+    <supportsCommentPolicy>Yes</supportsCommentPolicy>
+    <supportsPingPolicy>Yes</supportsPingPolicy>
+    <supportsAuthor>Yes</supportsAuthor>
+    <supportsSlug>Yes</supportsSlug>
+    <supportsPassword>Yes</supportsPassword>
+    <supportsExcerpt>Yes</supportsExcerpt>
+    <supportsTrackbacks>No</supportsTrackbacks>
+    <supportsPages>No</supportsPages>
+    <supportsPageParent>No</supportsPageParent>
+    <supportsPageOrder>No</supportsPageOrder>
+    <supportsEmptyTitles>No</supportsEmptyTitles>
+    <requiresHtmlTitles>No</requiresHtmlTitles>
+    <requiresXHTML>No</requiresXHTML>
+    <supportsScripts>Yes</supportsScripts>
+    <supportsEmbeds>Yes</supportsEmbeds>
+    <characterSet>UTF-8</characterSet>
+    <maxCategoryNameLength>50</maxCategoryNameLength>
+  </options>
+
+  <weblog>
+    <serviceName>{{ site.name }} Weblog</serviceName>
+    <imageUrl>{% static "zinnia/theme/img/wlw/zinnia.png" %}</imageUrl>
+    <watermarkImageUrl>{% static "zinnia/theme/img/wlw/watermark.png" %}</watermarkImageUrl>
+    <homepageLinkText>{% trans "View site" %}</homepageLinkText>
+    <adminLinkText>{% trans "Administration site" %}</adminLinkText>
+    <adminUrl><![CDATA[
+        {blog-homepage-url}{% url 'admin:index' %}
+    ]]></adminUrl>
+    <postEditingUrl><![CDATA[
+        {blog-homepage-url}{% url 'admin:zinnia_entry_changelist' %}{post-id}/
+    ]]></postEditingUrl>
+  </weblog>
+
+  <buttons>
+    <button>
+      <id>0</id>
+      <text>{% trans "Manage comments" %}</text>
+      <imageUrl>{% static "zinnia/theme/img/wlw/comments.png" %}</imageUrl>
+      <clickUrl><![CDATA[
+        {blog-homepage-url}{% url 'changelist'|comment_admin_urlname %}
+      ]]></clickUrl>
+    </button>
+  </buttons>-->
+  <!-- Add views section -->
+</manifest>

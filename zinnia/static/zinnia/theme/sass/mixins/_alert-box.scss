@@ -1,0 +1,18 @@
+@mixin alert-box($color) {
+  $font-color: white;
+
+  color: $font-color;
+  background: $color;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-color: lighten($color, 10%);
+  text-shadow: 0 -1px rgba(0,0,0,0.3);
+  border-radius: 3px;
+  padding: 0.5em;
+  margin-bottom: 1em;
+  a {
+    font-weight: bold;
+    @include link-colors(
+      $font-color, $font-color, $font-color,
+      $font-color, $font-color);
+  }
+}

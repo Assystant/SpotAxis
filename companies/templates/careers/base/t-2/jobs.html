@@ -1,0 +1,70 @@
+<div class="listing-container row flex-row root">
+{% load TRM_tags %}
+<div class=" column md-7 align-middle">
+	{% for function in company.company_functions %}
+		<div class="listing">
+			<h4>{{function|title}}</h4>
+			{% for vacancy in vacancies %}
+				{% if vacancy.function == function %}
+					<div class="listing-item {% if forloop.last and forloop.parentloop.last %}no-border{% endif %}">
+						<span style="float: left;"><a href="{% url 'vacancies_get_vacancy_details' vacancy.id %}">{{vacancy.employment|title}}</a></span>
+						<div class="location" style="float: right;">
+							<span class="block">{{vacancy.employmentType|title|default:'Full Time'}}</span>
+							<span class="block">{{vacancy.city|title}}{% if vacancy.city %}, {% endif %}{{vacancy.state}}{% if vacancy.state|title %}, {% endif %}{{vacancy.nationality|title}}</span>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div> 
+	{% empty %}
+		{% if isPreview or editing %}
+			<div class="listing">
+				<h4>Engineering</h4>
+				<div class="listing-item">
+					<span style="float: left;"><a href="#">Senior Platform Engineer</a></span>
+					<div class="location" style="float: right;">
+						<span class="block">Full Time</span>
+						<span class="block">{{company.city|title}}{% if company.city %}, {% endif %}{{company.state}}{% if company.state|title %}, {% endif %}{{company.nationality|title}}</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="listing-item">
+					<span style="float: left;"><a href="#">Senior Platform Engineer</a></span>
+					<div class="location" style="float: right;">
+						<span class="block">Full Time</span>
+						<span class="block">{{company.city|title}}{% if company.city %}, {% endif %}{{company.state}}{% if company.state|title %}, {% endif %}{{company.nationality|title}}</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<div class="listing">
+				<h4>Engineering</h4>
+				<div class="listing-item">
+					<span style="float: left;"><a href="#">Senior Platform Engineer</a></span>
+					<div class="location" style="float: right;">
+						<span class="block">Full Time</span>
+						<span class="block">{{company.city|title}}{% if company.city %}, {% endif %}{{company.state}}{% if company.state|title %}, {% endif %}{{company.nationality|title}}</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="listing-item no-border">
+					<span style="float: left;"><a href="#">Senior Platform Engineer</a></span>
+					<div class="location" style="float: right;">
+						<span class="block">Full Time</span>
+						<span class="block">{{company.city|title}}{% if company.city %}, {% endif %}{{company.state}}{% if company.state|title %}, {% endif %}{{company.nationality|title}}</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div> 
+		{% else %}
+			<div class="listing">
+				No current job openings. Check back later.
+			</div>
+		{% endif %}
+	{% endfor %}
+	<!-- end of listing-->
+
+</div>
+
+</div>

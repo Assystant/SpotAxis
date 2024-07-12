@@ -1,0 +1,41 @@
+{% extends "zinnia/base.html" %}
+{% load i18n %}
+{% load zinnia %}
+
+{% block title %}{% trans "Sitemap" %}{% endblock title %}
+
+{% block meta-description %}{% trans "Sitemap of the weblog" %}{% endblock meta-description %}
+
+{% block body-class %}sitemap{% endblock body-class %}
+
+{% block content %}
+<h1>{% trans "Sitemap" %}</h1>
+
+<div class="entriesbycategories">
+  <h2>{% trans "Resources by categories" %}</h2>
+  {% for category in categories %}
+  <h3>{{ category }}</h3>
+  <ul>
+    {% for entry in category.entries_published.all %}
+    <li>
+      <a href="{{ entry.get_absolute_url }}" title="{{ entry.title }}" rel="bookmark">{{ entry.title }}</a>
+      {% with comment_count=entry.comment_count %}
+      {% if comment_count %}
+      - {{ comment_count }} {% trans "comment" %}{{ comment_count|pluralize }}
+      {% endif %}
+      {% endwith %}
+    </li>
+    {% empty %}
+    <li>
+      {% trans "No resources yet." %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
+</div>
+
+<div class="montharchives">
+  <h2>{% trans "Monthly archives" %}</h2>
+  {% get_archives_entries %}
+</div>
+{% endblock content %}

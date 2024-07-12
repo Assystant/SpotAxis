@@ -1,0 +1,11 @@
+{% extends 'mails/base_email.txt' %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Invitation to Collaborate{% endblock %}
+
+{% block content %}
+{{invitation.invited_by.first_name}} has invited you to join {{company.name}}'s team
+
+{% endblock %}
+
+{% block button-text %}{% trans 'Join Now' %}{% endblock %}

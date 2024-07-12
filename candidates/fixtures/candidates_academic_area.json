@@ -1,0 +1,74 @@
+[
+  {
+    "model": "candidates.academic_area",
+    "pk": 4,
+    "fields": {
+      "name": "Arts",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 1,
+    "fields": {
+      "name": "Engineering",
+      "order": 100
+    }
+  },
+   {
+    "model": "candidates.academic_area",
+    "pk": 3,
+    "fields": {
+      "name": "Medicine",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 2,
+    "fields": {
+      "name": "Sciences",
+      "order": 100
+    }
+  },
+     {
+    "model": "candidates.academic_area",
+    "pk": 5,
+    "fields": {
+      "name": "Management",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 6,
+    "fields": {
+      "name": "Law",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 7,
+    "fields": {
+      "name": "Commerce",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 8,
+    "fields": {
+      "name": "Hospitality",
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_area",
+    "pk": 9,
+    "fields": {
+      "name": "Others",
+      "order": 100
+    }
+  }
+]

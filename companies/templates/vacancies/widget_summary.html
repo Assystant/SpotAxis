@@ -1,0 +1,63 @@
+{% load i18n %}
+{% load TRM_tags %}
+<link href="{{ STATIC_URL }}bootstrap-3.3.4/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link href="{{ STATIC_URL }}css/style.css" rel="stylesheet" type="text/css"/>
+<style>
+    * {
+        font-size:90%;
+    }
+</style>
+<body class="text-muted small no-padding">
+    <section class="container-fluid bg-alt">
+        <div class="row">
+            <div class="col-xs-10 col-xs-push-1 no-padding pt40 pb40">
+                {% get_status_count vacancy_status company.id as status_count %}
+                {%if status_count  > 0 %}
+                    {%for vacancy in vacancies%}
+                        <blockquote class="mb40 row bg-white pb20 pl10 pr10 br-2">
+                            <div class="{% if not recruiter or preview%}col-xs-12 col-sm-9{% else %}col-xs-8{% endif %} no-padding">
+                                <h4><i class="fa text-light fa-briefcase fa-lg"></i> <a class="" target="_blank" href="{% url 'vacancies_get_vacancy_details' vacancy.id %}">{{vacancy.employment}}</a> <span class="small inline-block">(No. of Openings - {{vacancy.vacancies_number}})</span></h4>
+                                <span><i class="fa text-light fa-map-marker"></i> {{vacancy.city}}{%if vacancy.city%},{%endif%} {{vacancy.state}}{%if vacancy.state%},{%endif%} {{vacancy.nationality}}</span><br>
+                                <span><i class="fa text-light fa-gears"></i> {{vacancy.industry}}</span> 
+                                <small class="pl20 inline-block mb10"> <i class="fa text-light fa-cog"></i> {{vacancy.function}}</small><br>
+                                <span class="label label-trans"><i class="fa text-light fa-black-tie fa-sm"></i> {{vacancy.employmentType|default:'Full Time'}}</span>
+                                <span class="clearfix"></span>
+                            </div>
+                            
+                                {% if not preview and vacancy.status.codename == 'open' and recruiter and recruiter.membership > 1 %}
+                                    <div class="col-xs-4 text-right pt20 no-padding">
+                                    <a class="btn btn-xs btn-trans-info text-center" href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id 0 %}" target="_blank">
+                                        
+                                        <span class="fa-stack fa-lg mb5">
+                                            <i class="fa fa-circle fa-inverse"></i>
+                                            <i class="fa fa-stack-2x fa-list-alt"></i>
+                                            {% if vacancy.hasUnseen %}
+                                                <span class="badge badge-sm va-top">300</span>
+                                            {% endif %}
+                                        </span>
+                                        <br>Application<br>Process
+                                    </a>
+                                    </div>
+                                {% else %}
+                                <div class="col-xs-12 col-sm-3 text-right pt20 no-padding">
+                                    <a class="btn btn btn-block btn-default text-center" href="{% url 'vacancies_get_vacancy_details' vacancy.id %}?public_apply=true" target="_blank">Quick Apply</a>
+                                    <!-- <a class=" hidden btn btn btn-block btn-info text-center" href="{% url 'vacancies_get_vacancy_details' vacancy.id %}?apply=true" target="_blank">Apply via SpotAxis</a> -->
+                                    </div>
+                                {% endif %}
+                            
+                        </blockquote>
+                    {%endfor%}
+                {%else%}
+                    <div class="container-fluid border-bottom border-light pt20 pb20 pl20 pr20 br-2 bg-white ">
+                        <h5 class="text-center text-light">No Jobs to show. </h5>
+                    </div>
+                {%endif%}
+            </div>
+        </div>
+    </section>
+    <script src="{{ STATIC_URL }}js/jquery-1.11.0.min.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap-3.3.4/js/bootstrap.js"></script>
+<script>
+    console.log(a)
+</script>

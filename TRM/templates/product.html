@@ -1,0 +1,214 @@
+{% extends "base/outer_base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% comment %} Home {% endcomment %}
+{% block title %}Product{% endblock %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+{% block css %}
+    <meta name="keywords" content="SpotAxis, Management, Applicant Tracking System, Talent Sourcing, Career Site Management, Recruitment, Talent Relationship Management, Talent Management Solution, Collaborative Hiring, Talent Acquisition, Head Hunting, Job, Career, Resume Builder, Job Portal, Job Board, Job Search, Recruitment, Recruitment Solution, HR Tech, Application Tracking System, Recruitment Process Automation, Candidate Management, Pricing, Affordable, Plans" />
+    <meta name="description" content="Free Recruitment Process Automation Tool">
+    <link rel="canonical" href="https://spotaxis.com/">
+    <style>
+        .s-promo-block-v4.wow:before{
+            left:.3125em;
+            right:.3125em;
+        }
+        .s-promo-block-v5:before{
+            opacity:0.5;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+        <!--========== PROMO BLOCK ==========-->
+        <div class="js__parallax-window s-promo-block-v4" style="background: url({{ STATIC_URL }}newtheme/img/1920x1080/14.jpg) 50% 0 no-repeat fixed;">
+            <div class="g-container--md g-text-center--xs g-padding-y-150--xs">
+                <div class="g-margin-b-80--xs">
+                    <h1 class="g-font-size-40--xs g-font-size-50--sm g-font-size-55--md g-color--white g-letter-spacing--1 g-margin-b-30--xs">Simplifies from start to end,<br> every phase of recruitment.</h1>
+                    <p class="text-uppercase g-font-size-14--xs g-font-weight--750 g-color--white g-letter-spacing--2"></p>
+                </div>
+                <a href="#basic">
+                    <span class="s-icon s-icon--md s-icon--white-brd g-radius--circle ti-angle-double-down"></span>
+                </a>
+            </div>
+        </div>
+        <!--========== END PROMO BLOCK ==========-->
+
+        <!--========== PAGE CONTENT ==========-->
+
+        <!-- Basic Features -->
+        <div id="basic" class="container g-padding-y-80--xs">
+	        <div class="g-text-center--xs g-margin-b-40--xs">
+	                <h2 class="g-font-size-32--xs g-font-size-36--md">Basic Features</h2>
+	                <p class="g-font-size-18--sm">We have all the reasons to make your recruiters happy and powerful.</p>
+	        </div>
+            <div class="row g-hor-centered-row--md g-row-col--5 g-margin-b-80--xs g-margin-b-100--md">
+                <div class="col-sm-5 g-hor-centered-row__col">
+                    <p class="text-uppercase g-font-size-14--xs g-font-weight--750 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">#Post a Job  <span style="margin-left: 20px">#Job Template</span><br>#Candidate Preference</span></p>
+                    <h2 class="g-font-size-32--xs g-font-size-36--sm g-margin-b-25--xs">Job information at one Spot</h2>
+                    <p class="g-font-size-18--sm">Create your job with user friendly forms, set expectations from candidates. System will automatically template job description and specifications for future use.</p>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5 g-hor-centered-row__col s-promo-block-v4 wow">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/mockups/1.jpg" alt="Mockup Image">
+                </div>
+            </div>
+            <div class="row g-hor-centered-row--md g-row-col--5 g-margin-b-80--xs g-margin-b-100--md">
+                <div class="col-sm-5 col-sm-push-7 g-hor-centered-row__col">
+                    <p class="text-uppercase g-font-size-14--xs g-font-weight--750 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">#Social hiring <span style="margin-left: 20px">#Referral Management</span>  #Careers site</p>
+                    <h2 class="g-font-size-32--xs g-font-size-36--sm g-margin-b-25--xs">Easy to source talent</h2>
+                    <!--p class="g-font-size-18--sm">Create your custom mobile responsive careers site or use our existing plug and play templates, have 100% own branding. Leverage social network for employee referral and generate link for other source tracking.</p-->
+                    <p class="g-font-size-18--sm">Use our mobile responsive, plug and play career site templates with 100% own branding. Leverage social network for employee referral and management.</p>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5 col-sm-pull-7 g-hor-centered-row__col g-text-left--xs g-text-right--md s-promo-block-v4 wow">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/mockups/2.jpg" alt="Mockup Image">
+                </div>
+            </div>
+            <div class="row g-hor-centered-row--md g-row-col--5 g-margin-b-80--xs g-margin-b-100--md">
+                <div class="col-sm-5 g-hor-centered-row__col">
+                    <p class="text-uppercase g-font-size-14--xs g-font-weight--750 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">#Resume Parsing  <span style="margin-left: 20px">#Custom Form</span><br><!--#Social Profile--></p>
+                    <h2 class="g-font-size-32--xs g-font-size-36--sm g-margin-b-25--xs">Collect the right information</h2>
+                    <p class="g-font-size-18--sm">Collect profile data seamlesly and accurately through our advanced resume parser, ask additional information through custom application forms; Eventually make candidate's experience smoother </p>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5 g-hor-centered-row__col s-promo-block-v4 wow">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/mockups/3.jpg" alt="Mockup Image">
+                </div>
+            </div>
+            <div class="row g-hor-centered-row--md g-row-col--5 g-margin-b-80--xs g-margin-b-100--md">
+                <div class="col-sm-5 col-sm-push-7 g-hor-centered-row__col">
+                    <p class="text-uppercase g-font-size-14--xs g-font-weight--750 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">#Collaborative Hiring<!--span style="margin-left: 20px">#Schedule</span--><span style="margin-left: 20px">#Hiring Process</span></p>
+                    <h2 class="g-font-size-32--xs g-font-size-36--sm g-margin-b-25--xs">Conduct Interview like a pro</h2>
+                    <!--p class="g-font-size-18--sm"> Organize your hiring with custom process, assign interview/ evalutor roles to team members. Schedule interviews between team members and candidate with ease.</p-->
+                    <p class="g-font-size-18--sm"> Organize your hiring with custom process, assign interviewer/ evalutor roles to team members for interview and collaborate with ease.</p>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5 col-sm-pull-7 g-hor-centered-row__col s-promo-block-v4 wow">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/mockups/4.jpg" alt="Mockup Image">
+                </div>
+            </div>
+            <div class="row g-hor-centered-row--md g-row-col--5">
+                <div class="col-sm-5 g-hor-centered-row__col">
+                    <p class="text-uppercase g-font-size-14--xs g-font-weight--750 g-color--primary g-letter-spacing--2 g-margin-b-25--xs">#Application History  <span style="margin-left: 20px">#Comments</span><br>#Source</p>
+                    <h2 class="g-font-size-32--xs g-font-size-36--sm g-margin-b-25--xs">Data to assess candidates</h2>
+                    <p class="g-font-size-18--sm">Assess each candidate based on previous job application experience with your company, source from which candidate application arrived and interviewer/ evaluator remarks about the candidate in each hiring stage.</p>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5 g-hor-centered-row__col g-text-left--xs g-text-right--md s-promo-block-v4 wow">
+                    <img class="img-responsive" src="{{ STATIC_URL }}newtheme/img/mockups/5.jpg" alt="Mockup Image">
+                </div>
+            </div>
+        </div>
+        <!-- End Basic Features -->
+
+        <!-- Premium Features -->
+        <div id="premium" class="container g-padding-y-80--xs">
+            <div class="g-text-center--xs g-margin-b-80--xs">
+                <h2 class="g-font-size-32--xs g-font-size-36--md">Premium Features</h2>
+            </div>
+            <div class="row g-margin-b-60--xs g-margin-b-40--md">
+                <div class="col-sm-4 g-margin-b-60--xs g-margin-b-0--md">
+                    <div class="clearfix">
+                        <div class="g-media g-width-30--xs">
+                            <div class="wow fadeInDown" data-wow-duration=".3" data-wow-delay=".1s">
+                                <i class="g-font-size-28--xs g-color--primary ti-desktop"></i>
+                            </div>
+                        </div>
+                        <div class="g-media__body g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs">Schedule Jobs</h3>
+                            <p class="g-margin-b-0--xs">Recruiters can schedule Jobs to publish and expire based on requirement.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 g-margin-b-60--xs g-margin-b-0--md">
+                    <div class="clearfix">
+                        <div class="g-media g-width-30--xs">
+                            <div class="wow fadeInDown" data-wow-duration=".3" data-wow-delay=".2s">
+                                <i class="g-font-size-28--xs g-color--primary ti-settings"></i>
+                            </div>
+                        </div>
+                        <div class="g-media__body g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs">Block Candidates</h3>
+                            <p class="g-margin-b-0--xs">Recruiters can block candidates conditionally by period and business function.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="clearfix">
+                        <div class="g-media g-width-30--xs">
+                            <div class="wow fadeInDown" data-wow-duration=".3" data-wow-delay=".3s">
+                                <i class="g-font-size-28--xs g-color--primary ti-star"></i>
+                            </div>
+                        </div>
+                        <div class="g-media__body g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs">Custom Review</h3>
+                            <p class="g-margin-b-0--xs">Interviewers/Evaluators can give custom ratings on candidates based on interview performace.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- // end row  -->
+            <div class="row">
+                <div class="col-sm-4 g-margin-b-60--xs g-margin-b-0--md">
+                    <div class="clearfix">
+                        <div class="g-media g-width-30--xs">
+                            <div class="wow fadeInDown" data-wow-duration=".3" data-wow-delay=".4s">
+                                <i class="g-font-size-28--xs g-color--primary ti-ruler-alt-2"></i>
+                            </div>
+                        </div>
+                        <div class="g-media__body g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs">Compare Candidates</h3>
+                            <p class="g-margin-b-0--xs">Interviewers/Evaluators and recruiters can compare candidates based on score given by different evaluators.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 g-margin-b-60--xs g-margin-b-0--md">
+                    <div class="clearfix">
+                        <div class="g-media g-width-30--xs">
+                            <div class="wow fadeInDown" data-wow-duration=".3" data-wow-delay=".5s">
+                                <i class="g-font-size-28--xs g-color--primary ti-package"></i>
+                            </div>
+                        </div>
+                        <div class="g-media__body g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs">Bulk action</h3>
+                            <p class="g-margin-b-0--xs">Recruiters can conduct bulk action on candidates to archive or move to other process.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="clearfix">
+                        <div class="g-media g-width-30--xs">
+                            <div class="wow fadeInDown" data-wow-duration=".3" data-wow-delay=".6s">
+                                <i class="g-font-size-28--xs g-color--primary ti-panel"></i>
+                            </div>
+                        </div>
+                        <div class="g-media__body g-padding-x-20--xs">
+                            <h3 class="g-font-size-18--xs">Advanced filter</h3>
+                            <p class="g-margin-b-0--xs">Recruiters can filter candidates based on keywords, source and who are evaluating/interviewing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- // end row  -->
+        </div>
+        <!-- End Premium Features -->
+
+        <!-- Parallax -->
+        <div class="s-promo-block-v5 g-bg-position--center js__parallax-window" style="background: url({{ STATIC_URL }}newtheme/img/1920x1080/17.jpg) 50% 0 no-repeat fixed;">
+            <div class="container g-text-center--xs g-padding-y-80--xs g-padding-y-125--sm">
+                <div class="g-margin-b-80--xs">
+                    <h2 class="g-font-size-40--xs g-font-size-50--sm g-font-size-60--md g-color--white">Upcoming Artificial Intelligence based Recruiter</h2>
+                    <!--<p class="g-font-size-18--xs g-font-size-26--md g-color--white-opacity g-margin-b-0--xs">A fine crafted solution for Internal Hiring Teams to increase efficiency by 3X times with sophistication and simplicity.</p>-->
+                </div>
+                <a href="{% url 'comingsoon' %}" class="text-uppercase s-btn s-btn--md s-btn--white-brd g-radius--50">Learn More</a>
+            </div>
+        </div>
+        <!-- End Parallax -->
+
+        <!--========== END PAGE CONTENT ==========-->
+
+{% endblock %}

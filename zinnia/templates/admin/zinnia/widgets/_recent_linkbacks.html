@@ -1,0 +1,28 @@
+{% load i18n zinnia %}
+{% for linkback in linkbacks %}
+<tr>
+  <th>
+    {% with entry=linkback.content_object %}
+    <a href="{{ linkback.url }}">{{ linkback.name }}</a>
+    {% trans "made a linkback on" context "on entry" %}
+    <a href="{{ entry.get_absolute_url }}#{{ linkback.flags.all.0.flag }}-{{ linkback.pk }}"
+       title="{% blocktrans with object=entry.title %}Linkback on {{ object }}{% endblocktrans %}">
+      {{ entry.title }}
+    </a>
+    {% endwith %}
+    {{ linkback.comment|truncatewords:20|linebreaks }}
+  </th>
+  <td>
+    <a href="{% url 'change'|comment_admin_urlname linkback.pk %}"
+       title="{% trans "Edit the linkback" %}" class="changelink">
+      {% trans "Edit" %}
+    </a>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <th colspan="2">
+    {% trans "No linkbacks yet." %}
+  </th>
+</tr>
+{% endfor %}

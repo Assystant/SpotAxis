@@ -1,0 +1,27 @@
+{% extends "zinnia/base.html" %}
+{% load i18n %}
+
+{% block meta-description %}{% trans "Author list" %}{% endblock meta-description %}
+
+{% block title %}{% trans "Authors" %}{% endblock title %}
+
+{% block body-class %}author-list{% endblock body-class %}
+
+{% block content %}
+<h1>{% trans "Author list" %}</h1>
+
+<ul>
+  {% for object in object_list %}
+  <li class="vcard">
+    <a href="{{ object.get_absolute_url }}"
+       title="{% blocktrans with author=object %}Show all {{ author }}'s resources{% endblocktrans %}"
+       class="fn url{% if not author.get_full_name %} nickname{% endif %}">{{ object }}</a>
+    {% blocktrans count entry_count=object.count_entries_published %}{{ entry_count }} resource{% plural %}{{ entry_count }} resources{% endblocktrans %}
+  </li>
+  {% empty %}
+  <li>
+    {% trans "No authors yet." %}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock content %}

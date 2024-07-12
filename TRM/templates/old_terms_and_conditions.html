@@ -1,0 +1,19 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Terms and Conditions{% endblock %}
+{% comment %} Terms and Consitions {% endcomment %}
+{% block page-header %}{% trans 'Terms and Conditions' %}{% endblock %}
+{% block content %}
+
+<!-- Content starts -->
+
+<div class="bg-white pl40 pr40 pt40 pb40">
+	<div class="container">
+	    {% include 'terms_and_conditions_include.html' %}
+	</div>
+</div>
+
+<!-- Content ends -->
+
+{% endblock %}

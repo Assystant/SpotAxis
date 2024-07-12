@@ -1,0 +1,52 @@
+{% extends "zinnia/entry_list.html" %}
+{% load i18n %}
+
+{% block meta-description %}{% trans "Archives" %} {{ year|date:"Y" }}{% endblock meta-description %}
+
+{% block title %}{% trans "Archives" %} {{ year|date:"Y" }}{% endblock title %}
+
+{% block body-class %}{{ block.super }} archive date year year-{{ year|date:"Y" }}{% endblock body-class %}
+
+{% block content-title %}
+<h1 class="text-light mb20">{% trans "Archives" %} {{ year|date:"Y" }}</h1>
+{% endblock content-title %}
+
+{% block content-related %}
+<hr class="mr20">
+<div class="conainer-fluid">
+	<div class="row no-margin">
+		<div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+			<div class="bordered mb20 pl10 pr10 pt10 pb10">
+				<h2 class="text-muted border-bottom border-light pb5 mb10 mt10">{% trans "Monthly archives" %}</h2>
+				<ul>
+				  {% for date in date_list %}
+					  <li>
+					    <a href="{% url 'zinnia:entry_archive_month' date|date:"Y" date|date:"m" %}" rel="archives">{{ date|date:"YEAR_MONTH_FORMAT" }}</a>
+					  </li>
+				  {% endfor %}
+				</ul>
+			</div>
+		</div>
+		{% if previous_year %}
+		<div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+			<div class=" bordered mb20 pb10 pl10 pr10 pt10">
+			<h2 class="text-muted border-bottom border-light mt10 pb5 mb10">{% trans "Previous year" %}</h2>
+			<p class="ml20">
+			  <a href="{% url 'zinnia:entry_archive_year' previous_year|date:"Y" %}" rel="archives">{{ previous_year|date:"Y" }}</a>
+			</p>
+			</div>
+		</div>
+		{% endif %}
+		{% if next_year %}
+		<div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+			<div class=" bordered mb20 pb10 pl10 pr10 pt10">
+			<h2 class="text-muted border-bottom border-light mt10 pb5 mb10">{% trans "Next year" %}</h2>
+			<p class="ml20">
+			  <a href="{% url 'zinnia:entry_archive_year' next_year|date:"Y" %}" rel="archives">{{ next_year|date:"Y" }}</a>
+			</p>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+{% endblock content-related %}

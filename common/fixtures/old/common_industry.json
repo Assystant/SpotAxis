@@ -1,0 +1,142 @@
+[
+{
+   "model": "common.industry",
+   "pk": 1,
+   "fields": {
+      "name": "Administrativos"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 2,
+   "fields": {
+      "name": "Biolog\u00eda"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 3,
+   "fields": {
+      "name": "Comunicaciones"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 4,
+   "fields": {
+      "name": "Construcci\u00f3n"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 5,
+   "fields": {
+      "name": "Contabilidad"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 6,
+   "fields": {
+      "name": "Creatividad, Producci\u00f3n y Dise\u00f1o Comercial"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 7,
+   "fields": {
+      "name": "Derecho y Leyes"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 8,
+   "fields": {
+      "name": "Educaci\u00f3n"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 9,
+   "fields": {
+      "name": "Ingenier\u00eda"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 10,
+   "fields": {
+      "name": "Log\u00edstica, Transportaci\u00f3n y Distribuci\u00f3n"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 11,
+   "fields": {
+      "name": "Manufactura, Producci\u00f3n y Operaci\u00f3n"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 12,
+   "fields": {
+      "name": "Mercadotecnia, Publicidad y Relaciones P\u00fablicas"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 13,
+   "fields": {
+      "name": "Recursos Humanos"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 14,
+   "fields": {
+      "name": "Salud y Belleza"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 15,
+   "fields": {
+      "name": "Sector Salud"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 16,
+   "fields": {
+      "name": "Seguro y Reaseguro"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 17,
+   "fields": {
+      "name": "Tecnolog\u00edas de la Informaci\u00f3n / Sistemas"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 18,
+   "fields": {
+      "name": "Turismo, Hospitalidad y Gastronom\u00eda"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 19,
+   "fields": {
+      "name": "Ventas"
+   }
+},
+{
+   "model": "common.industry",
+   "pk": 20,
+   "fields": {
+      "name": "Veterinaria / Zoolog\u00eda"
+   }
+}
+]

@@ -1,0 +1,42 @@
+[
+{
+   "model": "vacancies.vacancy_status",
+   "pk": 1,
+   "fields": {
+      "name": "Active",
+      "codename": "active"
+   }
+},
+{
+   "model": "vacancies.vacancy_status",
+   "pk": 2,
+   "fields": {
+      "name": "Inactive",
+      "codename": "inactive"
+   }
+},
+{
+   "model": "vacancies.vacancy_status",
+   "pk": 3,
+   "fields": {
+      "name": "Programmed",
+      "codename": "programmed"
+   }
+},
+{
+   "model": "vacancies.vacancy_status",
+   "pk": 4,
+   "fields": {
+      "name": "Finalized",
+      "codename": "finalized"
+   }
+},
+{
+   "model": "vacancies.vacancy_status",
+   "pk": 5,
+   "fields": {
+      "name": "Removed",
+      "codename": "removed"
+   }
+}
+]

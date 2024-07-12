@@ -1,0 +1,12 @@
+{% load TRM_tags %} 
+<p class="small">Add the "Apply form link" to job boards for candidates to apply. Manage all candidates at SpotAxis, track duplicates and know the source of application.</p>
+<hr>
+<div class="relative clearfix">
+    {% with vacancy.get_url_block as copy_contents %}
+        {% include 'copy_blocks.html' %}
+    {% endwith %}
+    {% comment %} {% with x.tag_name as block_head and x|args:vacancy|call:'ref_links' as xobjects %} {% endcomment %}
+        {% comment %} {% with xobjects.objects as copy_contents %} {% endcomment %}
+        {% comment %} {% endwith %} {% endcomment %}
+    {% comment %} {% endwith %} {% endcomment %}
+</div>

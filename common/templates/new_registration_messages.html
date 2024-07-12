@@ -1,0 +1,32 @@
+{% extends "base/outer_base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% comment %} Home {% endcomment %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+
+{% block content %}
+
+        <!--========== PAGE CONTENT ==========-->
+        <!--<div class="g-bg-position--center g-fullheight--xs" style="background: url('{{ STATIC_URL }}newtheme/img/1920x1080/08.jpg'); background-color= white">-->
+        <div class="g-bg-position--center g-padding-y-80--xs" style="min-height:100vh">
+            <div class="container js__ver-center-aligned">
+                <div class="g-text-center--xs">
+                    <div class="g-margin-t-40--xs g-margin-b-60--xs g-margin-b-80--sm">
+                        <h1 class="g-font-size-32--xs g-font-size-50--sm g-font-size-60--md g-margin-b-30--xs">Account Activation</h1>
+                        {% if account_verification_active %}
+                            <p class="text-uppercase g-font-size-20--md g-font-weight--300">We have sent an email to <strong>{{ email }}</strong> including a link to complete your signup.<br> If you did not receive any email try checking your Spam folder.</p>
+                            <p class="text-uppercase g-font-size-20--md g-font-weight--300">The link is valid for <strong>{{ expiration_days }} hours</strong>.</p>
+                        {% else %}
+                            <p class="text-uppercase g-font-size-20--md g-font-weight--300">The link is invalid or has already been used previously.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--========== END PAGE CONTENT ==========-->
+
+{% endblock %}

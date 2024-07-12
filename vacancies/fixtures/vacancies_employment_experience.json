@@ -1,0 +1,380 @@
+[
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 1,
+    "fields": {
+      "name": "Any",
+      "codename": "Any",
+      "order": 1
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 2,
+    "fields": {
+      "name": "0",
+      "codename": "0",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 3,
+    "fields": {
+      "name": "1 year",
+      "codename": "1 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 4,
+    "fields": {
+      "name": "2 years",
+      "codename": "2 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 5,
+    "fields": {
+      "name": "3 years",
+      "codename": "3 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 6,
+    "fields": {
+      "name": "4 years",
+      "codename": "4 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 7,
+    "fields": {
+      "name": "5 years",
+      "codename": "5 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 8,
+    "fields": {
+      "name": "6 years",
+      "codename": "6 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 9,
+    "fields": {
+      "name": "7 years",
+      "codename": "7 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 10,
+    "fields": {
+      "name": "8 years",
+      "codename": "8 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 11,
+    "fields": {
+      "name": "9 years",
+      "codename": "9 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 12,
+    "fields": {
+      "name": "10 years",
+      "codename": "10 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 13,
+    "fields": {
+      "name": "11 years",
+      "codename": "11 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 14,
+    "fields": {
+      "name": "12 years",
+      "codename": "12 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 15,
+    "fields": {
+      "name": "13 years",
+      "codename": "13 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 16,
+    "fields": {
+      "name": "14 years",
+      "codename": "14 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 17,
+    "fields": {
+      "name": "15 years",
+      "codename": "15 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 18,
+    "fields": {
+      "name": "16 years",
+      "codename": "16 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 19,
+    "fields": {
+      "name": "17 years",
+      "codename": "17 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 20,
+    "fields": {
+      "name": "18 years",
+      "codename": "18 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 21,
+    "fields": {
+      "name": "19 years",
+      "codename": "19 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 22,
+    "fields": {
+      "name": "20 years",
+      "codename": "20 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 23,
+    "fields": {
+      "name": "21 years",
+      "codename": "21 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 24,
+    "fields": {
+      "name": "22 years",
+      "codename": "22 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 25,
+    "fields": {
+      "name": "23 years",
+      "codename": "23 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 26,
+    "fields": {
+      "name": "24 years",
+      "codename": "24 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 27,
+    "fields": {
+      "name": "25 years",
+      "codename": "25 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 28,
+    "fields": {
+      "name": "26 years",
+      "codename": "26 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 29,
+    "fields": {
+      "name": "27 years",
+      "codename": "27 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 30,
+    "fields": {
+      "name": "28 years",
+      "codename": "28 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 31,
+    "fields": {
+      "name": "29 years",
+      "codename": "29 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 32,
+    "fields": {
+      "name": "30 years",
+      "codename": "30 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 33,
+    "fields": {
+      "name": "31 years",
+      "codename": "31 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 34,
+    "fields": {
+      "name": "32 years",
+      "codename": "32 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 35,
+    "fields": {
+      "name": "33 years",
+      "codename": "33 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 36,
+    "fields": {
+      "name": "34 years",
+      "codename": "34 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 37,
+    "fields": {
+      "name": "35 years",
+      "codename": "35 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 38,
+    "fields": {
+      "name": "36 years",
+      "codename": "36 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 39,
+    "fields": {
+      "name": "37 years",
+      "codename": "37 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 40,
+    "fields": {
+      "name": "38 years",
+      "codename": "38 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 41,
+    "fields": {
+      "name": "39 years",
+      "codename": "39 year",
+      "order": 100
+    }
+  },
+  {
+    "model": "vacancies.employment_experience",
+    "pk": 42,
+    "fields": {
+      "name": "40 years",
+      "codename": "40 year",
+      "order": 100
+    }
+  }
+]

@@ -1,0 +1,99 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block meta %}
+    <meta name="keyword" content="Apply Later, Jobs, Job Bookmark, Favourites, Favorites, SpotAxis"/>
+    <meta name="description" content="List of Jobs marked to appy later on SpotAxis"/>
+{% endblock %}
+{% block title %}SpotAxis | Apply Later{% endblock %}
+{% comment %} Page where a candidate's bookmarked vacancies are shown. {% endcomment %}
+{% block content %}
+
+<!-- Content starts -->
+
+    <div class="row mb50 mt20">
+        <div class=" col-md-8 col-md-push-2 col-sm-12" id='job-section'>
+            {% if candidate_favs %}
+                 <h2 class="text-center text-light">Apply Later</h2>
+                    {% for postulate in candidate_favs %}
+                        <blockquote class="bg-white mb20 no-margin-bottom">
+                            <h4>
+                                <i class="fa fa-briefcase fa-lg"></i>
+                                <a class="" {%if postulate.vacancy.status.codename == 'open' %}href="{{postulate.vacancy.company.geturl}}{% url 'vacancies_get_vacancy_details' postulate.vacancy.id %}"{% endif %} target="_blank">{{ postulate.vacancy.employment }}</a>
+                                <span class="small inline-block">(No. of Openings - {{postulate.vacancy.vacancies_number}})</span>
+                                <span class="pull-right"><i class="fa fa-flag-checkered"></i> <span class="text-info">{{postulate.vacancy.status}}</span></span>
+                            </h4>
+                            <span>
+                                <i class="fa fa-map-marker"></i> 
+                                {% if postulate.vacancy.city %}{{postulate.vacancy.city}}, {%endif%}
+                                {% if postulate.vacancy.state %}{{postulate.vacancy.state}}, {%endif%}
+                                {{postulate.vacancy.nationality}}
+                            </span><br>
+                            <span><i class="fa fa-gears"></i> {{postulate.vacancy.industry}}</span>
+                            <small class="pl20 inline-block"> <i class="fa fa-cog"></i> {{postulate.vacancy.function}}</small>
+                            <button id="btn_fav_{{ postulate.vacancy.pk }}" onclick="mark_unmark_favorite({{ postulate.vacancy.pk }})" class="mt20 btn btn-sm pull-right btn-default">
+                                <i class="fa fa-heart text-danger"></i> {% trans 'Forget' %}
+                            </button>
+                            <br>
+                            <span class="label label-trans"><i class="fa fa-black-tie fa-sm"></i> {{postulate.vacancy.employmentType}}</span>
+                            
+                        </blockquote>
+                    {% endfor %}
+
+            {% else %}
+
+                <h5 class="text-center text-light bg-white pt20 pb20">{% trans 'You have no jobs marked to apply later' %}</h5>
+                {# <hr class="mb10"> #}
+
+            {% endif %} {# if candidate_favs #}
+
+        </div>
+    </div><!-- row -->
+
+<!-- Content ends -->
+
+{% endblock %}
+{% block java_script_code %}
+    <script>
+        function mark_unmark_favorite(vacancy_id) {
+            var btn_fav = $("#btn_fav_" + vacancy_id);
+            $.ajax({
+                data: {
+                    'id': vacancy_id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                url: '/ajax/mark-vacancy-asfavorite/',
+                type: 'GET',
+                success: function(data){
+                    console.log(data);
+                    var message = '';
+                    if (data == 'unmarked'){
+                        btn_fav.html('<i class="fa fa-heart"></i> Apply Later');
+                        btn_fav.addClass('hidden')
+                        console.log('Favourite was removed');
+                        $block = btn_fav.parents('blockquote');
+                        
+                        $block.css('border-color','#5bc0de')
+                        $block.addClass('collapse fade in');
+                        
+
+                        setTimeout(function(){
+                            $block.collapse('hide');
+                            $block.remove();
+                            if (!$('#job-section blockquote')[0]){
+                                $('#job-section').append('<h5 class="text-center text-light bg-white pt20 pb20">{% trans 'You have no jobs marked to apply later' %}</h5>')
+                            }
+                        },1000)
+                        
+                    }
+                    if (data == 'error'){
+                        alert("Failed to remove. Please try again in a moment.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("Failed to remove, please try again in a moment");
+                }
+            });
+        }
+    </script>
+{% endblock %}

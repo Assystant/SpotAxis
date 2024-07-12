@@ -1,0 +1,13 @@
+{% load TRM_tags %}
+{% if candidate%}
+	<div class="text-light text-center">
+		{% if schedule %}
+			<button class="btn btn-danger btn-sm btn-block mb15 hover-trigger complete-schedule"><i class="fa fa-check hover-target"></i> Mark as Done</button>
+			<p>Scheduled for <br><b class="{% if schedule.local_time|isPast %}text-danger{% elif schedule.local_time|isNearFuture:60 %}text-success{% endif %}">{{schedule.scheduled_on}}</b></p>
+		<small><small>Reschedule</small></small>
+		{% endif %}
+		<input type="text" class="form-control text-center picker mb5">
+	</div>
+{% elif error_message %}
+	<div class="text-light text-center">{{error_message}}</div>
+{% endif %}

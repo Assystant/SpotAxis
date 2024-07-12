@@ -1,0 +1,191 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load humanize %}
+{% load TRM_tags %}
+{% block title %}{% trans 'Payments' %}{% endblock %}
+{% comment %} Page for COmpany Recommendations {% endcomment %}
+{% block page-header %}{% trans 'Payments' %}{% endblock %}
+{% block content %}
+	<div class="container-fluid">
+		<div class='row'>
+			<div class="col-sm-3"></div>
+			<div class="col-sm-6">
+				{% if amount_to_pay %}
+					<div class="bg-white border-bottom border-light mt20 pl10 pr10 pt10 pb10">
+						<p>You have selected <span class="lead text-info">{{slab}}</span> <span class="text-light">{{slab.get_slab_period_display|default:''}}</span> plan {% if company.subscription.added_users and not remove_users %} with <span clas="text-info">{{company.subscription.added_users}} additional users</span> {% elif company.subscription.added_users and remove_users %} with <span class="text-info">{{slab.package.max_users|sub:slab.package.free_users}} additional users</span> {% endif %} {% if company.subscription.expiry %} This plan will expire on{% endif%}</p>
+						{% if company.subscription.expiry %}
+							<input type="checkbox"><label> Update Plan Immediately *</label>
+						{% endif %}
+						<p>Amount to Pay : <span class="pull-right text-info">{{slab.currency.symbol}}{{amount_to_pay|floatformat:2}}</span></p>
+						<p>Credits Available: <small class="text-danger">{% if amount_to_pay > company.wallet.available %} Insufficient Blance {% endif %}</small> <span class="pull-right text-info">{{comany.wallet.currency.symbol|default:'$'}}{{company.wallet.available|floatformat:2}}</span></p>
+						
+						{% if amount_to_pay <= company.wallet.available %}
+							<button class="btn btn-sm btn-info pull-right mt10 mb10"> Pay </button>
+						{% else %}
+							<button class="btn btn-sm btn-info pull-right mt10 mb10 disabled" disabled> Pay </button>
+						{% endif %}
+						<span class="clearfix"></span>
+					</div>
+
+					<div class="bg-white border-bottom border-light mb20 pl10 pr10 pt10 pb10 text-light">
+						{% if company.subscription.expiry %}
+							<p><small>* Keep this unchecked to subscribe to the new plan post expiration of current plan. If you wish to proceed immediately, any loss of features or service will not be refunded </small></p>
+						{% endif %}
+						{% if slab.expiry_period and company.subscription.expiry%}
+							<p><small>Your next renewal will be charged {{slab.currency.symbol|default:'$'}}{{renewal}} for {{slab}} plan {% if company.subscription.added_users and not remove_users %} with {{company.subscription.added_users}} additional users {% elif company.subscription.added_users and remove_users %} with {{slab.package.max_users|sub:slab.package.free_users}} additional users {% endif %}</small></p>
+						{% endif %}
+						{% if remove_users %}
+							<p><small>You will be required to remove users to adjust to the new plan's user limit.</small></p>
+						{% endif %}
+					</div>
+				{% endif %}
+				{% if not amount_to_pay or amount_to_pay >= company.wallet.available %}
+					<h4>Add Credits</h4>
+					<form class="bg-white border-bottom border-light mt20 mb20 pl20 pr20 pt20 pb20" action ="//{{request.get_host}}/checkout/" method = "post" id="add_credits">
+						{% csrf_token %}
+						<input type="hidden" name="slab" value ="{{slab.id}}">
+
+							<div class="input-group numeric-step-input pull-left text-center" style="width:150px">
+								<span class="input-group-btn"><a class="btn btn-default step-sub"><i class="fa fa-minus"></i></a></span>
+								<input type="tel" class="form-control step-value text-center" min ='{{amount_to_pay|default:5}}' step =5 value='{{amount_to_pay|default:5}}' name="amount_to_pay">
+								<span class="input-group-btn"><a class="btn btn-default step-add"><i class="fa fa-plus"></i></a></span>
+							</div>
+							<button data-paypal-button="true" class="pull-left ml10 btn btn-trans no-padding">
+							  <img src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/blue-rect-paypalcheckout-34px.png" alt="PayPal Checkout">
+							</button>
+							<span class="clearfix"></span>
+						<!--form action="/" id="my-sample-form" method="post">
+					      <label for="card-number">Card Number</label>
+					      <div id="card-number"></div>
+
+					      <label for="cvv">CVV</label>
+					      <div id="cvv"></div>
+
+					      <label for="expiration-date">Expiration Date</label>
+					      <div id="expiration-date"></div>
+
+					      <input type="submit" value="Pay" />
+					    </form-->
+					</form>
+				{% endif %}
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+	</div>
+	<div class="modal fade" id="add_credits" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+						<form id="payment-form" method="post" action="/checkouts">
+							<div class="bt-drop-in-wrapper">
+					          <div id="bt-dropin"></div>
+					        </div>
+					        <label for="amount">
+					            <span class="input-label">Amount</span>
+					            <div class="input-wrapper amount-wrapper">
+					              <input id="amount" name="amount" type="tel" min="1" placeholder="Amount" value="10">
+					            </div>
+					          </label>
+					        <button type="submit" class="button"><span> Test Transaction</span></button>
+					    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+{% block java_script_srcs %}
+	<!--script src="https://js.braintreegateway.com/web/3.5.0/js/client.min.js"></script>
+	<script src="https://js.braintreegateway.com/web/3.5.0/js/hosted-fields.min.js"></script>
+	<script src="https://js.braintreegateway.com/web/3.5.0/js/paypal.min.js"></script>
+	<script src="https://js.braintreegateway.com/web/3.5.0/js/data-collector.min.js"></script>
+	<script src="https://js.braintreegateway.com/js/braintree-2.27.0.min.js"></script-->
+{% endblock %}
+{% block java_script_code %}
+	<script>
+		// var braintree = require('braintree-web');
+
+		// Fetch the button you are using to initiate the PayPal flow
+		$(document).ready(function(){
+			var paypalButton = document.getElementById('pay_button');
+			// var braintree = require('braintree-web');
+			var client_token = '{{client_token}}';
+			// braintree.setup(client_token, "dropin",{
+			// 	container: 'bt-dropin',
+			// 	paypal: {
+			// 	    button: {
+			// 	      type: 'checkout'
+			// 	    }
+			// 	}
+			// })
+			// braintree.client.create({
+			//   authorization: '{{client_token}}'
+			// }, function (err, clientInstance) {
+			// 	if (err) {
+			// 	    // Handle error in client creation
+			// 	    return;
+			// 	}
+
+			// 	var options = {
+			// 	    client: clientInstance,
+			// 	     styles: {
+			// 		    'input': {
+			// 		      'font-size': '12pt',
+			// 		      'color': '#3A3A3A'
+			// 		    },
+			// 		    '.number': {
+			// 		      'font-family': 'monospace'
+			// 		    },
+			// 		    '.valid': {
+			// 		      'color': 'green'
+			// 		    }
+			// 		},
+			// 		fields: {
+			// 		    number: {
+			// 		      selector: '#card-number'
+			// 		    },
+			// 		    cvv: {
+			// 		      selector: '#cvv',
+			// 		      placeholder: '•••'
+			// 		    },
+			// 		    expirationDate: {
+			// 		      selector: '#expiration-date',
+			// 		      type: 'month'
+			// 		    }
+			// 		}
+			// 	};
+			//   	braintree.hostedFields.create(options, function (hostedFieldsErr, hostedFieldsInstance) {
+			//     	if (hostedFieldsErr) {
+			//       		// Handle error in Hosted Fields creation
+			//       		return;
+			//     	}
+
+			//     // Use the Hosted Fields instance here to tokenize a card
+			//   });
+			// });
+
+			// Create a Client component
+			// braintree.client.create({
+			//   authorization: '{{client_token}}'
+			// }, function (clientErr, clientInstance) {
+			//   // Create PayPal component
+			//   braintree.paypal.create({
+			//     client: clientInstance
+			//   }, function (err, paypalInstance) {
+			//     paypalButton.addEventListener('click', function () {
+			//       // Tokenize here!
+			//       paypalInstance.tokenize({
+			//         flow: 'checkout', // Required
+			//         amount: $('#pay_amount').val(), // Required
+			//         currency: 'USD', // Required
+			//         locale: 'en_US',
+			//         enableShippingAddress: false,
+			//       }, function (err, tokenizationPayload) {
+			//         // Tokenization complete
+			//         // Send tokenizationPayload.nonce to server
+			//       });
+			//     });
+			//   });
+			// });
+		});
+	</script>
+{% endblock %}

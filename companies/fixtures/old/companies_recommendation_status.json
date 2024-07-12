@@ -1,0 +1,47 @@
+[
+{
+   "model": "companies.recommendation_status",
+   "pk": 1,
+   "fields": {
+      "name": "Active",
+      "codename": "active",
+      "order": 1
+   }
+},
+{
+   "model": "companies.recommendation_status",
+   "pk": 2,
+   "fields": {
+      "name": "Programmed",
+      "codename": "programmed",
+      "order": 2
+   }
+},
+{
+   "model": "companies.recommendation_status",
+   "pk": 3,
+   "fields": {
+      "name": "Inactive",
+      "codename": "inactive",
+      "order": 3
+   }
+},
+{
+   "model": "companies.recommendation_status",
+   "pk": 4,
+   "fields": {
+      "name": "Finalized",
+      "codename": "finalized",
+      "order": 4
+   }
+},
+{
+   "model": "companies.recommendation_status",
+   "pk": 5,
+   "fields": {
+      "name": "Pre-registration",
+      "codename": "preregistration",
+      "order": 0
+   }
+}
+]

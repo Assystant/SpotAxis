@@ -1,0 +1,416 @@
+[
+  {
+    "model": "candidates.language",
+    "pk": 1,
+    "fields": {
+      "name": "Mandarin",
+      "codename": null,
+      "order": 1
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 2,
+    "fields": {
+      "name": "English",
+      "codename": "en",
+      "order": 2
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 3,
+    "fields": {
+      "name": "Spanish",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 4,
+    "fields": {
+      "name": "Arabic",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 5,
+    "fields": {
+      "name": "Bengali",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 6,
+    "fields": {
+      "name": "Hindi",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 7,
+    "fields": {
+      "name": "Russian",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 8,
+    "fields": {
+      "name": "Portuguese",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 9,
+    "fields": {
+      "name": "Japanese",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 10,
+    "fields": {
+      "name": "German",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 11,
+    "fields": {
+      "name": "Javanese",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 12,
+    "fields": {
+      "name": "Korean",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 13,
+    "fields": {
+      "name": "Turkish",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 14,
+    "fields": {
+      "name": "Vietnamese",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 15,
+    "fields": {
+      "name": "Telugu",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 16,
+    "fields": {
+      "name": "Cantonese",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 17,
+    "fields": {
+      "name": "Marathi",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 18,
+    "fields": {
+      "name": "Tamil",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 19,
+    "fields": {
+      "name": "Italian",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 20,
+    "fields": {
+      "name": "Urdu",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 21,
+    "fields": {
+      "name": "Min Nan",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 22,
+    "fields": {
+      "name": "Jinyu",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 23,
+    "fields": {
+      "name": "Gujarati",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 24,
+    "fields": {
+      "name": "Polish",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 25,
+    "fields": {
+      "name": "Ukrainian",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 26,
+    "fields": {
+      "name": "Persian",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 27,
+    "fields": {
+      "name": "Xiang",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 28,
+    "fields": {
+      "name": "Malayalam",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 29,
+    "fields": {
+      "name": "Hakka",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 30,
+    "fields": {
+      "name": "Kannada",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 31,
+    "fields": {
+      "name": "Oriya",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 32,
+    "fields": {
+      "name": "Punjabi",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 33,
+    "fields": {
+      "name": "Sunda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 34,
+    "fields": {
+      "name": "Romanian",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 35,
+    "fields": {
+      "name": "Bhojpuri",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 36,
+    "fields": {
+      "name": "Azerbaijani",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 37,
+    "fields": {
+      "name": "Maithili",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 38,
+    "fields": {
+      "name": "Hausa",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 39,
+    "fields": {
+      "name": "Burmese",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 40,
+    "fields": {
+      "name": "Serbo-Croatian",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 41,
+    "fields": {
+      "name": "Gan",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 42,
+    "fields": {
+      "name": "Awadhi",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 43,
+    "fields": {
+      "name": "Thai",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 44,
+    "fields": {
+      "name": "Dutch",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 45,
+    "fields": {
+      "name": "Yoruba",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.language",
+    "pk": 46,
+    "fields": {
+      "name": "Sindhi",
+      "codename": null,
+      "order": 100
+    }
+  }
+]

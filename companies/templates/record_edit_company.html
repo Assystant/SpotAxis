@@ -1,0 +1,420 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block meta %}
+    <meta name="keyword" content="SpotAxis, Profile, Create Company, Jobs"/>
+    <meta name="description" content="Create Company Profile on SpotAxis"/>
+{% endblock %}
+{% block title %}SpotAxis | Create Company {% endblock %}
+
+{% block content %}
+    <form id="record_company_form" enctype="multipart/form-data" action="." method="post" role="form" class="mt10 mb50" >
+        {% csrf_token %}
+
+        <!-- Company Information-->
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+                <h2 class="text-center text-light">{% trans 'Company Information' %}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-8 col-md-push-2">
+                <div class="container-fluid bg-white pt20 pb20 br-2 mb40">
+                    <div class="row">
+                        <!-- Logo -->
+                        <div class="col-xs-12 col-sm-8 col-sm-push-2 col-md-6 col-md-push-3">
+                            <div class="form-group">
+                                <img class="img-responsive user-photo bordered br-2" src="{% if company.logo %}{{MEDIA_URL}}{{company.logo}}{%else%}{{MEDIA_URL}}logos_TRM/logo_TRM_company_default.png{%endif%}" alt="photo" style="margin:20px auto 20px">
+                                {% if form_company.logo.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in form_company.logo.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                {{ form_company.logo }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Brandname -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.name.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in form_company.name.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_name">{% trans 'Brand Name' %}<span class="required">*</span></label>
+                                {% endif %}
+                                <div class="input-group input-group-sm {%if form_company.name.errors%}has-error{%endif%}">
+                                    <div class="input-group-addon"><i class="fa fa-building fa-lg"></i></div>
+                                    {{ form_company.name }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Legal Name -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                            {% if form_company.social_name.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in form_company.social_name.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_social_name">{% trans 'Legal Name' %}<span class="required">*</span></label>
+                                {% endif %}
+                                <div class="input-group input-group-sm {%if form_company.social_name.errors%}has-error{%endif%}">
+                                    <div class="input-group-addon"><i class="fa fa-building-o fa-lg"></i></div>
+                                    {{ form_company.social_name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Brandname and Legal Name -->
+
+                    <div class="row">
+                        <!-- Company Phone -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.phone.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in form_company.phone.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_phone">{% trans 'Company Phone' %}<span class="required">*</span></label>
+                                {% endif %}
+                                <div class="input-group input-group-sm {%if form_company.phone.errors%}has-error{%endif%}">
+                                    <div class="input-group-addon"><i class="fa fa-phone fa-lg"></i></div>
+                                    {{ form_company.phone }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Company Email -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.company_email.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in form_company.company_email.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_company_email">{% trans 'Company Email' %}<span class="required">*</span></label>
+                                {%endif%}
+                                <div class="input-group input-group-sm {%if form_company.company_email.errors%}has-error{%endif%}">
+                                    <div class="input-group-addon"><i class="fa fa-envelope fa-lg"></i></div>
+                                    {{ form_company.company_email }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Email and Phone -->
+                    <div class="row">
+                        <!-- Industry -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.industry.errors %}
+                                    <ul class="list-unstyled error-list text-danger">
+                                    {% for error in form_company.industry.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_industry">{% trans 'Industry' %}<span class="required">*</span></label>
+                                {%endif%}
+                                <div class="input-group input-group-sm {%if form_company.industry.errors%}has-error{%endif%}">
+                                    <div class="input-group-addon"><i class="fa fa-gears fa-lg"></i></div>
+                                    {{ form_company.industry }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- No of Employees -->
+                        <!--div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.no_of_employees.errors %}
+                                    <ul class="list-unstyled error-list">
+                                        {% for error in form_company.no_of_employees.errors %}
+                                            <li>{{ error|escape }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_no_of_employees">No of Employees</label>
+                                {% endif %}
+                                <div class="input-group input-group-sm {% if form_company.no_of_employees.errors %}has-error{%endif%}">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-users fa-lg"></i>
+                                    </div>
+                                    {{form_company.no_of_employees}}
+                                </div>
+                            </div>
+                        </div-->
+                        <!-- Country -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.nationality.errors %}
+                                    <ul class="list-unstyled error-list">
+                                    {% for error in form_company.nationality.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_country">{% trans 'Country' %}<span class="required">*</span></label>
+                                {%endif%}
+                                <div class="input-group input-group-sm {%if form_company.nationality.errors%}has-error{%endif%}">
+                                    <div class="input-group-addon"><i class="fa fa-globe fa-lg"></i></div>
+                                    {{ form_company.nationality }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Industry and No of Employees -->
+
+                    <div class="row">
+                        <!-- State -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.state.errors %}
+                                    <ul class="list-unstyled error-list">
+                                    {% for error in form_company.state.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_state">{% trans 'State' %}<span class="required">*</span></label>
+                                {%endif%}
+                                <div class="input-group input-group-sm {%if form_company.state.errors%}has-error{%endif%}">
+                                    <div class="input-group-addon"><i class="fa fa-location-arrow fa-lg"></i></div>
+                                    {{ form_company.state }}
+                                </div>
+                            </div>
+                        </div>
+                        <!--City-->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.city.errors %}
+                                    <ul class="list-unstyled error-list">
+                                    {% for error in form_company.city.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_municipal">{% trans 'City' %}<span class="required">*</span></label>
+                                {%endif%}
+                                <div class="input-group input-group-sm {%if form_company.city.errors%}has-error{%endif%}">
+                                    <div class="input-group-addon"><i class="fa fa-crosshairs fa-lg"></i></div>
+                                    {{ form_company.city }}
+                                </div>
+                            </div>                
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Description -->
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.description.errors %}
+                                    <ul class="list-unstyled error-list">
+                                    {% for error in form_company.description.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_description">{% trans "Description" %}<span class="required">*</span></label>
+                                {% endif %}
+                                <div class="{% if form_company.description.errors %}has-error{% endif %} mb20">
+                                        {#                        <div class="input-group-addon"><i class="fa fa-map-marker fa-lg"></i></div>#}
+                                    {{ form_company.description }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Facebook -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.facebook.errors %}
+                                    <ul class="list-unstyled error-list">
+                                    {% for error in form_company.facebook.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_facebook">{% trans 'Facebook' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if form_company.facebook.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-facebook fa-lg"></i></div>
+                                    {{ form_company.facebook }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Twitter -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.twitter.errors %}
+                                    <ul class="list-unstyled error-list">
+                                    {% for error in form_company.twitter.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_twitter">{% trans 'Twitter' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if form_company.twitter.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-twitter fa-lg"></i></div>
+                                    {{ form_company.twitter }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Facebook and Twitter -->
+
+                    <div class="row">
+                        <!-- Web -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                {% if form_company.url.errors %}
+                                    <ul class="list-unstyled error-list">
+                                    {% for error in form_company.url.errors %}
+                                        <li>{{ error|escape }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <label for="id_url">{% trans 'Website' %}</label>
+                                {% endif %}
+                                <div class="input-group {% if form_company.url.errors %}has-error{% endif %} mb20">
+                                    <div class="input-group-addon"><i class="fa fa-globe fa-lg"></i></div>
+                                    {{ form_company.url }}
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Web -->
+
+                    <div class="row mt20 button-row ">
+                        <div class="col-xs-12">
+                            <button class="btn btn-sm btn-info btn-block"><i class="fa fa-check-circle fa-lg"></i> Save and Update</button>
+                            <a class="btn btn-sm btn-default btn-block" href="{% url 'companies_recruiter_profile' %}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block java_script_srcs %}
+    <script src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+    <script src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget_original.js"></script>
+    <script src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
+    <script src="{{ STATIC_URL }}ckeditor/ckeditor-init.js"></script>
+    
+{% endblock %}
+
+{% block java_script_code %}
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $('#id_logo').change(function(){
+                console.log('image changed');
+                 if(this.files && this.files[0]) {
+                    // var file = e.originalEvent.srcElement.files[i];
+                    var img = $('#id_logo').parent().find('img');
+                    console.log(img);
+                    var reader = new FileReader();
+                    var maxsize = 5*1024*1024;
+                    reader.onload = function(e) {
+                        console.log(img.attr('src'))
+                         img.attr('src',e.target.result);
+                         console.log(reader.result)
+                         console.log(img.attr('src'))
+                    }
+                    var filesize = this.files[0].size;
+                    if(filesize>maxsize){
+                        alert('File Size is more than 5MB. Please choose a smaller image.')
+                        $(this).val('');
+                        $(this).click();
+                    }
+                    else {
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                    // $("input").after(img);
+                }
+            })
+        })
+
+        function get_municipals(value) {
+            var id = (value);
+            $('#id_municipal').empty();
+            $.ajax({
+                data: {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                url: '/ajax/get-municipals/',
+                type: 'POST',
+    {#            dataType: 'html',#}
+                success: function(data){
+    {#                console.log(data.length);#}
+                    if (data.length == 0) {
+                        $('#id_municipal').append('<option value="0">Select a State first</option>');
+                    } else {
+                        $('#id_municipal').append('<option value="-1">Select...</option>');
+                    }
+
+                    for(var i = 0; i<data.length; i++){
+                        $('#id_municipal').append('<option value="' + data[i].pk + '">' + data[i].fields.name + '</option>');
+                    }
+                },
+                error: function(){
+                    $('#id_municipal').empty();
+                }
+            });
+        }
+
+        function get_company_areas(value) {
+            var id = (value);
+            $('#id_area').empty();
+            $.ajax({
+                data: {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                url: '/ajax/get-company-areas/',
+                type: 'POST',
+    {#            dataType: 'html',#}
+                success: function(data){
+                    if (data.length > 0) {
+                        $('#id_area').append('<option value="-1">Select...</option>');
+                        for(var i = 0; i<data.length; i++){
+                            $('#id_area').append('<option value="' + data[i].pk + '">' + data[i].fields.name + '</option>');
+                        }
+                    } else {
+                        $('#id_area').append('<option value="0">Select an Industry first</option>');
+                    }
+                },
+                error: function(){
+                    $('#id_area').append('<option value="0">Select an Industry first</option>');
+                }
+            });
+        }
+
+{#        $(document).ready(function () {#}
+{#            $(function() {#}
+        // $('#id_state').change(
+        //     function(){ get_municipals(this.value); }
+        // );
+        // $('#id_industry').change(
+        //     function(){ get_company_areas(this.value); }
+        // );
+{#        $(function(){#}
+        AjaxUploadWidget.autoDiscover();
+{#        });#}
+{#            });#}
+{#        });#}
+
+        $(function () {
+          $('[data-toggle="popover"]').popover()
+        })
+
+    </script>
+{% endblock %}

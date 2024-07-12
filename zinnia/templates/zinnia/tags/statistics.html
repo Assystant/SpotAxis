@@ -1,0 +1,42 @@
+{% load i18n %}
+<ul class="statistics">
+  <li>
+    {% blocktrans count author_count=authors %}{{ author_count }} author{% plural %}{{ author_count }} authors{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans count entry_count=entries %}{{ entry_count }} resource{% plural %}{{ entry_count }} resources{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans count tag_count=tags %}{{ tag_count }} tag{% plural %}{{ tag_count }} tags{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans count category_count=categories %}{{ category_count }} category{% plural %}{{ category_count }} categories{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans count comment_count=comments %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans count pingback_count=pingbacks %}{{ pingback_count }} pingback{% plural %}{{ pingback_count }} pingbacks{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans count trackback_count=trackbacks %}{{ trackback_count }} trackback{% plural %}{{ trackback_count }} trackbacks{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans count reject_count=rejects %}{{ reject_count }} rejected item{% plural %}{{ reject_count }} rejected items{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans with entries_per_month=entries_per_month|floatformat:2 %}{{ entries_per_month }} resources per month{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans with words_per_entry=words_per_entry|floatformat:2 %}{{ words_per_entry }} words per resource{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans with words_per_comment=words_per_comment|floatformat:2 %}{{ words_per_comment }} words per comment{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans with comments_per_entry=comments_per_entry|floatformat:2 %}{{ comments_per_entry }} comments per resource{% endblocktrans %}
+  </li>
+  <li>
+    {% blocktrans with linkbacks_per_entry=linkbacks_per_entry|floatformat:2 %}{{ linkbacks_per_entry }} linkbacks per resource{% endblocktrans %}
+  </li>
+</ul>

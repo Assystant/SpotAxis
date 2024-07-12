@@ -1,0 +1,61 @@
+{% extends "zinnia/entry_list.html" %}
+{% load i18n %}
+{% load zinnia %}
+
+{% block meta-description %}{% blocktrans with year=week|date:"Y" week_number=week|week_number %}Archives week {{ week_number }} of {{ year }}{% endblocktrans %}{% endblock meta-description %}
+
+{% block title %}{% blocktrans with year=week|date:"Y" week_number=week|week_number %}Archives week {{ week_number }} of {{ year }}{% endblocktrans %}{% endblock title %}
+
+{% block body-class %}{{ block.super }} archive date week year-{{ week|date:"Y" }} month-{{ week|date:"m" }} week-{{ week|week_number }}{% endblock body-class %}
+
+{% block content-title %}
+  <h1 class="text-light mb5 ">{% blocktrans with year=week|date:"Y" week_number=week|week_number %}Archives week {{ week_number }} of {{ year }}{% endblocktrans %}</h1>
+  <h2 class="text-muted ml10 no-margin-top mb20">{{ week|date:"DATE_FORMAT" }} - {{ week_end_day|date:"DATE_FORMAT" }}</h2>
+{% endblock content-title %}
+
+{% block content-related %}
+  <hr class="mr20">
+  <div class="container-fluid">
+  <div class="row no-margin">
+    {% if date_list %}
+      <div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+        <div class="bordered mb20 pl10 pr10 pt10 pb10">
+          <h2 class="text-muted border-bottom border-light pb5 mb10 mt10">{% trans "Daily archives" %}</h2>
+          <ul>
+            {% for date in date_list %}
+              <li>
+                <a href="{% url 'zinnia:entry_archive_day' date|date:"Y" date|date:"m" date|date:"d" %}" rel="archives">{{ date|date:"DATE_FORMAT" }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+    {% if previous_week %}
+      <div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+        <div class="bordered mb20 pl10 pr10 pt10 pb10">
+          <h2 class="text-muted border-bottom border-light pb5 mb10 mt10">{% trans "Previous week" %}</h2>
+          <p class="ml20">
+            <a href="{% url 'zinnia:entry_archive_week' previous_week|date:"Y" previous_week|week_number %}" rel="archives">
+              {% blocktrans with year=previous_week|date:"Y" week_number=previous_week|week_number %}Week {{ week_number }} of {{ year }}{% endblocktrans %}
+            </a>
+          </p>
+        </div>
+      </div>
+    {% endif %}
+    {% if next_week %}
+      <div class="col-xs-12 col-sm-6 col-md-4 pl5 pr5">
+        <div class="bordered mb20 pl10 pr10 pt10 pb10">
+          <h2 class="text-muted border-bottom border-light pb5 mb10 mt10">{% trans "Next week" %}</h2>
+          <p class="ml20">
+            <a href="{% url 'zinnia:entry_archive_week' next_week|date:"Y" next_week|week_number %}" rel="archives">
+              {% blocktrans with year=next_week|date:"Y" week_number=next_week|week_number %}Week {{ week_number }} of {{ year }}{% endblocktrans %}
+            </a>
+          </p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  </div>
+  
+{% endblock content-related %}

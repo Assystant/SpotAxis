@@ -1,0 +1,758 @@
+{% extends 'base/base.html' %}
+{% load humanize %}
+{% load TRM_tags %}
+{% load el_pagination_tags %}
+{% block css %}
+      <link href="{{STATIC_URL}}daterange/daterangepicker.css" rel="stylesheet">
+      <link href="{{STATIC_URL}}slider/bootstrap-slider.css" rel="stylesheet">
+{% endblock %}
+{% block bodyclass %}bg-alt{%endblock%}
+{% block content %}
+	<div class="container mt40">
+		<div class="row mb20">
+			<form method="get" id="jobsearchform">
+				<div class="row">
+					<input type="hidden" name="k" value="{{filters.keywords|joinBy:','}}">
+					<input type="hidden" name="l" value="{{filters.locations|joinBy:','}}">
+					<input type="hidden" name="t" value="{{filters.types|joinBy:','}}">
+					<input type="hidden" name="i" value="{{filters.types|joinBy:','}}">
+					<input type="hidden" name="d" value="{{filters.types|joinBy:','}}">
+					<input type="hidden" name="s" value="{{filters.types|joinBy:','}}">
+					<input type="hidden" name="j" value="{{filters.types|joinBy:','}}">
+					<input type="hidden" name="e" value="{{filters.types|joinBy:','}}">
+					<div class="col-xs-12 mb10">
+						<select id="jobsearchfilter-keyword" multiple class="no-dropdown"></select>
+					</div>
+					<div class="col-xs-12 col-sm-6 col-lg-3 mb10">
+						<select id="jobsearchfilter-location" multiple class="items-hidden">
+							{% for location in locations %}
+								<option value="1-{{location}}">{{location}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="col-xs-12 col-sm-6  col-lg-3 mb10">
+						<select id="jobsearchfilter-type" multiple class="items-hidden">
+			            	{% for type in types %}
+			            		<option value='2-{{type.id}}'>{{type.name}}</option>
+			            	{% endfor %}
+						</select>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-lg-3 mb10  advanced-filters collapse fade">
+
+						<select id="jobsearchfilter-industry" multiple class="items-hidden">
+							{% for industry in industries %}
+								<option value="3-{{industry.id}}">{{industry.name}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-lg-3 mb10 advanced-filters collapse fade">
+
+						<select id="jobsearchfilter-degree" multiple class="items-hidden">
+							{% for degree in degrees %}
+								<option value="4-{{degree.id}}">{{degree.name}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-lg-3 mb10  advanced-filters collapse fade">
+
+						<select id="jobsearchfilter-salary" multiple class="items-hidden">
+							{% for salary in salaries %}
+								<option value="5-{{salary.id}}">{{salary.name}}</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="col-xs-12 mb10 pl5 pr5 collapse fade" id="salaryrange">
+						<div class="form-group pt10">
+							<label for="jobsearchfilter-salaryrange" class="mr20 pl15">Expected</label>
+							<span class="inline-block"><span class="mr20">0</span><input id="jobsearchfilter-salaryrange" type="text" class="form-control" value="" data-slider-min="0" data-slider-max="40" data-slider-step="1" data-slider-value="[0,10]"/><span class="ml20">40 years</span></span>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-lg-3 mb10  advanced-filters collapse fade">
+
+						<input id="jobsearchfilter-joining" class="form-control" placeholder="Joining Date">
+
+					</div>
+					<div class="col-xs-12 col-sm-8 col-lg-5 mb10 pl5 pr5  advanced-filters collapse fade">
+						<div class="form-group pt10 no-margin-bottom">
+							<label for="jobsearchfilter-experience" class="mr20 pl15">Experience</label>
+							<span class="inline-block"><span class="mr20">0</span><input id="jobsearchfilter-experience" type="text" class="form-control" value="" data-slider-min="0" data-slider-max="40" data-slider-step="1" data-slider-value="[0,10]"/><span class="ml20">40 years</span></span>
+						</div>
+					</div>
+					<div class="hidden-xs hidden-lg col-sm-8 col-md-6"></div>
+					<div class="visible-lg col-lg-6 advanced-filters collapse fade"></div>
+					<div class="col-xs-12 col-sm-2 mt5 col-md-4 mb20">
+						<a href="#" class="btn btn btn-trans pull-right mt5 advanced-filters collapse fade in" data-toggle="collapse" data-target=".advanced-filters">Advanced</a>
+						<a href="#" class="btn btn btn-trans pull-right mt5 advanced-filters collapse fade" data-toggle="collapse" data-target=".advanced-filters">Hide</a>
+					</div>
+					<div class="col-xs-12 col-sm-2 mt5 mb20">
+						<button class="btn btn-block btn-info pull-right">Search</button>
+						</div>
+				</div>
+			</form>
+			<div class="endless_page_template">
+				{% include page_template %}
+			</div>
+	    </div>
+	</div>
+{% endblock %}
+{% block java_script_srcs %}
+      <script type="text/javascript" src="{{STATIC_URL}}daterange/moment.js"></script>
+      <script type="text/javascript" src="{{STATIC_URL}}daterange/daterangepicker.js"></script>
+      <script type="text/javascript" src="{{STATIC_URL}}slider/bootstrap-slider.js"></script>
+	  <script src="{{ STATIC_URL }}el-pagination/js/el-pagination.js"></script>
+{% endblock %}
+{% block java_script_code %}
+	<script>
+		var checklinks = function(event){
+		}
+        Selectize.define('no-delete', function(options) {
+          this.deleteSelection = function() {};
+        });
+        var keywordFilterSelect = {
+            searchField: ['text'],
+            sortField:'text',
+            openOnFocus:false,
+            allowEmptyOption: false,
+            allowPrecedence:true,
+            hideSelected: true,
+            multiple:true,
+            selected:null,
+            create: function (input, callback){
+                callback({
+                    'value': '0-' + input,
+                    'text': input,
+                })
+            },
+            selectOnTab: true,
+            placeholder: " Looking for",
+            render: {
+                option: function(item,escape){
+                    return '<div class="row no-margin bg-white border-bottom border-light" data-value="'+item.value+'"><div class="col-xs-12 no-padding"><p class="mt10 no-margin-bottom text-light"><b>'+ item.text + '</b></p></div></div>'
+                },
+                item: function(item,escape){
+                    if(item.type){
+                        return '<div class="item lh1" data-type="'+item.type+'"><div class="item-text inline-block pl5 pr5">'+item.text+'</div></div>';
+                    }
+                    else{
+                        return '<div class="item lh1" data-type="0"><div class="inline-block">'+item.text+'</div></div>';
+                    }
+                },
+            },
+            onInitialize: function(){
+            	$filter = this;
+            	keywords = {{filters.keywords|utf8|safe}};
+            	keywords.forEach(function(keyword){
+            		value = '0-' + keyword
+            		if (keyword.trim() != ""){
+            			alert(keyword)
+	            		$filter.addOption({value:value,text:keyword})
+						$filter.addItem(value);
+					}
+            	});
+            	joinings = {{filters.joinings|utf8|safe}};
+            	// console.log(joinings);
+            	joinings.forEach(function(joining){
+            		value = '7-' + joining
+            		if (joining){
+	            		$filter.addOption({value:value,text:joining,type:7})
+						$filter.addItem(value);
+					}
+            	});
+            	experiences = {{filters.experiences|utf8|safe}};
+            	// console.log(experiences);
+            	experiences.forEach(function(experience){
+            		value = '8-' + experience
+            		if (experience){
+	            		$filter.addOption({value:value,text:experience + ' years',type:8})
+						$filter.addItem(value);
+					}
+            	});
+            },
+            onItemAdd: function(value, $item){
+            	if (value.startsWith('7-')){
+	            	filter = this;
+					items = filter.$control.find('.item[data-type=7]')
+					items.each(function(i,item){
+						if (item != $item[0]){
+							oldvalue = $(item).data('value').split('-');
+							newvalue = value.split('-');
+							start = new moment(oldvalue[1]);
+							end = new moment(oldvalue[2]);
+							_start = new moment(newvalue[1]);
+							_end = new moment(newvalue[2]);
+							if(_start <= end && start <= _end){
+								filter.removeItem(oldvalue.join('-'));
+								filter.removeOption(oldvalue.join('-'));
+								filter.removeItem(newvalue.join('-'));
+								filter.removeOption(newvalue.join('-'));
+								finaltext = moment.min(start,_start).format('MM/DD/YYYY') + ' - ' + moment.max(end,_end).format('MM/DD/YYYY');
+								finalvalue = "7-" + finaltext
+								filter.addOption({value:finalvalue,text:finaltext,type:7});
+								filter.addItem(finalvalue);
+							}
+						}
+					});
+				}
+            },
+            onItemRemove: function(value, $item){
+                this.removeOption(value);
+                _this = this
+                setTimeout(function(){
+                    arr = value.split('-')
+                    vtype = parseInt(arr[0])
+                    if (vtype == 1){
+                        $('#jobsearchfilter-location')[0].selectize.removeItem(value);
+                    }
+                    else if (vtype == 2){
+                        $('#jobsearchfilter-type')[0].selectize.removeItem(value);
+                    }
+                    else if (vtype == 3) {
+                        $('#jobsearchfilter-industry')[0].selectize.removeItem(value);
+                    }
+                    else if (vtype == 4) {
+                        $('#jobsearchfilter-degree')[0].selectize.removeItem(value);
+                    }
+                    else if (vtype == 5) {
+                        $('#jobsearchfilter-salary')[0].selectize.removeItem(value);
+                    }
+                },200)
+            },
+        }
+        var locationFilterSelect = {
+        	persist: false,
+            searchField: ['text'],
+            sortField:'text',
+            openOnFocus:true,
+            allowEmptyOption: false,
+            allowPrecedence:true,
+            hideSelected: true,
+            multiple:true,
+            selected:null,
+            create: false,
+            selectOnTab: true,
+            placeholder: ' Location',
+            render: {
+			    option_create: function(data, escape) {
+				    return '<div class="create"><strong>' + escape(data.input) + '</strong>&hellip;</div>';
+			    }
+			},
+            create: function (input, callback){
+                callback({
+                    'value': '1-' + input,
+                    'text': input,
+                })
+            },
+            onInitialize: function(){
+            	$filter = this;
+            	locations = {{filters.locations|utf8|safe}};
+            	// console.log(locations);
+            	locations.forEach(function(location){
+            		value = '1-' + location
+            		if (location.trim() != ""){
+	            		$filter.addOption({value:value,text:location})
+						$filter.addItem(value);
+					}
+            	});
+                this.$dropdown.next('.no-results').remove();
+            },
+            onItemRemove: function(value, $item){
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+            },
+            onItemAdd: function(value, $item){
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+                //Go for search 
+                filter = $('#jobsearchfilter-keyword')[0].selectize;
+                fvalue = (value).toString();
+                filter.addOption({
+                    'value': fvalue,
+                    'type': 1,
+                    'label': ' Location',
+                    'text': this.options[value].text
+                });
+                filter.addItem(fvalue)
+            },
+            plugins: {
+                'no-delete': {}
+            }
+        }
+        var typeFilterSelect = {
+            searchField: ['text'],
+            sortField:'text',
+            openOnFocus:true,
+            allowEmptyOption: false,
+            allowPrecedence:true,
+            hideSelected: true,
+            multiple:true,
+            selected:null,
+            create: false,
+            selectOnTab: true,
+            placeholder: 'Employment Type',
+            onInitialize: function(){
+            	$filter = this;
+            	types = {{filters.types|utf8|safe}};
+            	// console.log(types);
+            	types.forEach(function(type){
+            		if (type.trim() != ""){
+	            		value = '2-' + type
+						$filter.addItem(value);
+					}
+            	});
+                this.$dropdown.next('.no-results').remove();
+            },
+            onItemRemove: function(value, $item){
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+            },
+            onItemAdd: function(value, $item){
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+                //Go for search 
+                filter = $('#jobsearchfilter-keyword')[0].selectize;
+                fvalue = (value).toString();
+                filter.addOption({
+                    'value': fvalue,
+                    'type': 2,
+                    'label': 'Type',
+                    'text': this.options[value].text
+                });
+                filter.addItem(fvalue)
+            },
+            onDropdownOpen: function($dropdown){
+                if($dropdown.find('[data-selectable]')[0]){
+                    this.$dropdown.next('.no-results').remove();
+                }
+            },
+            onFocus: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+            },
+            onType: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+            },
+            onBlur:function(){
+                this.$dropdown.next('.no-results').remove();
+            },
+            plugins: {
+                'no-delete': {}
+            }
+        }
+        var industryFilterSelect = {
+            searchField: ['text'],
+            sortField:'text',
+            openOnFocus:true,
+            allowEmptyOption: false,
+            allowPrecedence:true,
+            hideSelected: true,
+            multiple:true,
+            selected:null,
+            create: false,
+            selectOnTab: true,
+            placeholder: 'Industry',
+            onInitialize: function(){
+            	$filter = this;
+            	industries = {{filters.industries|utf8|safe}};
+            	// console.log(industries);
+            	industries.forEach(function(industry){
+
+            		if (industry.trim() != ""){
+	            		value = '3-' + industry
+						$filter.addItem(value);
+					}
+            	});
+                this.$dropdown.next('.no-results').remove();
+            },
+            onItemRemove: function(value, $item){
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+            },
+            onItemAdd: function(value, $item){
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+                //Go for search 
+                filter = $('#jobsearchfilter-keyword')[0].selectize;
+                fvalue = (value).toString();
+                filter.addOption({
+                    'value': fvalue,
+                    'type': 3,
+                    'label': 'Industry',
+                    'text': this.options[value].text
+                });
+                filter.addItem(fvalue)
+            },
+            onDropdownOpen: function($dropdown){
+                if($dropdown.find('[data-selectable]')[0]){
+                    this.$dropdown.next('.no-results').remove();
+                }
+            },
+            onFocus: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+            },
+            onType: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+            },
+            onBlur:function(){
+                this.$dropdown.next('.no-results').remove();
+            },
+            plugins: {
+                'no-delete': {}
+            }
+        }
+        var degreeFilterSelect = {
+            searchField: ['text'],
+            sortField:'text',
+            openOnFocus:true,
+            allowEmptyOption: false,
+            allowPrecedence:true,
+            hideSelected: true,
+            multiple:true,
+            selected:null,
+            create: false,
+            selectOnTab: true,
+            placeholder: 'Degree',
+            onInitialize: function(){
+            	$filter = this;
+            	degrees = {{filters.degrees|utf8|safe}};
+            	// console.log(degrees);
+            	degrees.forEach(function(degree){
+            		if (degree.trim() != ""){
+	            		value = '4-' + degree
+						$filter.addItem(value);
+					}
+            	});
+                this.$dropdown.next('.no-results').remove();
+            },
+            onItemRemove: function(value, $item){
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+            },
+            onItemAdd: function(value, $item){
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+                //Go for search 
+                filter = $('#jobsearchfilter-keyword')[0].selectize;
+                fvalue = (value).toString();
+                filter.addOption({
+                    'value': fvalue,
+                    'type': 4,
+                    'label': 'Degree',
+                    'text': this.options[value].text
+                });
+                filter.addItem(fvalue)
+            },
+            onDropdownOpen: function($dropdown){
+                if($dropdown.find('[data-selectable]')[0]){
+                    this.$dropdown.next('.no-results').remove();
+                }
+            },
+            onFocus: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+            },
+            onType: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+            },
+            onBlur:function(){
+                this.$dropdown.next('.no-results').remove();
+            },
+            plugins: {
+                'no-delete': {}
+            }
+        }
+        var salaryFilterSelect = {
+            searchField: ['text'],
+            sortField:'text',
+            openOnFocus:true,
+            allowEmptyOption: false,
+            allowPrecedence:true,
+            hideSelected: true,
+            multiple:true,
+            selected:null,
+            create: false,
+            selectOnTab: true,
+            placeholder: 'Salary',
+            onInitialize: function(){
+            	$filter = this;
+            	salaries = {{filters.salaries|utf8|safe}};
+            	// console.log(salaries);
+            	salaries.forEach(function(salary){
+            		if (salary.trim() != ""){
+	            		value = '5-' + salary
+						$filter.addItem(value);
+					}
+            	});
+                this.$dropdown.next('.no-results').remove();
+            },
+            onItemRemove: function(value, $item){
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+
+            	// if(value == '5-6'){
+            	// 	$('#salaryrange').collapse('hide');
+            	// }
+            },
+            onItemAdd: function(value, $item){
+            	// if(value == '5-6'){
+            	// 	$('#salaryrange').collapse('show');
+            	// }
+            	if (this.$wrapper.hasClass('items-hidden')) {
+                    this.$control_input.attr('placeholder',this.settings.placeholder);
+                    this.$control_input.css('width','auto');
+                }
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+                //Go for search 
+                filter = $('#jobsearchfilter-keyword')[0].selectize;
+                fvalue = (value).toString();
+                filter.addOption({
+                    'value': fvalue,
+                    'type': 5,
+                    'label': 'Salary',
+                    'text': this.options[value].text
+                });
+                filter.addItem(fvalue)
+            },
+            onDropdownOpen: function($dropdown){
+                if($dropdown.find('[data-selectable]')[0]){
+                    this.$dropdown.next('.no-results').remove();
+                }
+            },
+            onFocus: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+            },
+            onType: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                }
+            },
+            onBlur:function(){
+                this.$dropdown.next('.no-results').remove();
+            },
+            plugins: {
+                'no-delete': {}
+            }
+        }
+        var daterangeoptions = {
+		    "ranges": {
+		        "Next 7 Days": [
+		            moment(),
+		            moment().add(6, 'days'),
+		        ],
+		        "Next 30 Days": [
+			        moment(),
+		            moment().add(29, 'days'),
+		        ],
+                'This Month': [
+                	moment().startOf('month'), 
+                	moment().endOf('month')
+                ],
+		        "Next Month": [
+		            moment().add(1, 'month').startOf('month'),
+		            moment().add(1, 'month').endOf('month')
+		        ],
+		        "Next 3 Month": [
+		            moment().add(1, 'month').startOf('month'),
+		            moment().add(3, 'month').endOf('month')
+		        ],
+		        "Next 6 Month": [
+		            moment().add(1, 'month').startOf('month'),
+		            moment().add(6, 'month').endOf('month')
+		        ]
+		    },
+		    "autoApply": true,
+		    "autoUpdateInput": false,
+		    "alwaysShowCalendars": true,
+		    "startDate": moment(),
+		    "minDate": moment(),
+		    "opens": "center",
+		    "applyClass": "btn-info-inverse",
+		    "buttonClasses": "btn",
+		    "cancelLabel": 'Clear'
+        }
+		$(document).ready(function(){
+			$('.company-card').click(function(event){
+				if(event.target.tagName.toLowerCase() === 'a'){
+					event.stopPropagation();
+				}
+			});
+			$('#jobsearchfilter-keyword').selectize(keywordFilterSelect);
+			$('#jobsearchfilter-location').selectize(locationFilterSelect);
+			$('#jobsearchfilter-type').selectize(typeFilterSelect);
+			$('#jobsearchfilter-industry').selectize(industryFilterSelect);
+			$('#jobsearchfilter-degree').selectize(degreeFilterSelect);
+			$('#jobsearchfilter-salary').selectize(salaryFilterSelect);
+			// $('#jobsearchfilter-notice').selectize(noticeFilterSelect);
+			experiencevalue = {{filters.experiences|utf8|safe}};
+			experiencevalue = experiencevalue[0];
+			if(experiencevalue){
+				experiencevalue = experiencevalue.split('-');
+				experiencevalue[0] = parseInt(experiencevalue[0]);
+				experiencevalue[1] = parseInt(experiencevalue[1]);
+			}
+			else {
+				experiencevalue = [0,10]
+			}
+			$('#jobsearchfilter-joining').daterangepicker(daterangeoptions);
+			$("#jobsearchfilter-experience").slider({
+				tooltip_split: true,
+				value: experiencevalue
+			});
+			$('#jobsearchfilter-experience').on('slideStop',function(range){
+				filter = $('#jobsearchfilter-keyword')[0].selectize;
+				oldvalue = filter.$control.find('.item[data-type=8]').data('value');
+				fvalue = range.value[0] + '-' + range.value[1];
+				if (oldvalue || oldvalue !="" || typeof oldvalue != 'undefined'){
+					filter.removeItem(oldvalue);
+					filter.removeOption(oldvalue);
+				}
+				filter.addOption({
+					'value': '8-' + fvalue,
+					'type': 8,
+					'label': 'Experience',
+					'text': fvalue + ' years'
+				});
+				filter.addItem('8-' + fvalue);
+			})
+			$('#jobsearchfilter-joining').on('apply.daterangepicker', function(ev, picker) {
+			    fvalue = (picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY')).toString();
+			    filter = $('#jobsearchfilter-keyword')[0].selectize;
+                filter.addOption({
+                    'value': '7-' + fvalue,
+                    'type': 7,
+                    'label': 'Joining on',
+                    'text': fvalue
+                });
+                filter.addItem('7-'+fvalue);
+			    $(this).val('');
+			});
+
+		    $('#jobsearchfilter-joining').on('cancel.daterangepicker', function(ev, picker) {
+		       $(this).val('');
+		    });
+		});
+		$('#jobsearchform').submit(function(e){
+			e.stopPropagation();
+			$form = $(this);
+			$values = $('#jobsearchfilter-keyword').val()
+			$keywords = ""
+			$locations = ""
+			$types = ""
+			$industries = ""
+			$degrees = ""
+			$salaries = ""
+			$joinings = ""
+			$experiences = ""
+			if ($values) {
+				$values.forEach(function(value, index){
+					value = value.toString().split('-')
+					type = value.shift();
+					value = value.join('-')
+					switch(type){
+						case '0':
+							$keywords += value + ";";
+							break;
+						case '1':
+							$locations += value + ";";
+							break;
+						case '2':
+							$types += value + ";";
+							break;
+						case '3':
+							$industries += value + ";";
+							break;
+						case '4':
+							$degrees += value + ";";
+							break;
+						case '5':
+							$salaries += value + ";";
+							break;
+						case '7':
+							$joinings += value + ";";
+							break;
+						case '8':
+							$experiences += value + ";";
+							break;
+					}
+				});
+			}
+			$keywords = $keywords.slice(0,-1);
+			$locations = $locations.slice(0,-1);
+			$types = $types.slice(0,-1);
+			$industries = $industries.slice(0,-1);
+			$degrees = $degrees.slice(0,-1);
+			$salaries = $salaries.slice(0,-1);
+			$joinings = $joinings.slice(0,-1);
+			$experiences = $experiences.slice(0,-1);
+			$form.find('[name=k]').val($keywords);
+			$form.find('[name=l]').val($locations);
+			$form.find('[name=t]').val($types);
+			$form.find('[name=i]').val($industries);
+			$form.find('[name=d]').val($degrees);
+			$form.find('[name=s]').val($salaries);
+			$form.find('[name=j]').val($joinings);
+			$form.find('[name=e]').val($experiences);
+			return true;
+		})
+	</script>
+	<script>
+        $.endlessPaginate({
+            paginateOnScroll: true,
+
+            paginateOnScrollMargin: 100,
+            paginateOnScrollChunkSize: 3
+        });
+    </script>
+{% endblock %}

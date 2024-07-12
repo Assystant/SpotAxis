@@ -1,0 +1,93 @@
+[
+  {
+    "model": "companies.company_industry",
+    "pk": 1,
+    "fields": {
+      "name": "Alimentos y Bebidas"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 2,
+    "fields": {
+      "name": "Construcci\u00f3n e Inmobiliaria"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 3,
+    "fields": {
+      "name": "Explotaci\u00f3n de Recursos Forestales"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 4,
+    "fields": {
+      "name": "Gobierno y Organizaciones"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 5,
+    "fields": {
+      "name": "Industria"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 6,
+    "fields": {
+      "name": "Medios de Comunicaci\u00f3n"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 7,
+    "fields": {
+      "name": "Mobiliario y Material de Oficina"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 8,
+    "fields": {
+      "name": "Publicidad y Artes Gr\u00e1ficas"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 9,
+    "fields": {
+      "name": "Salud y Belleza"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 10,
+    "fields": {
+      "name": "Servicios"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 11,
+    "fields": {
+      "name": "Tecnolog\u00eda y Telecomunicaciones"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 12,
+    "fields": {
+      "name": "Textil, Calzado y Complementos"
+    }
+  },
+  {
+    "model": "companies.company_industry",
+    "pk": 13,
+    "fields": {
+      "name": "Turismo, Ocio y Deportes"
+    }
+  }
+]

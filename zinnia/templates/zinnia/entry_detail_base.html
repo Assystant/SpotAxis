@@ -1,0 +1,203 @@
+{% extends "zinnia/base.html" %}
+{% load i18n %}
+{% load zinnia %}
+{% load comments %}
+{% load TRM_tags %}
+
+{% block title %}{{ object.title }}{% endblock title %}
+
+{% block meta-description %}{{ object.excerpt|safe }}{% endblock meta-description %}
+
+{% block meta-keywords %}{% if object.tags %}{{ object.tags }}{% else %}{{ block.super }}{% endif %}{% endblock meta-keywords %}
+
+{% block link %}
+{{ block.super }}
+{% with previous_entry=object.previous_entry %}{% if previous_entry %}
+<link rel="prev" title="{{ previous_entry.title }}" href="{{ previous_entry.get_absolute_url }}" />
+{% endif %}{% endwith %}
+{% with next_entry=object.next_entry %}{% if next_entry %}
+<link rel="next" title="{{ next_entry.title }}" href="{{ next_entry.get_absolute_url }}" />
+{% endif %}{% endwith %}
+<link rel="shortlink" href="{{ object.short_url }}" />
+<link rel="canonical" href="{{ object.get_absolute_url }}" />
+{% with year=object.publication_date|date:"Y" month=object.publication_date|date:"m" day=object.publication_date|date:"d" %}
+<link rel="alternate" type="application/rss+xml" title="{% blocktrans with object=object.title %}RSS feed of discussions on {{ object }}{% endblocktrans %}"
+href="{% url 'zinnia:entry_discussion_feed' year month day object.slug %}" />
+<link rel="alternate" type="application/rss+xml" title="{% blocktrans with object=object.title %}RSS feed of comments on {{ object }}{% endblocktrans %}"
+href="{% url 'zinnia:entry_comment_feed' year month day object.slug %}" />
+<link rel="alternate" type="application/rss+xml" title="{% blocktrans with object=object.title %}RSS feed of pingbacks on {{ object }}{% endblocktrans %}"
+href="{% url 'zinnia:entry_pingback_feed' year month day object.slug %}" />
+<link rel="alternate" type="application/rss+xml" title="{% blocktrans with object=object.title %}RSS feed of trackbacks on {{ object }}{% endblocktrans %}"
+href="{% url 'zinnia:entry_trackback_feed' year month day object.slug %}" />
+{% endwith %}
+{% endblock link %}
+
+{% block body-class %} entry entry-{{ object.pk }}{% if object.featured %} featured{% endif %} year-{{ object.publication_date|date:"Y" }} month-{{ object.publication_date|date:"m" }} week-{{ object.publication_date|date:"W" }} day-{{ object.publication_date|date:"d" }}{% endblock body-class %}
+{% block content %}
+
+{% block entry-content %}
+{% include object.content_template with object_content=object.html_content %}
+{% endblock entry-content %}
+
+{% block entry-widgets %}
+<aside role="complementary" class="entry-widgets  mr20">
+  {% block entry-next-entry %}
+  {% with next_entry=object.next_entry %}
+  {% if next_entry %}
+  <div class="entry-next">
+    <div class="entry-content bg-dark">
+      <h6 class="text-inverse mb5"> {% trans "Next Resource" %} </h6>
+      <p>
+        <a href="{{ next_entry.get_absolute_url }}" title="{{ next_entry.title }}" rel="next" class="">
+          {% if next_entry.title|length > 25 %}{{ next_entry.title|title|uptill:20 }}...{%else%}{{ next_entry.title|title }}{% endif %}
+        </a>
+      </p>
+    </div>
+    <div class="entry-button bg-dark"><i class="glyphicon glyphicon-chevron-right"></i></div>
+  </div>
+  {% endif %}
+  {% endwith %}
+  {% endblock entry-next-entry %}
+  {% block entry-previous-entry %}
+  {% with previous_entry=object.previous_entry %}
+  {% if previous_entry %}
+  <div class="entry-previous">
+    <div class="entry-button bg-dark"><i class="glyphicon glyphicon-chevron-left"></i></div>
+    <div class="entry-content bg-dark">
+      <h6 class="text-inverse mb5"> {% trans "Previous Resource" %} </h6>
+      <p>
+        <a href="{{ previous_entry.get_absolute_url }}" title="{{ previous_entry.title }}" rel="prev">
+          {% if previous_entry.title|length > 25 %}{{ previous_entry.title|title|uptill:20 }}...{%else%}{{ previous_entry.title|title }}{% endif %}
+        </a>
+      </p>
+    </div>
+  </div>
+  {% endif %}
+  {% endwith %}
+  {% endblock entry-previous-entry %}
+  {% block entry-related-entries %}
+  {% with entry_related=object.related_published %}
+  {% if entry_related %}
+  <div class="entry-related">
+    <h3 class="text-light">{% trans "Related resources" %}</h3>
+    <ul>
+      {% for entry in entry_related %}
+      <li>
+       <a href="{{ entry.get_absolute_url }}" title="{{ entry.title }}" rel="bookmark">{{ entry.title }}</a>
+     </li>
+     {% endfor %}
+   </ul>
+ </div>
+ <hr>
+ {% endif %}
+ {% endwith %}
+ {% endblock entry-related-entries %}
+ {% block entry-similar-entries %}
+ <div class="entry-similar container-fluid bordered hover-highlight text-light mb20">
+  <h3>{% trans "Similar resources" %}</h3>
+  <hr class="no-margin-top">
+  {% get_similar_entries %}
+</div>
+{% endblock entry-similar-entries %}
+</aside>
+{% endblock entry-widgets %}
+
+
+{% block entry-comments %}
+<section id="comments" class="container-fluid bordered hover-highlight mr20 mb20">
+  <h3 class="text-light">{% trans "Comments" %}<small class="inline-block ml20"><a class="small" href="#comment-form">Post your Comment</a></small></h3>
+  <hr class="no-margin-top">
+  {% if object.comment_count %}
+  {% with comment_list=object.comments %}
+  {% block comments-loop %}
+  <div id="comment-list" class="row no-margin pb10">
+    {% for comment in comment_list %}
+      <div id="comment-{{ comment.pk }}-by-{{ comment.user_name|slugify }}" class=" ml50 {% if comment.user %} authenticated-comment{% if comment.user.is_staff %} staff-comment{% endif %}{% if comment.user.is_superuser %} superuser-comment{% endif %}{% endif %}" >
+        {% block comment-image %}
+          <img src="{%if comment.user%}{{comment.user.photo.url}}{%else%}{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}{%endif%}" class="l15 card-left navbar-img navbar-img-hg ml50 mt3 pl5" alt="{{ comment.name }}" data-name="{{ comment.name }}" />
+        {% endblock comment-image %}
+        {% block comment-info %}
+          <p class="comment-info card-block mb5 copy-block">
+            {% if comment.url %}
+            <a href="{{ comment.url }}" rel="external nofollow" class="fn url text-light">{{ comment.name|title }}</a>
+            {% else %}
+            <span class="fn text-light">{{ comment.name|title }}</span>
+            {% endif %}
+            {% trans "on" context "on date" %}
+            <time class="comment-published text-light" datetime="{{ comment.submit_date|date:"c" }}">
+              {{ comment.submit_date|date:"SHORT_DATETIME_FORMAT" }}
+            </time>
+            <a data-clipboard-action="copy" data-clipboard-text="{{settings.HOSTED_URL}}{{object.get_absolute_url}}#comment-{{ comment.pk }}-by-{{ comment.user_name|slugify }}" id="c{{ comment.pk }}" class="clickable btn-copy small text-muted ml10 anchor-link" title="{% trans "Direct link to this comment" %}" data-toggle="tooltip">Share Link <i class="fa fa-copy"></i></a>
+            <span class="btn-copy-text text-info hidden ml5">Copied</span>
+          </p>
+        {% endblock comment-info %}
+        {% block comment-content %}
+        <span class="text-muted">
+        {{ comment.comment|linebreaks }}
+        </span>
+        {% endblock comment-content %}
+        {% if not forloop.last %}
+          <hr class="no-margin-top">
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  {% endblock comments-loop %}
+  {% endwith %}
+  {% if not object.comments_are_open %}
+  <p>{% trans "Comments are closed." %}</p>
+  {% endif %}
+  {% else %}
+  {% if object.comments_are_open %}
+  <p>{% trans "No comments yet." %}</p>
+  {% else %}
+  <p>{% trans "Comments are closed." %}</p>
+  {% endif %}
+  {% endif %}
+</section>
+{% endblock entry-comments %}
+
+{% block entry-comments-form %}
+<div class="bordered container-fluid mr20 hover-highlight mb20">
+  {% if object.comments_are_open %}
+  {% render_comment_form for object %}
+  {% endif %}
+</div>
+{% endblock entry-comments-form %}
+
+{% endblock content %}
+{% block admin-tools %}
+{% if perms.zinnia.change_entry %}
+<li class="pl5 pr5 pt5 pb5 border-bottom border-light">
+  <a href="{% url 'admin:zinnia_entry_change' object.pk %}" title="{% trans "Edit the resource" %}">
+    <i class="ionicons ion-ios-compose mr20 fa-lg pl3"></i> {% trans "Edit the resource" %}
+  </a>
+</li>
+{% endif %}
+{% endblock admin-tools %}
+
+{% if object.next_entry or object.previous_entry %}
+{%block script %}
+{{block.super}}
+<script>
+  var recal_suggestions = function(){
+    $info_height = parseInt($('.entry-info').offset()['top']) + 100 - parseInt($(window).height());
+    if(window.scrollY > $info_height)
+    {
+      console.log('show')
+      $('.entry-previous,.entry-next').show();
+    }
+    else {
+      console.log('hide')
+      $('.entry-previous,.entry-next').hide();
+    }
+  }
+  $(document).ready(function(){
+    recal_suggestions();
+  })
+  $(window).scroll(function(){
+    recal_suggestions();
+  })
+</script>
+{% endblock script %}
+{% endif %}

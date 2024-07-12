@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>{{company}}</title>
+	<meta name="description" content="{{company.description}}">
+    <meta name="keyword" content="">
+	<link rel="stylesheet" href="{{STATIC_URL}}sa-ui-kit/output.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}sa-ui-kit/modal.css">
+	<!-- Main style file for template -->
+	<link rel="stylesheet" href="{{STATIC_URL}}{{ stylesheet }}"> 
+	<link rel="stylesheet" href="{{STATIC_URL}}sa-ui-kit/builder.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+<!--  Modal start -->
+	{% if editing %}
+		<div class="modal short-modal" id="image_modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2>Add link to image</h2>
+				</div>
+				<div class="modal-body row flex-row">
+					<div class="field column xs-12">
+						<input type="text" id="input_image" name="url" class="input-field validate" required />
+						<label class="" for="url">Link</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a class="button scale-3 -bg-persian hover-dark elevation-1" id="changeImage">Okay!</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal short-modal" id="link_modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2>Setup links</h2>
+				</div>
+				<div class="modal-body">
+					<div class="link_editor">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a class="button scale-3 -bg-persian hover-dark elevation-1 add_row">Add row</a>
+					<a class="button scale-3 -bg-mantis hover-dark elevation-1 submit_links">Submit</a>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+<!-- Modal end -->
+
+	<!-- Wrapper for entire body apart from palettes start -->
+	<div>
+		<div>	
+			{% if isPreview %}
+				{% include above_jobs_template %}
+			{% else %}
+				{{company.above_jobs|safe}}
+			{% endif %}
+			{% include jobs_template %}
+			{% if isPreview %}
+				{% include below_jobs_template %}
+			{% else %}
+				{{company.below_jobs|safe}}
+			{% endif %}
+		</div>
+	</div>
+	<!-- end of wrapper -->
+
+	{% if editing %}
+		<script src="{{STATIC_URL}}sa-ui-kit/iframescript.js"></script>
+		<script src="{{STATIC_URL}}sa-ui-kit/modal.js"></script>
+		<script type="text/javascript">
+			window.addEventListener('message', function(e){
+				var script = '<script>' + e.data + "<\/script>";
+				$('body').append(script);
+			});
+		</script>
+	{% endif %}
+	<script>
+		function setCookie( cname, cvalue, exdays ) {
+			var d = new Date();
+			d.setTime( d.getTime() + ( exdays * 24 * 60 * 60 * 1000 ) );
+			var expires = "expires=" + d.toUTCString();
+			document.cookie = cname + "=" + cvalue + "; " + expires;
+		}
+		function getCookie( cname ) {
+			var name = cname + "=";
+			var ca = document.cookie.split( ';' );
+			for ( var i = 0; i < ca.length; i++ ) {
+				var c = ca[ i ];
+				while ( c.charAt( 0 ) == ' ' ) {
+					c = c.substring( 1 );
+				}
+				if ( c.indexOf( name ) == 0 ) {
+					return c.substring( name.length, c.length );
+				}
+			}
+			return "";
+		}
+		$(document).ready(function(){
+			$('.job-count .badges').html('{{vacancies.count|default:0}}');
+			$('.nav-brand').text('{{company.name|title|default:""}}');
+			$('.nav-brand').attr('href','{% if company.url %}{{company.url}}{% else %}/{% endif %}');
+			
+		})
+	</script>
+</body>
+</html>

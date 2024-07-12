@@ -1,0 +1,15 @@
+{% if referer or external_referer%}
+    <nav class="navbar navbar-success half-nav">
+        <div class="container-fluid lh24">
+            <ul class="nav navbar-nav nav-center">
+                <li class=" text-success">
+                	{% if referer %}
+	                    <span class="pt2" >Referred by: </span><b class="pt2">{{referer|title}}</b><img class="img-circle navbar-img navbar-img-lg no-margin ml5 mr5 mt2 mb2" src="{{referer.user.photo.url}}" alt="{{referer.user.get_full_name}} Pic" data-name="{{referer.user.get_full_name}}">
+                	{% elif external_referer %}
+	                    <span class="pt2" >Referrence from: </span><b class="pt2">{{external_referer|title}}</b><img class="img-circle navbar-img navbar-img-lg no-margin ml5 mr5 mt2 mb2" src="{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}" alt="{{external_referer.name}} Pic" data-name="{{external_referer.name}}">
+                	{% endif %}
+                </li>
+            </ul>
+        </div>
+    </nav>
+{% endif %}

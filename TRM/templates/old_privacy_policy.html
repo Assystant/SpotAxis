@@ -1,0 +1,19 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Privacy Policy{% endblock %}
+{% comment %} Privacy Policy {% endcomment %}
+{% block page-header %}{% trans 'Privacy Policy' %}{% endblock %}
+{% block content %}
+
+<!-- Content starts -->
+
+<div class="bg-white pl40 pr40 pt40 pb40">
+	<div class="container">
+	    {% include 'privacy_policy_include.html' %}
+	</div>
+</div>
+
+<!-- Content ends -->
+
+{% endblock %}

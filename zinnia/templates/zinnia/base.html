@@ -1,0 +1,76 @@
+{% extends "zinnia/skeleton.html" %}
+{% load i18n %}
+{% load zinnia %}
+
+{% block meta-keywords %}{% get_tags as entry_tags %}{{ entry_tags|join:", "}}{% endblock meta-keywords %}
+
+{% block meta %}
+<meta name="generator" content="Zinnia {{ ZINNIA_VERSION }}" />
+{% endblock meta %}
+
+{% block link %}
+<link rel="index" href="{% url 'zinnia:entry_archive_index' %}" />
+<link rel="author" type="text/plain" href="{% url 'zinnia:humans' %}" />
+<link rel="EditURI" type="application/rsd+xml" href="{% url 'zinnia:rsd' %}" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="{% url 'zinnia:wlwmanifest' %}" />
+<link rel="search" type="application/opensearchdescription+xml" title="Zinnia's Weblog" href="{% url 'zinnia:opensearch' %}" />
+<link rel="alternate" type="application/rss+xml" title="{% trans "RSS feed of last resources" %}" href="{% url 'zinnia:entry_feed' %}" />
+<link rel="alternate" type="application/rss+xml" title="{% trans "RSS feed of last discussions" %}" href="{% url 'zinnia:discussion_feed' %}" />
+{% get_archives_entries "zinnia/tags/entries_archives_link.html" %}
+{% endblock link %}
+
+{% block breadcrumbs %}
+{% trans "Blog" as root_name %}
+{% zinnia_breadcrumbs root_name %}
+{% endblock breadcrumbs %}
+{% block sidebar %}
+
+{% if user.is_authenticated%}
+{% if user.is_staff or user.is_superuser or user.is_admin %}
+<aside id="widget-tools" class="widget hover-highlight">
+  <h3 class="text-light">{% trans "Tools" %}</h3>
+  <ul class="no-margin">
+    {% if perms.zinnia %}
+    <li class="pt5 pb5 pl5 pr5 border-bottom border-light">
+      <a href="{% url 'admin:app_list' 'zinnia' %}" title="{% trans "Dashboard" %}">
+        <i class="fa fa-dashboard mr20 fa-lg"></i> {% trans "Dashboard" %}
+      </a>
+    </li>
+    {% endif %}
+    {% if perms.zinnia.add_entry %}
+    <li class="pt5 pb5 pl3 pr5 border-bottom border-light">
+      <a href="{% url 'admin:zinnia_entry_add' %}" title="{% trans "Post a resource" %}">
+        <i class="material-icons mr15 va-bot fa-lg">note_add</i> {% trans "Post a resource" %}
+      </a>
+    </li>
+    {% endif %}
+    {% block admin-tools %}
+    {% endblock admin-tools %}
+    <li class="pt5 pb5 pl5 pr5">
+      <a href="{% url 'auth_logout' %}?next={{request.path}}" title="{% trans "Log out" %}">
+        <i class="ionicons ion-log-out fa-lg mr20 pl2"></i> {% trans "Log out" %}
+      </a>
+    </li>
+  </ul>
+</aside>
+{% endif %}
+{% endif %}
+<aside id="widget-tags" class="widget hover-highlight">
+  <h3 class="text-light">
+    <a href="{% url 'zinnia:tag_list' %}" class="text-light">{% trans "Tags" %}</a>
+  </h3>
+  {% get_tag_cloud %}
+</aside>
+<aside id="widget-recents" class="widget hover-highlight hidden">
+  <h3 class="text-light">{% trans "Recent resources" %}</h3>
+  {#{% get_recent_entries %}#}
+</aside>
+<aside id="widget-populars" class="widget hover-highlight">
+  <h3 class="text-light">{% trans "Popular resources" %}</h3>
+  {% get_popular_entries %}
+</aside>
+<aside id="widget-archives" class="widget hover-highlight">
+  <h3 class="text-light">{% trans "Archives" %}</h3>
+  {% get_archives_entries_tree %}
+</aside>
+{% endblock sidebar %}

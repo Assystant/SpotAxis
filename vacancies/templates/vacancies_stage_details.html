@@ -1,0 +1,2886 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% load humanize %}
+{% block meta %}
+    <meta name="keyword" content="{% for skill in vacancy.skills %}{{skill}}, {% endfor %}{{vacancy.employment}}, {{vacancy.function}}"/>
+    <meta name="description" content="{{ vacancy.description|striptags|rem_nbsp|safe }}"/>
+{% endblock %}
+{% block title %}{{vacancy.company.name}} | {{vacancy.employment}} | Application Tracking{% endblock %}
+{% block css %}
+    <style>
+        .affix {
+            top:50px!important;
+        }   
+        @media(max-width:991px){
+            .affix{
+                position:static;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.1/switchery.min.css">
+    <link href="{{STATIC_URL}}daterange/daterangepicker.css" rel="stylesheet">
+{% endblock %}
+{% comment %} Vacancy summary Page {% endcomment %}
+{%block subnav %}
+    {%if recruiter%}
+        <nav class="navbar navbar-short navbar-default" id="navbar-short">
+            <div class="container-fluid" id="navbar_short">
+                <ul class="nav navbar-nav">
+                    {% if recruiter %}
+                        <li class="">
+                            <a class="" href="{{vacancy.get_absolute_url}}">Job Details</a>
+                        </li>
+                        <li class="active">
+                            <a class="" href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id 0%}">Hiring Process{% if vacancy.hasUnseen %}
+                                <span class="badge badge-sm badge-danger va-mid inline-block relative mt-8">{{vacancy.hasUnseen}}</span>
+                                {% endif %}</a>
+                        </li>
+                        <li>
+                            <a class="" href="{% url 'vacancies_talent_sourcing' vacancy.id %}">Talent Sourcing</a>
+                        </li>
+                    {% else %}
+                        <li class="">
+                            <a href="{% url 'companies_vacancies_by_status' vacancy.status.codename %}"><i class="fa fa-long-arrow-left"></i> Back to {{vacancy.status}} Jobs</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    {%endif%}
+{%endblock%}
+{% block content %}
+    {%if not recruiter %}
+        <div class="jumbotron no-padding hidden">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 col-md-4 pull-right pt40 pb40 pr20 pl20 bg-primary">
+                        <h4 class="pt20 pb20">{{company|capfirst}}</h4>
+                    </div>
+                    <div class="col-xs-12 col-md-7 pull-right pt40 pl20 pr20">
+                        <h4 class="mt40 pt40">{{ vacancy.status }} Job </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {%else %}
+        {% if recruiter.is_manager and vacancy.status.codename == 'open' %}
+            <div class="modal fade" id="close_vacancy" role="dialog" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">{% trans 'Closing Job' %}</h4>
+                        </div>
+                        <div class="modal-body row " id="fin-vac-modal-text">
+                            <div class="col-xs-6 col-xs-push-3">
+                                <a href="{% url 'companies_finalize_vacancy' vacancy.id 1 %}" class="btn btn-block btn-default">Candidate Selection Complete</a>
+                                <a href="{% url 'companies_finalize_vacancy' vacancy.id 2 %}" class="btn btn-block btn-default">No Suitable Candidate Found</a>
+                                <a href="{% url 'companies_finalize_vacancy' vacancy.id 3 %}" class="btn btn-block btn-default">Job Opening is on hold</a>
+                                <button class="btn btn-block btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="modal fade" id="job-members" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Members participating in Job Opening</h4>
+                    </div>
+                    <div class="modal-body row ">
+                        {% if recruiter.is_manager and not vacancy.status.codename == 'closed' %}
+                            <div class="col-xs-12 mb20">
+                                <select class="" id="memberlist" placeholder="Select/Type a member to add">
+                                </select>
+                            </div>
+                        {% endif %}
+                        <div class="col-xs-12 mlist">
+                            {% for member in vacancy.members %}
+                                <blockquote class="no-margin-bottom border-bottom border-light bg-white br-2 no-padding collapse fade in" data-id="{{member.id}}">
+                                    <img src="{{member.user.photo.url}}" data-name="{{member.user.get_full_name}}" class="img-card">
+                                    <div class="inline-block ml5 pt5">
+                                        <h4 class="text-light no-margin"><i class="fa fa-user"></i> <span class="name">{{member.user.first_name}} {{member.user.last_name}}</span></h4>
+                                        <h6 class="text-muted no-margin inline-block"><i class="fa fa-envelope"></i> {{member.user.email|default:'email@example.com'}}</h6>
+                                    </div>
+                                    {% if not member.is_manager and recruiter.is_manager%}
+                                        {% if vacancy.status.codename == 'open' %}
+                                            <div class="inline-block pull-right">
+                                                <button class="btn btn-xs btn-default block-hover remove mt10 ml5"><i class="fa fa-times"></i> Remove</button>
+                                            </div>  
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="inline-block pull-right">
+                                            <small class="text-light"><i class="fa fa-flag-checkered"></i> Process Manager</small>
+                                        </div>
+                                    {% endif %}
+                                </blockquote>
+                            {% endfor %}
+                        </div>
+                        <div class="col-xs-10 col-xs-push-1 mt10 mb10"><button class="btn btn-default btn-sm btn-block" data-dismiss="modal">Done</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="stage-members" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Members participating in Current Process</h4>
+                    </div>
+                    <div class="modal-body row ">
+                        {% if recruiter.is_manager and not vacancy.status.codename == 'closed' %}
+                            <div class="col-xs-12">
+                                <select class="" id="processmemberlist" placeholder="Select/Type a member to add">
+                                </select>
+                            </div>
+                        {% endif %}
+                        <div class="col-xs-12 mlist">
+                            {% for member in current_process.recruiters.all %}
+                                <blockquote class="no-margin-bottom border-bottom border-light bg-white br-2 no-padding collapse fade in" data-id="{{member.id}}">
+                                    <img src="{{member.user.photo.url}}" data-name="{{member.user.get_full_name}}" class="img-card">
+                                    <div class="inline-block ml5 pt5">
+                                        <h4 class="text-light no-margin"><i class="fa fa-user"></i> <span class="name">{{member.user.first_name}} {{member.user.last_name}}</span></h4>
+                                        <h6 class="text-muted no-margin inline-block"><i class="fa fa-envelope"></i> {{member.user.email|default:'email@example.com'}}</h6>
+                                    </div>
+                                    {% if recruiter.is_manager and not vacancy.status.codename == 'closed' %}
+                                        <div class="inline-block pull-right">
+                                            <button class="btn btn-xs btn-default block-hover remove mt10 ml5"><i class="fa fa-times"></i> Remove</button>
+                                        </div>  
+                                    {% endif %}
+                                </blockquote>
+                            {% endfor %}
+                        </div>
+                        <div class="col-xs-10 col-xs-push-1 mt10 mb10"><button class="btn btn-default btn-sm btn-block" data-dismiss="modal">Done</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if recruiter.is_manager and vacancy.status.codename == 'open' and vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+            <div class="modal fade" id="criterion-modal" role="dialog" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Process Selection Criteria</h4>
+                        </div>
+                        <form class="modal-body container-fluid">
+                            <div class="row none-row border-bottom border-light mb5 collapse fade {% if not current_process.criteria_as_list %} in{% endif %}">
+                                <div class="col-xs-12 col-sm-7 pt10 pl20">
+                                    Overall (default if none set)
+                                </div>
+                                <div class="col-xs-12 col-sm-5 pt10 pb10 no-padding-x text-center">
+                                        <span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span>
+                                    </div>
+                            </div>
+                            {% for criterion in current_process.criteria_as_list %}
+                                <div class="row border-bottom border-light mb5">
+                                    <div class="col-xs-12 col-sm-7">
+                                        <input type="text" value="{{criterion}}" class="form-control" placeholder="Criteria Name" required>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 pt10 pb10 no-padding-x text-center">
+                                        <span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span>
+                                        <a class="clickable remove btn btn-xs btn-default ml10 mr10"><i class="fa fa-times"></i> Remove</a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% if not curent_process.criteria_as_list %}
+                                <div class="row border-bottom border-light mb5">
+                                    <div class="col-xs-12 col-sm-7">
+                                        <input type="text" class="form-control" placeholder="Criteria Name" required>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 pt10 pb10 no-padding-x text-center">
+                                        <span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span>
+                                        <a class="clickable remove btn btn-xs btn-default ml10 mr10"><i class="fa fa-times"></i> Remove</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="col-xs-12 text-center pt5 mt5 mb5">
+                                <a class="small clickable add-criteria"><i class="fa fa-plus"></i> Add</a>
+                            </div>
+                            <div class="col-xs-10 col-xs-push-1 mt5 pt5 border-top border-light">
+                                <button class="btn btn-sm btn-info btn-block">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="modal fade" id="form-data-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Form Details</h4>
+                    </div>
+                    <div class="modal-body row ">
+                        <h3 class="text-info text-center"><i class="fa fa-spinner fa-pulse"></i> Please Wait ...</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {%endif%}
+    <div>
+        <section class="container-fluid mt40">
+            <div class="row pt20">
+                <div class='col-sm-3 right-border hidden-xs'>
+                    <div data-offset-top="60" data-offset-bottom="100">
+                        <h4 class="no-margin-bottom bg-white border-bottom border-light br-2 pt15 pb15 pl15 pr15 no-margin"><i class="fa fa-briefcase fa-lg"></i> <a class="" href="{% url 'vacancies_get_vacancy_details' vacancy.id %}">{{vacancy.employment}}</a> <br>
+                            <small class="small inline-block">
+                                {% if not vacancy.status.codename == 'closed' %}(No. of Openings - {{vacancy.vacancies_number}}){%else%}Closed{%endif%}
+                            </small><br>
+                        </h4>
+                        <div class="border-bottom border-light br-2 pt10 pb10 pl10 pr10 bg-white">
+                            <small class="text-light">Team Members Involved</small><br>
+                            <span class=" pl15 pull-left single-line-list all">
+                                {% for manager in vacancy.members %}
+                                    <img class="img-circle mb5 mt5 navbar-img pull-right single-line-list-item" data-id="{{manager.id}}" src="{{MEDIA_URL}}{{manager.user.photo}}" data-name="{{manager.user.get_full_name}}" data-toggle="tooltip" data-placement="top" title="{{manager.user.get_full_name}}">
+                                {% endfor %}
+                            </span>
+                            <span class="max-width:20%">
+                                <a class="btn btn-sm mt5 mb5 ml5 btn-default text-info btn-round border-info" data-toggle="modal" data-target="#job-members"><i class="fa {% if user.recruiter.is_manager and vacancy.status.codename == 'open' %}fa-pencil {% else %} fa-ellipsis-h mt5{%endif%}"></i></a>
+                            </span>
+                        </div>
+                        <div class="bg-white border-bottom border-light br-2 pt10 pl10 pr10 pb10">
+                            {% if not vacancy.status.codename == 'closed' and recruiter.is_manager and vacancy.company|args:'AT_CUSTOM_HIRING_PROCESS'|call:'check_service' %}
+                                <small><small><a class="clickable ml20 pl10" data-toggle="modal" data-target="#timeline_management"><i class="fa fa-pencil"></i> Manage Hiring Process</a></small></small>
+                            {% endif %}<br>
+                            {%if not recruiter%}
+                                <span><i class="fa fa-map-marker"></i> {{vacancy.city}}{%if vacancy.city%},{%endif%} {{vacancy.state}}{%if vacancy.state%},{%endif%} {{vacancy.nationality}}</span><br>
+                                <span><i class="fa fa-gears"></i> {{vacancy.industry}}</span> 
+                                <small class="pl20 inline-block"> <i class="fa fa-cog"></i> {{vacancy.function}}</small>
+                            {%else%}
+                                <ul class="nav timeline">
+
+                                    <!-- Item 1 -->
+                                    <li class="hidden {%if vacancy_stage == '0' %}active{% endif %}">
+                                        <div class="direction-r">
+                                            <div class="flag-wrapper">
+                                                <span class="flag"><a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id 0 %}">Applications Received</a></span>
+                                                <span class="time-wrapper"><span class="time ml5 mt5 inline-block va-mid label label-trans">{{vacancy.postulated.all.count}}</span></span>
+                                                {% if vacancy_stage == '0' %}
+                                                    <ul class="list-unstyled ml10">
+                                                        <li class="no-padding {% if stage_section == '0' or stage_section == 0 %}flag no-flag{% endif %}">
+                                                            <a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id 0 0 %}">In Process </a><small><small class="label label-trans va-mid inline-block">{{section0_count}}</small></small>
+                                                        </li>
+                                                        <li class="no-padding {% if stage_section == '1' %}flag no-flag{% endif %}">
+                                                            <a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id 0 1 %}">Moved to Next </a><small><small class="inline-block va-mid label label-trans">{{section1_count}}</small></small>
+                                                        </li>
+                                                        <li class="no-padding {% if stage_section == '2' %}flag no-flag{% endif %}">
+                                                            <a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id 0 2 %}">Archived </a><small><small class="inline-block va-mid label label-trans">{{section2_count}}</small></small>
+                                                        </li>
+                                                    </ul>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% for stage in stages %}
+                                        <li class="{%if vacancy_stage == stage.order|stringformat:'i' %}active{% endif %}">
+                                            <div class="direction-r">
+                                                <div class="flag-wrapper">
+                                                    <span class="flag"><a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id stage.order %}">{{stage.stage}}</a></span>
+                                                    <span class="time-wrapper"><span class="time ml5 mt5 inline-block va-mid label label-trans">
+                                                        {% if not forloop.last %}
+                                                            {{stage.total_count}}
+                                                        {% else %}
+                                                            {{finalize_count}}
+                                                        {% endif %}
+                                                    </span></span>
+                                                    {% if not forloop.last and vacancy_stage == stage.order|stringformat:'i' %}
+                                                        <ul class="list-unstyled ml10">
+                                                            <li class="no-padding {% if stage_section == '0' or stage_section == 0 %}flag no-flag{% endif %}">
+                                                                <a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id stage.order 0 %}">In Process </a><small><small class="inline-block va-mid label label-trans">{{section0_count}}</small></small>
+                                                            </li>
+                                                            <li class="no-padding {% if stage_section == '1' %}flag no-flag{% endif %}">
+                                                                <a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id stage.order 1 %}">Moved to Next </a><small><small class="inline-block va-mid label label-trans">{{section1_count}}</small></small>
+                                                            </li>
+                                                            <li class="no-padding {% if stage_section == '2' %}flag no-flag{% endif %}">
+                                                                <a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id stage.order 2 %}">Archived </a><small><small class="iline-block va-md label label-trans">{{section2_count}}</small></small>
+                                                            </li>
+                                                        </ul>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                  
+
+                                    <!-- Item 3 -->
+                                    <li class="{%if vacancy_stage == '100' %}active{% endif %} hidden">
+                                        <div class="direction-r">
+                                            <div class="flag-wrapper">
+                                                <span class="flag"><a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id 100 %}">Onboarding</a></span>
+                                                <span class="time-wrapper"><span class="time ml5 mt5 inline-block va-mid label label-trans">{{finalize_count}}</span></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                  
+                                </ul>
+                            {%endif%}
+                        </div>
+                        <div class="mt20 mb20">
+                            {% if not vacancy.status.codename == 'closed' %}
+                                {% if recruiter.is_manager %}
+                                    <button class="btn btn-block btn-default" data-toggle="modal" data-target="#close_vacancy">Close this Job</button>
+                                {% endif %}
+                            {% else %}
+                                {% if recruiter.is_manager and vacancy.company|args:'JP_POST'|call:'check_service' %}
+                                    <a href="{%url 'companies_add_update_vacancy'%}" class="btn btn-default btn-block">Create New Job</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 right-border mb20 pl5 pr5"> 
+                    {% if recruiter.is_manager or isProcessMember %}
+                        {% if candidates and vacancy.company|args:'AS_FILTER_CANDIDATES'|call:'check_service' and stage_section == '0' %}
+                            <div class="row no-margin">
+                                <div class="col-xs-12 no-padding mb5">
+                                    <div class="form-group no-margin">
+                                        <input type="text" id="keyword-filter" class="search-bar" placeholder="Filter Keywords">
+                                    </div>
+                                </div>
+                                {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+                                    <div class="col-xs-12 col-md-6 col-lg-5 no-padding mb5">
+                                        <div class="form-group no-margin">
+                                            <!--select type="text" id="rating-filter-min" class="visible-caret" placeholder="Ratings (min)"></select-->
+                                            <select type="text" id="rating_filter" class="visible-caret" placeholder="Ratings"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 no-padding mb5 hidden">
+                                        <div class="form-group no-margin">
+                                            <select type="text" id="rating-filter-max" class="visible-caret" placeholder="Ratings (max)"></select>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="col-xs-12 col-md-6 col-lg-7">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6 no-padding mb5">
+                                            <div class="form-group no-margin">
+                                                <input type="text" id="recruiter-filter" class="items-hidden visible-caret">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6  no-padding mb5">
+                                            <div class="form-group no-margin">
+                                                <input type="text" id="referal-filter" class="items-hidden visible-caret">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="loading hidden text-center text-info"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
+                        <div class="mb5 checkbox checkbox-circle checkbox-info ml5 text-light all-selector">
+                            {% if candidates.count > 1 and vacancy.status.codename == 'open' %}
+                                {% if stage_section == 0 or stage_section == '0' %}
+                                    {% if isProcessMember or recruiter.is_manager %}
+                                        {% if vacancy.company|args:'AT_MULTISELECT'|call:'check_service' or vacancy.company|args:'AS_COMPARE_CANDIDATES'|call:'check_service' %}
+                                            <small>
+                                                <input type="checkbox" id="card-select-all"><label for="card-select-all">Select All</label>
+                                            </small>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    {%for candidate in candidates %}
+                        <div class="mb10 candidate-card collapse fade in" data-public="0" data-candidate="{{candidate.id}}" data-vacancy="{{vacancy.id}}" id="candidate-s-{{candidate.id}}">
+                            <div class="no-margin bg-white border-bottom border-light pt10 pb10 pl10 pr10">
+                                {% if candidates.count > 1 and vacancy.status.codename == 'open' %}
+                                    {% if stage_section == 0 or stage_section == '0' %}
+                                        {% if isProcessMember or recruiter.is_manager %}
+                                            {% if vacancy.company|args:'AT_MULTISELECT'|call:'check_service' or vacancy.company|args:'AS_COMPARE_CANDIDATES'|call:'check_service' %}
+                                                <div class="card-left checkbox checkbox-card checkbox-circle checkbox-info no-margin pl10">
+                                                    <input type="checkbox" id="candidate-0-{{candidate.id}}" class="card-checkbox candidate-0-{{candidate.id}}"><label for="candidate-0-{{candidate.id}}"></label>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                <div class="row no-margin pl20">
+                                    <div class="col-xs-12 col-sm-9 col-md-7 no-padding no-margin">
+                                        <img class="navbar-img card-left no-margin-top" src="{% if candidate.candidate.user %}{{candidate.candidate.user.photo.url}}{% else %}{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}{% endif %}" data-name="{{candidate.candidate.first_name}} {{candidate.candidate.last_name}}">
+                                        <h4 class="no-margin-y ml20 pl10 no-margin-bottom inline-block text-light mr5 mt5">
+                                            {% with candidate.candidate.first_name|add:' '|add:candidate.candidate.last_name as candidate_name %}
+                                                {% if candidate_name|length < 20 %}
+                                                    <a target="_blank" href="{% url 'companies_curriculum_detail' candidate.candidate.id vacancy.id %}">{{candidate_name}}</a>
+                                                {% else %}
+                                                    <div>
+                                                        <a target="_blank" href="{% url 'companies_curriculum_detail' candidate.candidate.id vacancy.id %}" class="collapse fade name-s-{{candidate.id}}">{{candidate_name}}</a><a href="{% url 'companies_curriculum_detail' candidate.candidate.id vacancy.id %}" class="collapse fade in name-s-{{candidate.id}}" target="_blank">{{candidate_name|upto:' '}} <small class="size-xs inline-block text-info clickable" data-toggle="collapse" data-target=".name-s-{{candidate.id}}" onclick="return false;"> <small><small class="text-info">more ...</small></small></small></a>
+                                                    </div>
+                                                {% endif %}
+                                            {% endwith %}
+                                        </h4>
+                                        {% if candidate.candidate.user %}
+                                            <span class="va-mid inline-block label label-info size-xs lh1">SpotAxis</span>
+                                            {% if candidate.recruiter %}
+                                                <span class="va-bot inline-block text-light size-xs ml5">Referred by <span class="va-top mt6 text-info">{{candidate.recruiter}}</span></span>
+                                            {% endif %}
+                                            <br>
+                                        {% else %}
+                                            {% if candidate.recruiter %}
+                                                <span class="va-bot inline-block text-light size-xs ml5">{% if candidate.is_recruiter %}Added{% else %}Refered{% endif %} by <span class="va-top mt6 text-info">{{candidate.recruiter}}</span></span>
+                                            {% else %}
+                                                <span class="va-mid inline-block label label-trans size-xs lh1 ml5">Public</span>
+                                            {% endif %}
+                                            {% if candidate.medium %}
+                                                <span class="va-top inline-block mt6 label label-trans lh1 ml5">{{candidate.medium}}</span>
+                                            {% endif %}
+                                            <br>
+                                        {% endif %}
+                                        <span class="size-xs no-margin-top ml5"><i class="fa fa-envelope"></i> {% if candidate.candidate.user %}{{candidate.candidate.user.email}}{% else %}{{ candidate.candidate.public_email }}{% endif %} </span>
+                                        {% if candidate.candidate.role %}
+                                            <span class="size-xs ml5"><i class="fa fa-briefcase"></i> {{candidate.candidate.role|default:'No Current Positions'}}</span>
+                                        {% endif %}
+                                        {% if candidate.candidate.education %}
+                                            <span class="size-xs ml5"><i class="fa fa-university"></i> {{candidate.candidate.education|default:"Not Provided"}}</span>
+                                        {% endif %}
+                                        {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+                                            <span class="inline-block clickable" data-toggle="tooltip" data-trigger="hover" data-placement="right" title="{{candidate.avg_score|floatformat:'1'}}"> {{candidate.avg_stars|safe}}</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if vacancy.status.codename == 'open' %}
+                                        {% if isProcessMember or recruiter.is_manager %}
+                                            {% if stage_section == 0 or stage_section == '0' %}
+                                                <div class="col-xs-12 xs-card col-sm-3 col-md-5 no-padding text-right  panel-hover">
+                                                    <button class="btn btn-xs btn-trans text-center va-top no-style" data-toggle="popover" data-placement="bottom" data-html="true" data-content='{% include "base/scheduler_popover.html" %}'>
+                                                        <span class="fa-stack fa-lg">
+                                                            <i class="fa fa-square-o fa-stack-2x fa-inverse"></i>
+                                                            <i class="fa fa-lg fa-clock-o"></i>
+                                                        </span>
+                                                        <br>{% if candidate.schedule %}Re{%endif%}Schedule
+                                                    </button>
+                                                    {% if not vacancy_stage == '100' %}
+                                                        <button class="btn btn-xs btn-trans text-center send-to-archive va-top">
+                                                            <span class="fa-stack fa-lg">
+                                                                <i class="fa fa-square-o fa-stack-2x fa-inverse"></i>
+                                                                <i class="fa fa-lg fa-archive"></i>
+                                                            </span>
+                                                            <br>Archive
+                                                        </button>
+                                                    {% endif %}
+                                                    {% if not vacancy_stage == '0' %}
+                                                        <button class="btn btn-xs btn-trans text-center send-to-back">
+                                                            <span class="fa-stack fa-lg">
+                                                                <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                                                <i class="fa fa-stack-1x fa-angle-left"></i>
+                                                            </span>
+                                                            <br>Move to<br>Previous
+                                                        </button>
+                                                    {% endif %}
+                                                    {% if not vacancy_stage == '100' %}
+                                                        <button class="btn btn-xs btn-trans-info text-center send-to-next">
+                                                            <span class="fa-stack fa-lg">
+                                                                <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                                                <i class="fa fa-stack-1x fa-angle-right"></i>
+                                                            </span>
+                                                            <br>Move to<br> Next
+                                                        </button>
+                                                    {% endif %}
+                                                </div>
+                                            {% elif stage_sectin == 2 or stage_section == '2' %}
+                                                <div class="col-xs-12 xs-card col-sm-3 col-md-5 no-padding text-right  panel-hover">
+                                                    {% if candidate.withdraw %} 
+                                                        <small class="text-light"><i>Withdrawn by Candidate</i></small>
+                                                    {% endif %}
+                                                </div>
+                                            {%endif%}
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+                                        <div class="col-xs-12 mt5 mb5 ml10 mr10 collapse fade hidden" id="overallrating">
+                                            {% for criterion in current_process.criteria_as_list %}
+                                                <small>{{criterion}}</small>
+                                                <span class="inline-block ml5"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span><br>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    {% if candidate.description %}
+                                        <div class="clearfix"></div> 
+                                        <div id="cover-{{candidate.id}}" class="pl20 pr20 collapse fade border-top border-light">
+                                            <p class="no-margin pt5 small"><i>{%if candidate.recruiter%}Notes{%else%}Cover Text{%endif%}</i></p>
+                                            <small class="wrap">{{candidate.description|safe}}</small>
+                                        </div>  
+                                    {% endif %}
+                                </div> 
+                            </div>
+                            <div class="row bg-white border-bottom border-light no-margin pl20">
+                                {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+                                    <a class="btn btn-xs show-ratings">{% if not vacancy_stage == '100' and recruiter.is_manager and vacancy.status.codename == 'open' or not vacancy_stage == '100' and isProcessMember and vacancy.status.codename == 'open' %}Rate{%else%}Rating{%endif%} <small class="badge badge-light ml5">{{candidate.process.get_comments.count}}</small></a>
+                                {% endif %}
+                                {% if vacancy.company|args:'AS_COMMENTS'|call:'check_service' %}
+                                    <a class="btn btn-xs show-comments">Comment <small class="badge badge-light ml5 comment-count">{{candidate.comments.count}}</small></a>
+                                {% endif %}
+                                {# <a class="btn btn-xs show-tags">Tags <small class="badge badge-light ml5 tag-count">{{candidate.tags.count}}</small></a> #}
+                                <a class="btn btn-xs show-timeline">Timeline</a>
+                                {% if candidate.has_filled_custom_form or candidate.description.strip %}
+                                    <a class="btn btn-xs pull-right" data-toggle="modal" data-target="#form-data-modal">Form Details</a>
+                                {% endif %}
+                                {% if not candidate.seen %}
+                                    <label class="label label-trans">Unseen</label>
+                                {% endif %}
+                            </div>
+                            {% if vacancy.company|args:'AS_COMMENTS'|call:'check_service' %}
+                                <div class="collapse fade comment-cards" id="comment-s-{{candidate.id}}">
+                                    <div class="row text-center bg-white no-margin pl20 pr20 comment collapse fade in">
+                                        {% if candidate.comments.count > 3 %}
+                                            <small>
+                                                <a class="clickable" data-toggle="collapse" data-target="#comment-s-{{candidate.id}} .comment">See all <span class="comment-count">{{candidate.comments.count}}</span> comments</a>
+                                            </small>
+                                        {% endif %}
+                                    </div>
+                                    {% for comment in candidate.comments %}
+                                        {% if comment.comment_type == 1 %}
+                                            <div class="row bg-white no-margin border-bottom border-light pl20 pr20 comment {% if forloop.counter < candidate.comments.count|add:-2 %}collapse fade{% endif %}">
+                                                <div class="col-xs-12 pt5 pb5 text-light ">
+                                                    <img src="{{comment.recruiter.user.photo.url}}" class="navbar-img va-top no-margin-top card-left" data-name="{{comment.recruiter.user.get_full_name}}">
+                                                    <div class="ml20 row">
+                                                        <h5 class="inline-block no-margin-y">{{comment.recruiter}}</h5>
+                                                        <small class="text-muted"> in <a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id comment.stage.order comment.stage_section %}">{{comment.stage_string}}</a> - <span class="text-light">{{comment.logtime|naturaltime}}</span></small>
+                                                        <br>
+                                                        <small class="text-muted comment-text">{{comment.text|linebreaks}}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% elif comment.comment_type == 2 %}
+                                            <div class="row bg-white no-margin border-bottom border-light pl20 pr20 comment {% if forloop.counter < candidate.comments.count|add:-2 %}collapse fade{% endif %}">
+                                                <div class="col-xs-12  pt5 pb5 text-light ">
+                                                    <img src="{{comment.recruiter.user.photo.url}}" class="navbar-img va-top no-margin-top card-left" data-name="{{comment.recruiter.user.get_full_name}}">
+                                                    <div class="ml20 row">
+                                                        <h5 class="inline-block no-margin-y">{{comment.recruiter}}</h5>
+                                                        <small class="pt5 clickable text-muted" data-toggle="collapse" data-target="#comment-{{comment.id}}"> rated <span class="text-light">{{candidate.candidate.first_name}}</span> - <span class="inline-block" data-toggle="tooltip" title="{{comment.avg_score|floatformat:'1'}}" data-placement="right"> {{comment.avg_stars|safe}} </span> in <a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id comment.stage.order comment.stage_section %}">{{comment.stage}}</a> - <span class="text-light">{{comment.logtime|naturaltime}}</span></small><br>
+                                                        <div class="mt5 mb5 ml10 mr10 collapse fade" id="comment-{{comment.id}}">
+                                                            {% for criterion in comment.get_scores %}
+                                                                <small>{{criterion.name}}</small>
+                                                                <span class="inline-block ml5" data-toggle="tooltip" title="{{criterion.score}}" data-placement="right"> {{criterion.get_stars|safe}}</span><br>
+                                                            {% endfor %}
+                                                        </div>
+                                                        <small class="text-muted comment-text">{{comment.text|linebreaks}}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <div class="row bg-white no-margin border-bottom border-light pl20 pr20 hidden">
+                                        <div class='col-xs-12 pt5 pb5 text-muted'>
+                                            <h4 classs="text-light"><small class="pull-right">{{score|default:'Not Rated Yet'}}</small></h4>
+                                        </div>
+                                    </div>
+                                    <form class="row bg-white no-margin bordered border- pt5 pl5 pr5 pb5 comment-section">
+                                        <div class="col-xs-12 pt5 pb5">
+                                            <textarea class="form-control autosize" required></textarea>
+                                            <a class="clickable mt5 hide-all" data-toggle="collapse" data-target="#comment-s-{{candidate.id}}">Hide Comments</a>
+                                            <button class="btn btn-sm pull-right mt5 btn-info">Comment</button> 
+                                        </div>
+                                    </form>
+                                </div>
+                            {% endif %}
+                            {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+                                <div class="collapse fade rate-cards" id="rate-s-{{candidate.id}}">
+                                    {% for process in candidate.processes %}
+                                        {% if process.avg_score %}
+                                            <div class="row bg-white no-margin border-bottom border-light pl20 pr20 rate">
+                                                <div class="col-xs-12 pt10 pb10 text-light">
+                                                    <div class="row no-margin">
+                                                        <h4 class="inline-block no-margin-y clickable" data-toggle="collapse" data-target=".s-{{candidate.id}}-{{process.id}}" data-parent="#rate-s-{{candidate.id}}">{{process|title}} </h4>
+                                                        <small class="pt5 text-muted clickable" data-toggle="collapse" data-target=".s-{{candidate.id}}-{{process.id}}" data-parent="#rate-s-{{candidate.id}}"> - <span class="inline-block" data-toggle="tooltip" data-placement="right" title="{{process.avg_score|floatformat:'1'}}">{{process.avg_stars|safe}}</span></small>
+                                                        {% if process.criteria_avg_scores|length > 1 %}
+                                                            <div class="mt5 mb5 ml10 mr10 collapse fade s-{{candidate.id}}-{{process.id}}">
+                                                                {% for criterion in process.criteria_avg_scores %}
+                                                                    <small>{{criterion.0}} <small>(Avg.)</small></small>
+                                                                    <span class="inline-block ml5" data-toggle="tooltip" title="{{criterion.1}}" data-placement="right"> {{criterion.2|safe}}</span><br>
+                                                                {% endfor %}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% for comment in process.get_comments %}
+                                                <div class="row bg-white no-margin border-bottom border-light pl20 pr20 rate collapse fade s-{{candidate.id}}-{{process.id}}">
+                                                    <div class="col-xs-12 pt5 pb5 ml40 pr40 text-light ">
+                                                        <img src="{{comment.recruiter.user.photo.url}}" class="navbar-img va-top no-margin-top card-left" data-name="{{comment.recruiter.user.get_full_name}}">
+                                                        <div class="ml20 row">
+                                                            <h5 class="inline-block no-margin-y">{{comment.recruiter}}</h5>
+                                                            <small class="pt5 text-muted {% if comment.get_scores.count > 1 %} clickable {%endif%}" data-toggle="collapse" data-target="#{{comment.id}}" data-parent="#rate-s-{{candidate.id}}"> rated - <span class="inline-block" data-toggle="tooltip" title="{{comment.avg_score|floatformat:'1'}}" data-placement="right"> {{comment.avg_stars|safe}} </span> - <span class="text-light">{{comment.logtime|naturaltime}}</span></small>
+                                                            <br>
+                                                            {% if comment.get_scores.count > 1 %}
+                                                                <div class="mt5 mb5 ml10 mr10 collapse fade" id="{{comment.id}}">
+                                                                    {% for criterion in comment.get_scores %}
+                                                                        <small>{{criterion.name}}</small>
+                                                                        <span class="inline-block ml5" data-toggle="tooltip" title="{{criterion.score}}" data-placement="right"> {{criterion.get_stars|safe}}</span><br>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                            <small class="text-muted comment-text">{{comment.text|linebreaks}}</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if not vacancy_stage == '100' and vacancy.status.codename == 'open' and stage_section == '0' %}
+                                        {% if isProcessMember or recruiter.is_manager %}
+                                            
+                                            <form class="row bg-white no-margin border-bottom border-light pt5 pl5 pr5 pb5 rate-section {% if candidate.hasRated %}collapse fade{% endif %}">
+                                                <div class="col-xs-12 pt5 pb5">
+                                                    {% if current_process.criteria %}
+                                                        {% for criterion in current_process.criteria_as_list %}
+                                                            <small>{{criterion}}</small>
+                                                            <span class="inline-block star-system"> <i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i></span>
+                                                            <input type="hidden" data-name="{{criterion}}" value="0">
+                                                            {% if forloop.first and recruiter.is_manager  and vacancy.status.codename == 'open' %}
+                                                                <small><a class="clickable ml10" data-toggle="modal" data-target="#criterion-modal"><i class="fa fa-pencil"></i> Manage criteria</a></small>
+                                                            {% endif %}
+                                                            <br>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <small>Overall </small>
+                                                        <span class="inline-block star-system"> <i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i><i class="fa fa-star-o text-info pl5"></i></span>
+                                                        <input type="hidden" value="0" data-name="Overall">
+                                                        {% if recruiter.is_manager  and vacancy.status.codename == 'open' %}
+                                                            <small><a class="clickable ml10" data-toggle="modal" data-target="#criterion-modal"><i class="fa fa-pencil"></i> Manage criteria</a></small>
+                                                        {% endif %}
+                                                        <br>
+                                                    {% endif %}
+                                                    <textarea class="form-control autosize mt5 mb10" required>{{candidate.comment|default:''}}</textarea>
+                                                    <select class="tag-selector" multiple>
+                                                        {% for tag in candidate.vacancy.available_tags %}
+                                                            <option value="{{tag.id}}" {% if tag in candidate.tags.all %}selected="selected"{%endif%}>{{tag.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <button class="btn btn-sm pull-right mt5 btn-info">{% if not candidate.hasRated %}Rate{% else %}Change Rating{% endif %}</button> 
+                                                </div>
+                                            </form>
+                                        {% endif %}
+                                    {% endif %}
+                                    <div class="bg-white text-info pl40 pt5 pb5">
+                                        <a class="small clickable hide-all" data-toggle="collapse" data-target="#rate-s-{{candidate.id}}">
+                                        Hide Ratings</a>
+                                        {% if  candidate.hasRated %}
+                                            <div class="inline-block pull-right mr10">
+                                                <button class="rate-section collapse fade in btn btn-xs btn-default pull-right" data-toggle="collapse" data-target="#rate-s-{{candidate.id}} .rate-section">Change Rating</button>
+                                                <button class="rate-section collapse fade btn btn-xs btn-default pull-right" data-toggle="collapse" data-target="#rate-s-{{candidate.id}} .rate-section">Cancel</button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="collapse fade tag-cards" id="tag-s-{{candidate.id}}">
+                                <div class="bg-white border-bottom  border-light">
+                                    {% if candidate.tags.all %}
+                                        <div class="row bg-white no-margin border-bottom border-light pt10 pb10 pl20 pr20 tag-section collapse fade in">
+                                            {% for tag in candidate.tags.all %}
+                                                <label class="label label-info label-trans mt5 mb5 ml5 mr5"><i class="fa fa-tag"></i> {{tag.name}}</label>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    <form class="row bg-white no-margin border-bottom border-light pt20 pl20 pr20 pb20 tag-section {% if not candidate.tags.all %} in {% endif %}collapse fade">
+                                        {% csrf_token %}
+                                        <select class="tag-selector" multiple>
+                                            {% for tag in candidate.vacancy.available_tags %}
+                                                <option value="{{tag.id}}" {% if tag in candidate.tags.all %}selected="selected"{%endif%}>{{tag.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button class="btn btn-sm pull-right mt5 btn-info"> Tag </button> 
+
+                                    </form>
+                                    <div class="bg-white text-info pl40 pt5 pb5">
+                                        <a class="small clickable hide-all" data-toggle="collapse" data-target="#tag-s-{{candidate.id}}">
+                                        Hide Tags</a>
+                                        {% if  candidate.tags.all %}
+                                            <div class="inline-block pull-right mr10">
+                                                <button class="tag-section collapse fade in btn btn-xs btn-default pull-right" data-toggle="collapse" data-target="#tag-s-{{candidate.id}} .tag-section">Change Tags</button>
+                                                <button class="tag-section collapse fade btn btn-xs btn-default pull-right" data-toggle="collapse" data-target="#tag-s-{{candidate.id}} .tag-section">Cancel</button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="collapse fade timeline-cards" id="timeline-s-{{candidate.id}}">
+                                <div class="bg-white border-bottom border-light">
+                                    <ul class="timeline timeline-fix"  >
+                                        {% for tline in candidate.timeline %}
+                                            <li class="">
+                                                <a class="direction-r mt5 text-light">
+                                                    <div class="flag-wrapper">
+                                                        <span class="flag">{{tline.logtime}}</span>
+                                                        <span class="time-wrapper hidden"><span class="time"></span></span>
+                                                    </div>
+                                                </a>
+                                                <div class="desc mb5 no-margin-top">{% if tline.comment_type == 2 %}{{tline.recruiter}} rated <span data-toggle="tooltip" data-placement='top' title="{{tline.avg_score|floatformat:'1'}}">{{tline.avg_stars|safe}}</span> in {{tline.stage}}<br>{% endif %}{{tline.text}}</div>
+                                            </li>
+                                        {% endfor %}
+                                        {% if not candidate.timeline %}
+                                        <i>Nothing to Show</i>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                <div class="clickable bg-white small text-info pl40 pt5 pb5 hide-all" data-toggle="collapse" data-target="#timeline-s-{{candidate.id}}">Hide Timeline</div>
+                            </div>
+                        </div>
+                    {%endfor%}
+                    <h5 class="text-center text-light bg-white pt20 pb20 border-bottom border-light br-2 {% if candidates %} hidden{%endif%} nullcard">{% if candidates %} No candidates under the given filters{% else %} No candidates in this process{% endif %}</h5>
+                </div>
+                <div class="col-sm-3 hidden-xs">
+                    <div data-offset-top="60" data-offset-bottom="100">
+                        {% if vacancy_stage == '0' and vacancy.status.codename == 'open' %}
+                            <div class="mb5">
+                                <button class="btn btn-sm btn-info btn-block mb15" data-toggle="modal" data-target="#public_apply">
+                                    Add a Candidate
+                                </button>
+                            </div>
+                        {% endif %}
+                        <div class="border-bottom border-light br-2 pt10 pl10 pb10 pr10 bg-white">
+                            <h4 class="text-light no-margin wrap">{{current_process}}</h4>
+                        </div>
+                        {% if current_process %}
+                            <div class="border-bottom border-light br-2 pb10 pl10 pr10 bg-white">
+                                <small class="text-light">Evaluators</small><br>
+                                <span class=" pl15 pull-left single-line-list">
+                                    {% for manager in current_process.recruiters.all %}
+                                        <img class="img-circle mb5 mt5 navbar-img pull-right single-line-list-item" src="{{MEDIA_URL}}{{manager.user.photo}}" data-name="{{manager.user.get_full_name}}" data-id="{{manager.id}}"  data-toggle="tooltip" data-placement="top" title="{{manager.user.get_full_name}}">
+                                    {% endfor %}
+                                    <img class="img-circle ml-10 mb5 mt5 navbar-img pull-right single-line-null-item {% if current_process.recruiters.all %} hidden {% endif %}" src="{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}">
+                                    <span class="hidden"><br>Application<br>Process</span>
+                                </span>
+                                <span class="">
+                                    <a class="btn btn-sm mt5 mb5 ml5 btn-default text-info btn-round border-info" data-toggle="modal" data-target="#stage-members"><i class="fa {% if recruiter.is_manager and vacancy.status.codename == 'open' %}fa-pencil{% else %}fa-ellipsis-h mt5{% endif %}"></i></a>
+                                </span>
+                            </div>
+                        {% endif %}
+                        {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' and not vacancy_stage == '100' %}
+                            <div class="border-bottom border-light br-2 pt10 pb10 pl10 pr10 bg-white">
+                                <h6 class="text-light">Rating
+                                    {% if recruiter.is_manager  and vacancy.status.codename == 'open' %}
+                                        <small><a class="clickable ml10" data-toggle="modal" data-target="#criterion-modal"><i class="fa fa-pencil"></i> Manage criteria</a></small>
+                                    {% endif %}
+                                </h6>
+                                {% for criterion in current_process.criteria_as_list %}
+                                    <p class="mt5 no-margin-bottom"><small class="va-mid text-light">{{criterion}}</small><span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span></p>
+                                    <hr class="header-seperator no-margin-bottom">
+                                {% endfor %}
+                                {% if not current_process.criteria_as_list %}
+                                    <p class="mt5 no-margin-bottom"><small class="va-mid text-light">Overall </small><span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span></p>
+                                    <hr class="header-seperator no-margin-bottom">
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        <div id="tag-cloud">
+                            {{ vacancy.get_tag_cloud_html|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% if vacancy_stage == '0' %}
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="public_apply">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center">Apply for {{vacancy.employment}}</h4>
+              </div>
+              <div class="modal-body">
+                <section id="public-form">
+                    {% if my_vacancy or not user_profile %}
+                        {% include "form_public_file.html" %}
+                    {% endif %}
+                </section>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        
+        <div class="modal fade" id="privacy-policy-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body" id="privacy-policy-modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        {% include 'privacy_policy_include.html' %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal - Terms and Conditions-->
+        <div class="modal fade" id="terms-and-conditions-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body" id="terms-and-conditions-modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        {% include 'terms_and_conditions_include.html' %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Close' %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if recruiter and recruiter.is_manager and not vacancy.status.codename == 'closed' or recruiter and isProcessMember and not vacancy.status.codename == 'closed' %}
+        {% if vacancy.company|args:'AT_CUSTOM_HIRING_PROCESS'|call:'check_service' %}
+            {% include 'vacancies/manage_process_modal.html' %}
+        {% endif %}
+        <div class="modal fade" tabindex="-1" role="dialog" id="archiveModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center">Archive Candidates <span id="archive_count"></span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            {% if vacancy.ban and vacancy.company|args:'JM_ARCHIVE'|call:'check_service' %}
+                                <div class="col-xs-12 mt5">Impose Ban for {{vacancy.get_ban_period_display|default:'0'}} for <span class="text-light">{% if vacancy.ban_all %} {{vacancy.function|title}} {% else %} All {% endif %}</span> positions. <span class="pull-right"><input type="checkbox" class="pull-right js-switch ban-temp" checked></span></div>
+                            {% endif %}
+                                <div class="col-xs-12 mt5"> Ban Permanently <span class="pull-right"><input type="checkbox" class="js-switch ban-perm"></span></div>
+                                <div class="col-xs-10 col-xs-push-1 mt5"><button class="btn btn-sm btn-block btn-info archive_confirm"> Archive </button></div>
+                            
+                            <div class="col-xs-2"></div>
+                            <div class="col-xs-5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade pl5 pr5" tabindex="-1" role="dialog" id="compareModal">
+            <div class="modal-dialog modal-hg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center">Candidates Comparison for current Process - <strong>{{current_process}}</strong></h4>
+                    </div>
+                    <div class="modal-body">
+                        <section class="compareSection">
+                            <div class="compareCard">
+                                <div class="compareCardRow compareCardHeader text-center no-border">
+                                </div> 
+                                <div class="compareCardRow">
+                                    <label class="no-margin"><small>Current Proces Avg.</small></label>
+                                </div> 
+                                {% for criterion in current_process.criteria_as_list %}
+                                    <div class="compareCardRow">
+                                        <label class="no-margin"><small>{{criterion}}</small></label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if candidates.count > 1 and recruiter.is_manager or candidates.count > 1 and isProcessMember %}
+        {% if vacancy.company|args:'AT_MULTISELECT'|call:'check_service' or vacancy.company|args:'AS_COMPARE_CANDIDATES'|call:'check_service' %}
+            <div class="card-utility-panel collapse fade">
+                <div class="card-panel-wrapper bg-white bordered borrder-info text-center pl40 pr40">
+                    {% if vacancy.status.codename == 'open' %}
+                        {% if isProcessMember or recruiter.is_manager %}
+                            {% if stage_section == 0 or stage_section == '0' %}
+                                    <p class="mt10 mr10 text-light inline-block pull-left"><small id="select-all-count" class="text-muted ml5 inline-block"></small></p>
+                                    <div class="border-right vertical-hr"></div> 
+                                    <button class="btn btn-xs btn-trans text-center inverse-selection va-mid border-bottom border-light">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                            <i class="fa fa-retweet"></i>
+                                        </span>
+                                        Inverse Selection
+                                    </button>
+                                    {% if vacancy.company|args:'AT_MULTISELECT'|call:'check_service' %}
+                                        <div class="border-right vertical-hr"></div>
+                                        {% if not vacancy_stage == '100' %}
+                                            <button class="btn btn-xs btn-trans text-center bulk-send-to-archive send-to-archive va-mid border-bottom border-light">
+                                                <span class="fa-stack fa-lg">
+                                                    <i class="fa fa-square-o fa-stack-2x fa-inverse"></i>
+                                                    <i class="fa fa-lg fa-archive"></i>
+                                                </span>
+                                                Archive
+                                            </button>
+                                            <div class="border-right vertical-hr"></div>
+                                        {% endif %}
+
+                                        {% if not vacancy_stage == '0' %}
+                                            <button class="btn btn-xs btn-trans text-center bulk-send-to-back send-to-back va-mid border-bottom border-light">
+                                                <span class="fa-stack fa-lg">
+                                                    <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                                    <i class="fa fa-stack-1x fa-angle-left"></i>
+                                                </span>
+                                                Move to Previous
+                                            </button>
+                                            <div class="border-right vertical-hr"></div>
+                                        {% endif %}
+                                        {% if not vacancy_stage == '100' %}
+                                            <button class="btn btn-xs btn-trans-info text-center bulk-send-to-next send-to-next va-mid border-bottom border-light">
+                                                <span class="fa-stack fa-lg">
+                                                    <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                                    <i class="fa fa-stack-1x fa-angle-right"></i>
+                                                </span>
+                                                Move to Next
+                                            </button>
+                                            <div class="border-right vertical-hr"></div>
+                                        {% endif %}   
+                                    {% endif %}
+                                    {% if vacancy.company|args:'AS_COMPARE_CANDIDATES'|call:'check_service' %}
+                                        <button class="btn btn-default btn text-center va-mid mt5 ml10 pull-right inline-block" id="compare-candidates"><i class="fa fa-balance-scale"></i> Compare</button>   
+                                    {% endif %}
+                                    <div class="clearfix"></div>           
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+<!-- End Content -->
+{% endblock %}
+
+{%block java_script_code%}
+    <script src="{{STATIC_URL}}js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/moment.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/daterangepicker.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/scheduler.js"></script>
+    
+    <script>
+        {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+            var filter_rating_values = function(value, $item, $this){
+                addon = 6;
+                if($item.attr('data-range') === '1'){
+                    for(key in $this.options){
+                        if(key > addon){
+                            if(parseInt(key) - addon < parseInt(value)){
+                                data = $this.options[key]
+                                data.disabled = true;
+                                $this.updateOption(key,data)
+                            }
+                            else if ($this.options[key].disabled == true){
+                                data = $this.options[key]
+                                data.disabled = false;
+                                $this.updateOption(key,data)
+                            }
+                        }
+                        else if(key!=value){
+                            data = $this.options[key]
+                            data.disabled = false;
+                            $this.updateOption(key,data)
+                        }
+                    }
+                }
+                else{
+                    for(key in $this.options){
+                        if(key <= addon){
+                            if(parseInt(key) > parseInt(value) - addon){
+                                data = $this.options[key]
+                                data.disabled = true;
+                                $this.updateOption(key,data)
+                            }
+                            else if ($this.options[key].disabled == true){
+                                data = $this.options[key]
+                                data.disabled = false;
+                                $this.updateOption(key,data)
+                            }
+                        }
+                        else if(key!=value){
+                            data = $this.options[key]
+                            data.disabled = false;
+                            $this.updateOption(key,data)
+                        }
+                    }
+                }
+            }
+            var reset_rating_filter = function($this){
+                if($this.items[0]){
+                    $($this.items).each(function(k,el){
+                        $this.removeItem(el);
+                    });
+                }
+                for(key in $this.options){
+                    data = $this.options[key]
+                    data.disabled = false;
+                    $this.updateOption(key,data)
+                }
+            }
+            var ratingFilterSelect = {
+                searchField: ['text'],
+                sortField:'value',
+                openOnFocus:true,
+                allowEmptyOption: false,
+                hideSelected: true,
+                multiple:true,
+                maxItems: 2,
+                selected:null,
+                labelField: 'text',
+                valueField: 'value',
+                optgroupField: 'range',
+                optgroupLabelField: 'name',
+                optgroupValueField: 'value',
+                options:[
+                    {'value':1, 'text': '0', 'disabled':false, 'range': '1'},
+                    {'value':2, 'text': '1', 'disabled':false, 'range': '1'},
+                    {'value':3, 'text': '2', 'disabled':false, 'range': '1'},
+                    {'value':4, 'text': '3', 'disabled':false, 'range': '1'},
+                    {'value':5, 'text': '4', 'disabled':false, 'range': '1'},
+                    {'value':6, 'text': '5', 'disabled':false, 'range': '1'},
+                    {'value':7, 'text': '0', 'disabled':false, 'range': '2'},
+                    {'value':8, 'text': '1', 'disabled':false, 'range': '2'},
+                    {'value':9, 'text': '2', 'disabled':false, 'range': '2'},
+                    {'value':10, 'text': '3', 'disabled':false, 'range': '2'},
+                    {'value':11, 'text': '4', 'disabled':false, 'range': '2'},
+                    {'value':12, 'text': '5', 'disabled':false, 'range': '2'},
+                ],
+                optgroups: [
+                    {$order:1, name: 'min', value:'1'},
+                    {$order:2, name: 'max', value:'2'}
+                ],
+                create: false,
+                selectOnTab: true,
+                closeAfterSelect: false,
+                lockOptgroupOrder: false,
+                plugins: ['optgroup_columns'],
+                render: {
+                    option: function(item,escape){
+                        stars = get_stars(item.value-1);
+                        if(item.disabled == false){
+                            return '<div class="row no-margin bg-white border-bottom border-light" data-value="'+item.value+'"><div class="col-xs-12 no-padding"><div class="inline-block ml5">'+stars+'</div></div></div>'
+                        }
+                        else{
+                            return '<div class="hidden row no-margin bg-white border-bottom border-light" data-value="'+item.value+'"><div class="col-xs-12 no-padding"><div class="inline-block ml5">'+stars+'</div></div></div>'
+                        }
+                    },
+                    optgroup_header: function(data, escape) {
+                        // alert('data')
+                        return '<div class="optgroup-header text-light">' + data.name + '</div>';
+                    },
+                    item: function(item,escape){
+                        stars = get_stars(item.value-1)
+                        return '<div class="item bg-white no-padding no-margin-right double-filter" data-range="' + item.range + '"><div class="inline-block text-light">'+stars+'</div></div>';
+                    }
+                },
+                onItemAdd: function(value, $item){
+                    $this = this;
+                    if($this.items.length == 2){
+                        this.close()
+                        if($item.attr('data-range') == $item.prev().attr('data-range')){
+                            $this.removeItem(parseInt($item.prev().attr('data-value')));
+                            // filter_rating_values(value, $item, $this);
+                        }
+                        else {
+                            //Push up and reset
+                            filter = $('#keyword-filter')[0].selectize;
+                            fvalue = '1-rating-';
+                            minrating = $this.getItem(Math.min.apply(null,$this.items))
+                            maxrating = $this.getItem(Math.max.apply(null,$this.items));
+                            text = "" + (parseInt(minrating.attr('data-value'))-1) + '-' + (parseInt(maxrating.attr('data-value'))-7);
+                            fvalue += text
+                            // alert(text);  
+                            if(!filter.options[fvalue])
+                            {
+                                // console.log('creating');
+                                data = {
+                                        'value': fvalue,
+                                        'type': 1,
+                                        'label': 'Rating',
+                                        'text': text
+                                    }
+                                filter.addOption(data);
+                                filter.addItem(fvalue);   
+                            }
+                            reset_rating_filter($this);                  
+                        }
+                        $this.focus();
+                        setTimeout(function(){
+                            console.log($this)
+                            $this.close();
+                        },10)
+                    }
+                    else {
+                        filter_rating_values(value, $item, $this);
+                    }
+                    // if(minrating){
+                    //     // console.log('min found');
+                    //     // fvalue += minrating
+                    // text += $(this)[0].selectize.options[minrating].text
+                    // }
+                    // // fvalue+="-"
+                    // if(minrating && maxrating && minrating!=maxrating){
+                    //     text += " to ";
+                    // }
+                    // if(!minrating || (minrating && maxrating && minrating!=maxrating)){
+                    //     // console.log('max found');
+                    //     // fvalue += maxrating;
+                    //     text += $('#rating-filter-max')[0].selectize.options[maxrating].text
+                    // }
+                    // data = {
+                    //         'value': fvalue,
+                    //         'type': 1,
+                    //         'label': 'Rating',
+                    //         'text': text
+                    //     }
+                    // // console.log(data);
+                    if(!!$item.prev()[0] && $item.attr('data-range') === '1'){
+                        $item.insertBefore($item.prev())
+                    }
+                },
+                onItemRemove: function(value, $item){
+                    if(!this.items.length){
+                        reset_rating_filter(this);
+                    }
+                    else {
+                        this.open();
+                        value  = parseInt(this.items[0]);
+                        $item = this.getItem(value);
+                        filter_rating_values(value, $item, this);    
+                    }
+                    
+                    // if(this.$input.attr('id')=='rating-filter-min'){
+                    //     box = $('#rating-filter-max')[0].selectize
+                    //     for (key in box.options){
+                    //         data = box.options[key]
+                    //         data.disabled = false;
+                    //         box.updateOption(key,data)
+                    //     }
+                    //     box.clearCache('option');
+                    //     box.refreshOptions();
+                    // }
+                    // else if(this.$input.attr('id')=='rating-filter-max'){
+                    //     box = $('#rating-filter-min')[0].selectize
+                    //     for (key in box.options){
+                    //         data = box.options[key]
+                    //         data.disabled = false;
+                    //         box.updateOption(key,data)
+                    //     }
+                    //     box.clearCache('option');
+                    //     box.refreshOptions();
+                    // }
+                },
+                onType: function(str){
+                    this.$dropdown.next('.no-results').remove();
+                    if(!this.hasOptions){
+                        this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                    }
+                },
+                onBlur:function(){
+                    this.$dropdown.next('.no-results').remove();
+                    reset_rating_filter(this);
+                },
+            }
+        {% endif %}
+    </script>
+    <script>
+        {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+            var remove_criteria = function(){
+                $this = $(this);
+                $this.html('<i class="fa fa-pulse fa-spinner"></i> Please Wait').prop('disabled', true).addClass('disabled');
+                if($this.parents('.modal-body').find('.row').length==2){
+                    $this.parents('.modal-body').find('.none-row').collapse('show');
+                }
+                $this.parents('.row').remove();
+            }
+            $('.add-criteria').click(function(){
+                $this = $(this);
+                newHtml = '<div class="row border-bottom border-light mb5">'+
+                            '<div class="col-xs-12 col-sm-7">'+
+                                '<input type="text" value="{{criterion.name}}" class="form-control" placeholder="Criteria Name" required>'+
+                            '</div>'+
+                            '<div class="col-xs-12 col-sm-5 pt10 pb10 no-padding-x text-center">'+
+                                '<span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span>'+
+                                '<a class="clickable remove btn btn-xs btn-default ml10 mr10"><i class="fa fa-times"></i> Remove</a>'+
+                            '</div>'+
+                        '</div>';
+                $this.parent().before(newHtml);
+                $this.parent().prev().find('.remove').click(remove_criteria);
+            });
+            $('#criterion-modal form').submit(function(event) {
+                event.preventDefault();
+                $this = $(this);
+                $inputs = $this.find('input[type=text]');
+                criteria = [];
+                $inputs.each(function(k,$input){
+                    criteria.push($input.value);
+                });
+                $this.find('.btn.btn-info').html('<i class="fa fa-pulse fa-spinner"></i> Please Wait').addClass('disabled').prop('disabled', true);
+
+                $.ajax({
+                    data:{
+                        'criteria': criteria.join(';;'),
+                        'vid': {{current_process.id}},
+                    },
+                    url: '/ajax/updatecriteria/',
+                    type:'post',
+                    complete: function(){
+                        $this.find('.btn.btn-info').html('Save').removeClass('disabled').prop('disabled', false);
+                    },
+                    success: function(data){
+                        if(data.success){
+                            location.reload()
+                        }
+                        else {
+                            alert(data.msg)
+                        }
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+                return false;   
+            });
+            $('.star-system .fa').click(function(){
+                $this = $(this);
+                $this.removeClass('fa-star-o').removeClass('fa-star').addClass('fa-star');
+                $this.prevAll('.fa').removeClass('fa-star-o').removeClass('fa-star-half-o').addClass('fa-star');
+                $this.nextAll('.fa').removeClass('fa-star').removeClass('fa-star-half-o').addClass('fa-star-o');
+                $this.parents('.star-system').next().val($this.prevAll().length+1)
+            })
+        {% endif %}
+        var updateSelectcount = function(){
+            count = $('[type=checkbox][id^=candidate-]:checked').length
+            if (count) {
+                if (count == 1) {
+                    //alert(count + ' candidate selected')
+                    $('#select-all-count').html(count + ' candidate selected')
+                }
+                else {
+                    //alert(count + ' candidates selected')
+                    $('#select-all-count').html(count + ' candidates selected')
+                }
+            }
+            else {
+                //alert('All deselected');
+                $('#select-all-count').html('No Selection')
+            }
+        }
+        var updatePanel= function(){
+            // if(($("#compareModal").data('bs.modal') || {}).isShown)
+            count = $('[type=checkbox][id^=candidate-]:checked').length
+            if (count>0 && !$('.card-utility-panel').hasClass('in')){
+                $('.card-utility-panel').collapse('show');
+            }
+            else if (count<=0 && $('.card-utility-panel').hasClass('in')){
+                if(!($("#compareModal").data('bs.modal') || {}).isShown){
+                    $('.card-utility-panel').collapse('hide');
+                }
+            }
+        }
+        var updateCompare = function(){
+            count = $('[type=checkbox][id^=candidate-]:checked').length
+            if (count > 1){
+                $('#compare-candidates').prop('disabled',false).removeClass('disabled');
+            }
+            else {
+                $('#compare-candidates').prop('disabled',true).addClass('disabled');
+            }
+        }
+        var updateCompareSelect = function(){
+            if (!this.checked){
+                $(this).parents('.compareCard').css('opacity', '0.3');
+            }
+            else {
+                $(this).parents('.compareCard').css('opacity', '1');
+            }
+            $($(this).parents('.compareCard').data('id')).click();
+        }
+        var flushcompare = function(){
+            $('#compareModal .compareCard:not(:first)').remove();
+            updatePanel()
+            $('#compare-candidates').html('<i class=" fa fa-balance-scale"></i> Compare');
+        }
+        var discardCompareItem = function(){
+            $this = $(this);
+            $this.addClass('hidden')
+            $this.parents('.compareCard').find('.checkbox [type=checkbox]').click();
+            $this.parents('.compareCard').css({'width': 0,'overflow':'hidden'});
+            setTimeout(function(){
+                $this.parents('.compareCard').remove();
+                if($('#compareModal .compareCard').length<=1){
+                $('#compareModal').modal('hide');
+            }
+            },900);            
+        }
+        $('#compare-candidates').click(function(){
+            $this = $(this);
+            boxes = $('.candidate-card[data-public=0] [type=checkbox]:checked')
+            cids = []
+            $(boxes).each(function(k,el){
+                cids.push($(el).parents('.candidate-card').attr('data-candidate'))
+            })
+            boxes = $('.candidate-card[data-public=1] [type=checkbox]:checked')
+            pcids = []
+            $(boxes).each(function(k,el){
+                pcids.push($(el).parents('.candidate-card').attr('data-candidate'))
+            })
+            cids = (cids.join(','))
+            pcids = (pcids.join(','))
+            $this.html('<i class="fa fa-spinner fa-pulse"></i> Please Wait').prop('disabled', true).addClass('disabled')
+            $.ajax({
+                data:{
+                    'vsid': {{current_process.id}},
+                    'cids': cids,
+                    'pcids': pcids,
+                },
+                url: "{% url 'compare_candidates' %}",
+                type:'post',
+                complete: function(){
+                    $this.html('<i class="fa fa-balance-scale"></i> Compare').prop('disabled',false).removeClass('disabled')
+                },
+                success: function(data){
+                    if(($("#compareModal").data('bs.modal') || {}).isShown){
+                        flushcompare()
+                    }
+                    $('#compareModal .compareSection').append(data);
+                    if(!($("#compareModal").data('bs.modal') || {}).isShown){
+                        $('#compareModal').modal('show');
+                    }
+                    $('#compareModal .compareSection [data-toggle="tooltip"]').tooltip();
+                    $('#compareModal .compareSection [type="checkbox"]').change(updateCompareSelect);
+                    $('#compareModal .compareSection .compare-discard').click(discardCompareItem)
+                },
+                error: function(er){
+                    console.log(er)
+                    alert('Could not generate comparison. Please try again later.')
+
+                }
+            })
+        })
+        $('#compareModal').on('hidden.bs.modal',function(){
+            flushcompare();
+        })
+        $('#compareModal').on('shown.bs.modal',function(){
+            $('#compare-candidates').html('<i class="fa fa-refresh"></i> Reload');
+        }); 
+        var card_count = {{candidates.count}};
+        $('.card-checkbox').change(function(){
+            if (card_count > 1){
+                if(!this.checked){
+                    $('#card-select-all')[0].checked = false
+                }
+                else if ($('.card-checkbox:checked').length == $('.card-checkbox').length){
+                    $('#card-select-all')[0].checked = true
+                }
+            }
+            updateSelectcount();
+            updatePanel();
+            updateCompare();
+        });
+        var processMemberSelect = {
+            searchField: ['text','email'],
+            sortField:'text',
+            openOnFocus:true,
+            allowEmptyOption: false,
+            allowPrecedence:true,
+            hideSelected: true,
+            multiple:false,
+            selected:null,
+            options:[
+                {% for member in current_process.non_members %}
+                    {   'value':{{member.id}}, 
+                        'text':'{{member}}', 
+                        'img':'{{member.user.photo}}',
+                        'email': '{{member.user.email|default:"Not Available"}}',
+                    },
+                {%endfor %}
+            ],
+            create: false,
+            selectOnTab: true,
+            render: {
+                option: function(item,escape){
+                    img = $(document.createElement("img")).addClass('img-card').attr('data-name', item.text).attr('src',item.img);
+                    if (img.attr('src').endsWith('{{settings.PHOTO_USER_DEFAULT}}')){
+                        img = img.initial()
+                    }
+                    img = img[0]
+                    // console.log(img.initial())
+                    return '<div class="row no-margin bg-white border-bottom border-light" data-value="'+item.value+'" data-img="'+item.img+'" data-email="'+item.email+'"><div class="col-xs-12 no-padding"><div class="inline-block va-top">'+img.outerHTML+'</div><div class="inline-block ml10"><p class="mt10 no-margin-bottom text-light"><b>'+item.text+'</b></p><p class="no-margin-bottom"><i>'+item.email+'</i></p></div></div></div>'
+                },
+                item: function(item,escape){
+                    return '<div class="item"><div class="inline-block va-top"><img class="navbar-img" src="{{MEDIA_URL}}'+item.img+'" data-name="'+item.text+'"></div><div class="inline-block ml10 text-light">'+item.text+' &lt;'+item.email+'&gt;</div></div>';
+                }
+
+            },
+            onItemAdd: function(value, $item){
+                $this=this
+                this.disable();
+                loadingHtml = '<div class="inline-block text-muted ml10"><i class="fa fa-pulse fa-spinner"></i> Please Wait</div>'
+                $item.append(loadingHtml);
+                $.ajax({
+                    url:'/ajax/addmembertojobprocess/',
+                    type:'post',
+                    data: {
+                        'id': value,
+                        'vid': {{current_process.id|default:0}},
+                    },
+                    complete: function(){
+                        $this.clear();
+                        $this.enable();
+                        $this.focus();
+                        $this.close()
+                    },
+                    success: function(data){
+                        if(data.success){
+                            $this.removeOption(value);
+                            newMember = '<blockquote class="no-margin-bottom border-bottom border-light bg-white br-2 no-padding collapse fade in" data-id="'+data.id+'">'+
+                                    '<img src="{{MEDIA_URL}}'+data.img+'" class="img-card" data-name="'+data.name+'">'+
+                                        '<div class="inline-block ml10 pt5">'+
+                                            '<h4 class="text-light no-margin"><i class="fa fa-user"></i> <span class="name">'+data.name+'</span></h4>'+
+                                            '<h6 class="text-muted no-margin inline-block"><i class="fa fa-envelope"></i> '+data.email+'</h6>'+
+                                        '</div>'+
+                                        '<div class="inline-block pull-right">'+
+                                            '<button class="btn btn-xs btn-default block-hover remove mt10 ml5"><i class="fa fa-times"></i> Remove</button>'+
+                                        '</div>'+
+                                    '</blockquote>';
+                            newImage = '<img class="img-circle mb5 mt5 navbar-img pull-right single-line-list-item" data-id="'+data.id+'" src="{{MEDIA_URL}}'+data.img+'" data-name="'+data.name+'">'
+                            $newCard = $('#stage-members .mlist').prepend(newMember);
+                            $newCard.find('blockquote:nth-child(1) .remove').click(remove_process_card);
+                            $newCard.find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                            $imgs = $('.single-line-list:not(.all)').prepend(newImage);
+                            $imgs.find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                            $all = $('.single-line-list.all').find('img[data-id='+data.id+']');
+                            if(!$all[0]){
+                                $imgs = $('.single-line-list.all').prepend(newImage);
+                                $mlist = $('#memberlist')[0].selectize
+                                $mlist.removeOption(data.id);
+                                $newCard = $('#job-members .mlist').prepend(newMember);
+                                $newCard.find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                                $imgs.find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                                $newCard.find('blockquote:nth-child(1) .remove').click(remove_card);
+                            }
+                            $('.single-line-null-item').addClass('hidden')
+                        }
+                        alert(data.msg);
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+            },
+            onType: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Members Found</div>')
+                }
+            },
+            onBlur:function(){
+                this.$dropdown.next('.no-results').remove();
+            },
+            onFocus: function(){
+                console.log('focus')
+            },
+            onChanges: function(value){
+                console.log('change')
+            }
+        }
+        var remove_process_card = function(){
+            $this = $(this);
+            $this.html('<i class="fa fa-pulse fa-spinner"></i> Please Wait').prop('disabled',true).addClass('disabled');
+            data = {
+                'id': $this.parents('blockquote').data('id'),
+                'vid': '{{current_process.id}}'
+            }
+            $.ajax({
+                data: data,
+                type: 'POST',
+                url: '/ajax/removememberfromjobprocess/',
+                complete: function(){
+                    $this.html('<i class="fa fa-times"></i> Remove').prop('disabled', false).removeClass('disabled');
+                },
+                success: function(data){
+                    if(data.success){
+                        $this.hide();
+                        $('.single-line-list:not(.all) [data-id='+$this.parents('blockquote').data('id')+']').css('border-color','#5bc0de');
+                        $this.parents('blockquote').addClass('clicakble');
+                        setTimeout(function(){
+                            $('.single-line-list:not(.all) [data-id='+$this.parents('blockquote').data('id')+']').remove();
+                            $this.parents('blockquote').remove();
+                            if(!$('.single-line-list:not(.all) .single-line-list-item')[0])
+                            {
+                                $('.single-line-null-item').removeClass('hidden')
+                            }
+                        },1000);
+                        mlist = $('#processmemberlist')[0].selectize;
+                        mlist.addOption({
+                            'value': data.id,
+                            'text': data.name,
+                            'email': data.email,
+                            'img': data.img
+                        });            
+                    }
+                    alert(data.msg);
+                },
+                error: function(er){
+                    console.log(er);
+                }
+            })
+        }
+        var memberSelect = {
+            searchField: ['text','email'],
+            sortField:'text',
+            openOnFocus:true,
+            allowEmptyOption: false,
+            allowPrecedence:true,
+            hideSelected: true,
+            multiple:false,
+            selected:null,
+            options:[
+                {% for member in vacancy.non_members %}
+                    {   'value':{{member.id}}, 
+                        'text':'{{member}}', 
+                        'img':'{{member.user.photo}}',
+                        'email': '{{member.user.email|default:"Not Available"}}',
+                    },
+                {%endfor %}
+            ],
+            create: false,
+            selectOnTab: true,
+            render: {
+                option: function(item,escape){
+                    img = $(document.createElement("img")).addClass('img-card').attr('data-name', item.text).attr('src',item.img);
+                    if (img.attr('src').endsWith('{{settings.PHOTO_USER_DEFAULT}}')){
+                        img = img.initial()
+                    }
+                    img = img[0]
+                    // console.log(img.initial())
+                    return '<div class="row no-margin bg-white border-bottom border-light" data-value="'+item.value+'" data-img="'+item.img+'" data-email="'+item.email+'"><div class="col-xs-12 no-padding"><div class="inline-block va-top">'+img.outerHTML+'</div><div class="inline-block ml10"><p class="mt10 no-margin-bottom text-light"><b>'+item.text+'</b></p><p class="no-margin-bottom"><i>'+item.email+'</i></p></div></div></div>'
+                },
+                item: function(item,escape){
+                    return '<div class="item"><div class="inline-block va-top"><img class="navbar-img" src="{{MEDIA_URL}}'+item.img+'" data-name="'+item.text+'"></div><div class="inline-block ml10 text-light">'+item.text+' &lt;'+item.email+'&gt;</div></div>';
+                }
+
+            },
+            onItemAdd: function(value, $item){
+                console.log(this)
+                $this=this
+                this.disable();
+                loadingHtml = '<div class="inline-block text-muted ml10"><i class="fa fa-pulse fa-spinner"></i> Please Wait</div>'
+                $item.append(loadingHtml);
+                $.ajax({
+                    url:'/ajax/addmembertojob/',
+                    type:'post',
+                    data: {
+                        'id': value,
+                        'vid': {{vacancy.id}},
+                    },
+                    complete: function(){
+                        $this.clear();
+                        $this.enable();
+                        $this.focus();
+                    },
+                    success: function(data){
+                        if(data.success){
+                            $this.removeOption(value);
+                            newMember = '<blockquote class="no-margin-bottom border-bottom border-light bg-white br-2 no-padding collapse fade in" data-id="'+data.id+'">'+
+                                    '<img src="{{MEDIA_URL}}'+data.img+'" class="img-card" data-name="'+data.name+'">'+
+                                        '<div class="inline-block ml10 pt5">'+
+                                            '<h4 class="text-light no-margin"><i class="fa fa-user"></i> <span class="name">'+data.name+'</span></h4>'+
+                                            '<h6 class="text-muted no-margin inline-block"><i class="fa fa-envelope"></i> '+data.email+'</h6>'+
+                                        '</div>'+
+                                        '<div class="inline-block pull-right">'+
+                                            '<button class="btn btn-xs btn-default block-hover remove mt10 ml5"><i class="fa fa-times"></i> Remove</button>'+
+                                        '</div>'+
+                                    '</blockquote>';
+                            newImage = '<img class="img-circle mb5 mt5 navbar-img pull-right single-line-list-item" data-id="'+data.id+'" src="{{MEDIA_URL}}'+data.img+'" data-name="'+data.name+'">'
+                            $newCard = $('#job-members').find('blockquote:nth-child(1)').before(newMember).prev();
+                            $newCard.find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                            $newCard.find('.remove').click(remove_card);
+                            $imgs = $('.single-line-list.all').prepend(newImage);
+                            $imgs.find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+
+                        }
+                        alert(data.msg);
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+            },
+            onType: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Members Found</div>')
+                }
+            },
+            onBlur:function(){
+                this.$dropdown.next('.no-results').remove();
+            },
+        }
+        var remove_card = function(){
+            $this = $(this);
+            $this.html('<i class="fa fa-pulse fa-spinner"></i> Please Wait').prop('disabled',true).addClass('disabled');
+            data = {
+                'id': $this.parents('blockquote').data('id'),
+                'vid': '{{vacancy.id}}'
+            }
+            $.ajax({
+                data: data,
+                type: 'POST',
+                url: '/ajax/removememberfromjob/',
+                complete: function(){
+                    $this.html('<i class="fa fa-times"></i> Remove').prop('disabled', false).removeClass('disabled');
+                },
+                success: function(data){
+                    if(data.success){
+                        $this.hide();
+                        $('.single-line-list-item[data-id='+$this.parents('blockquote').data('id')+']').css('border-color','#5bc0de');
+                        $this.parents('blockquote').addClass('clicakble');
+                        setTimeout(function(){
+                            $('.single-line-list-item[data-id='+$this.parents('blockquote').data('id')+']').remove();
+                            $this.parents('blockquote').remove();
+                            $('#stage-members').find('blockquote[data-id='+data.id+']').remove();
+                        },1000);
+                        mlist = $('#memberlist')[0].selectize
+                        mlist.addOption({
+                            'value': data.id,
+                            'text': data.name,
+                            'email': data.email,
+                            'img': data.img
+                        })
+                        mlist = $('#processmemberlist')[0].selectize
+                        mlist.addOption({
+                            'value': data.id,
+                            'text': data.name,
+                            'email': data.email,
+                            'img': data.img
+                        })
+                    }
+                    alert(data.msg);
+                },
+                error: function(er){
+                    console.log(er);
+                }
+            })
+        }
+        {% if vacancy.company|args:'AS_COMMENTS'|call:'check_service' %}
+            $('form.comment-section').submit(function(e){
+                e.preventDefault();
+                $this = $(this);
+                $this.find('textarea').addClass('disabled').prop('disabled',true);
+                $this.find('.btn').addClass('disabled').prop('disabled', true).html('<i class="fa fa-pulse fa-spinner"></i> Please Wait')
+                $.ajax({
+                    url:'/ajax/comment/',
+                    type:'post',
+                    data:{
+                        'text':$this.find('textarea').val(),
+                        'type':1,
+                        'recruiter':{{recruiter.id}},
+                        'stage': {{vacancy_stage}},
+                        'ispublic': $this.parents('.candidate-card').data('public'),
+                        'candidate': $this.parents('.candidate-card').data('candidate'),
+                        'vacancy': $this.parents('.candidate-card').data('vacancy')
+                    },
+                    complete: function(){
+                        $this.find('textarea').removeClass('disabled').prop('disabled', false);
+                        $this.find('.btn').removeClass('disabled').prop('disabled', false).html('Comment');
+                    },
+                    success: function(data){
+                        if(data.success){
+                            $this.before(data.html);
+                            $this.prev().find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                            $this.find('textarea').val('');
+                            $this.parents('.candidate-card').find('.comment-count').html(parseInt($this.parents('.candidate-card').find('.show-comments .badge').html()) + 1);
+                        }
+                        alert(data.msg);
+
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+                return false;
+            });
+        {% endif %}
+        {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+            $('form.rate-section').submit(function(e){
+                e.preventDefault();
+                $this = $(this);
+                stars=$this.find('input[type="hidden"][data-name]');
+                ratings=[]
+                tags = $this.find('select.tag-selector')[0].selectize.items
+                proceed=true;
+                $(stars).each(function(k,star){
+                    if($(star).val()==="0"){
+                        if (proceed)
+                            alert('Please provide all ratings to proceed')
+                        proceed=false;
+                    }
+                    ratings.push($(star).attr('data-name').toString() + ' -&&- ' + $(star).val())
+                });
+                if(proceed){
+                    $this.find('textarea').addClass('disabled').prop('disabled',true);
+                    $this.find('.btn').addClass('disabled').prop('disabled', true).html('<i class="fa fa-pulse fa-spinner"></i> Please Wait')
+                    $.ajax({
+                        url:'/ajax/rate/',
+                        type:'post',
+                        data:{
+                            'text':$this.find('textarea').val(),
+                            'type':2,
+                            'recruiter':{{recruiter.id}},
+                            'stage': {{vacancy_stage}},
+                            'ispublic': $this.parents('.candidate-card').data('public'),
+                            'candidate': $this.parents('.candidate-card').data('candidate'),
+                            'vacancy': $this.parents('.candidate-card').data('vacancy'),
+                            'ratings': ratings,
+                            'tags': tags,
+                        },
+                        complete: function(){
+                            $this.find('textarea').removeClass('disabled').prop('disabled', false);
+                            $this.find('.btn').removeClass('disabled').prop('disabled', false).html('Rate');
+                        },
+                        success: function(data){
+                            if(data.success){
+                                $this.before(data.html);
+                                $this.find('textarea').val('')
+                                setCookie('rate',$this.parents('.rate-cards').attr('id'),1);
+                                location.reload()
+                            }
+                            else {
+                            alert(data.msg);
+                                
+                            }
+                        },
+                        error: function(er){
+                            console.log(er);
+                        }
+                    })
+                }
+                else {
+                }
+
+                return false;
+            });
+        {% endif %}
+            var get_stars = function(value){
+                stars = ""
+                count=0
+                full_stars = parseInt(value)
+                if (full_stars > 5){
+                    full_stars = full_stars -6;
+                }
+                while(count<full_stars){
+                    stars+='<i class="fa fa-star pl5"></i>';
+                    count++;
+                }
+                while(count<5){
+                    stars+='<i class="fa fa-star-o pl5"></i>';
+                    count++;
+                }
+                return stars;
+            }
+
+        {% if candidates and vacancy.company|args:'AS_FILTER_CANDIDATES'|call:'check_service' and stage_section == '0' %}
+            var updateSelectionVisibility = function(){
+                if ($('.candidate-card:not(.hidden)').length > 0){
+                    $('.nullcard').addClass('hidden');
+                    $('.all-selector').removeClass('hidden');
+                }
+                else {
+                    $('.nullcard').removeClass('hidden');
+                    $('.all-selector').addClass('hidden');
+                }
+            }
+            var keywordFilterSelect = {
+                searchField: ['text'],
+                sortField:'text',
+                openOnFocus:false,
+                allowEmptyOption: false,
+                allowPrecedence:true,
+                hideSelected: true,
+                multiple:false,
+                selected:null,
+                options:[
+                    {% for tag in vacancy.available_tags %}
+                    {
+                        'value': '5-' + '{{tag.id}}',
+                        'text': '#' + '{{tag.name}}'
+                    },
+                    {% endfor %}
+                ],
+                create: function (input, callback){
+                    callback({
+                        'value': '0-' + input,
+                        'text': input,
+                    })
+
+                },
+                selectOnTab: true,
+                render: {
+                    option: function(item,escape){
+                        if (item.value.split('-')[0] == '5'){
+                            return '<div class="row no-margin bg-white border-bottom border-light" data-value="'+item.value+'" data-label="'+item.label+'"><div class="col-xs-12 no-padding"><p class="mt10 no-margin-bottom text-light"><b>'+' ' + item.text + '</b></p></div></div>'
+                        }
+                    },
+                    item: function(item,escape){
+                        if(item.type){
+                            return '<div class="item lh1" data-type="'+item.type+'"><div class="inline-block pl5 pr5 border-right border-light"><b><i>'+item.label+'</b></i></div><div class="inline-block ml5">'+item.text+'</div></div>';
+                        }
+                        else{
+                            return '<div class="item lh1" data-type="0"><div class="inline-block">'+item.text+'</div></div>';
+                        }
+                    },
+                    option_create: function(data, escape) {
+                        return '';
+                    }
+                },
+                onItemAdd: function(value, $item){
+                    $('.loading').removeClass('hidden');
+                    // console.log('item added')
+                    loadingHtml = '<div class="inline-block text-muted ml10"><i class="fa fa-pulse fa-spinner"></i> Please Wait</div>'
+                    $('.candidate-card:not(.hidden) .card-checkbox:checked').click()
+                    val =this.$input.val()
+                    val += ',' + value
+                    val = val.replace(/^(\,)/,"");
+                    // min = $('#rating-filter-min')[0].selectize.items[0]
+                    // max = $('#rating-filter-max')[0].selectize.items[0]
+                    // if (!min){
+                    //     min = 0
+                    // }
+                    // if (!max){
+                    //     max = 0
+                    // }
+                    // val = val.replace('1-rating','1-'+min+'-'+max)
+                    $.ajax({
+                        data:{
+                            'process':{{current_process.id}},
+                            'filter': val,
+                            'section': {{stage_section}},
+                        },
+                        type:'post',
+                        url: '/ajax/filter-candidates/',
+                        complete: function(){
+                            updateSelectionVisibility()
+                        $('.loading').addClass('hidden');
+                        },
+                        success: function(data){
+                            if (data.success){
+                                $('.candidate-card').addClass('hidden')
+                                $(data.candidates).each(function(k, el){
+                                    // console.log(el)
+                                    $('.candidate-card[data-public='+el.public+'][data-candidate='+el.candidate+']').removeClass('hidden');
+                                })
+                                setCookie('candidate-filter',$('#keyword-filter').val(), 1)
+                            }
+                            else {
+                                alert(data.msg)
+                                alert('Failed to Update Filter. Please Try Again!')
+                            }
+                        },
+                        error: function(er){
+                            console.log(er);
+                        }
+                    })
+                    this.close();
+                },
+                onItemRemove: function(value, $item){
+                    $('.loading').removeClass('hidden');
+                    val =this.$input.val()
+                    // val += ',' + value
+                    // val = val.replace(/^(\,)/,"");
+                    // min = $('#rating-filter-min')[0].selectize.items[0]
+                    // max = $('#rating-filter-max')[0].selectize.items[0]
+                    // console.log(val)
+                    // if (!min){
+                        // min = 0
+                    // }
+                    // if (!max){
+                        // max = 0
+                    // }
+                    // val = val.replace('1-rating','1-'+min+'-'+max)
+                    $.ajax({
+                        data:{
+                            'process':{{current_process.id}},
+                            'filter': val,
+                            'section': {{stage_section}},
+                        },
+                        type:'post',
+                        url: '/ajax/filter-candidates/',
+                        complete: function(){
+                            updateSelectionVisibility()
+                        $('.loading').addClass('hidden');
+                        },
+                        success: function(data){
+                            if (data.success){
+                                $('.candidate-card').addClass('hidden')
+                                $(data.candidates).each(function(k, el){
+                                    $('.candidate-card[data-public='+el.public+'][data-candidate='+el.candidate+']').removeClass('hidden');
+                                })
+                                setCookie('candidate-filter',$('#keyword-filter').val(), 1)
+
+                            }
+                            else {
+                                alert(data.msg)
+                                alert('Failed to Update Filter. Please Try Again!')
+                            }
+                        },
+                        error: function(er){
+                            console.log(er);
+                        }
+                    });
+                    arr = value.split('-')
+                    vtype = parseInt(arr[0])
+                    if (vtype != 5){
+                        this.removeOption(value);
+                    }
+                    _this = this
+                    setTimeout(function(){
+                        // console.log(arr)
+                        if (vtype == 3){
+                            $('#referal-filter')[0].selectize.removeItem(arr[1]);
+                        }
+                        else if (vtype == 2){
+                            $('#recruiter-filter')[0].selectize.removeItem(arr[1]);
+                        }
+                        else if (vtype == 1) {
+                            found = false;
+                            _this.$input.val().split(',').forEach(function(el){
+                                if (el !='1-rating'){
+                                    // $('#rating-filter-min')[0].selectize.clear();
+                                    $('#rating-filter-max')[0].selectize.clear();
+                                }
+                            })
+                        }
+                        else {
+                            console.log('none')
+                        }
+
+                        _this.close();
+                    },200)
+                },
+                onType: function(str){
+                    if(str == ""){
+                        this.close();
+                    }
+                },
+                onBlur:function(){
+                    this.close();
+                },
+                onInitialize: function(){
+                    $this = this;
+                    filter_values = getCookie('candidate-filter').split(',')
+                    $(document).ready(function(){
+                        $(filter_values).each(function(index, value){
+                            value_sections = value.split('-');
+                            switch (value_sections[0]){
+                                case '0':
+                                    $this.addOption({
+                                        'value': value,
+                                        'type': 0,
+                                        'text': value_sections[1]
+                                    });
+                                    $this.addItem(value)
+                                    break;
+                                case '1':
+                                    $filter = $('#rating_filter')[0].selectize;
+                                    $filter.addItem((parseInt(value_sections[2]) + 1).toString())
+                                    $filter.addItem((parseInt(value_sections[3]) + 7).toString())
+                                    break;
+                                case '2':
+                                    $filter = $('#recruiter-filter')[0].selectize;
+                                    $filter.addItem(value_sections[1])
+                                    break;
+                                case '3':
+                                    $filter = $('#referal-filter')[0].selectize;
+                                    $filter.addItem(value_sections[1])
+                                    break;
+                                case '5':
+                                    $this.addItem(value)
+                                    break;
+                                default:
+                                    break;
+                            }
+                            // setCookie('candidate-filter', value, 1)
+                        })
+                        $
+                    })
+                }
+            }
+            var recruiterFilterSelect = {
+                searchField: ['text', 'email'],
+                sortField:'text',
+                openOnFocus:true,
+                allowEmptyOption: false,
+                hideSelected: true,
+                multiple:false,
+                selected:null,
+                options:[
+                    {% for member in current_process.fellow_recruiters %}
+                        {   'value':{{member.id}}, 
+                            'text':'{{member}}', 
+                            'img':'{{member.user.photo}}',
+                            'email': '{{member.user.email|default:"Not Available"}}',
+                        },
+                    {%endfor %}
+                ],
+                placeholder: 'Evaluators involved',
+                create: false,
+                selectOnTab: true,
+                render: {
+                    option: function(item,escape){
+                        img = $(document.createElement("img")).addClass('img-card-small card-left').attr('data-name', item.text).attr('src',item.img);
+                        if (img.attr('src').endsWith('{{settings.PHOTO_USER_DEFAULT}}')){
+                            img = img.initial()
+                        }
+                        img = img[0]
+                        // console.log(img.initial())
+                        return '<div class="row no-margin bg-white border-bottom border-light" data-value="'+item.value+'" data-img="'+item.img+'" data-email="'+item.email+'"><div class="col-xs-12 no-padding"><div class="inline-block va-top">'+img.outerHTML+'</div><div class="inline-block ml30"><p class="no-margin-y small lh1"><b>'+item.text+'</b></p><p class="no-margin-y small lh1"><i>'+item.email+'</i></p></div></div></div>'
+                    },
+                    item: function(item,escape){
+                        // return '<div class="item"><div class="inline-block va-top"><img class="navbar-img" src="{{MEDIA_URL}}'+item.img+'" data-name="'+item.text+'"></div><div class="inline-block ml10 text-light">'+item.text+' &lt;'+item.email+'&gt;</div></div>';
+                        return '<span data-value="'+item.value+'" class="hidden"></span>'
+                    }
+                },
+                onItemAdd: function(value, $item){
+                    if (this.$wrapper.hasClass('items-hidden')) {
+                        this.$control_input.attr('placeholder',this.settings.placeholder);
+                        this.$control_input.css('width','auto');
+                    }
+                    if(!this.hasOptions){
+                        this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                    }
+                    //Go for search 
+                    filter = $('#keyword-filter')[0].selectize;
+                    fvalue = '2-' + (value).toString();
+                    filter.addOption({
+                        'value': fvalue,
+                        'type': 2,
+                        'label': 'Evaluator Involved',
+                        'text': this.options[value].text
+                    });
+                    filter.addItem(fvalue)
+                    this.close();
+                    this.$control_input.css('width','0px')
+                },
+                onInitialize: function(){
+                    if (this.$wrapper.hasClass('items-hidden')) {
+                        this.$control_input.parent().attr('placeholder',this.settings.placeholder)
+                        this.$control_input.attr('placeholder','');
+                        this.$control_input.css('width',0)
+                    }
+
+                },
+                onDropdownOpen: function($dropdown){
+                    if($dropdown.find('[data-selectable]')[0]){
+                        this.$dropdown.next('.no-results').remove();
+                    }
+                },
+                onFocus: function(str){
+                    this.$dropdown.next('.no-results').remove();
+                    if(!this.hasOptions){
+                        this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                    }
+                    if (this.$wrapper.hasClass('items-hidden')) {
+                        this.$control_input.parent().attr('placeholder','');
+                        this.$control_input.attr('placeholder',this.settings.placeholder);
+                        this.$control_input.css('width','auto')
+                    }
+                },
+                onType: function(str){
+                    this.$dropdown.next('.no-results').remove();
+                    if(!this.hasOptions){
+                        this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                    }
+                },
+                onBlur:function(){
+                    this.$dropdown.next('.no-results').remove();
+                    if (this.$wrapper.hasClass('items-hidden')) {
+                        this.$control_input.parent().attr('placeholder',this.settings.placeholder)
+                        this.$control_input.attr('placeholder','');
+                        this.$control_input.css('width',0)
+                    }
+                },
+            }
+            var referalFilterSelect = {
+                searchField: ['text', 'email'],
+                sortField:'text',
+                openOnFocus:true,
+                allowEmptyOption: false,
+                hideSelected: true,
+                selected:null,
+                options:[
+                    {% for member in recruiter.fellow_recruiters %}
+                        {   'value':{{member.id}}, 
+                            'text':'{{member}}', 
+                            'img':'{{member.user.photo}}',
+                            'email': '{{member.user.email|default:"Not Available"}}',
+                        },
+                    {% endfor %}
+                    {% if recruiter.is_manager %}
+                        {   'value':{{recruiter.id}}, 
+                            'text':'{{recruiter}}', 
+                            'img':'{{recruiter.user.photo}}',
+                            'email': '{{recruiter.user.email|default:"Not Available"}}',
+                        },
+                    {% endif %}
+                ],
+                placeholder: 'Refered by',
+                create: false,
+                selectOnTab: true,
+                render: {
+                    option: function(item,escape){
+                        img = $(document.createElement("img")).addClass('img-card-small card-left').attr('data-name', item.text).attr('src',item.img);
+                        if (img.attr('src').endsWith('{{settings.PHOTO_USER_DEFAULT}}')){
+                            img = img.initial()
+                        }
+                        img = img[0]
+                        // console.log(img.initial())
+                        return '<div class="row no-margin bg-white border-bottom border-light" data-value="'+item.value+'" data-img="'+item.img+'" data-email="'+item.email+'"><div class="col-xs-12 no-padding"><div class="inline-block va-top">'+img.outerHTML+'</div><div class="inline-block ml30"><p class="no-margin-y small lh1"><b>'+item.text+'</b></p><p class="no-margin-y small lh1"><i>'+item.email+'</i></p></div></div></div>'
+                    },
+                    item: function(item,escape){
+                        // return '<div class="item"><div class="inline-block va-top"><img class="navbar-img" src="{{MEDIA_URL}}'+item.img+'" data-name="'+item.text+'"></div><div class="inline-block ml10 text-light">'+item.text+' &lt;'+item.email+'&gt;</div></div>';
+                        return '<span data-value="'+item.value+'" class="hidden"></span>'
+                    }
+                },
+                onItemAdd: function(value, $item){
+                    if (this.$wrapper.hasClass('items-hidden')) {
+                        this.$control_input.attr('placeholder',this.settings.placeholder);
+                        this.$control_input.css('width','auto');
+                    }
+                    if(!this.hasOptions){
+                        this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                    }
+                    //Go for search
+                    filter = $('#keyword-filter')[0].selectize;
+                    fvalue = '3-' + (value).toString()
+                    filter.addOption({
+                        'value': fvalue,
+                        'type': 3,
+                        'label': 'Refered by',
+                        'text': this.options[value].text
+                    })
+                    this.$control_input.css('width','0px')
+                    filter.addItem(fvalue)
+                },
+                onInitialize: function(){
+                    if (this.$wrapper.hasClass('items-hidden')) {
+                        this.$control_input.parent().attr('placeholder',this.settings.placeholder)
+                        this.$control_input.attr('placeholder','');
+                        this.$control_input.css('width',0)
+                    }
+                },
+                onDropdownOpen: function($dropdown){
+                    if($dropdown.find('[data-selectable]')[0]){
+                        this.$dropdown.next('.no-results').remove();
+                    }
+                },
+                onFocus: function(str){
+                    this.$dropdown.next('.no-results').remove();
+                    if(!this.hasOptions){
+                        this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                    }
+                    if (this.$wrapper.hasClass('items-hidden')) {
+                        this.$control_input.parent().attr('placeholder','');
+                        this.$control_input.attr('placeholder',this.settings.placeholder);
+                        this.$control_input.css('width','auto')
+                    }
+                },
+                onType: function(str){
+                    this.$dropdown.next('.no-results').remove();
+                    if(!this.hasOptions){
+                        this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Results Found</div>')
+                    }
+                },
+                onBlur:function(){
+                    this.$dropdown.next('.no-results').remove();
+                    if (this.$wrapper.hasClass('items-hidden')) {
+                        this.$control_input.parent().attr('placeholder',this.settings.placeholder)
+                        this.$control_input.attr('placeholder','');
+                        this.$control_input.css('width',0)
+                    }
+                },
+            }
+        {% endif %}
+        {% if recruiter.is_manager or isProcessMember %}
+            var tagSelect = {
+                openOnFocus: false,
+                allowEmptyOption: false,
+                hideSelected: true,
+                placeholder: 'Tags',
+                create: function (input, callback){
+                    callback({
+                        'value': '__' + input,
+                        'text': input,
+                    })
+
+                },
+                selectOnTab: true,
+                render: {
+                    option_create: function(data, escape) {
+                        return '<div class="create">Add new Tag <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+                    }
+                },
+                onInitialize: function(){
+                    var selectize = this;
+                }
+            }
+            $('form.tag-section').submit(function(e){
+                e.preventDefault();
+                $this = $(this);
+                $selectize = $this.find('select')[0].selectize;
+                $selectize.disable();
+                $this.find('.btn').addClass('disabled').prop('disabled', true).html('<i class="fa fa-pulse fa-spinner"></i> Please Wait')
+                $.ajax({
+                    url:'/ajax/tag/',
+                    type:'post',
+                    data:{
+                        'tags':$selectize.items,
+                        'candidate': $this.parents('.candidate-card').data('candidate'),
+                        'vacancy': $this.parents('.candidate-card').data('vacancy')
+                    },
+                    complete: function(){
+                        $selectize.enable();
+                        $this.find('.btn').removeClass('disabled').prop('disabled', false).html('Tag');
+                    },
+                    success: function(data){
+                        if(data.success){
+                            $this.before(data.html);
+                            $this.parents('.tag-card').find('.tag-count').html(data.tagcount);
+                        }
+                        location.reload();
+                        // alert(data.msg);
+
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+                return false;
+            });
+        {% endif %}
+        $(document).ready(function(){
+            {% if recruiter.is_manager or isProcessMember %}
+                $('.tag-selector').selectize(tagSelect);
+                {% if candidates and vacancy.company|args:'AS_FILTER_CANDIDATES'|call:'check_service' and stage_section == '0' %}
+                    // $('.candidates-filter').selectize(filterSelect);
+                    {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+                        $('#rating_filter').selectize(ratingFilterSelect);
+                        // $('#rating-filter-min').next().find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                        // $('#rating-filter-min')[0].selectize.clear();
+
+                        $('#rating-filter-max').selectize(ratingFilterSelect);
+                        $('#rating-filter-max').next().find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                    {% endif %}
+                    $('#recruiter-filter').selectize(recruiterFilterSelect);
+                    $('#recruiter-filter').next().find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                    $('#referal-filter').selectize(referalFilterSelect);
+                    $('#referal-filter').next().find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                    $('#keyword-filter').selectize(keywordFilterSelect);
+                    $('#keyword-filter').next().find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                    $('#referal-filter')[0].selectize.clear();
+                    $('.tag-selector').selectize(tagSelect);
+                    $('#tag-cloud').find('.tag-item').click(function(){
+                        $('#keyword-filter')[0].selectize.addItem('5-'+$(this).data('value'))
+                    })
+                {% endif %}
+            {% endif %}
+            $('.inverse-selection').click(function(){
+                checkedboxes = $('.candidate-card:not(.hidden) [type="checkbox"]:checked')
+                ;
+                // console.log(checkedboxes)
+                uncheckedboxes = $('.candidate-card:not(.hidden) [type="checkbox"]:not(:checked)');
+                // console.log(uncheckedboxes)
+                $(uncheckedboxes).each(function(k,el){
+                    if(($("#compareModal").data('bs.modal') || {}).isShown){
+                        $('#'+$(el).attr('id').replace('candidate','check')).click();
+                    }
+                    else {
+                        $(el).click();
+                    }
+                })
+                $(checkedboxes).each(function(k,el){
+                    if(($("#compareModal").data('bs.modal') || {}).isShown){
+                        $('#'+$(el).attr('id').replace('candidate','check')).click();
+                    }
+                    else {
+                        $(el).click()
+                    }
+                })
+            });
+            $('#card-select-all').click(function(){
+                if(this.checked == false){
+                    checked = false;
+                }
+                else {
+                    checked = true;
+                }
+                boxes = $('.candidate-card:not(.hidden) [type=checkbox][id^=candidate-]')
+                $(boxes).each(function(k,el){
+                    $(el)[0].checked = checked;
+                })
+                updateSelectcount();
+                updatePanel();
+                updateCompare();
+            });
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            
+            elems.forEach(function(html) {
+              var switchery = new Switchery(html,{color:'#5bc0de', size:'small'});
+            });
+            var textarea = document.querySelector('textarea');
+            if (textarea)
+                textarea.addEventListener('keydown', autosize);
+            function autosize(){
+              var el = this;
+              setTimeout(function(){
+                el.style.cssText = 'height:auto; padding:0';
+                // for box-sizing other than "content-box" use:
+                // el.style.cssText = '-moz-box-sizing:content-box';
+                el.style.cssText = 'height:' + (parseInt(el.scrollHeight) + parseInt(14)) + 'px';
+              },0);
+            }
+            var hide_all = function($this){
+                if(!$this){
+                    $this = $(this);
+                }
+                else {
+                    $this = $($this);
+                }
+                $this.parents('.candidate-card').find('.show-comments').removeClass('active').removeClass('hide-all');
+                $this.parents('.candidate-card').find('.show-ratings').removeClass('active').removeClass('hide-all');
+                $this.parents('.candidate-card').find('.show-tags').removeClass('active').removeClass('hide-all');
+                $this.parents('.candidate-card').find('.show-timeline').removeClass('active').removeClass('hide-all');
+                $this.parents('.candidate-card').find('.comment-cards').collapse('hide');
+                $this.parents('.candidate-card').find('.rate-cards').collapse('hide');
+                $this.parents('.candidate-card').find('.tag-cards').collapse('hide');
+                $this.parents('.candidate-card').find('.timeline-cards').collapse('hide');
+            }
+            $('.hide-all').click(hide_all);
+            {% if vacancy.company|args:'AS_COMMENTS'|call:'check_service' %}
+                $('.show-comments').click(function(){
+                    $(this).parents('.candidate-card').find('.comment-cards').collapse('show');
+                    $(this).parents('.candidate-card').find('.rate-cards').collapse('hide');
+                    $(this).parents('.candidate-card').find('.tag-cards').collapse('hide');
+                    $(this).parents('.candidate-card').find('.timeline-cards').collapse('hide');
+                    $(this).addClass('active');
+                    $('.show-ratings').removeClass('active hide-all');
+                    $('.show-tags').removeClass('active hide-all');
+                    $('.show-timeline').removeClass('active hide-all');
+                    if(!$(this).hasClass('hide-all')){
+                        $(this).addClass('hide-all');
+                    }
+                    else {
+                        hide_all(this);
+                        }
+                });
+            {% endif %}
+            {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+                $('.show-ratings').click(function(){
+                    $(this).parents('.candidate-card').find('.rate-cards').collapse('show');
+                    $(this).parents('.candidate-card').find('.comment-cards').collapse('hide');
+                    $(this).parents('.candidate-card').find('.tag-cards').collapse('hide');
+                    $(this).parents('.candidate-card').find('.timeline-cards').collapse('hide');
+                    $(this).addClass('active');
+                    $('.show-comments').removeClass('active hide-all');
+                    $('.show-tags').removeClass('active hide-all');
+                    $('.show-timeline').removeClass('active hide-all');
+                    if(!$(this).hasClass('hide-all')){
+                        $(this).addClass('hide-all');
+                    }
+                    else {
+                        hide_all(this);
+                    }
+                });
+                $('#criterion-modal .remove').click(remove_criteria);
+            {% endif %}
+            $('.show-tags').click(function(){
+                $(this).parents('.candidate-card').find('.tag-cards').collapse('show');
+                $(this).parents('.candidate-card').find('.timeline-cards').collapse('hide');
+                $(this).parents('.candidate-card').find('.comment-cards').collapse('hide');
+                $(this).parents('.candidate-card').find('.rate-cards').collapse('hide');
+                $(this).addClass('active');
+                $('.show-comments').removeClass('active hide-all');
+                $('.show-ratings').removeClass('active hide-all');
+                $('.show-timeline').removeClass('active hide-all');
+                if(!$(this).hasClass('hide-all')){
+                    $(this).addClass('hide-all');
+                }
+                else {
+                    hide_all(this);
+                }
+            });
+            $('.show-timeline').click(function(){
+                $(this).parents('.candidate-card').find('.timeline-cards').collapse('show');
+                $(this).parents('.candidate-card').find('.comment-cards').collapse('hide');
+                $(this).parents('.candidate-card').find('.rate-cards').collapse('hide');
+                $(this).parents('.candidate-card').find('.tag-cards').collapse('hide');
+                $(this).addClass('active');
+                $('.show-comments').removeClass('active hide-all');
+                $('.show-ratings').removeClass('active hide-all');
+                $('.show-tags').removeClass('active hide-all');
+                if(!$(this).hasClass('hide-all')){
+                    $(this).addClass('hide-all');
+                }
+                else {
+                    hide_all(this);
+                }
+            });
+            {% if recruiter.is_manager  %}
+                $('#job-members .remove').click(remove_card);
+                $('#memberlist').selectize(memberSelect);
+                $('#memberlist').next().find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+                $('#memberlist')[0].selectize.clear();
+                $('#stage-members .remove').click(remove_process_card);
+                $('#processmemberlist').selectize(processMemberSelect);
+                $('#processmemberlist')[0].selectize.clear();
+            {% endif %}
+            rcard = getCookie('rate');
+            if (rcard!=""){
+                setCookie('rate','',1)
+                $card = $('#'+rcard).parents('.candidate-card').find('.show-ratings');
+                $card.click();
+                // console.log($card)
+                window.scrollTo(0,$card.offset()['top']);
+            }
+        });
+        // $('#memberlist')[0].selectize.open();
+        {% if vacancy_stage == '0' %}
+            {%if public_form.errors %}
+                $(document).ready(function(){
+                    $('#public_apply').modal('show');
+                });
+            {% endif%}
+
+        {% endif %}
+        {% if not vacancy.status.codename == 'closed' %}
+            {% if isProcessMember or recruiter.is_manager %}
+                $('.send-to-next').click(function(){
+                    formdata = [{
+                        'public': $(this).parents('.candidate-card').data('public'),
+                        'candidate': $(this).parents('.candidate-card').data('candidate'), 
+                    }]
+                    $this = $(this);
+                    if($this.hasClass('bulk-send-to-next')){
+                        formdata = []
+                        boxes = $('.candidate-card:not(.hidden) [type=checkbox]:checked')
+                        $(boxes).each(function(k,el){
+                            data = {
+                                'public': $(el).parents('.candidate-card').data('public'),
+                                'candidate': $(el).parents('.candidate-card').data('candidate'), 
+                            }
+                            formdata.push(data);
+                        })
+                    }
+                    formdata = JSON.stringify(formdata);
+                    $this.html('<i class="fa fa-spinner fa-pulse fa-lg"></i> Please Wait').prop('disabled',true).addClass('disabled');
+                    $.ajax({
+                        data: {
+                            'formdata':formdata,
+                            'vacancy': '{{vacancy.id}}',
+                            'process': '{{current_process.id}}',
+                        },
+                        url:'/ajax/upgradepostulate/',
+                        type: 'POST',
+                        complete: function(data){
+                            // console.log(data)
+                        },
+                        success: function(data){
+                            // console.log(data);
+                            if(data.success == true){
+                                //highlight adn timeout remove after 5 seconds
+                                // $this = $(this)
+                                location.reload();
+                                // $this.parents('.panel-shadow').css('border','2px solid #337ab7')
+                                // setTimeout(function(){
+                                //     $this.parents('.candidate-card').addClass('collapse fade in');
+                                //     $this.parents('.candidate-card').collapse('toggle');
+                                //     setTimeout(function(){
+
+                                //         $this.parents('.candidate-card').remove();
+                                //     },500);
+                                // },1000)
+                                // $activesection = $('.nav.timeline li.active:not(.hidden)');
+                                // $count = $activesection.find('ul li:nth-child(1) .label').html();
+                                // $count--;
+                                // $activesection.find('ul li:nth-child(1) .label').html($count)
+                                // $count = $activesection.find('ul li:nth-child(2) .label').html();
+                                // $count++;
+                                // $activesection.find('ul li:nth-child(2) .label').html($count);
+                                // $count = $activesection.next().find('.label').html()
+                                // $count++;
+                                // $activesection.next().find('.label').html($count);
+                                // alert(data.msg);
+                            }
+                            else {
+                                alert('Could Not update. Please Try Again!')
+                            }
+                        }
+                    });
+                })
+                $('.send-to-back').click(function(){
+                    formdata = [{
+                        'public': $(this).parents('.candidate-card').data('public'),
+                        'candidate': $(this).parents('.candidate-card').data('candidate'), 
+                    }]
+                    $this = $(this);
+                    if($this.hasClass('bulk-send-to-back')){
+                        formdata = []
+                        boxes = $('.candidate-card:not(.hidden) [type=checkbox]:checked')
+                        $(boxes).each(function(k,el){
+                            data = {
+                                'public': $(el).parents('.candidate-card').data('public'),
+                                'candidate': $(el).parents('.candidate-card').data('candidate'),
+                            }
+                            formdata.push(data);
+                        })
+                    }
+                    formdata = JSON.stringify(formdata);
+                    $this.html('<i class="fa fa-spinner fa-pulse fa-lg"></i> Please Wait').prop('disabled',true).addClass('disabled');
+                    $.ajax({
+                        data: {
+                            'formdata': formdata,
+                            'vacancy': '{{vacancy.id}}',
+                            'process': '{{current_process.id}}',
+                        },
+                        url:'/ajax/downgradepostulate/',
+                        type: 'POST',
+                        complete: function(data){
+                            // console.log(data)
+                        },
+                        success: function(data){
+                            // console.log(data);
+                            if(data.success == true){
+                                //highlight adn timeout remove after 5 seconds
+                                // $this = $(this)
+                                location.reload()
+                                // $this.parents('.panel-shadow').css('border','2px solid #337ab7')
+                                // setTimeout(function(){
+                                //     $this.parents('.candidate-card').addClass('collapse fade in');
+                                //     $this.parents('.candidate-card').collapse('toggle');
+                                //     setTimeout(function(){
+
+                                //         $this.parents('.candidate-card').remove();
+                                //     },500);
+                                // },1000)
+                                // $activesection = $('.nav.timeline li.active');
+                                // $count = $activesection.find('ul li:nth-child(1) .label').html();
+                                // $count--;
+                                // $activesection.find('ul li:nth-child(1) .label').html($count)
+                                // $count = $activesection.find('.time-wrapper .label').html()
+                                // $count--;
+                                // $activesection.find('.time-wrapper .label').html($count);
+                                // alert(data.msg);
+                            }
+                            else {
+                                alert('Could Not update. Please Try Again!')
+                            }
+                        }
+                    });
+                })
+                $('.send-to-archive').click(function(){
+                    $this = $(this);
+                    // $this.html('<i class="fa fa-spinner fa-pulse fa-lg"></i> Please Wait').prop('disabled',true).addClass('disabled');
+                    $('#archiveModal').modal('show')
+                    $('#archiveModal').attr({
+                        'data-public': $(this).parents('.candidate-card').data('public'),
+                        'data-vacancy': $(this).parents('.candidate-card').data('vacancy'),
+                        'data-candidate': $(this).parents('.candidate-card').data('candidate')
+                    });
+                    if($this.hasClass('bulk-send-to-archive')){
+                        $('#archiveModal #archive_count').html(' - ' + $('.candidate-card:not(.hidden) [type=checkbox]:checked').length)
+                        $('#archiveModal').attr({'data-bulk':'1'})
+                    }
+                    else {
+                        $('#archiveModal #archive_count').html(' - 1');
+                        $('#archiveModal').attr({'data-bulk':'0'})
+                    }
+                })
+                $('.archive_confirm').click(function(){
+                    $this = $(this);
+                    $this.html('<i class="fa fa-spinner fa-pulse fa-lg"></i> Please Wait').prop('disabled', true).addClass('disabled');
+                    if( $this.parents('.modal').find('.ban-temp')[0]){
+                        ban_temp = $this.parents('.modal').find('.ban-temp')[0].checked;
+                    }
+                    else {
+                        ban_temp = false;
+                    }
+                    if($this.parents('.modal').data('bulk') === 0){
+                        formdata = [{
+                            'public': $this.parents('.modal').data('public'),
+                            'candidate': $this.parents('.modal').data('candidate'),
+                        }]
+                    }
+                    else{
+                        formdata = []
+                        boxes = $('.candidate-card:not(.hidden) [type=checkbox]:checked')
+                        $(boxes).each(function(k,el){
+                            data = {
+                                'public': $(el).parents('.candidate-card').data('public'),
+                                'candidate': $(el).parents('.candidate-card').data('candidate'),
+                            }
+                            formdata.push(data);
+                        })
+                    }
+                    formdata = JSON.stringify(formdata);
+                    $.ajax({
+                        data: {
+                            'formdata':formdata,
+                            'vacancy': '{{vacancy.id}}',
+                            'ban_temp': ban_temp,
+                            'ban_perm': $this.parents('.modal').find('.ban-perm')[0].checked||false,
+                        },
+                        url:'/ajax/archivepostulate/',
+                        type: 'POST',
+                        complete: function(data){
+                            // console.log(data)
+                            $this.html('Archive').prop('disabled',false).removeClass('disabled');
+                        },
+                        success: function(data){
+                            // console.log(data);
+                            if(data.success == true){
+                                //highlight adn timeout remove after 5 seconds
+                                // $this = $(this)
+                                // $card = $('.candidate-card[data-public='+formdata['public']+'][data-candidate='+formdata['candidate']+']');
+                                // $card.find('.panel-shadow').css('border','2px solid #337ab7')
+                                // setTimeout(function(){
+                                //     $card.addClass('collapse fade in');
+                                //     $card.collapse('toggle');
+                                //     setTimeout(function(){
+                                //         $card.remove();
+                                //     },500);
+                                // },1000);
+
+                                // $activesection = $('.nav.timeline li.active');
+                                // $count = $activesection.find('ul li:nth-child(1) .label').html();
+                                // $count--;
+                                // $activesection.find('ul li:nth-child(1) .label').html($count)
+                                // $count = $activesection.find('ul li:nth-child(3) .label').html();
+                                // $count++;
+                                // $activesection.find('ul li:nth-child(3) .label').html($count);
+                                // alert(data.msg)
+                                location.reload()
+                                $this.parents('.modal').modal('hide');
+                            }
+                            else {
+                                alert('Could Not update. Please Try Again!')
+                            }
+                        }
+                    });
+                });
+            {% endif %}
+            function finalise_vacancy(i){
+                vacancy_id = '{{vacancy.id}}';
+                formdata = {
+                    'vacancy': vacancy_id,
+                    'status': i
+                }
+                $this = $(this);
+                $.ajax({
+                    data: formdata,
+                    url: '/ajax/finalise_vacancy/',
+                    type: 'POST',
+                    success: function(data){
+                        // console.log(data);
+                        if(data.success == true){
+                            location.href="/"
+                        }
+                        else {
+                            alert('COuld not update. Please Try Again!')
+                        }
+                    }
+                })
+            }
+            function toreadabledate(d){
+                var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+                date = new Date(d);
+                month = monthNames[date.getMonth()]
+
+                return month + ' ' + date.getDate() + ', ' + date.getYear();
+            }
+            function readURL(input) {
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('.user-photo').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            {% if recruiter.is_manager and not vacancy.status.codename == 'closed' and vacancy.company|args:'AT_CUSTOM_HIRING_PROCESS'|call:'check_service' %}
+                $creating = false;
+                var listSelect = {
+                  sortField:'text',
+                  openOnFocus:true,
+                  allowEmptyOption: false,
+                  allowPrecedence:true,
+                  hideSelected: true,
+                  multiple:false,
+                  selected:null,
+                  options:[],
+                  create:function (input, callback){
+                    // console.log(input)
+                    if ($creating){
+                        return false;
+                    }
+                    else {
+
+                        $creating=true;
+                    }
+                    $.ajax({
+                        url:'/ajax/addstage/',
+                        type:'post',
+                        data:{
+                            'stage_name': input
+                        },
+                        complete: function(data){
+                            // console.log(data);
+                            if (this.isLocked){
+                                this.unlock();
+                            }
+
+                            $creating = false;
+                        },
+                        success: function(data){
+                            // console.log(data);
+                            // console.log('success')
+                            if (data.success){
+                                // console.log('true')
+                                // console.log(callback)
+                                response = {value:data.id,text:input}
+                                // console.log(response)
+                                callback(response);
+                                // this.addOption(response);
+                                // this.addItem(data.id);
+                                // this.refreshOptions();
+                                //Proceed with selection
+
+                            }
+                            else {
+                                alert('Failed. Try Again!!');
+                            }
+                        },
+                        error: function(data){
+                            console.log(data);
+                        }
+                    })
+
+                  },
+                  onItemAdd: function(value,$item){
+                    // console.log(value)
+                    // console.log($item)
+                    $newitem = $('#bucket-list #bucket').append('<div class="row bucket-item" data-id='+value+'>'+$item.html()+'</div>');
+                    // console.log($newitem)
+                    $newitem.find('.bucket-item:last-child').click(function(e){
+                        onclickremove(this)
+                    })
+                    this.removeOption(value);
+                    this.focus();
+                    $( "#bucket").sortable({placeholder: "ui-state-highlight", cancel: ".bucket-item-static"});
+                  },
+                }
+                $('#list').selectize(listSelect);
+                $('#list')[0].selectize.$control_input.attr('maxlength',50);
+                $('#list')[0].selectize.clear();
+                $('#list')[0].selectize.open();
+
+                $( function() {
+                    $( "#bucket").sortable({placeholder: "ui-state-highlight", cancel: ".bucket-item-static"});
+                    // $('#bucket').disableSelection();
+                } );
+                function onclickremove($this){
+                    // console.log($this)
+                    $list = $('#list')[0].selectize;
+                    // console.log($list)
+                    $list.addOption({value:$($this).data('id'),text:$($this).html()})
+                    $list.refreshOptions();
+                    $($this).remove();
+                }
+                $('#bucket .bucket-item').click(function(e){
+                    onclickremove(this)
+                });
+                $('#app_procees_update').click(function(){
+                    $bucket = $('#bucket-list #bucket');
+                    formdata = "";
+                    $this = $(this);
+                    $(this).html('<i class="fa fa-spinner fa-pulse fa-lg fa-fw"></i> Please Wait');
+                    $(this).addClass('disabled');
+                    $(this).prop('disabled',true);
+                    $bucket.find('.bucket-item').each(function(key,value){
+                        formdata+=($(value).data('id')) + ",";
+                    });
+                    $.ajax({
+                        url:'/ajax/updatevacancystage/',
+                        data: {
+                            stage_ids: formdata.trim(','),
+                            vacancy: '{{vacancy.id}}',
+                        },
+                        type:'post',
+                        complete: function(data){
+                            $this.html('<i class="fa fa-check-circle"></i> Save and Update');
+                            $this.removeClass('disabled');
+                            $this.prop('disabled',false);
+                            
+                        },
+                        success: function(data){
+                            if(data.success){
+                                $timeline = $('.timeline');
+                                $timeline.html('');
+                                for (timeline_item in data.timeline){
+                                    html ='<li><div class="direction-r"><div class="flag-wrapper"><span class="flag">'
+                                            +'<a href="'+ data.timeline[timeline_item].href+'">'
+                                            +data.timeline[timeline_item].label+'</a></span><span class="time-wrapper"><span class="time">'+data.timeline[timeline_item].count+'</span></span></div></div></li>'
+                                    $timeline.append(html);
+                                    // console.log(data.timeline[timeline_item].label);
+                                }
+                                // console.log(this)
+                                $($this).parents('.modal').modal('hide');
+                                location.reload()
+                            }
+                            else{
+                                if (data.msg){
+                                    alert(data.msg);
+                                }
+                                else {
+                                    alert('Could Not Save. Please Try Again!')
+                                }
+                            }
+                        },
+                        error: function(error){
+                            console.log(error);
+                        },
+                    });
+                })
+            {% endif %}
+        {% endif %}
+
+        {% if my_vacancy or not user_profile %}
+            $('#id_file').change(function(){
+                if(this.files && this.files[0] && this.files[0].size > 5*1024*1024) {
+                    alert('File exceeds 5MB file size')
+                    this.value="";
+                }
+            })
+        {% endif %}
+        $('#form-data-modal').on('shown.bs.modal', function(e){
+            $this = $(this)
+            var $invoker = $(e.relatedTarget);
+            $.ajax({
+                data: {
+                    'candidate': $invoker.closest('.candidate-card').attr('data-candidate'),
+                },
+                url: '/ajax/get-candidate-form-data/',
+                type: 'post',
+                success: function(data){
+                    if (data.html){
+                        $this.find('.modal-body').html(data.html)
+                    }
+                    else {
+                        $this.find('.modal-body').html('<h4 class="text-center text-light">Could not retrieve the details');
+                    }
+                },
+                error: function(er){
+                    console.log(er);
+                    $this.find('.modal-body').html('<h4 class="text-center text-light">Could not retrieve the details');
+                }
+            });
+        });
+        $('#form-data-modal').on('hidden.bs.modal', function(e){
+            $(this).find('.modal-body').html('<h3 class="text-info text-center"><i class="fa fa-spinner fa-pulse"></i> Please Wait ...</h3>')
+        });
+    </script>
+{% endblock %}

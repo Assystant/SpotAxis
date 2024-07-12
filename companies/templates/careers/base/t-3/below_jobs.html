@@ -1,0 +1,97 @@
+<div class="takeme">
+
+	<footer class="flex-row">
+		<div class="footer-block">
+			<h3 class="editable">Powered by <a href="http://spotaxis.com">SpotAxis</a></h3>
+			<p class="editable"><small>
+				Be a part of an amazing company.</small>
+			</p>
+		</div>
+		<div>
+			<div class="location-block">
+				<h5 class="editable"><i class="fa fa-map-marker -text-dark" aria-hidden="true"></i> Mexico</h5>
+				<address class="editable">
+					Cabo, Mexico City
+				</address>
+				<p class="editable"><small>...</small></p>
+			</div>
+		</div>
+		<div>
+			<div class="location-block">
+				<h5 class="editable"><i class="fa fa-map-marker -text-dark" aria-hidden="true"></i> Japan</h5>
+				<address class="editable">
+					Harajuku, Tokyo
+				</address>
+				<p class="editable"><small>...</small></p>
+			</div>
+		</div>
+
+		<div>
+			<div class="location-block">
+				<h5 class="editable"><i class="fa fa-map-marker -text-dark" aria-hidden="true"></i> South Korea</h5>
+				<address class="editable">
+					Gangnam, Seoul
+				</address>
+				<p class="editable"><small>...</small></p>
+			</div>
+		</div>
+
+		<div>
+			<div class="location-block">
+				<h5 class="editable"><i class="fa fa-map-marker -text-dark" aria-hidden="true"></i> Belgium</h5>
+				<address class="editable">
+					Fonske, Leuven
+				</address>
+				<p class="editable"><small>...</small></p>
+			</div>
+		</div>
+	</footer>
+
+	<script type="text/javascript">
+		$('.toggler').on('click', function(){
+			$(this).find('i').toggleClass('fa-minus-square-o fa-plus-square-o');
+			$(this).next().fadeToggle(200);
+		});
+
+
+		/* Script for carousel start*/
+				$(document).ready(function(){
+					$('.carousel>ul').find('li').remove();
+					$('.jumbotron').each(function(count, object){
+						$(this).css('background-image', 'url(' + $(this).attr('data-image') + ')').attr('id', 'img'+count);
+						$('.carousel>ul').append('<li class= "fa fa-square-o -text-dark"' +  'data-target=' + "img" + count +  '></li>');
+					});
+
+					$('[data-target]').on('click', function(){
+						$('.jumbotron').removeClass('activeCarousel');
+						var handler = '#' + $(this).attr('data-target');
+						$(handler).addClass('activeCarousel');;
+					})
+
+
+			{% if isPreview %} //auto play only in preview mode
+			var i=0;
+			function slideshow(){
+				$('.jumbotron').removeClass('activeCarousel');
+				index = i % $('[data-target]').length;
+				$('.jumbotron').eq(index).addClass('activeCarousel');
+				i++;
+				setTimeout(slideshow, 4000);
+			}
+
+			slideshow();
+			{% endif %}
+
+
+				});
+		/* Script for carousel end*/
+
+		//handle red streak under positions 101
+		$('.red-streak').height($('.position>.sidenote').height()-20);
+		$('.position>.sidenote').on('keyup', function(){
+			$('.red-streak').height($('.position>.sidenote').height()-20);
+		})
+
+	</script>
+
+</div>

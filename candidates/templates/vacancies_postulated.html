@@ -1,0 +1,126 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block meta %}
+    <meta name="keyword" content="Applied Jobs, Talent, Job Application History, SpotAxis"/>
+    <meta name="description" content="Applied Job History and Status on SpotAxis"/>
+{% endblock %}
+{% block title %}SpotAxis | Applied jobs{% endblock %}
+{% comment %} Page where applied for jobs are shown for a candidate. {% endcomment %}
+{% block content %}
+
+<!-- Content starts -->
+    <div class="row mb50 mt20">
+        <div class="col-md-8 col-md-push-2">
+
+            {% if active_postulates or finalized_postulates or rejected_postulates %}
+                <!--Section for Aplied and Rejected Vacancies -->
+                {% if finalized_postulates %}
+                    <h2 class="pt40 text-center text-light">Selected Applications</h2>
+                    {% for postulate in finalized_postulates %}
+                        <blockquote class="bg-white mb20 no-margin-bottom">
+                            <h4>
+                                <i class="fa fa-briefcase fa-lg"></i>
+                                <a class="text-light">{{ postulate.vacancy.employment }}</a>
+                                <span class="small inline-block text-info">(Selected)</span>
+                                <span class="pull-right"><i class="fa fa-flag-checkered"></i> <span class="text-info">{%if postulate.vacancy_stage%}{{postulate.vacancy_stage}}{%elif postulate.finalize%}Onboarding{%else%}Application{%endif%}</span> Process</span>
+                            </h4>
+                            <span>
+                                <i class="fa fa-map-marker"></i> 
+                                {% if postulate.vacancy.city %}{{postulate.vacancy.city}}, {%endif%}
+                                {% if postulate.vacancy.state %}{{postulate.vacancy.state}}, {%endif%}
+                                {{postulate.vacancy.nationality}}
+                            </span><br>
+                            <span><i class="fa fa-gears"></i> {{postulate.vacancy.industry}}</span>
+                            <small class="pl20 inline-block"> <i class="fa fa-cog"></i> {{postulate.vacancy.function}}</small><br>
+                            <span class="label label-trans"><i class="fa fa-black-tie fa-sm"></i> {{postulate.vacancy.employmentType}}</span>
+                        </blockquote>
+                    {%endfor %}
+                {% endif %}
+                <!--Section for Aplied and Under Process Vacancies -->
+                {% if active_postulates %}
+                    <h2 class="pt40 text-center text-light">Active Applications</h2>
+                    {% for postulate in active_postulates %}
+                        <blockquote class="bg-white mb20 no-margin-bottom" data-id="{{postulate.id}}">
+                            <h4>
+                                <i class="fa fa-briefcase fa-lg"></i>
+                                <a class="" href="{{postulate.vacancy.company.geturl}}{% url 'vacancies_get_vacancy_details' vacancy_id=postulate.vacancy.id %}" target="_blank">{{ postulate.vacancy.employment }}</a>
+                                <span class="small inline-block">(No. of Openings - {{postulate.vacancy.vacancies_number}})</span>
+                                <span class="pull-right"><i class="fa fa-flag-checkered"></i> <span class="text-info">{%if postulate.vacancy_stage%}{{postulate.vacancy_stage}}{%elif postulate.finalize%}Onboarding{%else%}Application{%endif%}</span> Process <br>{% if not postulate.finalize %}<button class="btn btn-sm btn-default mt40 pull-right withdraw">Withdraw Application</button> {% endif %}</span>
+
+                            </h4>
+                            <span>
+                                <i class="fa fa-map-marker"></i> 
+                                {% if postulate.vacancy.city %}{{postulate.vacancy.city}}, {%endif%}
+                                {% if postulate.vacancy.state %}{{postulate.vacancy.state}}, {%endif%}
+                                {{postulate.vacancy.nationality}}
+                            </span><br>
+                            <span><i class="fa fa-gears"></i> {{postulate.vacancy.industry}}</span>
+                            <small class="pl20 inline-block"> <i class="fa fa-cog"></i> {{postulate.vacancy.function}}</small><br>
+                            <span class="label label-trans"><i class="fa fa-black-tie fa-sm"></i> {{postulate.vacancy.employmentType}}</span>
+                        </blockquote>
+                    {%endfor %}
+                {% endif %}
+                <!--Section for Finalized Vacancies -->
+                {% if rejected_postulates %}
+                    <h2 class="pt40 text-center text-light">Archived Applications</h2>
+                    {% for postulate in rejected_postulates %}
+                        <blockquote class="bg-white mb20 no-margin-bottom">
+                            <h4>
+                                <i class="fa fa-briefcase fa-lg"></i>
+                                <a target="_blank" class="{% if not postulate.vacancy.status.codename == 'open' %}text-light{% endif %}" {% if postulate.vacancy.status.codename == 'open'%}href="{{postulate.vacancy.company.geturl}}{% url 'vacancies_get_vacancy_details' vacancy_id=postulate.vacancy.id %}"{%endif%}>{{ postulate.vacancy.employment }}</a>
+                                <span class="small inline-block">(Application Archived / Other Candidate Selected)</span>
+                                <span class="pull-right"><i class="fa fa-flag-checkered"></i> <span class="text-light">{%if postulate.vacancy_stage%}{{postulate.vacancy_stage}}{%elif postulate.finalize%}Onboarding{%else%}Application{%endif%}</span> Process<br>{% if postulate.withdraw %}<small class="text-right text-light">Withdrawn by You</small>{% endif %}</span>
+                            </h4>
+                            <span>
+                                <i class="fa fa-map-marker"></i> 
+                                {% if postulate.vacancy.city %}{{postulate.vacancy.city}}, {%endif%}
+                                {% if postulate.vacancy.state %}{{postulate.vacancy.state}}, {%endif%}
+                                {{postulate.vacancy.nationality}}
+                            </span><br>
+                            <span><i class="fa fa-gears"></i> {{postulate.vacancy.industry}}</span>
+                            <small class="pl20 inline-block"> <i class="fa fa-cog"></i> {{postulate.vacancy.function}}</small><br>
+                            <span class="label label-trans"><i class="fa fa-black-tie fa-sm"></i> {{postulate.vacancy.employmentType}}</span>
+                        </blockquote>
+                    {%endfor %}
+                {% endif %}
+
+
+            {% else %}
+                <h5 class="bg-white br-2 pt20 pb20 text-center text-light">{% trans 'You have not applied for any Jobs ' %}</h5>
+             {# if postulates #}
+            {%endif%}
+        </div>
+    </div><!-- row -->
+
+<!-- Content ends -->
+
+{% endblock %}
+{% block java_script_code %}
+    <script>
+        $('.withdraw').click(function(){
+            $this = $(this);
+            id=$this.parents('blockquote').data('id');
+            $this.html('<i class="fa fa-pulse fa-spinner"></i> Please Wait').prop('disabled', true).addClass('disabled');
+            $.ajax ({
+                data:{
+                    'id':id,
+                },
+                type: 'POST',
+                url: '/ajax/withdraw/',
+                complete: function(){
+                    $this.html('Withdraw Application').removeClass('disabled').prop('disabled',false);
+                },
+                success: function(data){
+                    console.log(data);
+                    if(data.success == true){
+                        location.href=location.href;
+                    }
+                },
+                error: function(er){
+                    console.log(er);
+                }
+            });
+        });
+    </script>
+{% endblock %}

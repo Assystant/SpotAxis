@@ -1,0 +1,15 @@
+{% load i18n %}
+<ul class="{% if not categories %}no-{% endif %}categories">
+  {% for category in categories %}
+  <li{% if category.slug == context_category.slug %} class="current"{% endif %}>
+    <a href="{{ category.get_absolute_url }}"
+       title="{% blocktrans %}Show all resources in {{ category }}{% endblocktrans %}">{{ category }}</a>
+    {% blocktrans count entry_count=category.count_entries_published %}{{ entry_count }} resource{% plural %}{{ entry_count }} resources{% endblocktrans %}
+  </li>
+  {% empty %}
+  <li>
+    {% trans "No categories yet." %}
+  </li>
+  {% endfor %}
+</ul>
+

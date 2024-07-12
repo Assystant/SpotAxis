@@ -1,0 +1,39 @@
+{% load TRM_tags %}
+{% for candidate in candidates %}
+    <div class="compareCard" data-id = "#candidate{{candidate.checkbox_id}}">
+        <div class="compareCardRow compareCardHeader text-center">
+            <div class="checkbox checkbox-circle checkbox-info inline-block"><input type="checkbox" id="check{{candidate.checkbox_id}}" checked><label for="check{{candidate.checkbox_id}}"></label></div>
+            <a class="btn btn-trans no-padding-x compare-discard"><i class="fa fa-times"></i> Close</a>
+            <img src="{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}" class="img-responsive center-block img-circle navbar-img">
+            <p class="no-margin text-center">{% if candidate.full_name|length > 20 %}{{candidate.full_name|upto:' '}}{% else %}{{candidate.full_name}}{% endif %}</p>
+            <small class="pl5">
+                <span class="inline-block clickable" data-toggle="tooltip" data-trigger="hover" data-placement="right" title="{{candidate.avg_score|floatformat:'1'}}"> {{candidate.avg_stars|safe}}</span>
+            </small>
+            <br>
+        </div>
+        {% for process in candidate.processes %}
+            {% if process.vacancy_stage.id == current_process.id %}
+                <div class="compareCardRow">
+                    <small class="pt5 pl5 text-muted"><span class="inline-block" data-toggle="tooltip" data-placement="right" title="{{process.avg_score}}">{{process.avg_stars|safe}}</span></small>
+                </div>
+                {% if process.criteria_avg_scores|length > 1 %}
+                    {% for criterion in process.criteria_avg_scores %}
+                        <div class="compareCardRow">
+                            <small class="pt5">
+                                <span class="inline-block ml5" data-toggle="tooltip" title="{{criterion.1}}" data-placement="right"> {{criterion.2|safe}}</span>
+                            </small>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    {% for criterion in current_process.criteria_as_list %}
+                        <div class="compareCardRow">
+                            <small class="pt5">
+                                <span class="inline-block" data-toggle="tooltip" title="0.0" data-placement="right"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span>
+                            </small>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endfor %}

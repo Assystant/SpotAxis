@@ -1,0 +1,86 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% load humanize %}
+{% block meta %}
+    <meta name="keyword" content="{% for skill in vacancy.skills %}{{skill}}, {% endfor %}{{vacancy.employment}}, {{vacancy.function}}"/>
+    <meta name="description" content="{{ vacancy.description|striptags|rem_nbsp|safe }}"/>
+{% endblock %}
+{% block title %}{{vacancy.company.name}} | {{vacancy.employment}} | Application Tracking{% endblock %}
+{% block css %}
+
+    <!-- Jquery-File-Uploads -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui.css">
+    <!-- CSS adjustments for browsers with JavaScript disabled -->
+    <noscript><link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui-noscript.css"></noscript>
+    <!-- Jquery-File-Uploads -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.1/switchery.min.css">
+    <link href="{{STATIC_URL}}datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}daterange/daterangepicker.css" rel="stylesheet">
+
+    <style>
+        .affix {
+            top:50px!important;
+        }   
+        @media(max-width:991px){
+            .affix{
+                position:static;
+            }
+        }
+    </style>
+{% endblock %}
+{% comment %} Vacancy summary Page {% endcomment %}
+{%block subnav %}
+    {%if recruiter%}
+        <nav class="navbar navbar-short navbar-default" id="navbar-short">
+            <div class="container-fluid" id="navbar_short">
+                <ul class="nav navbar-nav">
+                    {% if recruiter %}
+                        <li>
+                            <a href="{{vacancy.get_absolute_url}}">Job Details</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'vacancies_get_vacancy_stage_details' vacancy.id 0%}">Hiring Process{% if vacancy.hasUnseen %}
+                                <span class="badge badge-sm badge-danger va-mid inline-block relative mt-8">{{vacancy.hasUnseen}}</span>
+                                {% endif %}</a>
+                        </li>
+                        <li class="active">
+                            <a href="{% url 'vacancies_talent_sourcing' vacancy.id %}">Talent Sourcing</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'companies_vacancies_by_status' vacancy.status.codename %}"><i class="fa fa-long-arrow-left"></i> Back to {{vacancy.status}} Jobs</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    {%endif%}
+{%endblock%}
+{% block content %}
+    <div class="row mt50 pt20 mb40 no-margin-x">
+        <div class="col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            {% include 'vacancies/talent_sourcing.html' %}
+        </div>
+    </div>
+    {% include 'remove_external_referal_modal.html' %}
+{% endblock %}
+{% block java_script_srcs %}
+    <script src="{{ STATIC_URL }}js/external-referal.js"></script>
+{% endblock %}
+
+{% block java_script_code %}
+    <script>
+        new Clipboard('.btn-copy');
+        $('.btn-copy').click(function(){
+            $this = $(this);
+            $this.parents('.copy-block').find('.btn-copy-text').removeClass('hidden')
+            $this.parents('.copy-block').find('.btn-copy-text').addClass('animated fadeOutUp');
+            setTimeout(function(){
+                console.log($this);
+                $this.parents('.copy-block').find('.btn-copy-text').addClass('hidden');
+                $this.parents('.copy-block').find('.btn-copy-text').removeClass('animated fadeOutUp')
+            },500);
+        });
+    </script>
+{% endblock %}

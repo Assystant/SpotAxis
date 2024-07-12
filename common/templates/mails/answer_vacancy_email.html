@@ -1,0 +1,23 @@
+{% extends 'mails/base_email.html' %}
+{% load i18n %}
+{% load TRM_tags %}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+</head>
+<body>
+
+{% block title %}They answered your question on Job {{ question.vacancy.employment }}{% endblock %}
+
+{% block content %}
+    <span style="color: #0066cc"><strong>&raquo;&raquo;</strong></span> {{ question.question }}
+    <br/>
+    <br/>
+    <span style="color: #009F00"><strong>&raquo;&raquo;</strong></span> <i>{{ question.answer }}</i>
+{% endblock %}
+
+{% block button-text %}{% trans 'See Job' %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% load i18n %}
+    <form role="form" id="loginform" method="post" action="." class="panel-body panel-shadow reg-page">
+        {% csrf_token %}
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}" />
+        {% endif %}
+        <div class="reg-header">
+            <h2 class="text-center mb20"><div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-4"><img src="{{STATIC_URL}}img/logo/logo.png" class=" mb40 img-responsive img-thumb" alt="SpotAxis Logo"></div></h2>
+        </div>
+        <div class="clearfix"></div>
+        {% if form.errors %}
+            <div class="alert alert-danger mb20">
+                {% trans 'Username and/or Password incorrect' %}
+		    </div>
+        {% endif %}
+        <div class="input-group mb20">
+            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+            <input type="text" id="username" name="username" placeholder="{% trans 'Username' %}" class="form-control">
+        </div>
+        <div class="input-group mb20">
+            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+            <input type="password" id="password" name="password" placeholder="{% trans 'Password' %}" class="form-control">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" id="submit_btn" class="btn btn-info btn-block pull-right" ><i class="fa fa-sign-in fa-lg mr5"></i> {% trans 'Login' %}</button>
+            </div>
+        </div>
+
+        <hr class="hr-1px">
+
+        <h5 class="text-center">Forgot your <a href="{% url 'recover_user' %}?next={{request.path}}">{% trans 'Username' %}</a> or <a href="{% url 'auth_password_reset' %}?next={{request.path}}">{% trans 'Password' %}</a>?</h5>
+        <hr class="header-seperator">
+        <h5 class="text-center">Don't have an account?</h5>
+        {% if talent_only %}
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3"><a href="{% url 'candidates_register_candidate' %}?next={{request.path}}" class="btn btn-info btn-sm btn-block">Register as a Talent</a></div>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3"><a href="{% url 'companies_record_recruiter' %}" class="btn btn-info btn-sm btn-block">Register as an Employer</a></div>
+            </div>
+        {% endif %}
+
+    </form>

@@ -1,0 +1,13 @@
+{% extends 'mails/base_email.html' %}
+{% load i18n %}
+
+{% block title %}SpotAxis | Your profile was reveiwed{% endblock %}
+
+{% block content %}
+    Hi {{ candidate.first_name|capfirst }} {{candidate.last_name|capfirst }}, the company {{ vacancy.company }} has reviewed your profile for the job opening <a href="{{ vacancy_url }}" target="_blank">{{ vacancy.employment|capfirst }}</a>
+    <br/>
+    <br/>
+    {% trans 'We wish you success!' %}
+{% endblock %}
+
+{% block button-text %}{% trans 'See all Applied Applications' %}{% endblock %}

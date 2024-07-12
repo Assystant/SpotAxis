@@ -1,0 +1,299 @@
+[
+	{
+		"model": "payments.services",
+		"pk": 1, 
+		"fields": 
+		{
+			"name": "Domain Branding", 
+			"codename": "CSM_CNAME", 
+			"category": 1,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 2, 
+		"fields": 
+		{
+			"name": "Open Jobs Widget", 
+			"codename": "CSM_JOBS_WIDGET", 
+			"category": 1,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 3, 
+		"fields": 
+		{
+			"name": "Custom Apply Link", 
+			"codename": "CSM_ONSITE_APPLY", 
+			"category": 1,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 4, 
+		"fields": 
+		{
+			"name": "Own Branding", 
+			"codename": "CSM_Branding", 
+			"category": 1,
+			"enabled": 0
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 5, 
+		"fields": 
+		{
+			"name": "Post Job", 
+			"codename": "JP_POST", 
+			"category": 2,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 6, 
+		"fields": 
+		{
+			"name": "Job Template", 
+			"codename": "JP_TEMPLATE", 
+			"category": 2,
+			"enabled": 1
+		}
+	},
+	{
+		"model": "payments.services",
+		"pk": 7, 
+		"fields": 
+		{
+			"name": "Conditional Archiving", 
+			"codename": "JM_ARCHIVE", 
+			"category": 3,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 8, 
+		"fields": 
+		{
+			"name": "Custom Publish Duration", 
+			"codename": "JM_DURATION", 
+			"category": 3,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 9, 
+		"fields": 
+		{
+			"name": "Custom Application Form", 
+			"codename": "JM_CUSTOM_APPLICATION_FORM", 
+			"category": 3,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 10, 
+		"fields": 
+		{
+			"name": "Post Across Social Media", 
+			"codename": "TS_SOCIAL_MEDIA", 
+			"category": 4,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 11, 
+		"fields": 
+		{
+			"name": "Employee Referal", 
+			"codename": "TS_EMPLOYEE_REFRAL", 
+			"category": 4,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 12, 
+		"fields": 
+		{
+			"name": "Post Across Job Boards", 
+			"codename": "TS_JOB_BOARDS", 
+			"category": 4,
+			"enabled": 0
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 13, 
+		"fields": 
+		{
+			"name": "Browser Extension to Scrap Profiles", 
+			"codename": "TS_SCRAPPER", 
+			"category": 4,
+			"enabled": 0
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 14, 
+		"fields": 
+		{
+			"name": "Access to SpotAxis Talent Pool", 
+			"codename": "TS_SPOTAXIS_TALENT_POOL", 
+			"category": 4,
+			"enabled": 0
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 15, 
+		"fields": 
+		{
+			"name": "Assign Recruitment Agency", 
+			"codename": "TS_AGENCY", 
+			"category": 4,
+			"enabled": 0
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 16, 
+		"fields": 
+		{
+			"name": "Custom Hiring Process", 
+			"codename": "AT_CUSTOM_HIRING_PROCESS", 
+			"category": 5,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 17, 
+		"fields": 
+		{
+			"name": "Multiselect - Bulk Interaction", 
+			"codename": "AT_MULTISELECT", 
+			"category": 5,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 18, 
+		"fields": 
+		{
+			"name": "Hard Match To Apply", 
+			"codename": "AT_HARD_MATCH", 
+			"category": 5,
+			"enabled": 0
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 19, 
+		"fields": 
+		{
+			"name": "Add Team Members", 
+			"codename": "CH_ADD_TEAM", 
+			"category": 6,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 20, 
+		"fields": 
+		{
+			"name": "Assign Roles", 
+			"codename": "CH_ROLES", 
+			"category": 6,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 21, 
+		"fields": 
+		{
+			"name": "Followers", 
+			"codename": "CH_FOLLOWERS", 
+			"category": 6,
+			"enabled": 0
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 22, 
+		"fields": 
+		{
+			"name": "Mirror Recruitment Team", 
+			"codename": "CH_MIRROR", 
+			"category": 6,
+			"enabled": 0
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 23, 
+		"fields": 
+		{
+			"name": "Ratings", 
+			"codename": "AS_RATINGS", 
+			"category": 7,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 24, 
+		"fields": 
+		{
+			"name": "Comments", 
+			"codename": "AS_COMMENTS", 
+			"category": 7,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 25, 
+		"fields": 
+		{
+			"name": "Compare Candidates", 
+			"codename": "AS_COMPARE_CANDIDATES", 
+			"category": 7,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 26, 
+		"fields": 
+		{
+			"name": "Filter Candidates", 
+			"codename": "AS_FILTER_CANDIDATES", 
+			"category": 7,
+			"enabled": 1
+		}
+	}, 
+	{
+		"model": "payments.services",
+		"pk": 27, 
+		"fields": 
+		{
+			"name": "Interview Scheduling", 
+			"codename": "AS_INTERVIEW_SCHEDULING", 
+			"category":7,
+			"enabled": 0
+		}
+	}
+]

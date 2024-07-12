@@ -1,0 +1,10 @@
+<h4 class="no-margin text-muted">{{block_head|safe}}</h4>
+{% for content in copy_contents %}
+    <div class="copy-block col-lg-8 no-padding clearfix pt5">
+        <p class="no-margin"><span class="text-light copy-block-label">{{content.head|default:'&nbsp;'}}</span><span class="pull-right btn-copy-text hidden pr5 text-info">Copied</span></p>
+        <div class="input-group">
+            <input type="text" value="{{content.value}}" class="form-control" data-toggle="tooltip" title="{{content.value}}" readonly>
+            <div class="input-group-btn"><button class="btn btn-info btn-copy" data-clipboard-action="copy" data-clipboard-text="{{content.value}}"><i class="fa fa-copy"></i></button></div>
+        </div>
+    </div>
+{% endfor %}

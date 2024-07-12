@@ -1,0 +1,26 @@
+[
+  {
+    "model": "common.gender",
+    "pk": 1,
+    "fields": {
+      "name": "Other",
+      "codename": "other"
+    }
+  },
+  {
+    "model": "common.gender",
+    "pk": 2,
+    "fields": {
+      "name": "Female",
+      "codename": "female"
+    }
+  },
+  {
+    "model": "common.gender",
+    "pk": 3,
+    "fields": {
+      "name": "Male",
+      "codename": "male"
+    }
+  }
+]

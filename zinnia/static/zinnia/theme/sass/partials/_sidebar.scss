@@ -1,0 +1,37 @@
+#sidebar {
+  h3 {
+    padding: 0.5em;
+  }
+
+  p { padding-left: 1em; }
+
+  ul, ol {
+    margin-left: 1em;
+    ul, ol {
+      margin-left: 0em;
+    }
+  }
+}
+
+.tag-cloud { @include tag-cloud(1.4em); }
+
+.entries-popular a { display: block; }
+
+[class*='entries-calendar'] {
+  table-layout: fixed;
+  caption, td, th {
+    padding: 4px 0;
+    text-align: center;
+  }
+  caption {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  tfoot td {
+    font-style: normal;
+    text-transform: capitalize;
+  }
+  .entry {
+    font-weight: bold;
+  }
+}

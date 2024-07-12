@@ -1,0 +1,117 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block title %}{{ company }}{% endblock %}
+{% comment %}  {% endcomment %}
+{% block page-header %}{{ company }}{% endblock %}
+{% block content %}
+
+
+    <div class="row mt30 mb20">
+        <div class="col-md-12">
+            <div class="white-container-blue-bottom">
+                <h2 class="mt10 mb20 color-green">{% trans 'Vacancy in' %} {{ company.social_name }}</h2>
+                {% if company.description %}
+                    {{ company.description|linebreaks }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    {% if vacancies %}
+
+       {% include "vacancies_paginator.html" %}
+
+        {% for vacancy in vacancies %}
+
+            {% if not vacancy.confidential %} {# If the vacancy is not confidential #}
+
+                <div class="jobs-item with-thumb job-item-margin search-page">
+                    <div class="clearfix visible-xs"></div>
+                    <div class="thumb"><a href="{% url 'vacancies_vacancies_by_company' company_id=vacancy.company.pk %}"><img src="{{ MEDIA_URL }}{{ vacancy.company.logo }}" alt=""></a></div>
+                    <div class="date">{{ vacancy.pub_date|date:"d" }} <span>{{ vacancy.pub_date|date:"M" }}</span></div>
+                    <h6 class="title search"><a href="{% url 'vacancies_get_vacancy_details' vacancy_id=vacancy.pk %}">{{ vacancy.employment }}</a></h6>
+                    <span class="meta"><a href="{% url 'vacancies_vacancies_by_company' company_id=vacancy.company.pk %}">{{ vacancy.company }}</a></span>
+                    <ul class="list-unstyled list-info">
+                        <li><i class="fa fa-map-marker color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Lugar' %}"></i><span>{% if vacancy.municipal %}{{vacancy.municipal}}, {% endif %}{{ vacancy.state }}</span></li>
+                    </ul>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-6">
+                            <ul class="list-unstyled list-info">
+                                <li><i class="fa fa-user color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Gender' %}"></i><span>{{ vacancy.gender }}</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-xs-6">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <i class="fa fa-calendar color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Age' %}"></i>
+                                    {% if vacancy.min_age %}
+                                        <span>{{ vacancy.min_age }} - {{ vacancy.max_age }} {% trans 'años' %}</span>
+                                    {% else %}
+                                        <span>{% trans 'Anyone' %}</span>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-6">
+                            <ul class="list-unstyled list-info">
+                                <li><i class="fa fa-graduation-cap color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Level of study' %}"></i><span>{{ vacancy.degree|default:'Any' }}</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-xs-6">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <i class="fa fa-dollar color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Salary' %}"></i>
+                                    {% if vacancy.salaryType.codename == 'fixed' %}
+                                        <span>{{ vacancy.min_salary }} - $ {{ vacancy.max_salary }}</span>
+                                    {% else %}
+                                        <span>{{ vacancy.salaryType }}</span>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-6">
+                            <ul class="list-unstyled list-info">
+                                <li><i class="fa fa-gears color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Industry' %}"></i><span>{% if vacancy.industry %}{{ vacancy.industry }}{% else %}All{% endif %}</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-xs-6">
+                            <ul class="list-unstyled list-info">
+                                <li><i class="fa fa-cog color-blue" data-toggle="tooltip" data-placement="top" title="{% trans 'Area' %}"></i><span>{% if vacancy.area %}{{ vacancy.area }}{% else %}All{% endif %}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <ul class="btns-icons-info">
+                        <li><a href="#" class="btn btn-icon-info fa fa-plus toggle"></a></li>
+                    </ul>
+                    <div class="content">
+                        <h5>{% trans 'Description' %}</h5>
+                        <p>{{ vacancy.description|striptags|rem_nbsp|safe|slice:":500" }}...  <a href="{% url 'vacancies_get_vacancy_details' vacancy_id=vacancy.pk %}" class="read-more">{% trans 'See more' %}</a></p>
+    {#                            <hr>#}
+
+                        <div class="clearfix">
+                            <a href="{% url 'vacancies_get_vacancy_details' vacancy_id=vacancy.pk %}" class="btn btn-info pull-right" style="width: 200px;">
+                                <i class="fa fa-search"></i> {% trans 'Go to the vacancy' %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            {% endif %} {# If is not confidential#}
+
+        {% endfor %} {# end for vacancy in vacancies #}
+
+        {% include "vacancies_paginator.html" %}
+    {% else %}
+        <h3>There are no vacancies</h3>
+    {% endif %}
+
+<!-- Content ends -->
+
+{% endblock %}

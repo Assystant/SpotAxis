@@ -1,0 +1,27 @@
+{% extends "zinnia/base.html" %}
+{% load i18n %}
+
+{% block meta-description %}{% trans "Category list" %}{% endblock meta-description %}
+
+{% block title %}{% trans "Categories" %}{% endblock title %}
+
+{% block body-class %}category-list{% endblock body-class %}
+
+{% block content %}
+<h1>{% trans "Category list" %}</h1>
+
+<ul>
+  {% for object in object_list %}
+  <li>
+    <a href="{{ object.get_absolute_url }}"
+       title="{% blocktrans with category=object %}Show all resources in {{ category }}{% endblocktrans %}">{{ object }}</a>
+    {% blocktrans count entry_count=object.count_entries_published %}{{ entry_count }} resource{% plural %}{{ entry_count }} resources{% endblocktrans %}
+    {% if object.description %}<p>{{ object.description|striptags|safe }}</p>{% endif %}
+  </li>
+  {% empty %}
+  <li>
+    {% trans "No categories yet." %}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock content %}

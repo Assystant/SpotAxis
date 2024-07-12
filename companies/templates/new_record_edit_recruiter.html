@@ -1,0 +1,135 @@
+{% extends "base/outer_base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% comment %} Home {% endcomment %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+
+{% block content %}
+
+        <!--========== PAGE CONTENT ==========-->
+        <!--<div class="g-bg-position--center g-fullheight--xs" style="background: url('{{ STATIC_URL }}newtheme/img/1920x1080/08.jpg'); background-color= white">-->
+        <div class="g-bg-position--center g-padding-y-80--xs" style="min-height:100vh">
+            <div class="container js__ver-center-aligned">
+                <div class="g-text-center--xs">
+                    <div class="g-margin-t-40--xs g-margin-b-60--xs g-margin-b-80--sm">
+                        <h1 class="g-font-size-32--xs g-font-size-50--sm g-font-size-60--md g-margin-b-30--xs">SignUp</h1>
+                        <!--p class="text-uppercase g-font-size-20--md g-font-weight--300">Be the first to know when we launch</p-->
+                    </div>
+                    <form role="form" method="post" action="." enctype="multipart/form-data" >
+                    	{% csrf_token %}
+                    	{% if next %}
+				            <input type="hidden" name="next" value="{{ next }}" />
+				        {% endif %}
+
+                        <div class="row g-margin-b-20--xs">
+                            <div class="col-sm-4 col-sm-offset-2 col-xs-6 g-full-width--xs g-margin-b-30--xs g-margin-b-20--md">
+                            	
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <i class="s-form-v4__icon ti-face-smile"></i>
+                                    </span>
+                                    <!--<input type="email" class="form-control s-form-v4__input" placeholder="Your email"> -->
+                                    {{ form_user.first_name }}
+                                </div>
+                                {% if form_user.first_name.errors %}
+	                                <ul class="list-unstyled text-danger">
+	                                {% for error in form_user.first_name.errors %}
+	                                    <li>{{ error|escape }}</li>
+	                                {% endfor %}
+	                                </ul>
+	                            {% endif %}
+                            </div>
+                            <div class="col-sm-4 col-xs-6 g-full-width--xs g-margin-b-30--xs g-margin-b-20--md">
+                            	
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <i class="s-form-v4__icon ti-face-smile"></i>
+                                    </span>
+                                    <!--<input type="email" class="form-control s-form-v4__input" placeholder="Your email"> -->
+                                    {{ form_user.last_name }}
+                                </div>
+                                {% if form_user.last_name.errors %}
+	                                <ul class="list-unstyled text-danger">
+	                                {% for error in form_user.last_name.errors %}
+	                                    <li>{{ error|escape }}</li>
+	                                {% endfor %}
+	                                </ul>
+	                            {% endif %}
+                            </div>
+                            <div class="col-sm-4 col-sm-offset-2 col-xs-6 g-full-width--xs g-margin-b-30--xs g-margin-b-20--md">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <i class="s-form-v4__icon ti-email"></i>
+                                    </span>
+                                    <!--<input type="email" class="form-control s-form-v4__input" placeholder="Your email"> -->
+                                    {{ form_user.email }}
+                                </div>
+                            	{% if form_user.email.errors %}
+	                                <ul class="list-unstyled text-danger">
+	                                {% for error in form_user.email.errors %}
+	                                    <li>{{ error|escape }}</li>
+	                                {% endfor %}
+	                                </ul>
+	                            {% endif %}
+                            </div>
+                            <div class="col-sm-4 col-xs-6 g-full-width--xs g-margin-b-30--xs g-margin-b-20--md">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <i class="s-form-v4__icon ti-user"></i>
+                                    </span>
+                                    <!--<input type="email" class="form-control s-form-v4__input" placeholder="Your email"> -->
+                                    {{ form_user.username }}
+                                </div>
+                            	{% if form_user.username.errors %}
+	                                <ul class="list-unstyled text-danger">
+	                                {% for error in form_user.username.errors %}
+	                                    <li>{{ error|escape }}</li>
+	                                {% endfor %}
+	                                </ul>
+	                            {% endif %}
+                            </div>
+                            <div class="col-sm-4 col-sm-offset-2 col-xs-6 g-full-width--xs g-margin-b-30--xs g-margin-b-20--md">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <i class="s-form-v4__icon ti-key"></i>
+                                    </span>
+                                    <!--<input type="email" class="form-control s-form-v4__input" placeholder="Your email"> -->
+                                    {{ form_user.password }}
+                                </div>
+                            	{% if form_user.password.errors %}
+	                                <ul class="list-unstyled text-danger">
+	                                {% for error in form_user.password.errors %}
+	                                    <li>{{ error|escape }}</li>
+	                                {% endfor %}
+	                                </ul>
+	                            {% endif %}
+                            </div>
+                            <div class="col-sm-4 col-xs-6 g-full-width--xs g-margin-b-30--xs g-margin-b-20--md">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <i class="s-form-v4__icon ti-key"></i>
+                                    </span>
+                                    <!--<input type="email" class="form-control s-form-v4__input" placeholder="Your email"> -->
+                                    {{ form_user.password_repeat }}
+                                </div>
+                            	{% if form_user.password_repeat.errors %}
+	                                <ul class="list-unstyled text-danger">
+	                                {% for error in form_user.password_repeat.errors %}
+	                                    <li>{{ error|escape }}</li>
+	                                {% endfor %}
+	                                </ul>
+	                            {% endif %}
+                            </div>
+                       	</div>
+                        <p class="g-margin-b-40--md">When creating your account, you are indicating that you have read and accepted our <a href="{% url 'TRM_privacy_policy' %}">Privacy Policy</a> and <a href="{% url 'TRM_terms_and_conditions' %}">Terms and Conditions</a>.</p>
+                        <button type="submit" class="text-uppercase s-btn s-btn--md s-btn--dark-brd g-radius--50 g-padding-x-50--xs g-margin-b-20--xs">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--========== END PAGE CONTENT ==========-->
+{% endblock %}

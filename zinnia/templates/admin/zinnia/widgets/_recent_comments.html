@@ -1,0 +1,44 @@
+{% load i18n zinnia %}
+{% for comment in comments %}
+<tr>
+  <th>
+    <img src="{% get_gravatar comment.email 40 "G" %}"
+         class="gravatar photo" alt="{{ comment.name }}" />
+  </th>
+  <td>
+    {% with entry=comment.content_object %}
+    <strong>{{ comment.name }}</strong> {% trans "in" %}
+    <strong>
+      <a href="{{ entry.get_absolute_url }}#comment-{{ comment.pk }}-by-{{ comment.user_name|slugify }}"
+         title="{% blocktrans with object=entry.title %}Comment on {{ object }}{% endblocktrans %}">
+        {{ entry.title }}
+      </a>
+    </strong>
+    {% endwith %}
+    {{ comment.comment|truncatewords:20|linebreaks }}
+  </td>
+  <td>
+    <a href="{% url 'change'|comment_admin_urlname comment.pk %}"
+       title="{% trans "Edit the comment" %}" class="changelink">
+      {% trans "Edit" %}
+    </a>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <th colspan="3">
+    {% trans "No comments yet." %}
+  </th>
+</tr>
+{% endfor %}
+
+{% if comments %}
+<tr>
+  <th colspan="3">
+    <a href="{% url 'changelist'|comment_admin_urlname %}"
+       title="{% trans "Manage the comments" %}" class="managelink">
+      {% trans "Manage the comments" %}
+    </a>
+  </th>
+</tr>
+{% endif %}

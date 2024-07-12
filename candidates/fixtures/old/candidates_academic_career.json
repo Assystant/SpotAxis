@@ -1,0 +1,1262 @@
+[
+  {
+    "model": "candidates.academic_career",
+    "pk": 1,
+    "fields": {
+      "area": 1,
+      "name": "Architecture",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 2,
+    "fields": {
+      "area": 1,
+      "name": "Audiovisual Arts",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 3,
+    "fields": {
+      "area": 1,
+      "name": "Performing Arts for Expressions and Dances",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 4,
+    "fields": {
+      "area": 1,
+      "name": "Performing Arts for Theatrical Expressions",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 5,
+    "fields": {
+      "area": 1,
+      "name": "Visual Arts for Expression Photo",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 6,
+    "fields": {
+      "area": 1,
+      "name": "Visual Arts for Plastic Expressions",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 7,
+    "fields": {
+      "area": 1,
+      "name": "Design of Artesans",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 8,
+    "fields": {
+      "area": 1,
+      "name": "Dise\u00f1o de Interiores y Ambientaci\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 9,
+    "fields": {
+      "area": 1,
+      "name": "Dise\u00f1o de Modas",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 10,
+    "fields": {
+      "area": 1,
+      "name": "Dise\u00f1o Industrial",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 11,
+    "fields": {
+      "area": 1,
+      "name": "Dise\u00f1o para la Comunicaci\u00f3n Gr\u00e1fica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 12,
+    "fields": {
+      "area": 1,
+      "name": "Historia del Arte",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 13,
+    "fields": {
+      "area": 1,
+      "name": "Comunicaci\u00f3n Multimedia",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 14,
+    "fields": {
+      "area": 1,
+      "name": "M\u00fasica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 15,
+    "fields": {
+      "area": 1,
+      "name": "Urban\u00edstica y Medio Ambiente",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 16,
+    "fields": {
+      "area": 1,
+      "name": "Nivelaci\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 17,
+    "fields": {
+      "area": 1,
+      "name": "Dise\u00f1o Gr\u00e1fico",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 18,
+    "fields": {
+      "area": 1,
+      "name": "Multimedia",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 19,
+    "fields": {
+      "area": 1,
+      "name": "Otra",
+      "codename": "other",
+      "order": 1
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 20,
+    "fields": {
+      "area": 2,
+      "name": "Administraci\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 21,
+    "fields": {
+      "area": 2,
+      "name": "Administraci\u00f3n de Empresas",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 22,
+    "fields": {
+      "area": 2,
+      "name": "Administraci\u00f3n de Negocios",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 23,
+    "fields": {
+      "area": 2,
+      "name": "Administraci\u00f3n Financiera y Sistemas",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 24,
+    "fields": {
+      "area": 2,
+      "name": "Administraci\u00f3n Gubernamental y Pol\u00edticas P\u00fablicas Locales",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 25,
+    "fields": {
+      "area": 2,
+      "name": "Contadur\u00eda P\u00fablica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 26,
+    "fields": {
+      "area": 2,
+      "name": "Desarrollo Tur\u00edstico Sustentable",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 27,
+    "fields": {
+      "area": 2,
+      "name": "Econom\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 28,
+    "fields": {
+      "area": 2,
+      "name": "Gesti\u00f3n y Econom\u00eda Ambiental",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 29,
+    "fields": {
+      "area": 2,
+      "name": "Mercadotecnia",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 30,
+    "fields": {
+      "area": 2,
+      "name": "Negocios Internacionales",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 31,
+    "fields": {
+      "area": 2,
+      "name": "Recursos Humanos",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 32,
+    "fields": {
+      "area": 2,
+      "name": "Sistemas de Informaci\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 33,
+    "fields": {
+      "area": 2,
+      "name": "Turismo",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 34,
+    "fields": {
+      "area": 2,
+      "name": "Gesti\u00f3n Hotelera",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 35,
+    "fields": {
+      "area": 2,
+      "name": "Hoteler\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 36,
+    "fields": {
+      "area": 2,
+      "name": "Servicios Tur\u00edsticos",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 37,
+    "fields": {
+      "area": 2,
+      "name": "Sistemas de Informaci\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 38,
+    "fields": {
+      "area": 2,
+      "name": "Turismo Alternativo",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 39,
+    "fields": {
+      "area": 2,
+      "name": "Otra",
+      "codename": "other",
+      "order": 1
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 40,
+    "fields": {
+      "area": 3,
+      "name": "Enfermer\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 41,
+    "fields": {
+      "area": 3,
+      "name": "M\u00e9dico Cirujano y Partero",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 42,
+    "fields": {
+      "area": 3,
+      "name": "Cirujano Dentista",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 43,
+    "fields": {
+      "area": 3,
+      "name": "Cultura F\u00edsica y Deportes",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 44,
+    "fields": {
+      "area": 3,
+      "name": "Gerontolog\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 45,
+    "fields": {
+      "area": 3,
+      "name": "Nutrici\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 46,
+    "fields": {
+      "area": 3,
+      "name": "Psicolog\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 47,
+    "fields": {
+      "area": 3,
+      "name": "Salud P\u00fablica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 48,
+    "fields": {
+      "area": 3,
+      "name": "Seguridad Laboral, Protecci\u00f3n Civil y Emergencias",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 49,
+    "fields": {
+      "area": 3,
+      "name": "Emergencias, Seguridad Laboral y Rescates",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 50,
+    "fields": {
+      "area": 3,
+      "name": "Param\u00e9dico",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 51,
+    "fields": {
+      "area": 3,
+      "name": "Pr\u00f3tesis Dental",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 52,
+    "fields": {
+      "area": 3,
+      "name": "Radiolog\u00eda e Imagen",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 53,
+    "fields": {
+      "area": 3,
+      "name": "Terapia F\u00edsica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 54,
+    "fields": {
+      "area": 3,
+      "name": "Terapia Respiratoria",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 55,
+    "fields": {
+      "area": 3,
+      "name": "Otra",
+      "codename": "other",
+      "order": 1
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 56,
+    "fields": {
+      "area": 4,
+      "name": "F\u00edsica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 57,
+    "fields": {
+      "area": 4,
+      "name": "Inform\u00e1tica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 58,
+    "fields": {
+      "area": 4,
+      "name": "Sistemas Computacionales - Desarrollo de Software",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 59,
+    "fields": {
+      "area": 4,
+      "name": "Biom\u00e9dica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 60,
+    "fields": {
+      "area": 4,
+      "name": "Bioqu\u00edmica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 61,
+    "fields": {
+      "area": 4,
+      "name": "Civil",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 62,
+    "fields": {
+      "area": 4,
+      "name": "Procesos y Comercio Internacional",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 63,
+    "fields": {
+      "area": 4,
+      "name": "Administraci\u00f3n Industrial",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 64,
+    "fields": {
+      "area": 4,
+      "name": "Ciencias Computacionales",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 65,
+    "fields": {
+      "area": 4,
+      "name": "Computaci\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 66,
+    "fields": {
+      "area": 4,
+      "name": "Comunicaciones y Electr\u00f3nica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 67,
+    "fields": {
+      "area": 4,
+      "name": "Electr\u00f3nica y Computaci\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 68,
+    "fields": {
+      "area": 4,
+      "name": "Energ\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 69,
+    "fields": {
+      "area": 4,
+      "name": "Instrumentaci\u00f3n Electr\u00f3nica y Nanosensores",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 70,
+    "fields": {
+      "area": 4,
+      "name": "Nanotecnolog\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 71,
+    "fields": {
+      "area": 4,
+      "name": "Obras y Servicios",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 72,
+    "fields": {
+      "area": 4,
+      "name": "Teleinform\u00e1tica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 73,
+    "fields": {
+      "area": 4,
+      "name": "Telem\u00e1tica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 74,
+    "fields": {
+      "area": 4,
+      "name": "Industrial",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 75,
+    "fields": {
+      "area": 4,
+      "name": "Mec\u00e1nica El\u00e9ctrica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 76,
+    "fields": {
+      "area": 4,
+      "name": "Mecatr\u00f3nica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 77,
+    "fields": {
+      "area": 4,
+      "name": "Qu\u00edmica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 78,
+    "fields": {
+      "area": 4,
+      "name": "Topogr\u00e1fica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 79,
+    "fields": {
+      "area": 4,
+      "name": "Matem\u00e1ticas",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 80,
+    "fields": {
+      "area": 4,
+      "name": "Qu\u00edmico Farmacobi\u00f3logo",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 81,
+    "fields": {
+      "area": 4,
+      "name": "Tecnolog\u00edas de la informaci\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 82,
+    "fields": {
+      "area": 4,
+      "name": "Administraci\u00f3n de Redes de C\u00f3mputo",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 83,
+    "fields": {
+      "area": 4,
+      "name": "Electr\u00f3nica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 84,
+    "fields": {
+      "area": 4,
+      "name": "Electr\u00f3nica y Mec\u00e1nica Automotriz",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 85,
+    "fields": {
+      "area": 4,
+      "name": "Herramentales",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 86,
+    "fields": {
+      "area": 4,
+      "name": "Inyecci\u00f3n de Pl\u00e1sticos",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 87,
+    "fields": {
+      "area": 4,
+      "name": "Meteorolog\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 88,
+    "fields": {
+      "area": 4,
+      "name": "Redes y Telecomunicaciones",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 89,
+    "fields": {
+      "area": 4,
+      "name": "Sistemas de Calidad",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 90,
+    "fields": {
+      "area": 4,
+      "name": "Otra",
+      "codename": "other",
+      "order": 1
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 91,
+    "fields": {
+      "area": 5,
+      "name": "Agrobiotecnolog\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 92,
+    "fields": {
+      "area": 5,
+      "name": "Agronegocios",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 93,
+    "fields": {
+      "area": 5,
+      "name": "Biolog\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 94,
+    "fields": {
+      "area": 5,
+      "name": "Biolog\u00eda Marina",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 95,
+    "fields": {
+      "area": 5,
+      "name": "Ciencia de los Alimentos",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 96,
+    "fields": {
+      "area": 5,
+      "name": "Agroindustrial",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 97,
+    "fields": {
+      "area": 5,
+      "name": "Alimentos y Biotecnolog\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 98,
+    "fields": {
+      "area": 5,
+      "name": "Recursos Naturales y Agropecurios",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 99,
+    "fields": {
+      "area": 5,
+      "name": "Sistemas Pecuarios",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 100,
+    "fields": {
+      "area": 5,
+      "name": "Agr\u00f3nomo",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 101,
+    "fields": {
+      "area": 5,
+      "name": "Medicina Veterinaria y Zootecnia",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 102,
+    "fields": {
+      "area": 5,
+      "name": "Administraci\u00f3n de Recursos Naturales",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 103,
+    "fields": {
+      "area": 5,
+      "name": "Control de Plagas Urbanas y Manejo de \u00c1reas Verdes",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 104,
+    "fields": {
+      "area": 5,
+      "name": "Otra",
+      "codename": "other",
+      "order": 1
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 105,
+    "fields": {
+      "area": 6,
+      "name": "Antropolog\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 106,
+    "fields": {
+      "area": 6,
+      "name": "Bibliotecolog\u00eda y Gesti\u00f3n del Conocimiento",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 107,
+    "fields": {
+      "area": 6,
+      "name": "Comunicaci\u00f3n P\u00fablica",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 108,
+    "fields": {
+      "area": 6,
+      "name": "Derecho o Abogado",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 109,
+    "fields": {
+      "area": 6,
+      "name": "Did\u00e1ctica del Franc\u00e9s",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 110,
+    "fields": {
+      "area": 6,
+      "name": "Docencia del Ingl\u00e9s",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 111,
+    "fields": {
+      "area": 6,
+      "name": "Educaci\u00f3n",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 112,
+    "fields": {
+      "area": 6,
+      "name": "Estudios Internacionales",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 113,
+    "fields": {
+      "area": 6,
+      "name": "Estudios Liberales",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 114,
+    "fields": {
+      "area": 6,
+      "name": "Estudios Pol\u00edticos y Gobierno",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 115,
+    "fields": {
+      "area": 6,
+      "name": "Filosof\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 116,
+    "fields": {
+      "area": 6,
+      "name": "Geograf\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 117,
+    "fields": {
+      "area": 6,
+      "name": "Gesti\u00f3n Cultural",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 118,
+    "fields": {
+      "area": 6,
+      "name": "Historia",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 119,
+    "fields": {
+      "area": 6,
+      "name": "Humanidades",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 120,
+    "fields": {
+      "area": 6,
+      "name": "Letras Hisp\u00e1nicas",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 121,
+    "fields": {
+      "area": 6,
+      "name": "Periodismo",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 122,
+    "fields": {
+      "area": 6,
+      "name": "Periodismo Digital",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 123,
+    "fields": {
+      "area": 6,
+      "name": "Seguridad Ciudadana",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 124,
+    "fields": {
+      "area": 6,
+      "name": "Sociolog\u00eda",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 125,
+    "fields": {
+      "area": 6,
+      "name": "Trabajo Social",
+      "codename": null,
+      "order": 100
+    }
+  },
+  {
+    "model": "candidates.academic_career",
+    "pk": 126,
+    "fields": {
+      "area": 6,
+      "name": "Otra",
+      "codename": "other",
+      "order": 1
+    }
+  }
+]

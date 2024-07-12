@@ -1,0 +1,258 @@
+a {
+	color: #F6A70E;
+}
+
+a:hover,
+a:focus {
+	color: #ca8708;
+}
+
+hr.primary {
+	border-top-color: #F6A70E;
+}
+
+.ui-slider .ui-slider-handle {
+	background: #ca8708;
+}
+
+.ui-slider .ui-slider-handle:before {
+	border-color: #F6A70E;
+}
+
+.ui-slider .ui-slider-range {
+	background: #F6A70E;
+}
+
+table > thead > tr > th {
+	background: #F6A70E;
+}
+
+.table-striped > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th {
+	background-color: rgba(42,173,222,.025);
+}
+
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+	background-color: rgba(42,173,222,.05);
+}
+
+.btn-default {
+	border-bottom-color: #ca8708;
+	background: #F6A70E;
+	color: #ffffff;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active {
+	border-color: #986606;
+	background-color: #ca8708;
+	color: #ffffff;
+}
+
+#header .header-top-bar a:hover {
+	color: #F6A70E;
+}
+
+#header .header-top-bar .header-login > div,
+#header .header-top-bar .header-register > div {
+	border-top-color: #F6A70E;
+}
+
+#header .header-nav-bar .primary-nav > li:hover {
+	color: #F6A70E;
+}
+
+#header .header-nav-bar .primary-nav > li.active > a {
+	border-bottom-color: #F6A70E;
+}
+
+#header .header-nav-bar .primary-nav:hover > li:hover > a,
+#header .header-nav-bar .primary-nav:hover > li.active:hover > a {
+	border-bottom-color: #F6A70E;
+}
+
+#header .header-nav-bar .primary-nav ul {
+	border-top-color: #F6A70E;
+}
+
+#header .header-nav-bar .primary-nav ul > li:hover > a,
+#header .header-nav-bar .primary-nav ul > li.hover > a,
+#header .header-nav-bar .primary-nav ul > li.active > a {
+	background: #F6A70E;
+}
+
+#header .header-map {
+	border-bottom-color: #F6A70E;
+}
+
+#header .header-search-bar .toggle:hover,
+#header .header-search-bar.active .toggle {
+	background: #F6A70E;
+}
+
+#header .header-search-bar .toggle:hover span,
+#header .header-search-bar .toggle:hover span:before,
+#header .header-search-bar .toggle:hover span:after,
+#header .header-search-bar.active .toggle span,
+#header .header-search-bar.active .toggle span:before,
+#header .header-search-bar.active .toggle span:after {
+	border-bottom-color: #ca8708;
+}
+
+#mobile-menu-toggle {
+	background: #F6A70E;
+}
+
+#footer .footer-links a:hover {
+	color: #F6A70E;
+}
+
+#footer .footer-links a:before {
+	color: #F6A70E;
+}
+
+.widget.links-widget > ul > li > a:hover,
+.widget.links-widget > ul > li.active > a {
+	color: #F6A70E;
+}
+
+.filter-list a:hover,
+.filter-list li.active > a {
+	color: #F6A70E;
+}
+
+.filter-list li.has-submenu > a:before {
+	color: #F6A70E;
+}
+
+.country-list a:hover {
+	color: #F6A70E;
+}
+
+.jobs-filter-widget .toggle {
+	background: #F6A70E;
+}
+
+.jobs-filter-widget .toggle:after {
+	background: #F6A70E;
+}
+
+.candidates-single-widget table .stars {
+	color: #F6A70E;
+}
+
+.pricing-tables .pricing-tables-column .price {
+	color: #F6A70E;
+}
+
+.nav-tabs {
+	border-bottom-color: #F6A70E;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+	border-color: #F6A70E;
+	background-color: #F6A70E;
+}
+
+.responsive-tabs > .tab-content .tab-pane {
+	border-color: #F6A70E;
+}
+
+.responsive-tabs > .tab-content > .acc-link.active,
+.responsive-tabs > .tab-content > .acc-link.active:hover,
+.responsive-tabs > .tab-content > .acc-link.active:focus {
+	border-color: #F6A70E;
+	background-color: #F6A70E;
+}
+
+.responsive-tabs.vertical > .tab-content {
+	border-left-color: #F6A70E;
+}
+
+.responsive-tabs.vertical > .nav-tabs {
+	border-right-color: #F6A70E;
+}
+
+.progress-bar > .progress-bar-inner > span {
+	background: #F6A70E;
+}
+
+.progress-bar.style-2 > .progress-bar-inner {
+	background: #F6A70E;
+}
+
+.progress-bar.toggle > .progress-bar-toggle {
+	border-bottom-color: #ca8708;
+	background: #F6A70E;
+}
+
+.progress-bar.toggle.active > .progress-bar-toggle,
+.progress-bar.toggle > .progress-bar-toggle:hover {
+	border-bottom-color: #986606;
+	background: #ca8708;
+}
+
+.progress-circle .loader-spiner {
+	border-color: #F6A70E;
+}
+
+.partners-item .img .overlay {
+	background: #F6A70E;
+}
+
+.jobs-item .date {
+	background: #F6A70E;
+}
+
+.pagination > li > a:hover {
+	color: #F6A70E;
+}
+
+.ullist li.active a,
+.ullist li a:hover {
+	color: #F6A70E !important;
+}
+
+.flex-control-paging li a:hover {
+	background: #F6A70E;
+}
+
+.flex-control-paging li a.flex-active {
+	background: #F6A70E;
+}
+
+
+
+@media (max-width: 991px) {
+
+	#header .header-nav-bar .primary-nav li > a,
+	#header .header-nav-bar .primary-nav ul > li > a {
+		border-bottom: 1px solid #1a1a1a;
+		background: #343434;
+	}
+
+
+	#header .header-nav-bar .primary-nav > li.active > a,
+	#header .header-nav-bar .primary-nav > li:hover > a,
+	#header .header-nav-bar .primary-nav > li.hover > a {
+		border-bottom-color: #1a1a1a;
+		background: #F6A70E;
+	}
+
+	#header .header-nav-bar .primary-nav:hover > li:hover > a,
+	#header .header-nav-bar .primary-nav:hover > li.active > a,
+	#header .header-nav-bar .primary-nav:hover > li.active:hover > a {
+		border-bottom-color: #1a1a1a;
+	}
+
+	#header .header-nav-bar .primary-nav > li.has-submenu > ul li:hover > a,
+	#header .header-nav-bar .primary-nav > li.has-submenu > ul li.hover > a {
+		background: #F6A70E;
+	}
+
+}

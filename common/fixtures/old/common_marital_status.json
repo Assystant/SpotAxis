@@ -1,0 +1,42 @@
+[
+  {
+    "model": "common.marital_status",
+    "pk": 1,
+    "fields": {
+      "name": "Soltero/a",
+      "codename": "single"
+    }
+  },
+  {
+    "model": "common.marital_status",
+    "pk": 2,
+    "fields": {
+      "name": "Casado/a",
+      "codename": "married"
+    }
+  },
+  {
+    "model": "common.marital_status",
+    "pk": 3,
+    "fields": {
+      "name": "Uni\u00f3n Libre",
+      "codename": "free"
+    }
+  },
+  {
+    "model": "common.marital_status",
+    "pk": 4,
+    "fields": {
+      "name": "Divorciado/a",
+      "codename": "divorced"
+    }
+  },
+  {
+    "model": "common.marital_status",
+    "pk": 5,
+    "fields": {
+      "name": "Viudo/a",
+      "codename": "widower"
+    }
+  }
+]

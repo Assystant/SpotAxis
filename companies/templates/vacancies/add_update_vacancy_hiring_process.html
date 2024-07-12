@@ -1,0 +1,700 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+{% block meta %}
+    <meta name="keyword" content="{{company.name}}, Create Job"/>
+    <meta name="description" content="Create your job opening."/>
+{% endblock %}
+{% block title %}{{ request.user.recruiter.company.all.0.name }} | Create Job Opening{% endblock %}
+{% block css %}
+
+    <!-- Jquery-File-Uploads -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui.css">
+    <!-- CSS adjustments for browsers with JavaScript disabled -->
+    <noscript><link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui-noscript.css"></noscript>
+    <!-- Jquery-File-Uploads -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.1/switchery.min.css">
+    <link href="{{STATIC_URL}}datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}daterange/daterangepicker.css" rel="stylesheet">
+    <style>
+        .ui-sortable-placeholder{
+            min-height:30px;
+            opacity:0.3;
+            background:#5bc0de;
+            opacity: 0.3
+        }
+        .sortable-tab-static{
+            color:#ccc;
+        }
+    </style>
+{% endblock %}
+{% comment %} Add/Modify Vacancies {% endcomment %}
+{% block page-header %}{% trans 'Publish Job' %}{% endblock %}
+{% block content %}
+
+    <div class="row mt10 mb40 no-margin-x">
+        <div class=" col-xs-12">
+            {% include 'vacancies/add_update_vacancy_timeline.html' %}
+        </div>
+        <div class="col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            <div class="container-fluid bg-white border-bottom border-light br-2 pt20 pb20 pl40 pr40">
+                <div class="row sortable-tab-section">
+                    <div class="col-xs-4 sortable-tabs">
+                        <div class="clearfix">
+                            <h4 class="text-light pl10 inline-block pull-left mt10 mb5">Hiring Process </h4>
+                            <a class="clickable pull-right mr5 mt8" data-toggle="modal" data-target="#timeline_management"><i class="fa fa-pencil" ></i> Manage</a>
+                        </div>
+                        {% for stage in stages %}
+                            <div class="sortable-tab {% if forloop.first or forloop.last%}sortable-tab-static{%endif%} {% if forloop.counter == 1%}active{% endif %}" data-target="#stage-{{stage.order}}" data-id="#tab-{{stage.order}}">
+                                {{stage}}
+                                {% if not forloop.first and not forloop.last%}<i class="fa fa-arrows-v mover"></i>{% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xs-8 sortable-tab-contents">
+                        {% for current_process in stages %}
+                            <div class="br-2 pb10 pl10 pr10 bg-white collapse fade {% if forloop.first %}in{% endif %} sortable-tab-content" id="stage-{{current_process.order}}" aria-expanded="{% if forloop.first %}true{%else%}false{%endif%}">
+                                <small class="text-light">Colleagues evaluating/interviewing in this round</small><br>
+                                <div class="border-bottom border-light pl5 pr5 pt15 pb15 chip-list">
+                                    {% for manager in current_process.recruiters.all %}
+                                        <div class="chip"  data-id="{{manager.id}}">
+                                            <img class="chip-img" src="{{MEDIA_URL}}{{manager.user.photo}}" data-name="{{manager.user.get_full_name}}">
+                                            <span class="chip-text">{{manager.user.get_full_name|title}}</span>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="chip null-chip {% if current_process.recruiters.all %} hidden {% endif %}"  data-id="0">
+                                        <img class="chip-img" src="{{MEDIA_URL}}{{settings.PHOTO_USER_DEFAULT}}">
+                                        <span class="chip-text text-info">Evaluator</span>
+                                    </div>
+                                    <a class="btn btn-sm mt5 mb5 ml5 btn-default text-info btn-round border-info change-evaluators" data-toggle="modal" data-target="#stage-members" data-id="{{current_process.id}}" data-name="{{current_process}}"><i class="fa {% if recruiter.is_manager and vacancy.status.codename == 'open' %}fa-pencil{% else %}fa-ellipsis-h mt5{% endif %}"></i></a>
+                                </div>
+                                {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+                                    {% if current_process.order == 100%}
+                                        <p class="mt20 no-margin-bottom text-light">Only finalized candidates are categorized under "Onboarding", ratings can not be given in this round.</p>
+                                    {% else %}
+                                        <div class="border-bottom border-light br-2 pt15 pb15 pl5 pr5">
+                                            <h6 class="text-light">Rating Criteria
+                                                {% if recruiter.is_manager  and vacancy.status.codename == 'open' %}
+                                                    <a class="clickable ml10 change-criteria btn btn-sm btn-default text-info btn-round border-info" data-toggle="modal" data-target="#criterion-modal" data-id="{{current_process.id}}" data-name="{{current_process}}"><i class="fa fa-pencil"></i></a> 
+                                                {% endif %}
+                                            </h6>
+                                            <div class="criteria_list">
+                                                {% for criterion in current_process.criteria_as_list %}
+                                                    <p class=" pl10 pr10 mt5 no-margin-bottom"><small class="va-mid text-light">{{criterion}}</small><span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span></p>
+                                                {% endfor %}
+                                                {% if not current_process.criteria_as_list %}
+                                                    <p class=" pl10 pr10 mt5 no-margin-bottom"><small class="va-mid text-light">Overall </small><span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span></p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3">
+            <a class=" btn btn-info btn-block btn-sm mt10 mb10" href="{% url 'companies_add_update_vacancy_talent_sourcing' vacancy_id %}">Next</a>
+        </div>
+    </div>
+    {% if recruiter and recruiter.is_manager and not vacancy.status.codename == 'closed' and vacancy.company|args:'AT_CUSTOM_HIRING_PROCESS'|call:'check_service' %}
+        {% include 'vacancies/manage_process_modal.html' %}
+    {% endif %}
+    {% if recruiter.is_manager and not vacancy.status.codename == 'closed' %}
+        <div class="modal fade" id="stage-members" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content hidden">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Manage evaluators/ interviewers for <span class="process_name"></span></h4>
+                    </div>
+                    <div class="modal-body row ">
+                        <input type="hidden" class="process_id" value="">
+                        <div class="col-xs-12">
+                            <select class="" id="processmemberlist" placeholder="Select/Type a member to add">
+                            </select>
+                        </div>
+                        <div class="col-xs-12 mlist">
+                            {% for member in current_process.recruiters.all %}
+                                <blockquote class="no-margin-bottom border-bottom border-light bg-white br-2 no-padding collapse fade in" data-id="{{member.id}}">
+                                    <img src="{{member.user.photo.url}}" data-name="{{member.user.get_full_name}}" class="img-card">
+                                    <div class="inline-block ml5 pt5">
+                                        <h4 class="text-light no-margin"><i class="fa fa-user"></i> <span class="name">{{member.user.first_name}} {{member.user.last_name}}</span></h4>
+                                        <h6 class="text-muted no-margin inline-block"><i class="fa fa-envelope"></i> {{member.user.email|default:'email@example.com'}}</h6>
+                                    </div>
+                                    {% if recruiter.is_manager and not vacancy.status.codename == 'closed' %}
+                                        <div class="inline-block pull-right">
+                                            <button class="btn btn-xs btn-default block-hover remove mt10 ml5"><i class="fa fa-times"></i> Remove</button>
+                                        </div>  
+                                    {% endif %}
+                                </blockquote>
+                            {% endfor %}
+                        </div>
+                        <div class="col-xs-10 col-xs-push-1 mt10 mb10"><button class="btn btn-default btn-sm btn-block" data-dismiss="modal">Done</button></div>
+                    </div>
+                </div>
+                <h1 class="modal-loader"><i class="fa fa-spinner fa-pulse"></i></h1>
+            </div>
+        </div>
+    {% endif %}
+    {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+        <div class="modal fade" id="criterion-modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content hidden">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Selection Criteria for <span class="process_name"></span></h4>
+                    </div>
+                    <input type="hidden" class="process_id" value="">
+                    <form class="modal-body container-fluid">
+                        
+                    </form>
+                </div>
+                <h1 class="modal-loader"><i class="fa fa-spinner fa-pulse"></i></h1>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block java_script_srcs %}
+    {#    ================================================================================================================#}
+    <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.iframe-transport.js"></script>
+    <!-- The basic File Upload plugin -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload.js"></script>
+    <!-- The File Upload processing plugin -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload-process.js"></script>
+    <!-- The File Upload validation plugin -->
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+    <script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.cookie.js"></script>
+    {#    ================================================================================================================#}
+    <script src="{{STATIC_URL}}js/jquery-ui.min.js"></script>
+    <script src="{{STATIC_URL}}datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.1/switchery.min.js"></script>
+    <script src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
+    <script src="{{ STATIC_URL }}ckeditor/ckeditor-init.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/moment.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}daterange/daterangepicker.js"></script>
+{% endblock %}
+
+{% block java_script_code %}
+    <script>
+        $('.sortable-tab').click(function(){
+            $(this).parents('.sortable-tabs').find('.sortable-tab').removeClass('active');
+            $(this).addClass('active');
+            $('.sortable-tab-content').collapse('hide');
+            console.log($(this).attr('data-target'))
+            _this = $(this);
+            setTimeout(function(){
+                $(_this.attr('data-target')).collapse('show');
+            }, 350);
+            setCookie('job_editing_2_active_tab',$(this).attr('data-id'))
+        })
+        $(document).ready(function(){
+            $( ".sortable-tabs").sortable({placeholder: "ui-state-highlight", items: ".sortable-tab:not(.sortable-tab-static)"});
+            active_tab = getCookie('job_editing_2_active_tab');
+            if (!!active_tab){
+                console.log($(active_tab))
+                $('[data-id="'+active_tab+'"]').click();
+            }
+        })
+        {%if recruiter and not vacancy.status.codename == 'closed' and vacancy.company|args:'AT_CUSTOM_HIRING_PROCESS'|call:'check_service' %}
+            $creating = false;
+            var listSelect = {
+              sortField:'text',
+              openOnFocus:true,
+              allowEmptyOption: false,
+              allowPrecedence:true,
+              hideSelected: true,
+              multiple:false,
+              selected:null,
+              options:[],
+              create:function (input, callback){
+                if ($creating){
+                    console.log('Already creating')
+                    return false;
+                }
+                else {
+
+                    $creating=true;
+                    console.log('Lets go');
+                }
+
+                $.ajax({
+                    url:'/ajax/addstage/',
+                    type:'post',
+                    data:{
+                        'stage_name': input
+                    },
+                    complete: function(data){
+                        // console.log(data);
+                        if (this.isLocked){
+                            this.unlock();
+                            console.log('unlocked')
+                        }
+                        console.log(this);
+                        $creating = false;
+                    },
+                    success: function(data){
+                        console.log(data);
+                        console.log('success')
+                        if (data.success){
+                            console.log('true')
+                            console.log(callback)
+                            response = {value:data.id,text:input}
+                            console.log(response)
+                            callback(response);
+                        }
+                        else {
+                            alert('Failed. Try Again!!');
+                        }
+                    },
+                    error: function(data){
+                        console.log(data);
+                    }
+                })
+
+              },
+              onItemAdd: function(value,$item){
+                console.log('added value')
+                // console.log(value)
+                // console.log($item)
+                $newitem = $('#bucket-list #bucket').append('<div class="row bucket-item" data-id='+value+'>'+$item.html()+'</div>');
+                console.log($newitem)
+                $newitem.find('.bucket-item:last-child').click(function(e){
+                    onclickremove(this)
+                })
+                this.removeOption(value);
+                this.focus();
+                $( "#bucket" ).sortable({placeholder: "ui-state-highlight", cancel: ".bucket-item-static"});
+              },
+            }
+            $('#list').selectize(listSelect);
+            $('#list')[0].selectize.$control_input.attr('maxlength',50);
+            $('#list')[0].selectize.clear();
+            $('#list')[0].selectize.open();
+
+            $(document).ready(function(){
+                $("#bucket").sortable({placeholder: "ui-state-highlight",cancel: ".bucket-item-static"});
+            });
+
+            function onclickremove($this){
+                // console.log($this)
+                $list = $('#list')[0].selectize;
+                // console.log($list)
+                $list.addOption({value:$($this).data('id'),text:$($this).html()})
+                $list.refreshOptions();
+                $($this).remove();
+            }
+            $('#bucket .bucket-item').click(function(e){
+                onclickremove(this)
+            });
+
+            popshare = "{{request.session|args:'enableshare'|call:'pop'|default:''}}"
+            if(!popshare){
+                popshare = getCookie('popshare')
+            }
+            console.log(popshare)
+            $('#app_procees_update').click(function(){
+                console.log('saving');
+                
+                $bucket = $('#bucket-list #bucket');
+                formdata = "";
+                $this = $(this);
+                $(this).html('<i class="fa fa-spinner fa-pulse fa-lg fa-fw"></i> Please Wait');
+                $(this).addClass('disabled');
+                $(this).prop('disabled',true);
+                $bucket.find('.bucket-item').each(function(key,value){
+                    formdata+=($(value).data('id')) + ",";
+                });
+                formdata = formdata.substring(0,formdata.length - 1);
+                if (formdata.trim(',') == $('#bucket').data('list')){
+                    alert('No changes made');
+                    $this.html('<i class="fa fa-check-circle"></i> Save and Update');
+                    $this.removeClass('disabled');
+                    $this.prop('disabled',false);
+                    $($this).parents('.modal').modal('hide');
+                    return false;
+                }
+                else if(popshare){
+                    setCookie('popshare','true',1)
+                    popshare=false
+
+                }
+                $.ajax({
+                    url:'/ajax/updatevacancystage/',
+                    data: {
+                        stage_ids: formdata.trim(','),
+                        vacancy: '{{vacancy.id}}',
+                    },
+                    type:'post',
+                    complete: function(data){
+                        $this.html('<i class="fa fa-check-circle"></i> Save and Update');
+                        $this.removeClass('disabled');
+                        $this.prop('disabled',false);
+                        
+                    },
+                    success: function(data){
+                        console.log(data)
+                        if(data.success){
+                            $timeline = $('.timeline');
+                            $timeline.html('');
+                            for (timeline_item in data.timeline){
+                                console.log(data.timeline[timeline_item]);
+                                html ='<li><div class="direction-r"><div class="flag-wrapper"><span class="flag">'
+                                        +'<a href="'+ data.timeline[timeline_item].href+'">'
+                                        +data.timeline[timeline_item].label+'</a></span><span class="time-wrapper"><span class="time">'+data.timeline[timeline_item].count+'</span></span></div></div></li>'
+                                $timeline.append(html);
+                                // console.log(data.timeline[timeline_item].label);
+                            }
+                            // console.log(this)
+                            $($this).parents('.modal').modal('hide');
+                            location.href=location.href
+                        }
+                        else{
+                            if (data.msg){
+                                alert(data.msg);
+                            }
+                            else {
+                                alert('Could Not Save. Please Try again')
+                            }
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                    },
+                });
+            })
+        {%endif%}
+    </script>
+    <script>
+        {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
+            var remove_criteria = function(){
+                console.log('removing')
+                $this = $(this);
+                $this.html('<i class="fa fa-pulse fa-spinner"></i> Please Wait').prop('disabled', true).addClass('disabled');
+                if($this.parents('.modal-body').find('.row').length==2){
+                    console.log($this.parents('.modal-body').find('.row').length)
+                    $this.parents('.modal-body').find('.none-row').collapse('show');
+                }
+                $this.parents('.row').remove();
+            }
+            var add_criteria = function(){
+                $this = $(this);
+                newHtml = '<div class="row border-bottom border-light mb5">'+
+                            '<div class="col-xs-12 col-sm-7">'+
+                                '<input type="text" value="{{criterion.name}}" class="form-control" placeholder="Criteria Name" required>'+
+                            '</div>'+
+                            '<div class="col-xs-12 col-sm-5 pt10 pb10 no-padding-x text-center">'+
+                                '<span class="inline-block"> <i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i><i class="fa fa-star-o text-light pl5"></i></span>'+
+                                '<a class="clickable remove btn btn-xs btn-default ml10 mr10"><i class="fa fa-times"></i> Remove</a>'+
+                            '</div>'+
+                        '</div>';
+                $this.parent().before(newHtml);
+                $this.parent().prev().find('.remove').click(remove_criteria);
+            };
+            $('#criterion-modal form').submit(function(event) {
+                event.preventDefault();
+                $this = $(this);
+                $inputs = $this.find('input[type=text]');
+                console.log($inputs)
+                $modal = $('#criterion-modal');
+                criteria = [];
+                $inputs.each(function(k,$input){
+                    criteria.push($input.value);
+                    console.log(criteria)
+                });
+                $this.find('.btn.btn-info').html('<i class="fa fa-pulse fa-spinner"></i> Please Wait').addClass('disabled').prop('disabled', true);
+
+                $.ajax({
+                    data:{
+                        'criteria': criteria.join(';;'),
+                        'vid': $modal.find('.process_id').val(),
+                    },
+                    url: '/ajax/updatecriteria/',
+                    type:'post',
+                    complete: function(){
+                        $this.find('.btn.btn-info').html('Save').removeClass('disabled').prop('disabled', false);
+                    },
+                    success: function(data){
+                        if(data.success){
+                            location.href=location.href
+                        }
+                        else {
+                            alert(data.msg)
+                        }
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+                return false;   
+            });
+        $('.change-criteria').click(function(){
+            console.log('changing criteria')
+            $modal = $('#criterion-modal');
+            $modal.find('.process_name').html($(this).attr('data-name')).css('color','#5bc0de')
+            $modal.find('.process_id').val($(this).attr('data-id'));
+            // $list = $('#processmemberlist')[0].selectize;
+            // $list.addOption(processMemberOptions)
+            $.ajax({
+                url:'/ajax/get_process_criterias/',
+                data: {
+                    'vid': $modal.find('.process_id').val(),
+                },
+                type:'post',
+                success: function(data){
+                    console.log(data)
+                    if(data.success){
+                        $modal.find('.modal-content .modal-body').html(data.criteria_modal_content);
+                        $('.in .criteria_list').html(data.criteria_list);
+                        $modal.find('.modal-content').removeClass('hidden');
+                        $modal.find('.modal-loader').addClass('hidden');
+                        $modal.find('.remove').click(remove_criteria);
+                        $modal.find('.add-criteria').click(add_criteria);
+                    }
+                    else {
+                        $modal.modal('hide')
+                    }
+                    if (data.msg){
+                        alert(data.msg)
+                    }
+                    else if (!data.success){
+                        alert('Could not retreive list of evaluators.')
+                    }
+                },
+                error: function(er){
+                    console.log(er);
+                    alert('Could not retreive list of evaluators.')
+                }
+            })
+        })
+        {% endif %}
+    </script>
+    <script>
+        var updateMemberCards = function(data){
+            console.log(data)
+            newMember = '<blockquote class="no-margin-bottom border-bottom border-light bg-white br-2 no-padding collapse fade in" data-id="'+data.id+'">'+
+                                    '<img src="{{MEDIA_URL}}'+data.img+'" class="img-card" data-name="'+data.name+'">'+
+                                        '<div class="inline-block ml10 pt5">'+
+                                            '<h4 class="text-light no-margin"><i class="fa fa-user"></i> <span class="name">'+data.name+'</span></h4>'+
+                                            '<h6 class="text-muted no-margin inline-block"><i class="fa fa-envelope"></i> '+data.email+'</h6>'+
+                                        '</div>'+
+                                        '<div class="inline-block pull-right">'+
+                                            '<button class="btn btn-xs btn-default block-hover remove mt10 ml5"><i class="fa fa-times"></i> Remove</button>'+
+                                        '</div>'+
+                                    '</blockquote>';
+            newImage = '<img class="img-circle mb5 mt5 navbar-img pull-right single-line-list-item" data-id="'+data.id+'" src="{{MEDIA_URL}}'+data.img+'" data-name="'+data.name+'">'
+            $newCard = $('#stage-members .mlist').prepend(newMember);
+            console.log('logging ____________________')
+            console.log($newCard)   ;
+            $newCard.find('blockquote:nth-child(1) .remove').click(remove_process_card);
+            $newCard.find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+            
+            // $imgs = $('.single-line-list:not(.all)').prepend(newImage);
+            // $imgs.find('img[data-name][src$="{{settings.PHOTO_USER_DEFAULT}}"]').initial();
+            // console.log($imgs);
+            
+            $('.in .null-chip').addClass('hidden')
+        }
+        var updateMemberList = function(data, vid){
+            console.log(vid)
+            console.log($('.in .chip-list'))
+            $list = $('.in .chip-list');
+            hasChip = $list.find('.chip[data-id=' + data.id + ']').length
+            if (!hasChip> 0){
+                $new_chip = $('<div class="chip" data-id="' + data.id + '">'
+                    + '<img class="chip-img" src="' + data.img + '" data-name="' + data.name + '">'
+                    + '<span class="chip-text">' + data.name + '</span></div>');
+                $new_chip.prependTo($list);
+                $new_chip.find('img').initial();
+            }
+        }
+        var processMemberOptions = [
+                {% for member in company.recruiter_set.all %}
+                    {   'value':{{member.id}}, 
+                        'text':'{{member}}', 
+                        'img':'{{member.user.photo}}',
+                        'email': '{{member.user.email|default:"Not Available"}}',
+                    },
+                {%endfor %}
+        ]
+        var processMemberSelect = {
+            searchField: ['text','email'],
+            sortField:'text',
+            openOnFocus:true,
+            allowEmptyOption: false,
+            allowPrecedence:true,
+            hideSelected: true,
+            multiple:false,
+            selected:null,
+            options:processMemberOptions,
+            create: false,
+            selectOnTab: true,
+            render: {
+                option: function(item,escape){
+                    img = $(document.createElement("img")).addClass('img-card').attr('data-name', item.text).attr('src',item.img);
+                    if (img.attr('src').endsWith('{{settings.PHOTO_USER_DEFAULT}}')){
+                        img = img.initial()
+                    }
+                    img = img[0]
+                    // console.log(img.initial())
+                    return '<div class="row no-margin bg-white border-bottom border-light" data-value="'+item.value+'" data-img="'+item.img+'" data-email="'+item.email+'"><div class="col-xs-12 no-padding"><div class="inline-block va-top">'+img.outerHTML+'</div><div class="inline-block ml10"><p class="mt10 no-margin-bottom text-light"><b>'+item.text+'</b></p><p class="no-margin-bottom"><i>'+item.email+'</i></p></div></div></div>'
+                },
+                item: function(item,escape){
+                    return '<div class="item"><div class="inline-block va-top"><img class="navbar-img" src="{{MEDIA_URL}}'+item.img+'" data-name="'+item.text+'"></div><div class="inline-block ml10 text-light">'+item.text+' &lt;'+item.email+'&gt;</div></div>';
+                }
+
+            },
+            onItemAdd: function(value, $item){
+                console.log(this)
+                $this=this
+                this.disable();
+                loadingHtml = '<div class="inline-block text-muted ml10"><i class="fa fa-pulse fa-spinner"></i> Please Wait</div>'
+                $item.append(loadingHtml);
+                $.ajax({
+                    url:'/ajax/addmembertojobprocess/',
+                    type:'post',
+                    data: {
+                        'id': value,
+                        'vid': $('#stage-members .process_id').val(),
+                    },
+                    complete: function(){
+                        $this.clear();
+                        $this.enable();
+                        $this.focus();
+                    },
+                    success: function(data){
+                        if(data.success){
+                            updateMemberCards(data);
+                            updateMemberList(data, $('#stage-members .process_id').val());
+                            $this.removeOption(value);
+                        }
+                        alert(data.msg);
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                })
+            },
+            onType: function(str){
+                this.$dropdown.next('.no-results').remove();
+                if(!this.hasOptions){
+                    this.$dropdown.after('<div class="selectize-dropdown single no-results pt5 pb5 pl10 pr10 text-light" style="width:100%;margin-top:-5px">No Matching Members Found</div>')
+                }
+            },
+            onBlur:function(){
+                this.$dropdown.next('.no-results').remove();
+            },
+            onFocus: function(){
+            },
+            onChanges: function(value){
+            }
+        }
+        var remove_process_card = function(){
+            console.log('removing')
+            $this = $(this);
+            $this.html('<i class="fa fa-pulse fa-spinner"></i> Please Wait').prop('disabled',true).addClass('disabled');
+            data = {
+                'id': $this.parents('blockquote').data('id'),
+                'vid': $('#stage-members .process_id').val(),
+            }
+            console.log(data)
+            $.ajax({
+                data: data,
+                type: 'POST',
+                url: '/ajax/removememberfromjobprocess/',
+                complete: function(){
+                    $this.html('<i class="fa fa-times"></i> Remove').prop('disabled', false).removeClass('disabled');
+                },
+                success: function(data){
+                    console.log(data);
+                    if(data.success){
+                        $this.hide();
+                        $('.single-line-list:not(.all) [data-id='+$this.parents('blockquote').data('id')+']').css('border-color','#5bc0de');
+                        $this.parents('blockquote').addClass('clicakble');
+                        setTimeout(function(){
+                            $('.single-line-list:not(.all) [data-id='+$this.parents('blockquote').data('id')+']').remove();
+                            $this.parents('blockquote').remove();
+                            console.log($('.single-line-list:not(.all) .single-line-list-item'))
+                            if(!$('.single-line-list:not(.all) .single-line-list-item')[0])
+                            {
+                                $('.in .null-chip').removeClass('hidden')
+                            }
+                        },1000);
+                        mlist = $('#processmemberlist')[0].selectize;
+                        console.log(mlist)
+                        mlist.addOption({
+                            'value': data.id,
+                            'text': data.name,
+                            'email': data.email,
+                            'img': data.img
+                        });  
+                        $('.chip-list .chip[data-id="' + data.id + '"]').remove()          
+                    }
+                    alert(data.msg);
+                },
+                error: function(er){
+                    console.log(er);
+                }
+            })
+        }
+        $(document).ready(function(){
+            $('#processmemberlist').selectize(processMemberSelect);
+        });
+        $('.change-evaluators').click(function(){
+            console.log('changing')
+            $modal = $('#stage-members');
+            $modal.find('.process_name').html($(this).attr('data-name')).css('color','#5bc0de')
+            $modal.find('.process_id').val($(this).attr('data-id'));
+            $list = $('#processmemberlist')[0].selectize;
+            $list.addOption(processMemberOptions)
+            $.ajax({
+                url:'/ajax/get_evaluators/',
+                data: {
+                    'vid': $modal.find('.process_id').val(),
+                },
+                type:'post',
+                success: function(data){
+                    console.log(data)
+                    if(data.success){
+                        console.log(data.recruiters);
+                        console.log(data.recruiters[0])
+                        console.log($list.options[data.recruiters[0]])
+                        data.recruiters.forEach(function(i){
+                            $option = $list.options[i];
+                            $option['name'] = $option['text']
+                            $option['id'] = $option['value']
+                            updateMemberCards($option);
+                            $list.removeOption(i);
+                        })
+                        $modal.find('.modal-content').removeClass('hidden');
+                        $modal.find('.modal-loader').addClass('hidden');
+                    }
+                    else {
+                        $modal.modal('hide')
+                    }
+                    if (data.msg){
+                        alert(data.msg)
+                    }
+                    else if (!data.success){
+                        alert('Could not retreive list of evaluators.')
+                    }
+                },
+                error: function(er){
+                    console.log(er);
+                    alert('Could not retreive list of evaluators.')
+                }
+            })
+        })
+        $('#stage-members').on('hidden.bs.modal', function(){
+            $(this).find('.modal-content').addClass('hidden');
+            $(this).find('.modal-loader').removeClass('hidden');
+            $(this).find('.mlist').html('');
+        })
+    </script>
+{% endblock %}

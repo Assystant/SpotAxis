@@ -1,0 +1,90 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'My recommendations' %}{% endblock %}
+{% comment %} Page for a company's recommendations {% endcomment %}
+{% block page-header %}{% trans 'My recommendations' %}{% endblock %}
+{% block content %}
+
+<!-- Content starts -->
+
+    <div class="title-lines">
+        <h3>{% trans 'My recommendations' %}</h3>
+    </div>
+
+    <div class="row white-container mb50">
+        <div class="col-md-4 text-justify">
+            <p>
+            Now you can get <strong>1 month free</strong> unlimited publicationsby simply recommending us a company which may be interested in our services. <strong><i>You will receive one month free recomendation.</i></strong>
+            </p>
+            <p>
+            Only you must invite them to our site and tell the to enter your username:
+            <strong><span class="color-blue">{{ company.user.username }}</span></strong> in the field
+            <i><strong>"User Recomended"</strong></i>.
+            </p>
+            <p>
+            Your bonus is a free month <strong>ACTIVATION</strong> when the recommended company buy any of 
+            <a href="{% url 'TRM_companies' %}#NuestrosPaquetes" target="_blank">our packages</a>.
+            </p>
+        </div>
+        <div class="col-md-8">
+            <img class="img-responsive img-rounded img-thumbnail" src="{{ STATIC_URL }}img/companies/recommendations.png">
+        </div>
+    </div>
+
+
+    {% if recommendations %}
+        <div class="mb50">
+            <!-- Recomendations -->
+            <h5>Recomendations...</h5>
+            <table class="table-bordered table-striped mb5">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Company' %}</th>
+                        <th class="text-center">{% trans 'Status' %}</th>
+                        <th class="text-center">{% trans 'Start Date' %}</th>
+                        <th class="text-center">{% trans 'End Date'%}</th>
+                        <th class="text-center>">{% trans 'Recomendation Add date' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recommendation in recommendations %}
+                        <tr>
+                            <td>
+                                <a target="_blank" href="{% url 'vacancies_vacancies_by_company' recommendation.from_company.pk %}">{{ recommendation.from_company }}</a>
+                            </td>
+                            <td class="text-center">
+                                {{ recommendation.status }}
+                            </td>
+                            <td class="text-center">
+                                {% if recommendation.start_date %}
+                                    {{ recommendation.start_date|date:"D d M Y" }}
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if recommendation.end_date %}
+                                    {{ recommendation.end_date|date:"D d M Y" }}
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {{ recommendation.add_date|date:"D d M Y - h:i a" }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <i><strong>Recommendations for the moment are inactive as the vacancies you post are all free for a limited time.</strong></i>
+        </div>
+    {% else %}
+        <h5>{% trans 'No Recommendations Found' %}</h5>
+        <b>Recommend us to your colleagues and start accumulating free months!!</b>
+        <hr class="mb60">
+    {% endif %}
+
+<!-- Content ends -->
+
+{% endblock %}

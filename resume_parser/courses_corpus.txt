@@ -1,0 +1,405 @@
+XII
+X
+12th
+10th
+Bachelor of Arts
+B.A
+Bachelor of Arts Bachelor of EducationB.A. 
+B.Ed
+Bachelor of Arts Bachelor of Law   
+B.A.B.L  
+Bachelor of Arts Bachelor of Law   
+B.A.LLB  
+Bachelor of Ayurvedic Medicine and Surgery  
+B.A.M.S  
+Bachelor of Applied Sciences  
+B.A.S  
+Bachelor of Arts   
+B.A.S.L.P  
+Bachelor of Audiology and Speech Language Pathology   
+B.A.S.L.P  
+Bachelor of Architecture   
+B.Arch  
+Bachelor of Business Administration   
+B.B.A  
+Bachelor of Business Administration Bachelor of Law   
+B.B.A 
+LL.B  
+Bachelor of Business Management   
+B.B.M  
+Bachelor of Business Studies   
+B.B.S  
+Bachelor of Computer Applications   
+B.C.A  
+Bachelor of Communication Journalism   
+B.C.J  
+Bachelor of Computer Science   
+B.C.S  
+Bachelor of Commerce   
+B.Com  
+Bachelor of Divinity   
+B.D  
+Bachelor of Dental Surgery   
+B.D.S  
+Basic Development Therapy   
+B.D.T  
+Bachelor of Design   
+B.Des  
+Bachelor of Engineering  
+B.E  
+Bachelor of Electronic Science   
+B.E.S  
+Bachelor of Education   
+B.Ed  
+Bachelor of education in Artificial Intelligence   
+B.Ed AI  
+Bachelor of Education  
+B.EdQ  
+Bachelor of Elementary Education  
+B.EI.ED  
+Bachelor of Elementary Education  
+B.EL.Ed  
+Bachelor of Fine Arts  
+B.F.A  
+Bachelor of Financial Investment and Analysis  
+B.F.I.A  
+Bachelor of Fishery Sciences   
+B.F.S  
+Bachelor of Fashion Technology  
+B.F.Tech  
+Bachelor of General Law  
+B.G.L  
+Behavioral Healthcare Education 
+B.H.Ed  
+Bachelor of Hotel Management 
+B.H.M  
+Bachelor Hotel Management and Catering Technology 
+B.H.M.C.T  
+Bachelor of Homeopathic Medicine & Surgery
+B.H.M.S  
+Bachelor of Hospitality and Tourism Management  
+B.H.T.M  
+Bachelor of Information Systems Management 
+B.I.S.M  
+Bachelor of Laws  
+B.L  
+Bachelor of Library and Information Science  
+B.L.I.S  
+Bachelor of Labour Management  
+B.L.M  
+Bachelor Library Science  
+B.L.Sc  
+Bachelor of Literature  
+B.Lit  
+Bachelor of Medical Laboratory Technology  
+B.M.L.T  
+Bachelor of Mental Retardation   
+B.M.R  
+Bachelor of Medical Record Science  
+B.M.R.Sc  
+Bachelor in Mobility Science  
+B.M.Sc  
+Bachelor of Mobility Science   
+B.M.Sc  
+Bachelor of Medical Technology  
+B.M.T  
+Bachelor of Naturopathy and Yogic Sciences  
+B.N.Y.Sc  
+Bachelor of Occupational Therapy  
+B.O.T  
+Bachelor of Occupational Therapy  
+B.O.Th  
+Bachelor of Optometry and Vision Science  
+B.Optom  
+Bachelor of Physical Education  
+B.P.E  
+Bachelor Of Physical Education  
+B.P.Ed  
+Bachelor in Prosthetics and Orthotics  
+B.P.O  
+Bachelor of Public Relations  
+B.P.R  
+Bachelor of Physiotherapy  
+B.P.T  
+Bachelor of Pharmacy   
+B.Pharma  
+Bachelor of Rehabilitation Therapy  
+B.R.T  
+Bachelor of Science  
+B.S  
+Bachelor in Science Education 
+B.S.E  
+Bachelor of Speech Language & Audiology  
+B.S.L.A  
+Bachelor of Socio Legal Sciences Bachelor of Laws 
+B.S.L.LL.B  
+Bachelor of Siddha Medical Sciences 
+B.S.M.S  
+Bachelor Of Social Work  
+B.S.W  
+Bachelor of Science   B.Sc  
+Bachelor of Science Bachelor of Education   
+B.Sc.B.Ed  
+Bachelor of Science in Education  
+B.Sc.Ed  
+Bachelor of Tourism Administration   
+B.T.A  
+Basic Training Certificate  
+B.T.C  
+Bachelor of Technology  
+B.Tech  
+Bachelors of Technology  
+B.Tech  
+Bachelor of Unani Medicine & Surgery  
+B.U.M.S  
+Bachelor of Veterinary Science  
+B.V.Sc  
+Bachelor of Medicine 
+Bachelor of Medicine  
+Bachelor of Journalism and Mass Communication  
+BJMC  
+Diploma in Special Education  
+D.S.E  
+CP    
+Bachelor of Unani Medicine & Surgery   
+Bachelor of Law  
+LL.B  
+Bachelor of Medicine Bachelor of Surgery 
+M.B.B.S  
+Master of Journalism and Mass Communication 
+MJMC  
+Doctor of Philosophy  
+Ph. D  
+Clinical Psychology 
+Psy.D 
+Cl.Psy    
+Under Graduate Basic Training  
+U.G.B.T  
+Under Graduate Training  
+U.G.T  
+Under Graduate Teacher Training  
+U.G.T.T  
+Under Graduate   
+UG  
+B.R.S  
+Master of Science  
+BOTANY  
+Diploma in Medical 
+D.M  
+Executive Fellow Program In Management  
+E.F.P.M  
+Executive Management Programme 
+E.M.P  
+EPGP  
+Fellow Programme in Management  
+F.P.M  
+FACULTY DEVELOPMENT PROGRAMME 
+FDP  
+Executive Fellow Programme in Management  
+FELLOWSHIP  
+FELLOW PROGRAMME IN MANAGEMENT   
+FELLOWSHIP  
+FELLOW PROGRAMME IN MANAGEMENT   
+FPM  
+Master of Law  
+LL.M  
+Master of Arts  
+M.A  
+Master of Arts  
+M.A. 
+SWDS    
+Master of Arts in Management   
+M.A.M  
+Master of Arts in Personal Management    
+M.A.P.M  
+Master of Arts  
+M.A.S.L.P  
+Master of Audiology & Speech Language Pathology   
+M.A.S.L.P  
+Master of Arts in Theatre & Television   
+M.A.T.T  
+Master of Architecture  
+M.Arch  
+Master of Business Administration  
+M.B.A  
+Master of Business Economics   
+M.B.E  
+Master of Business Laws   
+M.B.L  
+Master of Business Management  
+M.B.M  
+Master of Business Studies   
+M.B.S  
+Master of Computer Applications  
+M.C.A  
+Master of Communication & Journalism  
+M.C.J  
+Master of Comparative Laws   
+M.C.L  
+Master of Computer Management   
+M.C.M  
+Master of Corporate Secretaryship  
+M.C.S  
+Master of Chirurgical  
+M.Ch  
+Master of Commerce   
+M.Com  
+Doctor of Medicine  
+M.D  
+Sports Medicine  
+M.D  
+Management Development Programme    
+M.D.P  
+Master of Dental Surgery   
+M.D.S  
+Master of Design   
+M.Des  
+Master of Engineering 
+M.E  
+Master of Education  
+M.Ed  
+Master of education in Artificial Intelligence 
+M.Ed AI  
+Master of Fine Arts   
+M.F.A  
+Master of Finance & Control  
+M.F.C  
+Master of Film Management  
+M.F.M  
+Master of Financial Services  
+M.F.S  
+Master of Fishery Science  
+M.F.Sc  
+Master of Fishery Sciences 
+M.F.Sc  
+Master of Foreign Trade  
+M.F.T  
+Master of Hospital Administration   
+M.H.A  
+Master of Hospitality & Hotel Management  
+M.H.H.M  
+Master of Hospitality Management  
+M.H.M  
+Master of Human Resource Management   
+M.H.R.M  
+Master Of Health Science   
+M.H.Sc  
+Masters of Hospitality and Tourism Management 
+M.H.T.M  
+Master of International Business   
+M.I.B  
+Master of Information Management  
+M.I.M  
+Master of Journalism   
+M.J  
+Master of Laws  
+M.L  
+Master of Library and Information Science  
+M.L.I.Sc  
+Master of Labour Management  
+M.L.M  
+Master of Library Science  
+M.L.Sc  
+Master of Marketing Management  
+M.M.M  
+Master of Management Program 
+M.M.P  
+Master of Management Studies  
+M.M.S  
+Master of Occupational Theraphy  
+M.O.T  
+Master of Performing Arts 
+M.P.A  
+Master of Psychiatric Epidemiology  
+M.P.E  
+Master Of Physical Education   
+M.P.Ed  
+Master of Public Health   
+M.P.H  
+Masters Programme in International Business  
+M.P.I.B  
+Master of Performance Management   
+M.P.M  
+Diploma in Prosthetics & Orthotics  
+M.P.O  
+Masters in Public Systems Management  
+M.P.S.M  
+Master of Physiotheraphy  
+M.P.T  
+Master of Pharmacy   
+M.Pharma  
+Master of Philosophy  
+M.Phil  
+Master of Rehabilitation Science 
+M.R.Sc  
+M.S. in Library and Information Science  
+M.S  
+Master of Science   
+M.S  
+Master of Social Dynamics 
+M.S.D  
+Masters Programme In Sports Physiotheraphy  
+M.S.P.T  
+Master of Social Work  
+M.S.W  
+Master of Science   
+M.Sc  
+Master of Tourism Administrations 
+M.T.A  
+Master of Tourism Management   
+M.T.M  
+Master of Technology  
+M.Tech  
+Master of Veterinary Science  
+M.V.Sc  
+Doctor of Medicine Unani  
+Mahir e Tibb  
+Master of Business Administration 
+MBA  
+MANAGEMENT DEVELOPMENT PROGRAMEE  
+MDP  
+Master of Industrial Relation and Personal Management 
+MIR and PM  
+Master of Personnel Management  
+MPM  
+Master of Personal Management and Industrial Relation  
+MPM and IR  
+Post Graduate Diploma   
+P Diplomo  
+Post Graduate Diploma  
+P.G.D.D.R.M  
+Post Graduate Diploma   
+P.G.D.D.T.  MD:P&N    
+Post Graduate Diploma  
+P.G.D.E.I  
+Post Graduate Diploma  
+P.G.D.R.P  
+Post Graduate Diploma  
+P.G.D.S.E.  MR    
+Post Graduate Programme 
+P.G.P  
+Post Graduate  
+PG  
+Post Graduate Diploma  
+PG Diploma  
+Post Graduate Programme  
+PG Programme  
+Post Graduate Diploma  
+PGD  
+Post Graduate Programme for Executives  
+PGEXP  
+Post Graduate Programme in Management  
+PGP  
+Post Graduate Programme In Agribusiness Management  
+PGP-ABM  
+Public management and Policy   
+PGP-PMP  
+PGPX In Visionary Leadership in Manufacturing   
+PGPEX-VLM  
+Post Graduate Programme in  Management  
+PGPM  
+Management for Executives  
+PGPX  
+Doctor of Philosophy   
+Ph. D 
+Visual Information Processing  

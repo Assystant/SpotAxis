@@ -1,0 +1,53 @@
+        <div class="modal fade" tabindex="-1" role="dialog" id="timeline_management">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center">Hiring Process</h4>
+                        <h5></h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <select id="list" placeholder="Select or Create a Hiring Round" class="fixed-dropdown" max="50">
+                                    {%for stage in allstages %}
+                                        <option value="{{stage.id}}">{{stage.name}}</option>
+                                    {%endfor%}
+                                </select>
+                            </div>
+                            <div class="col-xs-6" id="bucket-list">
+                                <h5 class="modal-title text-center pt5 pb5 text-light">Current Hiring Rounds</h5>
+                                <div>
+                                    <div class="pl20 pr20 pt10">
+                                        <div class="row bucket-item-static" data-id='0'>New Candidates</div>
+                                        {% for stage in vacancy.vacancystage_set.all %}
+                                            {% if not forloop.first and not forloop.last and stage.isLocked %}
+                                                <div class="row bucket-item-static" data-id="{{stage.stage.id}}" rel="tooltip" title="has Active Candidates">{{stage.stage}}</div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="pl20 pr20" id="bucket" data-list="{% for stage in vacancy.vacancystage_set.all %}{% if not forloop.first and not forloop.last%}{% if forloop.counter > 2 %},{% endif %}{{stage.stage.id}}{% endif %}{% endfor %}">
+                                        {%for stage in vacancy.vacancystage_set.all%}
+                                            {% if not forloop.first and not forloop.last and not stage.isLocked %}
+                                                <div class="row bucket-item{% if stage.locked %}-static{% endif %}" data-id="{{stage.stage.id}}">{{stage.stage}}</div>
+                                                
+                                            {% endif %}
+                                        {%endfor%}
+                                    </div>
+                                    <div class="pl20 pr20 pb10">
+                                        <div class="row bucket-item-static" data-id='100'>Onboarding</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 col-md-push-1 mt20">
+                                <button class="btn btn-sm btn-block btn-info" id="app_procees_update"><i class="fa fa-check-circle"></i> Save and Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->

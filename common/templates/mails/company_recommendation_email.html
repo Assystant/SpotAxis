@@ -1,0 +1,13 @@
+{% extends 'mails/base_email.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Thanks for recommendation' %}{% endblock %}
+
+{% block content %}
+    {{ user.first_name|capfirst }} {{ user.last_name|capfirst }} of the company {{ company }} have registered on our site and indicated that you recommended us, so e are gicing you one month of free vacancies which begin to run once {{ user.first_name|capfirst }} {{ user.last_name|capfirst }} Makes their first purchase with us.
+    <br/>
+    <br/>
+    For more information please contact us at <a href="mailto:email@spotaxis.com">email@spotaxis.com</a>
+{% endblock %}
+
+{% block button-text %}{% trans 'Go to my recommendations' %}{% endblock %}

@@ -1,0 +1,50 @@
+[
+  {
+    "model": "candidates.academic_status",
+    "pk": 1,
+    "fields": {
+      "name": "Degree",
+      "codename": "degree"
+    }
+  },
+  {
+    "model": "candidates.academic_status",
+    "pk": 2,
+    "fields": {
+      "name": "Graduate",
+      "codename": "graduate"
+    }
+  },
+  {
+    "model": "candidates.academic_status",
+    "pk": 3,
+    "fields": {
+      "name": "Intern",
+      "codename": "intern"
+    }
+  },
+  {
+    "model": "candidates.academic_status",
+    "pk": 4,
+    "fields": {
+      "name": "Practices/Services",
+      "codename": "practices"
+    }
+  },
+  {
+    "model": "candidates.academic_status",
+    "pk": 5,
+    "fields": {
+      "name": "In Progress",
+      "codename": "progress"
+    }
+  },
+  {
+    "model": "candidates.academic_status",
+    "pk": 6,
+    "fields": {
+      "name": "Truncated",
+      "codename": "truncated"
+    }
+  }
+]
