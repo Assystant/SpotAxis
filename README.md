@@ -15,7 +15,7 @@ Review and collaborate on source code changes
 
 Write and improve SpotAxis documentation
 
-Versión: 1.0 
+Version: 1.0 
 
 ## Requirements ##
 
