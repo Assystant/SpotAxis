@@ -17,19 +17,19 @@ The key features for end users include the following
 3. Parse resumes of each applicant
 4. Provide custom application form to candidates
 5. Collaborative hiring
-6. Custom hiring rounds
+6. Custom hiring pipeline for each job
 7. Custom rating for candidates in each hiring round
 8. Compare ratings of each candidate
 
 ### 2. Developers/Entrepreneurs: ###
-Can customize Spotaxis, add additional features, and host it for other companies to use as a subscription service.
+Can customize Spotaxis, add features, and host it for other companies to use as a subscription service(SaaS).
 
 The key features for this user type include the following
-1. Everything of End users.
-2. Manage multiple organisations
-3. Job Board
-4. Manage jobs and applicants
-5. Subscription Management for ATS.
+1. Everything of End users
+2. Manage multiple organizations as a super admin
+3. Use the default Job Board that is pulled from all the organizations.
+4. Manage jobs and applicants as a super admin
+5. Subscription/Pricing Management for ATS
 
 ## Contributors required ##
 
