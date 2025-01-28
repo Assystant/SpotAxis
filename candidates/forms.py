@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django import forms
@@ -15,8 +16,8 @@ from ckeditor.widgets import CKEditorWidget
 
 
 
-select_text = _(u'Select')
-select_option = _(u"Select an option")
+select_text = _('Select')
+select_option = _("Select an option")
 initial_country = get_initial_country()  # Automatic Country Selection
 
 def get_initial_date():
@@ -35,47 +36,47 @@ class CandidateForm(forms.ModelForm):
     initial_year = (date.today() - relativedelta(years=74)).year
     end_year = (date.today() - relativedelta(years=18)).year
     first_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name(s)'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name(s)'),
                                       'class': "form-control"}),
         max_length=30,
         min_length=2,
         required=True,
-        label=_(u'Name'),
-        error_messages={'required': _(u"Enter your Name")},
+        label=_('Name'),
+        error_messages={'required': _("Enter your Name")},
     )
     public_email = forms.CharField(
         widget = forms.TextInput(attrs={'placeholder': 'Email', 'class': 'form-control'}),
         required = False,
-        label=_(u'Email'),
-        error_messages={'required': _(u"Enter your Email")},
+        label=_('Email'),
+        error_messages={'required': _("Enter your Email")},
     )
     last_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Surname'),
+        widget=forms.TextInput(attrs={'placeholder': _('Surname'),
                                       'class': "form-control"}),
         max_length=30,
         min_length=2,
         required=True,
-        label=_(u'Surname'),
-        error_messages={'required': _(u"Enter your Surname")},
+        label=_('Surname'),
+        error_messages={'required': _("Enter your Surname")},
     )
     birthday = forms.DateField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Birthdate'), 'class': "form-control"}),
+        widget=forms.TextInput(attrs={'placeholder': _('Birthdate'), 'class': "form-control"}),
         required=True,
-        label=_(u'Birthdate'),
-        error_messages={'required': _(u"Enter your Birthdate")},
+        label=_('Birthdate'),
+        error_messages={'required': _("Enter your Birthdate")},
     )
     gender = forms.ModelChoiceField(
         queryset=Gender.objects.filter(~Q(codename='indistinct')),
         widget=forms.Select(attrs={'class': "form-control"}),
         empty_label=select_text,
         required=True,
-        label=_(u'Gender'))
+        label=_('Gender'))
     maritalStatus = forms.ModelChoiceField(
         queryset=Marital_Status.objects.all(),
         widget=forms.Select(attrs={'class': "form-control"}),
         empty_label=select_text,
         required=True,
-        label=_(u'Marital Status'))
+        label=_('Marital Status'))
     
     # min_salary = forms.IntegerField(
      #     required=False,
@@ -139,11 +140,11 @@ class CandidateForm(forms.ModelForm):
             # print img.format
             # print img.format.lower()
             if img.format.lower() not in ['jpeg', 'pjpeg', 'png', 'jpg', 'mpo']:
-                raise forms.ValidationError(_(u'You can only use images withextensions JPG, JPEG or PNG'))
+                raise forms.ValidationError(_('You can only use images withextensions JPG, JPEG or PNG'))
 
             #validate file size
             if len(image) > (1 * 1024 * 1024):
-                raise forms.ValidationError(_(u'The image selected is too large (Max 1MB)'))
+                raise forms.ValidationError(_('The image selected is too large (Max 1MB)'))
         else:
             return default_photo
         return image
@@ -194,7 +195,7 @@ class CandidateContactForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': "form-control"}),
         empty_label=select_text,
         required=True,
-        label=_(u'Country'),
+        label=_('Country'),
         initial=initial_country)
     state = forms.CharField(
         # queryset=states,
@@ -203,73 +204,73 @@ class CandidateContactForm(forms.ModelForm):
         max_length=30,
         min_length=2,
         required=True,
-        label=_(u'State'),
+        label=_('State'),
         error_messages={
-            'required': _(u"State is required")},
+            'required': _("State is required")},
     )
     city = forms.CharField(
         # choices=get_municipals(None),
         widget=forms.TextInput(attrs={'class': "form-control",'placeholder': "Enter your City"}),
         max_length=30,
         min_length=2,
-        label=_(u'City'),
+        label=_('City'),
         required=True,
         error_messages={
-            'required': _(u"City is required")},
+            'required': _("City is required")},
     )
     phone = USPhoneNumberField(
         min_length=10,
         max_length=12,
         error_messages={
-            'invalid': _(u"Enter a valid 10 digit phone"),
-            'min_length': _(u"Enter a valid 10 digit phone"),
-            'max_length': _(u"Enter a valid 10 digit phone"),
+            'invalid': _("Enter a valid 10 digit phone"),
+            'min_length': _("Enter a valid 10 digit phone"),
+            'max_length': _("Enter a valid 10 digit phone"),
         },
         required=False,
-        widget=forms.TextInput(attrs={'placeholder': _(u'Local telephone number to 10 digits'), 'class': "form-control"}),
+        widget=forms.TextInput(attrs={'placeholder': _('Local telephone number to 10 digits'), 'class': "form-control"}),
     )
     cellphone = USPhoneNumberField(
         min_length=10,
         max_length=12,
         error_messages={
-            'invalid': _(u"Enter a valid 10 digit mobile phone"),
-            'min_length': _(u"Enter a valid 10 digit mobile phone"),
-            'max_length': _(u"Enter a valid 10 digit mobile phone"),
+            'invalid': _("Enter a valid 10 digit mobile phone"),
+            'min_length': _("Enter a valid 10 digit mobile phone"),
+            'max_length': _("Enter a valid 10 digit mobile phone"),
         },
         required=False,
-        widget=forms.TextInput(attrs={'placeholder': _(u'Cell number to 10 digits'), 'class': "form-control"}),
+        widget=forms.TextInput(attrs={'placeholder': _('Cell number to 10 digits'), 'class': "form-control"}),
     )
     linkedin = forms.URLField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'http://linkedin.com/YourAccount'),
+        widget=forms.TextInput(attrs={'placeholder': _('http://linkedin.com/YourAccount'),
                                       'class': "form-control"}),
         max_length=150,
         required=False
     )
     facebook = forms.URLField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'www.facebook.com/YourAccount'),
+        widget=forms.TextInput(attrs={'placeholder': _('www.facebook.com/YourAccount'),
                                       'class': "form-control"}),
         max_length=150,
         required=False
     )
     twitter = forms.RegexField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'@username'),
+        widget=forms.TextInput(attrs={'placeholder': _('@username'),
                                       'class': "form-control"}),
         regex=r'^[\w@]+$',
         max_length=16,
         min_length=3,
         error_messages={
-            'invalid': _(u"Enter a valid Twitter user"),
+            'invalid': _("Enter a valid Twitter user"),
         },
         required=False
     )
     google = forms.URLField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'https://plus.google.com/YourAccount'),
+        widget=forms.TextInput(attrs={'placeholder': _('https://plus.google.com/YourAccount'),
                                       'class': "form-control"}),
         max_length=150,
         required=False
     )
     def clean_linkedin(self):
-        linkedin_error = _(u'Enter a valid Linkedin page.')
+        linkedin_error = _('Enter a valid Linkedin page.')
         if not self.cleaned_data.get('linkedin'):
             return None
         linkedin = self.cleaned_data.get('linkedin')
@@ -280,7 +281,7 @@ class CandidateContactForm(forms.ModelForm):
         return linkedin
 
     def clean_facebook(self):
-        facebook_error = _(u'Enter a valid Facebook page.')
+        facebook_error = _('Enter a valid Facebook page.')
         if not self.cleaned_data.get('facebook'):
             return None
         facebook = self.cleaned_data.get('facebook')
@@ -291,7 +292,7 @@ class CandidateContactForm(forms.ModelForm):
         return facebook
 
     def clean_twitter(self):
-        twitter_error = _(u'Enter a valid Twitter user')
+        twitter_error = _('Enter a valid Twitter user')
         if not self.cleaned_data.get('twitter'):
             return None
         twitter = self.cleaned_data.get('twitter')
@@ -305,7 +306,7 @@ class CandidateContactForm(forms.ModelForm):
         return twitter
 
     def clean_google(self):
-        google_error = _(u'Enter a vlaid Google+ page')
+        google_error = _('Enter a vlaid Google+ page')
         if not self.cleaned_data.get('google'):
             return None
         google = self.cleaned_data.get('google')
@@ -321,18 +322,18 @@ class CandidateContactForm(forms.ModelForm):
 
 class ObjectiveForm(forms.ModelForm):
     objective = forms.CharField(
-        widget=forms.Textarea(attrs={'placeholder': _(u'Enter your professional objectives'),
+        widget=forms.Textarea(attrs={'placeholder': _('Enter your professional objectives'),
                                       'class': "form-control"}),
         max_length=300,
         min_length=30,
         required=True,
-        label=_(u'Professional Objectives'),
-        error_messages={'required': _(u"Enter your professional objectives")},
+        label=_('Professional Objectives'),
+        error_messages={'required': _("Enter your professional objectives")},
     )
     skills = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder':_(u'Skills'),
+        widget=forms.TextInput(attrs={'placeholder':_('Skills'),
                                         'class': 'form-control no-dropdown text-left'}),
-        label=_(u'Skills'),
+        label=_('Skills'),
     )
     class Meta:
         model = Candidate
@@ -341,9 +342,9 @@ class ObjectiveForm(forms.ModelForm):
 
 class InterestsForm(forms.ModelForm):
     interests = forms.CharField(
-        widget=CKEditorWidget(attrs={'placeholder':_(u'Interests'),
+        widget=CKEditorWidget(attrs={'placeholder':_('Interests'),
                                         'class': 'form-control'}),
-        label=_(u'Interests'),
+        label=_('Interests'),
         required=False
     )
     class Meta:
@@ -353,9 +354,9 @@ class InterestsForm(forms.ModelForm):
 
 class HobbiesForm(forms.ModelForm):
     hobbies = forms.CharField(
-        widget = CKEditorWidget(attrs={'placeholder':_(u'Hobbies'),
+        widget = CKEditorWidget(attrs={'placeholder':_('Hobbies'),
                                         'class': 'form-control'}),
-        label=_(u'Hobbies'),
+        label=_('Hobbies'),
         required=False
     )
     class Meta:
@@ -365,11 +366,11 @@ class HobbiesForm(forms.ModelForm):
 
 class ExtraCurricularsForm(forms.ModelForm):
     extra_curriculars = forms.CharField(
-        widget = CKEditorWidget(attrs={'placeholder':_(u'Extra Curriculars'),
+        widget = CKEditorWidget(attrs={'placeholder':_('Extra Curriculars'),
                                         'class': 'form-control'}),
         # widget=forms.TextInput(attrs={'placeholder':_(u'Extra Curriculars'),
                                         # 'class': 'form-control no-dropdown text-left'}),
-        label=_(u'Extra Curriculars'),
+        label=_('Extra Curriculars'),
         required=False
     )
     class Meta:
@@ -379,9 +380,9 @@ class ExtraCurricularsForm(forms.ModelForm):
 
 class OthersForm(forms.ModelForm):
     others = forms.CharField(
-        widget=CKEditorWidget(attrs={'placeholder':_(u'Others'),
+        widget=CKEditorWidget(attrs={'placeholder':_('Others'),
                                         'class': 'form-control'}),
-        label=_(u'Others'),
+        label=_('Others'),
         required=False
     )
     class Meta:
@@ -405,18 +406,18 @@ class OthersForm(forms.ModelForm):
 class ExpertiseForm(forms.ModelForm):
     """ Work experience of a candidate """
     company = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the organisation'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the organisation'),
                                       'class': "form-control"}),
         max_length=30,
         min_length=3,
         required=True,
-        label=_(u'Empresa'),
-        error_messages={'required': _(u"Enter name of the company")},
+        label=_('Empresa'),
+        error_messages={'required': _("Enter name of the company")},
     )
     industry = forms.ChoiceField(
         choices=get_company_industries(),
         widget=forms.Select(attrs={'class': "form-control"}),
-        label=_(u'Industry'),
+        label=_('Industry'),
     )
     # area = forms.ChoiceField(
     #     choices=get_company_areas(None),
@@ -429,59 +430,59 @@ class ExpertiseForm(forms.ModelForm):
         empty_label=select_text,
         required=True,
         initial=initial_country,
-        label=_(u'Country'),
+        label=_('Country'),
         widget=forms.Select(attrs={'class': "form-control"}),
     )
     employment = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Position held'),
+        widget=forms.TextInput(attrs={'placeholder': _('Position held'),
                                       'class': "form-control"}),
         max_length=50,
         min_length=2,
         required=True,
-        label=_(u'Post'),
-        error_messages={'required': _(u"Enter the name of your position")},
+        label=_('Post'),
+        error_messages={'required': _("Enter the name of your position")},
     )
     state = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'State'),
+        widget=forms.TextInput(attrs={'placeholder': _('State'),
                                       'class': "form-control"}),
         max_length=50,
         min_length=2,
         required=False,
-        label=_(u'Post'),
+        label=_('Post'),
     )
     city = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'City'),
+        widget=forms.TextInput(attrs={'placeholder': _('City'),
                                       'class': "form-control"}),
         max_length=50,
         min_length=2,
         required=False,
-        label=_(u'Post'),
+        label=_('Post'),
     )
     present = forms.BooleanField(
-        label=_(u'Current job?'),
+        label=_('Current job?'),
         required=False,
     )
 
     start_date = forms.DateField(
         widget = forms.TextInput(attrs={'class':"form-control"}),
-        label=_(u'Start date'),
+        label=_('Start date'),
         required=True,
-        error_messages={'required': _(u"Enter your start date")},
+        error_messages={'required': _("Enter your start date")},
     )
     end_date = forms.DateField(
         widget = forms.TextInput(attrs={'class':"form-control"}),
-        label=_(u'End date'),
+        label=_('End date'),
         required=False,
-        error_messages={'required': _(u"Enter your end date")},
+        error_messages={'required': _("Enter your end date")},
     )
     tasks = forms.CharField(
-        widget=forms.Textarea(attrs={'placeholder': _(u'Describe the tasks performed.'),
+        widget=forms.Textarea(attrs={'placeholder': _('Describe the tasks performed.'),
                                       'class': "form-control input-sm",'rows':'5','columns':'40'}),
         max_length=1000,
         min_length=20,
         required=True,
-        label=_(u'Tasks/Functions Performed'),
-        error_messages={'required': _(u"Enter a description")},
+        label=_('Tasks/Functions Performed'),
+        error_messages={'required': _("Enter a description")},
     )
 
     def __init__(self, *args, **kwargs):
@@ -508,13 +509,13 @@ class ExpertiseForm(forms.ModelForm):
                 self.fields['end_date'].required = False
 
     def clean_industry(self):
-        invalid_industry = _(u'The industry you selected is invalid')
+        invalid_industry = _('The industry you selected is invalid')
         try:
             industry_id = int(self.cleaned_data.get('industry'))
         except:
             raise forms.ValidationError(invalid_industry)
         if industry_id <= 0:
-            raise forms.ValidationError(_(u'Slect an industry'))
+            raise forms.ValidationError(_('Slect an industry'))
         try:
             industry = Company_Industry.objects.get(pk = industry_id)
         except Company_Industry.DoesNotExist:
@@ -560,9 +561,9 @@ class ExpertiseForm(forms.ModelForm):
             if end_date:
                 end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d").date()
                 if start_date > end_date:
-                    raise forms.ValidationError(_(u'The date of start can not be greater than the date of leaving'))
+                    raise forms.ValidationError(_('The date of start can not be greater than the date of leaving'))
                 if start_date == end_date:
-                    raise forms.ValidationError(_(u'The date of start cannot be the same as date of leaving'))
+                    raise forms.ValidationError(_('The date of start cannot be the same as date of leaving'))
         return start_date
 
     class Meta:
@@ -575,13 +576,13 @@ class AcademicForm(forms.ModelForm):
         choices=get_degrees(),
         required=True,
         widget=forms.Select(attrs={'class': "form-control"}),
-        label=_(u'Level of Study'),
+        label=_('Level of Study'),
     )
     area = forms.CharField(
         # queryset=Academic_Area.objects.all(),
         # empty_label=select_text,
         required=True,
-        label=_(u'Specialisation of Study'),
+        label=_('Specialisation of Study'),
         widget=forms.TextInput(attrs={'class': "form-control"}),
         max_length = 100,
         min_length = 4,
@@ -595,65 +596,65 @@ class AcademicForm(forms.ModelForm):
     #     label=_(u'Career'),
     # )
     course_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the Course'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the Course'),
                                       'class': "form-control"}),
         max_length=100,
         min_length=1,
         required=True,
-        label=_(u'Course Name'),
+        label=_('Course Name'),
         error_messages={'required': 'Enter your Course Name'},
     )
     status = forms.ModelChoiceField(
         queryset=Academic_Status.objects.all(),
         empty_label=select_text,
         required=True,
-        label=_(u'Status'),
+        label=_('Status'),
         widget=forms.Select(attrs={'class': "form-control"}),
         error_messages={'required': select_option},
     )
     school = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the Institution'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the Institution'),
                                       'class': "form-control"}),
         max_length=100,
         min_length=3,
         required=True,
-        label=_(u'Institution'),
-        error_messages={'required': _(u"Enter the name of the Institution")},
+        label=_('Institution'),
+        error_messages={'required': _("Enter the name of the Institution")},
     )
     country = forms.ModelChoiceField(
         queryset=Country.objects.all(),
         empty_label=select_text,
         required=True,
         initial=initial_country,
-        label=_(u'Country'),
+        label=_('Country'),
         widget=forms.Select(attrs={'class': "form-control"}),
     )
     state = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the State'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the State'),
                                       'class': "form-control"}),
         max_length=100,
         min_length=2,
         required=False,
-        label=_(u'State'),
+        label=_('State'),
     )
     city = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the City'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the City'),
                                       'class': "form-control"}),
         max_length=100,
         min_length=2,
         required=False,
-        label=_(u'City'),
-        error_messages={'required': _(u"Enter the name of the City")},
+        label=_('City'),
+        error_messages={'required': _("Enter the name of the City")},
     )
     start_date = forms.DateField(
         widget=forms.TextInput(attrs={'class':"form-control"}),
-        label=_(u'Admission Date'),
+        label=_('Admission Date'),
         required=True,
-        error_messages={'required': _(u"Enter you admission date")},
+        error_messages={'required': _("Enter you admission date")},
     )
     end_date = forms.DateField(
         widget=forms.TextInput(attrs={'class':"form-control"}),
-        label=_(u'End Date'),
+        label=_('End Date'),
         required=False,
     )
 
@@ -706,13 +707,13 @@ class AcademicForm(forms.ModelForm):
             # self.fields['career'].choices = get_academic_careers(area_selected)
 
     def clean_degree(self):
-        invalid_degree = _(u'Level of Study is Invalid')
+        invalid_degree = _('Level of Study is Invalid')
         try:
             degree_id = int(self.cleaned_data.get('degree'))
         except:
             raise forms.ValidationError(invalid_degree)
         if degree_id <= 0:
-            raise forms.ValidationError(_(u'Select a Level of Study'))
+            raise forms.ValidationError(_('Select a Level of Study'))
         try:
             # degree = self.cleaned_data.get('degree')
             degree = Degree.objects.get(pk = degree_id)
@@ -785,9 +786,9 @@ class AcademicForm(forms.ModelForm):
                 end_date = None
             if end_date:
                 if start_date > end_date:
-                    raise forms.ValidationError(_(u'The start date can not be greater than the end date'))
+                    raise forms.ValidationError(_('The start date can not be greater than the end date'))
                 if start_date == end_date:
-                    raise forms.ValidationError(_(u'The start date can not be the same as end date'))
+                    raise forms.ValidationError(_('The start date can not be the same as end date'))
         return start_date
 
     def clean_end_date(self):
@@ -805,22 +806,22 @@ class AcademicForm(forms.ModelForm):
 class CvLanguageForm(forms.ModelForm):
     language = forms.ModelChoiceField(
         queryset=Language.objects.all(),
-        empty_label=_(u'Select')+'...',
+        empty_label=_('Select')+'...',
         required=True,
-        label=_(u'Language'),
+        label=_('Language'),
         widget=forms.Select(attrs={'class': "form-control"}),
-        error_messages={'required': _(u"Select a Language")},
+        error_messages={'required': _("Select a Language")},
     )
     read = forms.BooleanField(
-        label=_(u'Availability to Read'),
+        label=_('Availability to Read'),
         required=False,
     )
     write = forms.BooleanField(
-        label=_(u'Availability to Write'),
+        label=_('Availability to Write'),
         required=False,
     )
     speak = forms.BooleanField(
-        label=_(u'Availability to Speak'),
+        label=_('Availability to Speak'),
         required=False,
     )
     # level = forms.ModelChoiceField(
@@ -841,17 +842,17 @@ class TrainingForm(forms.ModelForm):
         required=True,
         min_length=2,
         max_length=50,
-        label= _(u'Name'),
+        label= _('Name'),
         widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Name'}),
-        error_messages={'required':_(u'Enter the name of Training taken')}
+        error_messages={'required':_('Enter the name of Training taken')}
     )
     description = forms.CharField(
         required=True,
         min_length=50,
         max_length=300,
-        label= _(u'Name'),
+        label= _('Name'),
         widget=forms.Textarea(attrs={'class':'form-control input-sm','placeholder':'Description of the Training'}),
-        error_messages={'required':_(u'Enter the description of the training taken')}
+        error_messages={'required':_('Enter the description of the training taken')}
     )
 
     class Meta:
@@ -863,17 +864,17 @@ class CertificateForm(forms.ModelForm):
         required=True,
         min_length=4,
         max_length=50,
-        label= _(u'Name'),
+        label= _('Name'),
         widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Name'}),
-        error_messages={'required':_(u'Enter the name of Certification taken')}
+        error_messages={'required':_('Enter the name of Certification taken')}
     )
     description = forms.CharField(
         required=True,
         min_length=50,
         max_length=300,
-        label= _(u'Description'),
+        label= _('Description'),
         widget=forms.Textarea(attrs={'class':'form-control input-sm','placeholder':'Description of the Certification'}),
-        error_messages={'required':_(u'Enter the description of the Certification taken')}
+        error_messages={'required':_('Enter the description of the Certification taken')}
     )
 
     class Meta:
@@ -885,17 +886,17 @@ class ProjectForm(forms.ModelForm):
         required=True,
         min_length=4,
         max_length=50,
-        label= _(u'Name'),
+        label= _('Name'),
         widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Name'}),
-        error_messages={'required':_(u'Enter the name of Project taken')}
+        error_messages={'required':_('Enter the name of Project taken')}
     )
     description = forms.CharField(
         required=True,
         min_length=50,
         max_length=300,
-        label= _(u'Name'),
+        label= _('Name'),
         widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Description of the Project'}),
-        error_messages={'required':_(u'Enter the description f the Project taken')}
+        error_messages={'required':_('Enter the description f the Project taken')}
     )
 
     class Meta:
@@ -919,7 +920,7 @@ class cv_FileForm(forms.ModelForm):
 
     def validate_number_files(self, files):
         if files > self.max_files:
-            msg = _(u'You can only upload upto %s files') % self.max_files
+            msg = _('You can only upload upto %s files') % self.max_files
             self.add_error('file', msg)
         pass
 
@@ -928,13 +929,13 @@ class cv_FileForm(forms.ModelForm):
 
         if file:
             if file.size > self.max_megas * 1024000:
-                raise ValidationError(_(u'The filesize of %s is greater than %s MB') % (file.name, self.max_megas))
+                raise ValidationError(_('The filesize of %s is greater than %s MB') % (file.name, self.max_megas))
 
             valid_extensions = ['doc','docx','pdf']
             extension = os.path.splitext(file.name)[1]
             extension = extension[1:].lower()
             if extension not in valid_extensions:
-                raise ValidationError(u'Only Word and Pdfs are allowed.')
+                raise ValidationError('Only Word and Pdfs are allowed.')
 
             # Accents and other special charcters in the name of the file are removed
             name = ''.join((c for c in unicodedata.normalize('NFD', file.name) if unicodedata.category(c) != 'Mn'))
@@ -955,46 +956,46 @@ class CandidateMiniForm(forms.ModelForm):
     initial_year = (date.today() - relativedelta(years=74)).year
     end_year = (date.today() - relativedelta(years=18)).year
     first_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name(s)'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name(s)'),
                                       'class': "form-control"}),
         max_length=30,
         min_length=2,
         required=True,
-        label=_(u'Name'),
-        error_messages={'required': _(u"Enter your Name")},
+        label=_('Name'),
+        error_messages={'required': _("Enter your Name")},
     )
     last_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Surname'),
+        widget=forms.TextInput(attrs={'placeholder': _('Surname'),
                                       'class': "form-control"}),
         max_length=30,
         min_length=2,
         required=True,
-        label=_(u'Surname'),
-        error_messages={'required': _(u"Enter your Surname")},
+        label=_('Surname'),
+        error_messages={'required': _("Enter your Surname")},
     )
     public_email = forms.CharField(
         widget = forms.TextInput(attrs={'placeholder': 'Email', 'class': 'form-control'}),
         required = True,
-        label=_(u'Email'),
-        error_messages={'required': _(u"Enter your Email")},
+        label=_('Email'),
+        error_messages={'required': _("Enter your Email")},
     )
     phone = USPhoneNumberField(
         min_length=10,
         max_length=12,
         error_messages={
-            'invalid': _(u"Enter a valid 10 digit phone"),
-            'min_length': _(u"Enter a valid 10 digit phone"),
-            'max_length': _(u"Enter a valid 10 digit phone"),
+            'invalid': _("Enter a valid 10 digit phone"),
+            'min_length': _("Enter a valid 10 digit phone"),
+            'max_length': _("Enter a valid 10 digit phone"),
         },
         required=False,
-        widget=forms.TextInput(attrs={'placeholder': _(u'Local telephone number to 10 digits'), 'class': "form-control"}),
+        widget=forms.TextInput(attrs={'placeholder': _('Local telephone number to 10 digits'), 'class': "form-control"}),
     )
     nationality = forms.ModelChoiceField(
         queryset=countries,
         widget=forms.Select(attrs={'class': "form-control"}),
         empty_label=select_text,
         required=False,
-        label=_(u'Country'),
+        label=_('Country'),
         initial=initial_country)
     state = forms.CharField(
         # queryset=states,
@@ -1003,19 +1004,19 @@ class CandidateMiniForm(forms.ModelForm):
         max_length=30,
         min_length=2,
         required=False,
-        label=_(u'State'),
+        label=_('State'),
         error_messages={
-            'required': _(u"State is required")},
+            'required': _("State is required")},
     )
     city = forms.CharField(
         # choices=get_municipals(None),
         widget=forms.TextInput(attrs={'class': "form-control",'placeholder': "Enter your City"}),
         max_length=30,
         min_length=2,
-        label=_(u'City'),
+        label=_('City'),
         required=False,
         error_messages={
-            'required': _(u"City is required")},
+            'required': _("City is required")},
     )
     public_photo = forms.ImageField(
         widget=forms.FileInput(attrs={'class':"form-control text-center", 'accept':"image/*"}), 
@@ -1061,11 +1062,11 @@ class CandidateMiniForm(forms.ModelForm):
             # print img.format
             # print img.format.lower()
             if img.format.lower() not in ['jpeg', 'pjpeg', 'png', 'jpg', 'mpo']:
-                raise forms.ValidationError(_(u'You can only use images withextensions JPG, JPEG or PNG'))
+                raise forms.ValidationError(_('You can only use images withextensions JPG, JPEG or PNG'))
 
             #validate file size
             if len(image) > (1 * 1024 * 1024):
-                raise forms.ValidationError(_(u'The image selected is too large (Max 1MB)'))
+                raise forms.ValidationError(_('The image selected is too large (Max 1MB)'))
         else:
             return default_photo
         return image
@@ -1084,39 +1085,39 @@ class ExpertiseMiniForm(forms.ModelForm):
     
     """ Work experience of a candidate """
     company = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the organisation'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the organisation'),
                                       'class': "form-control"}),
         max_length=30,
         min_length=3,
         required=True,
-        label=_(u'Empresa'),
-        error_messages={'required': _(u"Enter name of the company")},
+        label=_('Empresa'),
+        error_messages={'required': _("Enter name of the company")},
     )
     employment = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Position held'),
+        widget=forms.TextInput(attrs={'placeholder': _('Position held'),
                                       'class': "form-control"}),
         max_length=50,
         min_length=2,
         required=True,
-        label=_(u'Post'),
-        error_messages={'required': _(u"Enter the name of your position")},
+        label=_('Post'),
+        error_messages={'required': _("Enter the name of your position")},
     )
     present = forms.BooleanField(
-        label=_(u'Current job?'),
+        label=_('Current job?'),
         required=False,
     )
 
     employment_start_date = forms.DateField(
         widget = forms.TextInput(attrs={'class':"form-control", 'placeholder':'Start Date'}),
-        label=_(u'Start date'),
+        label=_('Start date'),
         required=True,
-        error_messages={'required': _(u"Enter your start date")},
+        error_messages={'required': _("Enter your start date")},
     )
     employment_end_date = forms.DateField(
         widget = forms.TextInput(attrs={'class':"form-control", 'placeholder':'End Date'}),
-        label=_(u'End date'),
+        label=_('End date'),
         required=False,
-        error_messages={'required': _(u"Enter your end date")},
+        error_messages={'required': _("Enter your end date")},
     )
 
     def __init__(self, *args, **kwargs):
@@ -1166,9 +1167,9 @@ class ExpertiseMiniForm(forms.ModelForm):
             if end_date:
                 end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d").date()
                 if start_date > end_date:
-                    raise forms.ValidationError(_(u'The date of start can not be greater than the date of leaving'))
+                    raise forms.ValidationError(_('The date of start can not be greater than the date of leaving'))
                 if start_date == end_date:
-                    raise forms.ValidationError(_(u'The date of start cannot be the same as date of leaving'))
+                    raise forms.ValidationError(_('The date of start cannot be the same as date of leaving'))
         return start_date
 
     class Meta:
@@ -1179,65 +1180,65 @@ class ExpertiseMiniForm(forms.ModelForm):
 class AcademicMiniForm(forms.ModelForm):
 
     course_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the Course'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the Course'),
                                       'class': "form-control"}),
         max_length=100,
         min_length=1,
         required=True,
-        label=_(u'Course Name'),
+        label=_('Course Name'),
         error_messages={'required': 'Enter your Course Name'},
     )
     status = forms.ModelChoiceField(
         queryset=Academic_Status.objects.all(),
         empty_label=select_text,
         required=True,
-        label=_(u'Status'),
+        label=_('Status'),
         widget=forms.Select(attrs={'class': "form-control"}),
         error_messages={'required': select_option},
     )
     school = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the Institution'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the Institution'),
                                       'class': "form-control"}),
         max_length=100,
         min_length=3,
         required=True,
-        label=_(u'Institution'),
-        error_messages={'required': _(u"Enter the name of the Institution")},
+        label=_('Institution'),
+        error_messages={'required': _("Enter the name of the Institution")},
     )
     academic_country = forms.ModelChoiceField(
         queryset=Country.objects.all(),
         empty_label=select_text,
         required=False,
         # initial=initial_country,
-        label=_(u'Country'),
+        label=_('Country'),
         widget=forms.Select(attrs={'class': "form-control"}),
     )
     academic_state = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the State'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the State'),
                                       'class': "form-control"}),
         max_length=100,
         min_length=2,
         required=False,
-        label=_(u'State'),
+        label=_('State'),
     )
     academic_city = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Name of the City'),
+        widget=forms.TextInput(attrs={'placeholder': _('Name of the City'),
                                       'class': "form-control"}),
         max_length=100,
         min_length=2,
         required=False,
-        label=_(u'City'),
-        error_messages={'required': _(u"Enter the name of the City")},
+        label=_('City'),
+        error_messages={'required': _("Enter the name of the City")},
     )
     academic_start_date = forms.DateField(
         widget=forms.TextInput(attrs={'class':"form-control", 'placeholder':'Start Date'}),
-        label=_(u'Admission Date'),
+        label=_('Admission Date'),
         required=False,
-        error_messages={'required': _(u"Enter you admission date")},
+        error_messages={'required': _("Enter you admission date")},
     )
     academic_end_date = forms.DateField(
         widget=forms.TextInput(attrs={'class':"form-control", 'placeholder':'End Date'}),
-        label=_(u'End Date'),
+        label=_('End Date'),
         required=False,
     )
 
@@ -1304,9 +1305,9 @@ class AcademicMiniForm(forms.ModelForm):
                 end_date = None
             if end_date:
                 if start_date > end_date:
-                    raise forms.ValidationError(_(u'The start date can not be greater than the end date'))
+                    raise forms.ValidationError(_('The start date can not be greater than the end date'))
                 if start_date == end_date:
-                    raise forms.ValidationError(_(u'The start date can not be the same as end date'))
+                    raise forms.ValidationError(_('The start date can not be the same as end date'))
         return start_date
 
     def clean_academic_end_date(self):

@@ -1,6 +1,7 @@
 """Loader tests."""
 
-from __future__ import unicode_literals
+
+from __future__ import absolute_import
 from contextlib import contextmanager
 
 from django.core.exceptions import ImproperlyConfigured

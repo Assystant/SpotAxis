@@ -1,4 +1,5 @@
 """Test cases for Zinnia's comparison"""
+from __future__ import absolute_import
 from django.test import TestCase
 
 from mots_vides import stop_words
@@ -9,6 +10,7 @@ from zinnia.comparison import ModelVectorBuilder
 from zinnia.comparison import pearson_score
 from zinnia.models.entry import Entry
 from zinnia.signals import disconnect_entry_signals
+from six.moves import range
 
 
 class ComparisonTestCase(TestCase):
@@ -121,21 +123,21 @@ class ComparisonTestCase(TestCase):
         vectors = ModelVectorBuilder(queryset=Entry.objects.all(),
                                      fields=['title', 'content'])
         with self.assertNumQueries(1):
-            self.assertEquals(vectors.get_related(e1, 10), [])
+            self.assertEqual(vectors.get_related(e1, 10), [])
 
         params = {'title': 'My entry 02', 'content':
                   'My second content entry 02',
                   'slug': 'my-entry-2'}
         e2 = Entry.objects.create(**params)
         with self.assertNumQueries(0):
-            self.assertEquals(vectors.get_related(e1, 10), [])
+            self.assertEqual(vectors.get_related(e1, 10), [])
 
         vectors = ModelVectorBuilder(queryset=Entry.objects.all(),
                                      fields=['title', 'content'])
         with self.assertNumQueries(2):
-            self.assertEquals(vectors.get_related(e1, 10), [e2])
+            self.assertEqual(vectors.get_related(e1, 10), [e2])
         with self.assertNumQueries(1):
-            self.assertEquals(vectors.get_related(e1, 10), [e2])
+            self.assertEqual(vectors.get_related(e1, 10), [e2])
 
     def test_cached_vector_builder(self):
         params = {'title': 'My entry number 1',
@@ -145,11 +147,11 @@ class ComparisonTestCase(TestCase):
         v = CachedModelVectorBuilder(
             queryset=Entry.objects.all(), fields=['title', 'content'])
         with self.assertNumQueries(1):
-            self.assertEquals(len(v.columns), 3)
+            self.assertEqual(len(v.columns), 3)
         with self.assertNumQueries(0):
-            self.assertEquals(len(v.columns), 3)
+            self.assertEqual(len(v.columns), 3)
         with self.assertNumQueries(0):
-            self.assertEquals(v.get_related(e1, 5), [])
+            self.assertEqual(v.get_related(e1, 5), [])
 
         for i in range(1, 3):
             params = {'title': 'My entry %s' % i,
@@ -159,32 +161,32 @@ class ComparisonTestCase(TestCase):
         v = CachedModelVectorBuilder(
             queryset=Entry.objects.all(), fields=['title', 'content'])
         with self.assertNumQueries(0):
-            self.assertEquals(len(v.columns), 3)
+            self.assertEqual(len(v.columns), 3)
         with self.assertNumQueries(0):
-            self.assertEquals(v.get_related(e1, 5), [])
+            self.assertEqual(v.get_related(e1, 5), [])
 
         v.cache_flush()
         with self.assertNumQueries(2):
-            self.assertEquals(len(v.get_related(e1, 5)), 2)
+            self.assertEqual(len(v.get_related(e1, 5)), 2)
         with self.assertNumQueries(0):
-            self.assertEquals(len(v.get_related(e1, 5)), 2)
+            self.assertEqual(len(v.get_related(e1, 5)), 2)
         with self.assertNumQueries(0):
-            self.assertEquals(len(v.columns), 3)
+            self.assertEqual(len(v.columns), 3)
 
         v = CachedModelVectorBuilder(
             queryset=Entry.objects.all(), fields=['title', 'content'])
         with self.assertNumQueries(0):
-            self.assertEquals(len(v.columns), 3)
+            self.assertEqual(len(v.columns), 3)
         with self.assertNumQueries(0):
-            self.assertEquals(len(v.get_related(e1, 5)), 2)
+            self.assertEqual(len(v.get_related(e1, 5)), 2)
 
     def test_raw_clean(self):
         v = ModelVectorBuilder(queryset=Entry.objects.none(), fields=['title'])
-        self.assertEquals(v.raw_clean('<p>HTML Content</p>'),
+        self.assertEqual(v.raw_clean('<p>HTML Content</p>'),
                           ['html', 'content'])
-        self.assertEquals(v.raw_clean('<p>An HTML Content</p>'),
+        self.assertEqual(v.raw_clean('<p>An HTML Content</p>'),
                           ['html', 'content'])
-        self.assertEquals(v.raw_clean('<p>An HTML Content 2</p>'),
+        self.assertEqual(v.raw_clean('<p>An HTML Content 2</p>'),
                           ['html', 'content'])
-        self.assertEquals(v.raw_clean('<p>!HTML Content ?</p>'),
+        self.assertEqual(v.raw_clean('<p>!HTML Content ?</p>'),
                           ['html', 'content'])

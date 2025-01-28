@@ -11,6 +11,7 @@ The API documentation can be accessed by visiting http://helpdesk/api/help/
 through templates/helpdesk/help_api.html.
 """
 
+from __future__ import absolute_import
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse

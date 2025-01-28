@@ -1,4 +1,5 @@
 """Sitemaps for Zinnia"""
+from __future__ import absolute_import
 from django.contrib.sitemaps import Sitemap
 from django.core.urlresolvers import reverse
 from django.db.models import Count
@@ -84,7 +85,7 @@ class EntryRelatedSitemap(ZinniaSitemap):
         of each items later.
         """
         if self.cache:
-            self.max_entries = float(max([i[0] for i in self.cache.values()]))
+            self.max_entries = float(max([i[0] for i in list(self.cache.values())]))
 
     def lastmod(self, item):
         """

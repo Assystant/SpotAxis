@@ -1,5 +1,6 @@
 # coding=utf-8
 """Test cases for Zinnia's views"""
+from __future__ import absolute_import
 from datetime import date
 
 from django.contrib.auth.models import update_last_login
@@ -27,6 +28,7 @@ from zinnia.tests.utils import skip_if_custom_user
 from zinnia.tests.utils import url_equal
 from zinnia.url_shortener.backends.default import base36
 from zinnia.views import quick_entry
+from six.moves import range
 
 
 @skip_if_custom_user

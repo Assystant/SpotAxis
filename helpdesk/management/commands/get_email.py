@@ -9,8 +9,10 @@ scripts/get_email.py - Designed to be run from cron, this script checks the
                        helpdesk, creating tickets from the new messages (or
                        adding to existing tickets if needed)
 """
-from __future__ import print_function
 
+
+from __future__ import absolute_import
+from __future__ import print_function
 import email
 import imaplib
 import mimetypes
@@ -92,7 +94,7 @@ def process_email(quiet=False):
 
 def process_queue(q, quiet=False):
     if not quiet:
-        print("Processing: %s" % q)
+        print(("Processing: %s" % q))
 
     if q.socks_proxy_type and q.socks_proxy_host and q.socks_proxy_port:
         try:
@@ -188,12 +190,12 @@ def decodeUnknown(charset, string):
             return string.decode('utf-8', 'ignore')
         except:
             return string.decode('iso8859-1', 'ignore')
-    return unicode(string, charset)
+    return str(string, charset)
 
 
 def decode_mail_headers(string):
     decoded = decode_header(string)
-    return u' '.join([unicode(msg, charset or 'utf-8') for msg, charset in decoded])
+    return ' '.join([str(msg, charset or 'utf-8') for msg, charset in decoded])
 
 
 def ticket_from_message(message, queue, quiet):
@@ -321,7 +323,7 @@ def ticket_from_message(message, queue, quiet):
     f.save()
 
     if not quiet:
-        print((" [%s-%s] %s" % (t.queue.slug, t.id, t.title,)).encode('ascii', 'replace'))
+        print(((" [%s-%s] %s" % (t.queue.slug, t.id, t.title,)).encode('ascii', 'replace')))
 
     for file in files:
         if file['content']:
@@ -336,7 +338,7 @@ def ticket_from_message(message, queue, quiet):
             a.file.save(filename, ContentFile(file['content']), save=False)
             a.save()
             if not quiet:
-                print("    - %s" % filename)
+                print(("    - %s" % filename))
 
     context = safe_template_context(t)
 

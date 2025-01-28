@@ -2,6 +2,7 @@
 Set of" markup" function to transform plain text into HTML for Zinnia.
 Code originally provided by django.contrib.markups
 """
+from __future__ import absolute_import
 import warnings
 
 from django.utils.encoding import force_bytes

@@ -1,6 +1,7 @@
 """Django EL Pagination utility functions."""
 
-from __future__ import unicode_literals
+
+from __future__ import absolute_import
 import sys
 
 from el_pagination import exceptions
@@ -10,6 +11,7 @@ from el_pagination.settings import (
     DEFAULT_CALLABLE_EXTREMES,
     PAGE_LABEL,
 )
+from six.moves import range
 
 
 # Handle the Python 2 to 3 migration.
@@ -19,7 +21,7 @@ if sys.version_info[0] >= 3:
 else:
     PYTHON3 = False
     # Avoid lint errors under Python 3.
-    text = unicode  # NOQA
+    text = str  # NOQA
 
 
 def get_data_from_context(context):
@@ -56,7 +58,7 @@ def get_page_numbers(
 
     Produce a Digg-style pagination.
     """
-    page_range = range(1, num_pages + 1)
+    page_range = list(range(1, num_pages + 1))
     pages = []
     if current_page != 1:
         if arrows:

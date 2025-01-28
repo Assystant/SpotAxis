@@ -1,23 +1,19 @@
-"""
-django-helpdesk - A Django powered ticket tracker for small enterprise.
-
-templatetags/load_helpdesk_settings.py - returns the settings as defined in 
-                                    django-helpdesk/helpdesk/settings.py
-"""
-from __future__ import print_function
+from __future__ import absolute_import
 from django.template import Library
 from helpdesk import settings as helpdesk_settings_config
+import logging
 
+logger = logging.getLogger(__name__)
 
-def load_helpdesk_settings(request):
+register = Library()
+
+@register.simple_tag
+def load_helpdesk_settings():
+    """
+    Returns the helpdesk settings for use in templates.
+    """
     try:
         return helpdesk_settings_config
     except Exception as e:
-        import sys
-        print("'load_helpdesk_settings' template tag (django-helpdesk) crashed with following error:",
-              file=sys.stderr)
-        print(e, file=sys.stderr)
+        logger.error("'load_helpdesk_settings' template tag (django-helpdesk) crashed with the following error:", exc_info=e)
         return ''
-
-register = Library()
-register.filter('load_helpdesk_settings', load_helpdesk_settings)

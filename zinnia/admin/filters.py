@@ -1,4 +1,5 @@
 """Filters for Zinnia admin"""
+from __future__ import absolute_import
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Count
 from django.utils.encoding import smart_text

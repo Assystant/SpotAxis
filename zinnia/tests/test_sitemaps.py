@@ -1,4 +1,5 @@
 """Test cases for Zinnia's sitemaps"""
+from __future__ import absolute_import
 from django.contrib.sites.models import Site
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -57,7 +58,7 @@ class SitemapsTestCase(TestCase):
     def test_entry_sitemap(self):
         sitemap = EntrySitemap()
         with self.assertNumQueries(1):
-            items = sitemap.items()
+            items = list(sitemap.items())
             self.assertEqual(len(items), 2)
         self.assertEqual(
             sitemap.lastmod(items[0]).replace(microsecond=0),
@@ -66,7 +67,7 @@ class SitemapsTestCase(TestCase):
     def test_category_sitemap(self):
         sitemap = CategorySitemap()
         with self.assertNumQueries(1):
-            items = sitemap.items()
+            items = list(sitemap.items())
             self.assertEqual(len(items), 2)
         self.assertEqual(
             sitemap.lastmod(items[0]).replace(microsecond=0),
@@ -80,7 +81,7 @@ class SitemapsTestCase(TestCase):
     def test_author_sitemap(self):
         sitemap = AuthorSitemap()
         with self.assertNumQueries(1):
-            items = sitemap.items()
+            items = list(sitemap.items())
             self.assertEqual(len(items), 2)
         self.assertEqual(
             sitemap.lastmod(items[0]).replace(microsecond=0),
@@ -94,7 +95,7 @@ class SitemapsTestCase(TestCase):
     def test_tag_sitemap(self):
         sitemap = TagSitemap()
         with self.assertNumQueries(3):
-            items = sitemap.items()
+            items = list(sitemap.items())
             self.assertEqual(len(items), 2)
         self.assertEqual(
             sitemap.lastmod(items[1]).replace(microsecond=0),
@@ -113,7 +114,7 @@ class SitemapsTestCase(TestCase):
         category_sitemap = CategorySitemap()
         author_sitemap = AuthorSitemap()
         tag_sitemap = TagSitemap()
-        self.assertEqual(len(entry_sitemap.items()), 0)
-        self.assertEqual(len(category_sitemap.items()), 0)
-        self.assertEqual(len(author_sitemap.items()), 0)
-        self.assertEqual(len(tag_sitemap.items()), 0)
+        self.assertEqual(len(list(entry_sitemap.items())), 0)
+        self.assertEqual(len(list(category_sitemap.items())), 0)
+        self.assertEqual(len(list(author_sitemap.items())), 0)
+        self.assertEqual(len(list(tag_sitemap.items())), 0)

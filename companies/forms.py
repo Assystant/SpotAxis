@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import print_function
 from django import forms
 from django.db.models import Q
 from django.http import Http404
@@ -15,8 +17,8 @@ from vacancies.models import get_ages
 from TRM.settings import LOGO_COMPANY_DEFAULT
 from ckeditor.widgets import CKEditorWidget
 
-select_text = _(u'Select' + '...')
-select_option = _(u"Select an option")
+select_text = _('Select' + '...')
+select_option = _("Select an option")
 initial_country = get_initial_country()  
 
 
@@ -29,7 +31,7 @@ def get_company_industries():
             for industry in industries:
                 choices.append([industry.id, industry.name])
     except:
-        print "Error in get_company_industries()"
+        print("Error in get_company_industries()")
     return choices
 
 
@@ -64,10 +66,10 @@ class CompanyLogoForm(forms.ModelForm):
             img = Image.open(image)
             if img.format.lower() not in ['jpeg', 'pjpeg', 'png', 'jpg', 'gif', 'mpo']:
                 # raise ValueError()
-                raise forms.ValidationError(_(u'You can only use images with extensions JPG, JPEG, PNG or GIF'))
+                raise forms.ValidationError(_('You can only use images with extensions JPG, JPEG, PNG or GIF'))
             #validate file size
             if len(image) > (5 * 1024 * 1024):
-                raise forms.ValidationError(_(u'The selected image is too large (Max 5MB)'))
+                raise forms.ValidationError(_('The selected image is too large (Max 5MB)'))
         else:
             return self.default_logo
         return image
@@ -79,18 +81,18 @@ class CompanyForm(forms.ModelForm):
     countries = Country.objects.all()
     industries = Company_Industry.objects.all()
     name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Brandname of your Company'),
+        widget=forms.TextInput(attrs={'placeholder': _('Brandname of your Company'),
                                       'class': "form-control"}),
         max_length=50,
         min_length=2,
-        error_messages={'required': _(u"Enter the name of your company")},
+        error_messages={'required': _("Enter the name of your company")},
     )
     social_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Legal name of your Company'),
+        widget=forms.TextInput(attrs={'placeholder': _('Legal name of your Company'),
                                       'class': "form-control"}),
         max_length=100,
         min_length=4,
-        error_messages={'required': _(u"Enter the company's Legal name")},
+        error_messages={'required': _("Enter the company's Legal name")},
     )
     # rfc = MXRFCField_Custom(
     #     widget=forms.TextInput(attrs={'placeholder': 'RFC',
@@ -110,7 +112,7 @@ class CompanyForm(forms.ModelForm):
     #     error_messages={'required':_(u"Enter the Company's Function")},
     # )
     no_of_employees = forms.IntegerField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'No of Employees'),
+        widget=forms.TextInput(attrs={'placeholder': _('No of Employees'),
                                       'class': "form-control"},
                                ),
         min_value=1,
@@ -122,52 +124,52 @@ class CompanyForm(forms.ModelForm):
     #     widget=forms.Select(attrs={'class': "form-control"}),
     # )
     description = forms.CharField(
-        widget= CKEditorWidget(attrs={'placeholder': _(u'Enter a description of the company\'s activities.'),'class':"form-control"}),
+        widget= CKEditorWidget(attrs={'placeholder': _('Enter a description of the company\'s activities.'),'class':"form-control"}),
         # max_length=500,
         min_length=30,
-        label=_(u"Description"),
+        label=_("Description"),
         error_messages={
-            'required': _(u"Enter a description of the activities in your company."),
+            'required': _("Enter a description of the activities in your company."),
         },
     )
     phone = USPhoneNumberField(
         max_length=12,
         min_length=10,
         error_messages={
-            'invalid': _(u"Enter a valid 10 dg=igit phone"),
-            'required': _(u'Enter your business phone'),
-            'min_length': _(u"Enter a valid 10 digit phone"),
-            'max_length': _(u"Enter a valid 10 digit phone"),
+            'invalid': _("Enter a valid 10 dg=igit phone"),
+            'required': _('Enter your business phone'),
+            'min_length': _("Enter a valid 10 digit phone"),
+            'max_length': _("Enter a valid 10 digit phone"),
         },
-        widget=forms.TextInput(attrs={'placeholder': _(u'10 digit business phone'),
+        widget=forms.TextInput(attrs={'placeholder': _('10 digit business phone'),
                                       'class': "form-control"}),
     )
     url = forms.URLField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Website of the Company'),
+        widget=forms.TextInput(attrs={'placeholder': _('Website of the Company'),
                                       'class': "form-control"}),
         max_length=150,
         min_length=9,
         required=False
     )
     facebook = forms.URLField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'www.facebook.com/account'),
+        widget=forms.TextInput(attrs={'placeholder': _('www.facebook.com/account'),
                                       'class': "form-control"}),
         max_length=150,
         required=False
     )
     twitter = forms.RegexField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'@username'),
+        widget=forms.TextInput(attrs={'placeholder': _('@username'),
                                       'class': "form-control"}),
         regex=r'^[\w@]+$',
         max_length=16,
         min_length=3,
         error_messages={
-            'invalid': _(u"Enter a valid Twitter user."),
+            'invalid': _("Enter a valid Twitter user."),
         },
         required=False
     )
     company_email = forms.EmailField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'General Business Email'),
+        widget=forms.TextInput(attrs={'placeholder': _('General Business Email'),
                                       'class': "form-control"}),
         required=True,
     )
@@ -203,7 +205,7 @@ class CompanyForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': "form-control"}),
         empty_label=select_text,
         required=True,
-        label=_(u'Nationality'),
+        label=_('Nationality'),
         initial=initial_country
     )
     state = forms.CharField(
@@ -213,19 +215,19 @@ class CompanyForm(forms.ModelForm):
         max_length=30,
         min_length=4,
         required=True,
-        label=_(u'State'),
+        label=_('State'),
         error_messages={
-            'required': _(u"State is required")},
+            'required': _("State is required")},
     )
     city = forms.CharField(
         # choices=get_municipals(None),
         widget=forms.TextInput(attrs={'class': "form-control",'placeholder': "Enter your City"}),
         max_length=30,
         min_length=4,
-        label=_(u'City'),
+        label=_('City'),
         required=True,
         error_messages={
-            'required': _(u"City is required")},
+            'required': _("City is required")},
     )
 
     def __init__(self, *args, **kwargs):
@@ -299,7 +301,7 @@ class CompanyForm(forms.ModelForm):
     #     return self.cleaned_data['rfc']
 
     def clean_facebook(self):
-        facebook_error = _(u'Enter a valid Facebook page')
+        facebook_error = _('Enter a valid Facebook page')
         if not self.cleaned_data.get('facebook'):
             return None
         facebook = self.cleaned_data.get('facebook')
@@ -310,7 +312,7 @@ class CompanyForm(forms.ModelForm):
         return facebook
 
     def clean_twitter(self):
-        twitter_error = _(u'Enter a valid Twitter user')
+        twitter_error = _('Enter a valid Twitter user')
         if not self.cleaned_data.get('twitter'):
             return None
         twitter = self.cleaned_data.get('twitter')
@@ -328,10 +330,10 @@ class CompanyForm(forms.ModelForm):
         if image:
             img = Image.open(image)
             if img.format.lower() not in ['jpeg', 'pjpeg', 'png', 'jpg', 'gif', 'mpo']:
-                raise forms.ValidationError(_(u'You can only use images with extensions JPG, JPEG, PNG or GIF'))
+                raise forms.ValidationError(_('You can only use images with extensions JPG, JPEG, PNG or GIF'))
             #validate file size
             if len(image) > (5 * 1024 * 1024):
-                raise forms.ValidationError(_(u'The selected image is too large (Max 5MB)'))
+                raise forms.ValidationError(_('The selected image is too large (Max 5MB)'))
         else:
             return self.default_logo
         return image
@@ -345,7 +347,7 @@ class CompanyForm(forms.ModelForm):
             except:
                 to_company = None
             if not to_company:
-                raise forms.ValidationError(_(u"Incorrect username, please check"))
+                raise forms.ValidationError(_("Incorrect username, please check"))
         else:
             return None
         return to_company
@@ -393,7 +395,7 @@ def get_academic_status():
             for stat in status:
                 choices.append([stat.id, stat.name])
     except:
-        print "Error in get_academic_status()"
+        print("Error in get_academic_status()")
     return choices
 
 
@@ -418,19 +420,19 @@ class SearchCvForm(forms.Form):
         choices=get_degrees(select=False),
         required=False,
         widget=forms.SelectMultiple(attrs={'class': "form-control"}),
-        label=_(u'Level of Study'),
+        label=_('Level of Study'),
     )
     status = forms.MultipleChoiceField(
         choices=get_academic_status(),
         required=False,
-        label=_(u'Status'),
+        label=_('Status'),
         widget=forms.SelectMultiple(attrs={'class': "form-control"}),
     )
     area = forms.ModelChoiceField(
         queryset=Academic_Area.objects.all(),
         empty_label=select_text,
         required=False,
-        label=_(u'Area'),
+        label=_('Area'),
         widget=forms.Select(attrs={'class': "form-control"}),
         error_messages={'required': select_option},
     )
@@ -456,17 +458,17 @@ class SearchCvForm(forms.Form):
         widget=forms.Select(attrs={'class': "form-control"}),
         empty_label=None,
         required=False,
-        label=_(u'gender')
+        label=_('gender')
     )
     min_age = forms.ChoiceField(
         choices=get_ages(indistinct=False),
         required=True,
-        label=_(u'Min Age'),
+        label=_('Min Age'),
     )
     max_age = forms.ChoiceField(
         choices=get_ages(indistinct=False),
         required=True,
-        label=_(u'Max Age'),
+        label=_('Max Age'),
         initial='65',
     )
     # language_1 = forms.ModelChoiceField(
@@ -498,11 +500,11 @@ class SearchCvForm(forms.Form):
     #     widget=forms.Select(attrs={'class': "form-control"}),
     # )
     travel = forms.BooleanField(
-        label=_(u'Availability to Travel'),
+        label=_('Availability to Travel'),
         required=False,
     )
     residence = forms.BooleanField(
-        label=_(u'Avalability to change residence'),
+        label=_('Avalability to change residence'),
         required=False,
     )
 
@@ -516,7 +518,7 @@ class SearchCvForm(forms.Form):
             self.fields['municipal'].choices = get_municipals(state_selected)
 
     def clean_degree(self):
-        invalid_degree = _(u'Level of Study is invalid')
+        invalid_degree = _('Level of Study is invalid')
         degrees = None
         try:
             degree_ids = self.cleaned_data.get('degree', None)
@@ -530,7 +532,7 @@ class SearchCvForm(forms.Form):
         return degrees
 
     def clean_status(self):
-        invalid_status = _(u'Status is invalid')
+        invalid_status = _('Status is invalid')
         status = None
         try:
             status_ids = self.cleaned_data.get('status', None)
@@ -594,15 +596,15 @@ class SearchCvForm(forms.Form):
         min_age = int(self.cleaned_data.get('min_age'))
         max_age = int(self.data['max_age'])
         if min_age < 18 or min_age > 65:
-                raise forms.ValidationError(_(u'Choose an age within the range of 18 to 65 years'))
+                raise forms.ValidationError(_('Choose an age within the range of 18 to 65 years'))
         if min_age > max_age != 0:
-            raise forms.ValidationError(_(u'The min age is greater than max age, please select a valid age.'))
+            raise forms.ValidationError(_('The min age is greater than max age, please select a valid age.'))
         return min_age
 
     def clean_max_age(self):
         max_age = int(self.cleaned_data.get('max_age'))
         if max_age < 18 or max_age > 65:
-                raise forms.ValidationError(_(u'Choose an age within the range of 18 to 65 years'))
+                raise forms.ValidationError(_('Choose an age within the range of 18 to 65 years'))
         return max_age
 
     # def clean_language_1(self):

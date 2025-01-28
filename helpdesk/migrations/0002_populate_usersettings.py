@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from django.contrib.auth import get_user_model
 from django.db import models, migrations
 
@@ -12,7 +13,7 @@ def picke_settings(data):
     try:
         import pickle
     except ImportError:
-        import cPickle as pickle
+        import pickle as pickle
     from helpdesk.lib import b64encode
     return b64encode(pickle.dumps(data))
 

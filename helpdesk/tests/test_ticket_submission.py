@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from helpdesk.models import Queue, CustomField, Ticket
 from django.test import TestCase
 from django.core import mail
@@ -7,7 +8,7 @@ from django.core.urlresolvers import reverse
 try:  # python 3
     from urllib.parse import urlparse
 except ImportError:  # python 2
-    from urlparse import urlparse
+    from urllib.parse import urlparse
 
 
 class TicketBasicsTestCase(TestCase):

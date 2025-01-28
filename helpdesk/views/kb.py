@@ -8,6 +8,7 @@ views/kb.py - Public-facing knowledgebase views. The knowledgebase is a
               resolutions to common problems.
 """
 
+from __future__ import absolute_import
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 

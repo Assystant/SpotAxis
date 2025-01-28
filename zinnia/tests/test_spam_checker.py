@@ -1,4 +1,5 @@
 """Test cases for Zinnia's spam_checker"""
+from __future__ import absolute_import
 import warnings
 
 from django.test import TestCase

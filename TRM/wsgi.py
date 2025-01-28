@@ -7,6 +7,7 @@ https://docs.djangoproject.com/en/1.7/howto/deployment/wsgi/
 
 
 
+from __future__ import absolute_import
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "TRM.settings")
 

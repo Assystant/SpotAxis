@@ -1,4 +1,5 @@
 """Templates module for Zinnia"""
+from __future__ import absolute_import
 import os
 
 from django.template.defaultfilters import slugify

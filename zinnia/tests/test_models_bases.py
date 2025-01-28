@@ -1,4 +1,5 @@
 """Test cases for zinnia.models_bases"""
+from __future__ import absolute_import
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase
 

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import datefinder
 import json
 import re
@@ -91,7 +93,7 @@ def get_name_status(candidate_profile, conflicted_profile):
     else:    
         message = 'No Conflict'
 
-    print message
+    print(message)
     return status
 
 def get_education_status(original_education, education):

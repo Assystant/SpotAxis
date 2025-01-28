@@ -217,8 +217,11 @@
 
 
 
+from __future__ import absolute_import
+from __future__ import print_function
 import optparse
 import struct
+from six.moves import range
 
 class FontError(Exception):
     """Error related to font handling"""
@@ -289,10 +292,10 @@ def get_table_directory(data):
     datalen = len(data)
     sfntsize = struct.calcsize(OpenType.SFNT_UNPACK)
     if sfntsize > datalen:
-        raise FontError, 'truncated font data'
+        raise FontError('truncated font data')
     sfntvers, numTables = struct.unpack(OpenType.SFNT_UNPACK, data[:sfntsize])[:2]
     if sfntvers != OpenType.SFNT_CFF and sfntvers != OpenType.SFNT_TRUE:
-        raise FontError, 'invalid font type';
+        raise FontError('invalid font type');
     
     font = {}
     font['version'] = sfntvers
@@ -301,7 +304,7 @@ def get_table_directory(data):
     # create set of offsets, lengths for tables
     table_dir_size = struct.calcsize(OpenType.TABLE_DIR_UNPACK)
     if sfntsize + table_dir_size * numTables > datalen:
-        raise FontError, 'truncated font data, table directory extends past end of data'
+        raise FontError('truncated font data, table directory extends past end of data')
     table_dir = {}
     for i in range(0, numTables):
         start = sfntsize + i * table_dir_size
@@ -321,7 +324,7 @@ def get_name_records(nametable):
     count, strOffset = struct.unpack('>2H', nametable[2:6])
     namerecsize = struct.calcsize(OpenType.NAME_RECORD_UNPACK)
     if count * namerecsize + headersize > len(nametable):
-        raise FontError, 'names exceed size of name table'
+        raise FontError('names exceed size of name table')
     name['count'] = count
     name['strOffset'] = strOffset
     
@@ -381,7 +384,7 @@ def make_eot_header(fontdata):
     required = (OpenType.TABLE_HEAD, OpenType.TABLE_NAME, OpenType.TABLE_OS2)
     for table in required:
         if not (table in tableDir):
-            raise FontError, 'missing required table ' + multicharval(table)
+            raise FontError('missing required table ' + multicharval(table))
             
     # read name strings
     
@@ -398,7 +401,7 @@ def make_eot_header(fontdata):
     os2size = struct.calcsize(OpenType.OS2_UNPACK)
     
     if os2size > os2Dir['length']:
-        raise FontError, 'OS/2 table invalid length'
+        raise FontError('OS/2 table invalid length')
     
     os2fields = struct.unpack(OpenType.OS2_UNPACK, fontdata[os2offset : os2offset + os2size])
     
@@ -420,7 +423,7 @@ def make_eot_header(fontdata):
     headsize = struct.calcsize(OpenType.HEAD_UNPACK)
     
     if headsize > headDir['length']:
-        raise FontError, 'head table invalid length'
+        raise FontError('head table invalid length')
         
     headfields = struct.unpack(OpenType.HEAD_UNPACK, fontdata[headoffset : headoffset + headsize])
     checkSumAdjustment = headfields[0]
@@ -453,7 +456,7 @@ def main():
     for f in args:
         data = readfont(f)
         if len(data) == 0:
-            print 'Error reading %s' % f
+            print(('Error reading %s' % f))
         else:
             eot = eotname(f)
             header = make_eot_header(data)

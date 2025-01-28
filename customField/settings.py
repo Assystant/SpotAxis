@@ -1,6 +1,7 @@
 """
 Settings for Custom Fields 
 """
+from __future__ import absolute_import
 from django.conf import settings
 
 TEMPLATE_MANAGER = getattr(settings, 'CF_TEMPLATE_MANAGER', settings.AUTH_USER_MODEL)

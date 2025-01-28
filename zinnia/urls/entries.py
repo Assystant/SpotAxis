@@ -1,4 +1,5 @@
 """Urls for the Zinnia entries"""
+from __future__ import absolute_import
 from django.conf.urls import url
 
 from zinnia.views.entries import EntryDetail

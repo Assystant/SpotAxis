@@ -1,8 +1,10 @@
 """On scroll chunks integration tests."""
 
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from el_pagination.tests.integration import SeleniumTestCase
+from six.moves import range
 
 
 class ChunksPaginationTest(SeleniumTestCase):
@@ -12,8 +14,8 @@ class ChunksPaginationTest(SeleniumTestCase):
     def test_new_elements_loaded(self):
         # Ensure new pages are loaded on scroll.
         self.get()
-        with self.assertNewElements('object', range(1, 11)):
-            with self.assertNewElements('item', range(1, 11)):
+        with self.assertNewElements('object', list(range(1, 11))):
+            with self.assertNewElements('item', list(range(1, 11))):
                 self.scroll_down()
 
     def test_url_not_changed(self):
@@ -26,8 +28,8 @@ class ChunksPaginationTest(SeleniumTestCase):
         # Ensure direct links work.
         self.get(data={'page': 2, 'items-page': 3})
         current_url = self.selenium.current_url
-        self.assertElements('object', range(6, 11))
-        self.assertElements('item', range(11, 16))
+        self.assertElements('object', list(range(6, 11)))
+        self.assertElements('item', list(range(11, 16)))
         self.assertIn('page=2', current_url)
         self.assertIn('items-page=3', current_url)
 
@@ -35,7 +37,7 @@ class ChunksPaginationTest(SeleniumTestCase):
         # Ensure next page is correctly loaded in a subsequent page, even if
         # normally it is the last page of the chunk.
         self.get(page=3)
-        with self.assertNewElements('object', range(11, 21)):
+        with self.assertNewElements('object', list(range(11, 21))):
             self.scroll_down()
 
     def test_chunks(self):
@@ -44,5 +46,5 @@ class ChunksPaginationTest(SeleniumTestCase):
         for i in range(5):
             self.scroll_down()
             self.wait_ajax()
-        self.assertElements('object', range(1, 16))
-        self.assertElements('item', range(1, 21))
+        self.assertElements('object', list(range(1, 16)))
+        self.assertElements('item', list(range(1, 21)))

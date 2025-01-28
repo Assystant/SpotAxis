@@ -2,6 +2,7 @@
 # neccessary for automatic discovery in django <= 1.5
 # http://stackoverflow.com/a/15780326/1382740
 
+from __future__ import absolute_import
 import unittest
 
 

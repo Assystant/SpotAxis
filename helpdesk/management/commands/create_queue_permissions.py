@@ -13,6 +13,7 @@ scripts/create_queue_permissions.py -
     existing permissions.
 """
 
+from __future__ import absolute_import
 from optparse import make_option
 
 from django.contrib.auth.models import Permission

@@ -9,6 +9,7 @@ templatetags/admin_url.py - Very simple template tag allow linking to the
 {% url 'changelist'|user_admin_url %}
 """
 
+from __future__ import absolute_import
 from django import template
 from django.contrib.auth import get_user_model
 

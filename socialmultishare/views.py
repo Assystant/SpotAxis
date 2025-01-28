@@ -1,11 +1,13 @@
 
+from __future__ import absolute_import
+from __future__ import print_function
 import decimal
 import os
 import traceback
 import json
 import random
-import urlparse
-import urllib
+import urllib.parse
+import urllib.request, urllib.parse, urllib.error
 import requests
 import hmac
 import hashlib
@@ -53,7 +55,7 @@ def share_to_social_media(request,vacancy_id=None):
                 context['fbgroups'] = ""
                 context['fbpages'] = ""
                 context['tokencount']-=1
-                messages.warning(request, _(u'Reauthorisation required for Facebook'))
+                messages.warning(request, _('Reauthorisation required for Facebook'))
         else:
             context['fbtoken'] = ""
         twtoken = tokens.filter(media = 'TW')
@@ -62,7 +64,7 @@ def share_to_social_media(request,vacancy_id=None):
                 context['twtoken'] = twtoken[0]
             else:
                 context['twtoken'] = ""
-                messages.warning(request, _(u'Reauthorisation required for Twitter'))
+                messages.warning(request, _('Reauthorisation required for Twitter'))
                 context['tokencount']-=1
         else:
             context['twtoken'] = ""
@@ -78,7 +80,7 @@ def share_to_social_media(request,vacancy_id=None):
             else:
                 context['litoken'] = ""
                 context['lipages'] = ""
-                messages.warning(request, _(u'Reauthorisation required for Linkedin'))
+                messages.warning(request, _('Reauthorisation required for Linkedin'))
                 context['tokencount']-=1
         else:
             context['litoken'] = ""
@@ -122,17 +124,17 @@ def share_to_social_media(request,vacancy_id=None):
                     a=posttofbpage(context['fbtoken'], message, page)
                 if request.POST.get('fbprofile'):
                     a=posttofbprofile(context['fbtoken'],message)
-                messages.success(request, _(u'Job shared on Facebook'))
+                messages.success(request, _('Job shared on Facebook'))
             if posttotw and context['twtoken']:
                 posttotwitter(context['twtoken'], message)
-                messages.success(request, _(u'Job shared on Twitter'))
+                messages.success(request, _('Job shared on Twitter'))
             if posttoli and context['litoken']:
                 for page in lipages:
                     page = page.strip('pageid-')
                     a=posttolipage(context['litoken'], message, page)
                 if request.POST.get('liprofile'):
                     a=posttoliprofile(context['litoken'], message)
-                messages.success(request, _(u'Job shared on Linkedin'))
+                messages.success(request, _('Job shared on Linkedin'))
             return redirect(reverse('vacancies_get_vacancy_details',args = [vacancy_id]))
             
     # if request.post check and validate, post and redirect
@@ -153,7 +155,7 @@ def connect_to_twitter(request,vacancy_id=None):
         resp, content = client.request(request_token_url, "GET")
         if resp['status'] != '200':
             raise Exception("Invalid response %s." % resp['status'])
-        request_token = dict(urlparse.parse_qsl(content))
+        request_token = dict(urllib.parse.parse_qsl(content))
         return redirect(authorize_url+"?oauth_token="+request_token['oauth_token'])
     elif request.GET.get('oauth_verifier'):
         oauth_token = request.GET.get('oauth_token')
@@ -163,7 +165,7 @@ def connect_to_twitter(request,vacancy_id=None):
             resp,content = client.request(access_token_url+"?oauth_verifier="+oauth_verifier+"&oauth_token="+oauth_token)
             # raise ValueError()
             if resp['status'] == '200':
-                data = dict(urlparse.parse_qsl(content))
+                data = dict(urllib.parse.parse_qsl(content))
                 print(resp)
                 # print(resp.read())
                 # data=str(resp.read())
@@ -196,7 +198,7 @@ def connect_to_facebook(request,vacancy_id=None):
     else:
         if request.GET['code']:
             request_token_url = "https://graph.facebook.com/v2.3/oauth/access_token?client_id="+consumer_key+"&redirect_uri="+fbredirecturi+"&client_secret="+consumer_secret+"&code="+request.GET['code']
-            resp = urllib.urlopen(request_token_url)
+            resp = urllib.request.urlopen(request_token_url)
             # return redirect(request_token_url)
             if resp.getcode() == 200:
                 data = json.loads(resp.read())
@@ -210,7 +212,7 @@ def connect_to_facebook(request,vacancy_id=None):
                         )
                         socialauth.oauth_token = str(data['access_token'])
                         url = "https://graph.facebook.com/debug_token?input_token="+str(data['access_token'])+"&access_token="+consumer_key+"|"+consumer_secret
-                        resp = urllib.urlopen(url)
+                        resp = urllib.request.urlopen(url)
                         if resp.getcode() == 200:
                             Data = json.loads(resp.read())
                             if Data['data']:
@@ -248,7 +250,7 @@ def debug_fb_token(fbtoken):
     consumer_key = settings.SOCIALMULTISHARE_FACEBOOK_OAUTH_KEY
     consumer_secret = settings.SOCIALMULTISHARE_FACEBOOK_OAUTH_SECRET
     url = "https://graph.facebook.com/debug_token?input_token="+str(fbtoken.oauth_token)+"&access_token="+consumer_key+"|"+consumer_secret
-    resp = urllib.urlopen(url)
+    resp = urllib.request.urlopen(url)
     Data = json.loads(resp.read())
     return Data
 
@@ -266,7 +268,7 @@ def verify_fb_scopes(fbtoken):
     consumer_key = settings.SOCIALMULTISHARE_FACEBOOK_OAUTH_KEY
     consumer_secret = settings.SOCIALMULTISHARE_FACEBOOK_OAUTH_SECRET
     url = "https://graph.facebook.com/me/permissions?access_token="+str(fbtoken.oauth_token)+"&appsecret_proof="+str(get_fb_app_secret_proof(str(fbtoken.oauth_token)))
-    resp = urllib.urlopen(url)
+    resp = urllib.request.urlopen(url)
     Data = json.loads(resp.read())
     for data in Data['data']:
         if data['status']!='granted':
@@ -288,7 +290,7 @@ def verify_tw_token(twtoken):
 def verify_li_token(litoken):
     token = litoken.oauth_token
     post_url = "https://api.linkedin.com/v1/people/~?oauth2_access_token="+token+"&format=json"
-    r = urllib.urlopen(post_url)
+    r = urllib.request.urlopen(post_url)
     if r.getcode() == 200:
         return True
     else:
@@ -296,7 +298,7 @@ def verify_li_token(litoken):
 
 def get_page_token(fbtoken,pageid):
     url = "https://graph.facebook.com/"+str(pageid)+"/?fields=access_token&access_token="+str(fbtoken.oauth_token)+"&appsecret_proof="+str(get_fb_app_secret_proof(str(fbtoken.oauth_token)))
-    resp = urllib.urlopen(url)
+    resp = urllib.request.urlopen(url)
     Data = json.loads(resp.read())
     return Data['access_token']
 
@@ -304,7 +306,7 @@ def get_fb_app_access_token():
     consumer_key = settings.SOCIALMULTISHARE_FACEBOOK_OAUTH_KEY
     consumer_secret = settings.SOCIALMULTISHARE_FACEBOOK_OAUTH_SECRET
     request_token_url = "https://graph.facebook.com/oauth/access_token?client_id="+consumer_key+"&client_secret"+consumer_secret+"&grant_type=client_credentials"
-    resp = urllib.urlopen(request_token_url)
+    resp = urllib.request.urlopen(request_token_url)
     if resp.getcode() == 200:
         data = json.loads(resp.read())
         return data['access_token']
@@ -323,7 +325,7 @@ def get_fb_app_secret_proof(access_token):
 
 def get_fb_groups(fbtoken):
     request_token_url = str("https://graph.facebook.com/"+str(fbtoken.identifier)+"/groups/?appsecret_proof="+str(get_fb_app_secret_proof(str(fbtoken.oauth_token)))+"&access_token="+str(fbtoken.oauth_token))
-    resp = urllib.urlopen(str(request_token_url))
+    resp = urllib.request.urlopen(str(request_token_url))
     if resp.getcode() == 200:
         data = json.loads(resp.read())
         return data['data']
@@ -334,7 +336,7 @@ def get_fb_pages(fbtoken):
     consumer_secret = settings.SOCIALMULTISHARE_FACEBOOK_OAUTH_SECRET
     request_token_url = "https://graph.facebook.com/me/accounts/?access_token="+fbtoken.oauth_token+"&appsecret_proof="+str(get_fb_app_secret_proof(str(fbtoken.oauth_token)))
     request_token_url = str(request_token_url)
-    resp = urllib.urlopen(request_token_url)
+    resp = urllib.request.urlopen(request_token_url)
     if resp.getcode() == 200:
         data = json.loads(resp.read())
         return data['data']
@@ -342,7 +344,7 @@ def get_fb_pages(fbtoken):
         return None    
 def get_li_pages(litoken):
     url = 'https://api.linkedin.com/v1/companies?format=json&is-company-admin=true&oauth2_access_token='+litoken.oauth_token
-    resp = urllib.urlopen(url)
+    resp = urllib.request.urlopen(url)
     if resp.getcode() == 200:
         data = json.loads(resp.read())
         return data
@@ -351,7 +353,7 @@ def get_li_pages(litoken):
 def get_li_groups(litoken):
     application = linkedin.LinkedInApplication(litoken.oauth_token)
     url = 'https://api.linkedin.com/v1/companies?format=json&is-company-admin=true&oauth2_access_token='+litoken.oauth_token
-    resp = urllib.urlopen(url)
+    resp = urllib.request.urlopen(url)
     if resp.getcode() == 200:
         data = json.loads(resp.read())
         return data
@@ -368,7 +370,7 @@ def posttofbprofile(fbtoken, message):
                 'appsecret_proof': str(get_fb_app_secret_proof(str(token))),
             }
         )
-    print (r.status_code)
+    print((r.status_code))
     # raise ValueError(r.reason)
     return r
 def posttofbgroup(fbtoken, message, groupid):
@@ -381,7 +383,7 @@ def posttofbgroup(fbtoken, message, groupid):
             'appsecret_proof': str(get_fb_app_secret_proof(str(fbtoken.oauth_token))),
             }
         )
-    print(r.status_code)
+    print((r.status_code))
     return r
 def posttofbpage(fbtoken, message, pageid):
     request_token_url = "https://graph.facebook.com/"+str(pageid)+"/feed/"
@@ -403,7 +405,7 @@ def posttofbpage(fbtoken, message, pageid):
                 'appsecret_proof': str(get_fb_app_secret_proof(str(fbtoken.oauth_token))),
                 }
             )
-    print(r.status_code)
+    print((r.status_code))
     return r
 def posttotwitter(twtoken, message):
     consumer_key = settings.SOCIALMULTISHARE_TWITTER_OAUTH_KEY
@@ -431,7 +433,7 @@ def posttolipage(litoken, message, pageid):
         data = body,
         headers={"content-type":"application/json"}
         )
-    print(r.status_code)
+    print((r.status_code))
     return r
 def posttoliprofile(litoken, message):
     token = litoken.oauth_token
@@ -447,5 +449,5 @@ def posttoliprofile(litoken, message):
         data = body,
         headers={"content-type":"application/json"}
         )
-    print(r.status_code)
+    print((r.status_code))
     return r

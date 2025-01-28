@@ -1,4 +1,5 @@
 """Test cases for Zinnia Template"""
+from __future__ import absolute_import
 from django.test import TestCase
 
 from zinnia.templates import append_position

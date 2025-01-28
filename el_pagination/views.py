@@ -1,7 +1,8 @@
 """Django EL Pagination class-based views."""
 
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
 from django.utils.encoding import smart_str

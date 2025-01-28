@@ -1,4 +1,5 @@
 """Urls for the zinnia capabilities"""
+from __future__ import absolute_import
 from django.conf.urls import url
 
 from zinnia.views.capabilities import HumansTxt

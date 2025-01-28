@@ -6,10 +6,11 @@ django-helpdesk - A Django powered ticket tracker for small enterprise.
 forms.py - Definitions of newforms-based forms for creating and maintaining
            tickets.
 """
+from __future__ import absolute_import
 from django.core.exceptions import ObjectDoesNotExist
 
 try:
-    from StringIO import StringIO
+    from io import StringIO
 except ImportError:
     from io import StringIO
 
@@ -103,7 +104,7 @@ class EditTicketForm(CustomFieldMixin, forms.ModelForm):
 
     def save(self, *args, **kwargs):
 
-        for field, value in self.cleaned_data.items():
+        for field, value in list(self.cleaned_data.items()):
             if field.startswith('custom_'):
                 field_name = field.replace('custom_', '', 1)
                 customfield = CustomField.objects.get(name=field_name)
@@ -230,7 +231,7 @@ class TicketForm(CustomFieldMixin, forms.Form):
                 t.assigned_to = None
         t.save()
 
-        for field, value in self.cleaned_data.items():
+        for field, value in list(self.cleaned_data.items()):
             if field.startswith('custom_'):
                 field_name = field.replace('custom_', '', 1)
                 customfield = CustomField.objects.get(name=field_name)
@@ -418,7 +419,7 @@ class PublicTicketForm(CustomFieldMixin, forms.Form):
 
         t.save()
 
-        for field, value in self.cleaned_data.items():
+        for field, value in list(self.cleaned_data.items()):
             if field.startswith('custom_'):
                 field_name = field.replace('custom_', '', 1)
                 customfield = CustomField.objects.get(name=field_name)

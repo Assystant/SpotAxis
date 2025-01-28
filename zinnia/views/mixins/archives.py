@@ -1,4 +1,5 @@
 """Mixins for Zinnia archive views"""
+from __future__ import absolute_import
 from datetime import datetime
 from datetime import timedelta
 

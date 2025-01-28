@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import django.utils.timezone
 from django.conf import settings
 from django.db import migrations

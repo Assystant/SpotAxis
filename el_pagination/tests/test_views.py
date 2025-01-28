@@ -1,7 +1,8 @@
 """View tests."""
 
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
 from django.test import TestCase
@@ -9,6 +10,7 @@ from django.test.client import RequestFactory
 
 from el_pagination import views
 from project.models import make_model_instances, TestModel
+from six.moves import range
 
 
 class AjaxListViewTest(TestCase):
@@ -43,22 +45,22 @@ class AjaxListViewTest(TestCase):
     def test_list(self):
         # Ensure the view correctly adds the list to context.
         view = self.make_view(
-            queryset=range(30),
+            queryset=list(range(30)),
             template_name=self.template_name,
             page_template=self.page_template,
         )
         response = view(self.request)
-        self.check_response(response, self.template_name, range(30))
+        self.check_response(response, self.template_name, list(range(30)))
 
     def test_list_ajax(self):
         # Ensure the list view switches templates when the request is Ajax.
         view = self.make_view(
-            queryset=range(30),
+            queryset=list(range(30)),
             template_name=self.template_name,
             page_template=self.page_template,
         )
         response = view(self.ajax_request)
-        self.check_response(response, self.page_template, range(30))
+        self.check_response(response, self.page_template, list(range(30)))
 
     def test_queryset(self):
         # Ensure the view correctly adds the queryset to context.
@@ -98,7 +100,7 @@ class AjaxListViewTest(TestCase):
 
     def test_missing_page_template(self):
         # An error is raised if the ``page_template`` name is not provided.
-        view = self.make_view(queryset=range(30))
+        view = self.make_view(queryset=list(range(30)))
         with self.assertRaises(ImproperlyConfigured) as cm:
             view(self.request)
         self.assertIn('page_template', str(cm.exception))
@@ -114,7 +116,7 @@ class AjaxListViewTest(TestCase):
     def test_view_in_context(self):
         # Ensure the view is included in the template context.
         view = self.make_view(
-            queryset=range(30),
+            queryset=list(range(30)),
             page_template=self.page_template,
         )
         response = view(self.request)

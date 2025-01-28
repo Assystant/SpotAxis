@@ -1,4 +1,5 @@
 """Views for Zinnia tags"""
+from __future__ import absolute_import
 from django.http import Http404
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _

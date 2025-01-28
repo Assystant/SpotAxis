@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 from django.contrib import admin
 from vacancies.models import Vacancy_Status, PubDate_Search, Employment_Experience, Salary_Type,\
     Vacancy, Postulate, Question, Vacancy_Files, Candidate_Fav, VacancyTags

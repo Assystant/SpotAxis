@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site

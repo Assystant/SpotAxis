@@ -1,4 +1,5 @@
 """Test cases for Zinnia's url_shortener"""
+from __future__ import absolute_import
 import warnings
 
 from django.test import TestCase

@@ -1,4 +1,5 @@
 """Protection mixins for Zinnia views"""
+from __future__ import absolute_import
 from django.contrib.auth.views import login
 
 

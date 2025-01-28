@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -17,7 +18,7 @@ class UploadedFile(models.Model):
     delete.alters_data = True
 
     def __unicode__(self):
-        return unicode(self.file)
+        return str(self.file)
 
     class Meta:
         ordering = ('-creation_date',)

@@ -1,6 +1,7 @@
 """
 Management command for re-counting the discussions on Entry.
 """
+from __future__ import absolute_import
 import sys
 
 from django.core.management.base import BaseCommand

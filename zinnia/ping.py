@@ -1,17 +1,18 @@
 """Pings utilities for Zinnia"""
+from __future__ import absolute_import
 import socket
 import threading
 from logging import getLogger
 try:
     from urllib.request import urlopen
     from urllib.parse import urlsplit
-    from xmlrpc.client import Error
-    from xmlrpc.client import ServerProxy
+    from .xmlrpc.client import Error
+    from .xmlrpc.client import ServerProxy
 except ImportError:  # Python 2
-    from urllib2 import urlopen
-    from urlparse import urlsplit
-    from xmlrpclib import Error
-    from xmlrpclib import ServerProxy
+    from urllib.request import urlopen
+    from urllib.parse import urlsplit
+    from .xmlrpc.client import Error
+    from .xmlrpc.client import ServerProxy
 
 from bs4 import BeautifulSoup
 
@@ -118,7 +119,7 @@ class ExternalUrlsPinger(threading.Thread):
         external_urls = self.find_external_urls(self.entry)
         external_urls_pingable = self.find_pingback_urls(external_urls)
 
-        for url, server_name in external_urls_pingable.items():
+        for url, server_name in list(external_urls_pingable.items()):
             reply = self.pingback_url(server_name, url)
             self.results.append(reply)
             logger.info('%s : %s' % (url, reply))

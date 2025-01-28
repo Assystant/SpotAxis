@@ -1,10 +1,12 @@
 """Paginator tests."""
 
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from django.test import TestCase
 
 from el_pagination import paginators
+from six.moves import range
 
 
 class PaginatorTestMixin(object):
@@ -33,7 +35,7 @@ class PaginatorTestMixin(object):
 
     def test_no_orphans(self):
         # Ensure exceeding orphans generate a new page.
-        paginator = self.paginator_class(range(11), 8, orphans=2)
+        paginator = self.paginator_class(list(range(11)), 8, orphans=2)
         object_list = paginator.page(2).object_list
         self.assertEqual(3, len(object_list))
 
@@ -66,7 +68,7 @@ class DifferentFirstPagePaginatorTestMixin(PaginatorTestMixin):
 
     def test_no_orphans(self):
         # Ensure exceeding orphans generate a new page.
-        paginator = self.paginator_class(range(11), 5, first_page=3, orphans=2)
+        paginator = self.paginator_class(list(range(11)), 5, first_page=3, orphans=2)
         object_list = paginator.page(3).object_list
         self.assertEqual(3, len(object_list))
 
@@ -102,7 +104,7 @@ class DefaultPaginatorTest(PaginatorTestMixin, TestCase):
 
     def test_single_page_indexes(self):
         # Ensure the returned indexes are correct for a single page pagination.
-        paginator = self.paginator_class(range(6), 5, orphans=2)
+        paginator = self.paginator_class(list(range(6)), 5, orphans=2)
         page = paginator.page(1)
         self.assertEqual(1, page.start_index())
         self.assertEqual(6, page.end_index())

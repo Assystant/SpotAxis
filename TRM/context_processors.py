@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from candidates.models import Candidate
@@ -18,7 +19,7 @@ def project_name(request):
     return {'project_name': settings.PROJECT_NAME, 'HOSTED_URL':settings.HOSTED_URL}
 
 def candidate_full_name(request):
-    full_name = _(u'Your Name')
+    full_name = _('Your Name')
     if request.user.is_authenticated():
         user_profile = request.user.profile.codename
         if user_profile == 'candidate':

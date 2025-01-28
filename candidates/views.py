@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import random
 
@@ -28,6 +30,7 @@ from vacancies.models import Vacancy_Status, Postulate, Candidate_Fav
 from TRM.context_processors import subdomain
 from TRM.settings import SITE_URL
 from django.db.models import Q
+from six.moves import range
 
 def resume_builder(request):
     subdomain_data = subdomain(request)
@@ -163,7 +166,7 @@ def edit_curriculum(request, candidate_id=None):
                     os.remove(str(remove_file))
                     curriculum.file = None
                     curriculum.save()
-                    messages.success(request, _(u'Your CV/Portafolio was successfully removed from the system'))
+                    messages.success(request, _('Your CV/Portafolio was successfully removed from the system'))
                 except:
                     tb = traceback.format_exc()
                     print(tb)
@@ -180,13 +183,13 @@ def edit_curriculum(request, candidate_id=None):
                     if actual_cv_file:
                         try:
                             remove_file = os.path.join(settings.MEDIA_ROOT, str(actual_cv_file))
-                            print('remove_file: %s' % remove_file)
+                            print(('remove_file: %s' % remove_file))
                             os.remove(str(remove_file))
                         except:
                             tb = traceback.format_exc()
                             print(tb)
                             pass
-                    messages.success(request, _(u'Successfuly uploaded your file %s') % curriculum.filename())
+                    messages.success(request, _('Successfuly uploaded your file %s') % curriculum.filename())
                 return redirect('candidates_edit_curriculum')
         else:
             photoForm = UserPhotoForm(instance=candidate.user, data=request.POST, files=request.FILES)
@@ -550,9 +553,9 @@ def create_candidates(request):
             user = User.objects.create(username=username+'3', password=password, first_name=first_name, last_name=last_name,
                                    email=email.lower(), is_active=True, logued_by=logued_by, profile=candidate_profile)
         # Candidate
-        year = random.choice(range(1950, 2000))
-        month = random.choice(range(1, 12))
-        day = random.choice(range(1, 28))
+        year = random.choice(list(range(1950, 2000)))
+        month = random.choice(list(range(1, 12)))
+        day = random.choice(list(range(1, 28)))
         birthday = datetime(year, month, day)
         gender = Gender.objects.get(id=random.randint(2, 3))
         maritalStatus = Marital_Status.objects.all().order_by('?')[0]
@@ -560,8 +563,8 @@ def create_candidates(request):
         city = 'City %s' % str(x)
         travel = random.choice([True, False])
         residence = random.choice([True, False])
-        min_salary = random.choice(range(5000, 10000))
-        max_salary = random.choice(range(10000, 80000))
+        min_salary = random.choice(list(range(5000, 10000)))
+        max_salary = random.choice(list(range(10000, 80000)))
         objective = "Auto Objetivo Profesional %s Objetivo Profesional %s Objetivo Profesional %s" % (str(x), str(x), str(x))
         # courses = "Diplomado en procesos automaticos %s" % str(x)
         candidate = Candidate.objects.create(user=user, first_name=first_name, last_name=last_name,
@@ -577,16 +580,16 @@ def create_candidates(request):
             # area =  Company_Area.objects.filter(company_industry=industry).order_by('?')[0]
             employment = 'Auto Puesto numero %s - %s' % (str(x), str(i))
             tasks = 'Auto Estas son las tareas del puesto numero %s - %s' % (str(x), str(i))
-            start_date_year = random.choice(range(1964, 1980))
-            start_date_month = random.choice(range(1, 12))
-            start_date_day = random.choice(range(1, 28))
+            start_date_year = random.choice(list(range(1964, 1980)))
+            start_date_month = random.choice(list(range(1, 12)))
+            start_date_day = random.choice(list(range(1, 28)))
             start_date = datetime(start_date_year, start_date_month, start_date_day)
             present = random.choice([True, False])
             end_date = None
             if not present:
-                end_date_year = random.choice(range(1981, 2015))
-                end_date_month = random.choice(range(1, 12))
-                end_date_day = random.choice(range(1, 28))
+                end_date_year = random.choice(list(range(1981, 2015)))
+                end_date_month = random.choice(list(range(1, 12)))
+                end_date_day = random.choice(list(range(1, 28)))
                 end_date = datetime(end_date_year, end_date_month, end_date_day)
             Expertise.objects.create(candidate=candidate, company=company, industry=industry,
                                      country=mex, employment=employment, start_date=start_date,
@@ -603,17 +606,17 @@ def create_candidates(request):
             status = Academic_Status.objects.all().order_by('?')[0]
             school = 'Auto Escuela %s - %s' % (str(x), str(i))
             # school_type = School_Type.objects.all().order_by('?')[0]
-            start_date_year = random.choice(range(1964, 1996))
-            start_date_month = random.choice(range(1, 12))
-            start_date_day = random.choice(range(1, 28))
+            start_date_year = random.choice(list(range(1964, 1996)))
+            start_date_month = random.choice(list(range(1, 12)))
+            start_date_day = random.choice(list(range(1, 28)))
             start_date = datetime(start_date_year, start_date_month, start_date_day)
             country = Country.objects.all().order_by('?')[0]
             present = random.choice([True, False])
             end_date = None
             if not present:
-                end_date_year = random.choice(range(1981, 2014))
-                end_date_month = random.choice(range(1, 12))
-                end_date_day = random.choice(range(1, 28))
+                end_date_year = random.choice(list(range(1981, 2014)))
+                end_date_month = random.choice(list(range(1, 12)))
+                end_date_day = random.choice(list(range(1, 28)))
                 end_date = datetime(end_date_year, end_date_month, end_date_day)
             Academic.objects.create(candidate=candidate, degree=degree, status=status,
                                     school=school, country=country,

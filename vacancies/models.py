@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 import os
 
 from candidates.models import Candidate
@@ -13,8 +14,9 @@ from django.db.models import Q, Sum
 from django.utils.translation import ugettext as _
 from TRM import settings
 from utils import get_file_content, get_file_text, tagcloud
+from six.moves import range
 
-Name = _(u'Name')
+Name = _('Name')
 
 
 class Vacancy_Status(models.Model):
@@ -29,17 +31,17 @@ class Vacancy_Status(models.Model):
     """
     name = models.CharField(verbose_name=Name, max_length=30, blank=True, null=True, default=None)
     codename = models.CharField(max_length=30, blank=True, null=True, default=None)
-    public = models.BooleanField(verbose_name = _(u'Is Public?'), default = False)
+    public = models.BooleanField(verbose_name = _('Is Public?'), default = False)
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return '%s' % self.name
 
     def count(self):
         return self.vacancy_set.count()
 
     class Meta:
-        verbose_name = _(u'Job Status')
-        verbose_name_plural = _(u'Job Statuses')
+        verbose_name = _('Job Status')
+        verbose_name_plural = _('Job Statuses')
         ordering = ['id']
 
 class PubDate_Search(models.Model):
@@ -47,15 +49,15 @@ class PubDate_Search(models.Model):
     It serves to search for jobs according to publication date
     """
     name = models.CharField(verbose_name=Name, max_length=30, blank=True, null=True, default=None)
-    days = models.PositiveIntegerField(verbose_name=_(u'Days'), blank=True, null=True, default=None)
+    days = models.PositiveIntegerField(verbose_name=_('Days'), blank=True, null=True, default=None)
     codename = models.CharField(max_length=30, blank=True, null=True, default=None)
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return '%s' % self.name
 
     class Meta:
-        verbose_name = _(u'Day for Search')
-        verbose_name_plural = _(u'Days for search')
+        verbose_name = _('Day for Search')
+        verbose_name_plural = _('Days for search')
         ordering = ['days']
 
 # class Vacancy_Type(models.Model):
@@ -76,11 +78,11 @@ class Employment_Experience(models.Model):
     order = models.PositiveSmallIntegerField(blank=True, null=True, default=100)
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return '%s' % self.name
 
     class Meta:
-        verbose_name = _(u'Employment Experience')
-        verbose_name_plural = _(u'Employment Experiences')
+        verbose_name = _('Employment Experience')
+        verbose_name_plural = _('Employment Experiences')
         ordering = ['id']
 
 class Salary_Type(models.Model):
@@ -92,11 +94,11 @@ class Salary_Type(models.Model):
     order = models.PositiveSmallIntegerField(blank=True, null=True, default=100)
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return '%s' % self.name
 
     class Meta:
-        verbose_name = _(u'Type of Salary')
-        verbose_name_plural = _(u'Types of Salaries')
+        verbose_name = _('Type of Salary')
+        verbose_name_plural = _('Types of Salaries')
         ordering = ['order']
 
 def get_ages(indistinct=True):
@@ -142,62 +144,62 @@ def get_30_days_later():
 
 class Vacancy(models.Model):
     """ Jobs """
-    company = models.ForeignKey(Company, verbose_name=_(u'Company'), blank=True, null=True, default=None, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(u'User'), blank=True, null=True, default=None, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, verbose_name=_('Company'), blank=True, null=True, default=None, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=True, null=True, default=None, on_delete=models.CASCADE)
     
-    employment = models.CharField(verbose_name=_(u'Job Role'), max_length=70, blank=True, null=True, default=None)
-    status = models.ForeignKey(Vacancy_Status, verbose_name=_(u'Status'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    description = RichTextField(verbose_name=_(u'Description of Post'), null=True, blank=True, default=None)
-    employmentType = models.ForeignKey(Employment_Type, verbose_name=_(u'Type of employment'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    employment = models.CharField(verbose_name=_('Job Role'), max_length=70, blank=True, null=True, default=None)
+    status = models.ForeignKey(Vacancy_Status, verbose_name=_('Status'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    description = RichTextField(verbose_name=_('Description of Post'), null=True, blank=True, default=None)
+    employmentType = models.ForeignKey(Employment_Type, verbose_name=_('Type of employment'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # state = models.ForeignKey(State, verbose_name=_(u'State'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     # municipal = models.ForeignKey(Municipal, verbose_name=_(u'City'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     
-    industry = models.ForeignKey(Industry, verbose_name=_(u'Industry'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    function = models.CharField(verbose_name=_(u'Function'), null=True, blank=True, default=None, max_length=50)
-    skills = models.CharField(verbose_name=_(u'Skills'), null=True, blank=True, default=None, max_length=200)
+    industry = models.ForeignKey(Industry, verbose_name=_('Industry'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    function = models.CharField(verbose_name=_('Function'), null=True, blank=True, default=None, max_length=50)
+    skills = models.CharField(verbose_name=_('Skills'), null=True, blank=True, default=None, max_length=200)
     
-    notice_period = models.CharField(verbose_name=_(u'Notice Period'), null=True, blank=True, default=None, max_length=50)
+    notice_period = models.CharField(verbose_name=_('Notice Period'), null=True, blank=True, default=None, max_length=50)
     # area = models.ForeignKey(Area, verbose_name=_(u'Area'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     
-    nationality = models.ForeignKey(Country, verbose_name=_(u'Nationality'), related_name='+', null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    state = models.CharField(verbose_name=_(u'State'),null=True,blank=True,default=None, max_length=50)
-    city = models.CharField(verbose_name=_(u'City'),null=True,blank=True,default=None, max_length=50)
+    nationality = models.ForeignKey(Country, verbose_name=_('Nationality'), related_name='+', null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    state = models.CharField(verbose_name=_('State'),null=True,blank=True,default=None, max_length=50)
+    city = models.CharField(verbose_name=_('City'),null=True,blank=True,default=None, max_length=50)
     
-    gender = models.ForeignKey(Gender, verbose_name=_(u'Gender'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    minEmploymentExperience = models.ForeignKey(Employment_Experience, verbose_name=_(u'Minimum Experience'), null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name = 'min_experience')
-    maxEmploymentExperience = models.ForeignKey(Employment_Experience, verbose_name=_(u'Maximum Experience'), null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name = 'max_experience')
-    degree = models.ForeignKey(Degree, verbose_name=_(u'Degree'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    gender = models.ForeignKey(Gender, verbose_name=_('Gender'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    minEmploymentExperience = models.ForeignKey(Employment_Experience, verbose_name=_('Minimum Experience'), null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name = 'min_experience')
+    maxEmploymentExperience = models.ForeignKey(Employment_Experience, verbose_name=_('Maximum Experience'), null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name = 'max_experience')
+    degree = models.ForeignKey(Degree, verbose_name=_('Degree'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     min_age = models.CharField(choices=get_ages(), null=True, blank=True, default=None, max_length=2)
     max_age = models.CharField(choices=get_ages(), null=True, blank=True, default=None, max_length=2)
     
-    currency = models.ForeignKey(Currency, verbose_name=_(u'Currency'), null=True, blank=True, default=None)
-    salaryType = models.ForeignKey(Salary_Type, verbose_name=_(u'Type of Salary'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    min_salary = models.CharField(verbose_name=_(u'Minimum Salary'),max_length=50, null=True, blank=True, default=None)
-    max_salary = models.CharField(verbose_name=_(u'Maximum Salary'),max_length=50, null=True, blank=True, default=None)
+    currency = models.ForeignKey(Currency, verbose_name=_('Currency'), null=True, blank=True, default=None)
+    salaryType = models.ForeignKey(Salary_Type, verbose_name=_('Type of Salary'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    min_salary = models.CharField(verbose_name=_('Minimum Salary'),max_length=50, null=True, blank=True, default=None)
+    max_salary = models.CharField(verbose_name=_('Maximum Salary'),max_length=50, null=True, blank=True, default=None)
     
-    seen = models.IntegerField(verbose_name=_(u'Seen'), blank=True, null=True, default=0)
-    postulate = models.BooleanField(verbose_name=_(u'Applications allowed?'), default=True)
-    applications = models.PositiveIntegerField(verbose_name=_(u'Number of applications'), blank=True, null=True, default=0)
-    confidential = models.BooleanField(verbose_name=_(u'Confidential?'), default=False)
-    data_contact = models.BooleanField(verbose_name=_(u'Contact data?'), default=True)
-    another_email = models.BooleanField(verbose_name=_(u'Send nominatins to another email'), default=False)
-    email = models.EmailField(verbose_name=u'E-mail', blank=True, null=True, default=None)
+    seen = models.IntegerField(verbose_name=_('Seen'), blank=True, null=True, default=0)
+    postulate = models.BooleanField(verbose_name=_('Applications allowed?'), default=True)
+    applications = models.PositiveIntegerField(verbose_name=_('Number of applications'), blank=True, null=True, default=0)
+    confidential = models.BooleanField(verbose_name=_('Confidential?'), default=False)
+    data_contact = models.BooleanField(verbose_name=_('Contact data?'), default=True)
+    another_email = models.BooleanField(verbose_name=_('Send nominatins to another email'), default=False)
+    email = models.EmailField(verbose_name='E-mail', blank=True, null=True, default=None)
     
-    add_date = models.DateTimeField(verbose_name=_(u'Add Date'), auto_now_add=True)
-    last_modified = models.DateTimeField(verbose_name=_(u'Last Modified'), auto_now=True)
+    add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
+    last_modified = models.DateTimeField(verbose_name=_('Last Modified'), auto_now=True)
     
-    pub_after = models.BooleanField(verbose_name=_(u'Post on a future date?'), default=False)
-    pub_date = models.DateField(verbose_name=_(u'Date of publication'), default=date.today)
-    unpub_date = models.DateField(verbose_name=_(u'Date of unpublication'), default = get_30_days_later)
-    editing_date = models.DateField(verbose_name=_(u'Editing Date'), null=True, blank=True)
-    end_date = models.DateField(verbose_name=_(u'End Date'), null=True, blank=True)
-    expired = models.BooleanField(verbose_name=_(u'Is Expired?'), default=False)
+    pub_after = models.BooleanField(verbose_name=_('Post on a future date?'), default=False)
+    pub_date = models.DateField(verbose_name=_('Date of publication'), default=date.today)
+    unpub_date = models.DateField(verbose_name=_('Date of unpublication'), default = get_30_days_later)
+    editing_date = models.DateField(verbose_name=_('Editing Date'), null=True, blank=True)
+    end_date = models.DateField(verbose_name=_('End Date'), null=True, blank=True)
+    expired = models.BooleanField(verbose_name=_('Is Expired?'), default=False)
     
-    questions = models.BooleanField(verbose_name=_(u'Allow questions?'), default=True)
-    hiring_date = models.DateField(verbose_name=_(u'Date of Joining'), null=True, blank=True)
-    vacancies_number = models.PositiveSmallIntegerField(verbose_name=_(u'Number of Jobs'), null=True, blank=True, default=1)
-    public_cvs = models.BooleanField(verbose_name=_(u'Allow public CV?'), default=False)
-    vacancy_reason = models.CharField(verbose_name=(u'Job Reason for Closing'),max_length = 100, null=True, blank=True, default=None)
+    questions = models.BooleanField(verbose_name=_('Allow questions?'), default=True)
+    hiring_date = models.DateField(verbose_name=_('Date of Joining'), null=True, blank=True)
+    vacancies_number = models.PositiveSmallIntegerField(verbose_name=_('Number of Jobs'), null=True, blank=True, default=1)
+    public_cvs = models.BooleanField(verbose_name=_('Allow public CV?'), default=False)
+    vacancy_reason = models.CharField(verbose_name=('Job Reason for Closing'),max_length = 100, null=True, blank=True, default=None)
     
     recruiters = models.ManyToManyField(Recruiter, verbose_name='Recruiter',default=None)
     
@@ -217,7 +219,7 @@ class Vacancy(models.Model):
     closedjobs = Closed()
 
     def __unicode__(self):
-        return u'%s' % self.employment
+        return '%s' % self.employment
 
     def non_members(self):
         employers = self.company.recruiter_set.all().filter(membership=1, user__is_active=True).exclude(id__in=[r.id for r in self.recruiters.all()])
@@ -237,7 +239,7 @@ class Vacancy(models.Model):
             url = self.company.subdomain.slug+settings.SITE_SUFFIX
         inurl = reverse('vacancies_get_vacancy_details',kwargs={'vacancy_id':self.id})
         url = url.strip('/') + '/' + inurl.strip('/')
-        return u'http://%s/' % url.strip('/')
+        return 'http://%s/' % url.strip('/')
 
     def get_application_url(self):
         if self.company.subdomain.cname:
@@ -246,7 +248,7 @@ class Vacancy(models.Model):
             url = self.company.subdomain.slug + settings.SITE_SUFFIX
         inurl = reverse('vacancies_public_apply', kwargs={'vacancy_id':self.id})
         url = url.strip('/') + '/' + inurl.strip('/')
-        return u'http://%s/' % url.strip('/')
+        return 'http://%s/' % url.strip('/')
 
     def get_url_block(self):
         return [{
@@ -273,7 +275,7 @@ class Vacancy(models.Model):
             experience = self.minEmploymentExperience.name
         else:
             experience = self.minEmploymentExperience.name + ' - ' + self.maxEmploymentExperience.name            
-        return u'%s' % experience
+        return '%s' % experience
 
     def age_preference(self):
         age = ""
@@ -345,20 +347,20 @@ class Vacancy(models.Model):
         return html
 
     class Meta:
-        verbose_name = _(u'Job')
-        verbose_name_plural = _(u'Jobs')
+        verbose_name = _('Job')
+        verbose_name_plural = _('Jobs')
         ordering = ('-pub_date', '-id')
 
 ACTION_CHOICES = (
-    (u'1', u'Published'),
-    (u'2', u'Un-Published'),
+    ('1', 'Published'),
+    ('2', 'Un-Published'),
 )
 
 class Publish_History(models.Model):
     """ Log of the published jobs """
-    vacancy = models.ForeignKey(Vacancy, verbose_name=_(u'Job'), blank=True, null=True, default=None, on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.CASCADE)
     action = models.CharField(choices=ACTION_CHOICES, null=True, blank=True, default=None, max_length=2)
-    action_date = models.DateField(verbose_name=_(u'On'), auto_now_add=True)
+    action_date = models.DateField(verbose_name=_('On'), auto_now_add=True)
     
 
     class Meta:
@@ -371,32 +373,32 @@ class Publish_History(models.Model):
 
 class Question(models.Model):
     """ Questions/Comments on the published jobs """
-    vacancy = models.ForeignKey(Vacancy, verbose_name=_(u'Job'), blank=True, null=True, default=None, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(u'User'), blank=True, null=True, default=None, on_delete=models.CASCADE)
-    question = models.CharField(verbose_name=_(u'Question'), max_length=200, null=True, blank=True, default=None)
-    answer = models.CharField(verbose_name=_(u'Answer'), max_length=200, null=True, blank=True, default=None)
-    question_date = models.DateTimeField(verbose_name=_(u'Question date'), auto_now_add=True)
-    answer_date = models.DateTimeField(verbose_name=_(u'Answer Date'), null=True, blank=True, default=None)
+    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=True, null=True, default=None, on_delete=models.CASCADE)
+    question = models.CharField(verbose_name=_('Question'), max_length=200, null=True, blank=True, default=None)
+    answer = models.CharField(verbose_name=_('Answer'), max_length=200, null=True, blank=True, default=None)
+    question_date = models.DateTimeField(verbose_name=_('Question date'), auto_now_add=True)
+    answer_date = models.DateTimeField(verbose_name=_('Answer Date'), null=True, blank=True, default=None)
 
     def __unicode__(self):
-        return u'%s' % self.question
+        return '%s' % self.question
 
     class Meta:
-        verbose_name = _(u'Question')
-        verbose_name_plural = _(u'Questions')
+        verbose_name = _('Question')
+        verbose_name_plural = _('Questions')
         ordering = ('-question_date',)
 
 class Candidate_Fav(models.Model):
     vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), related_name='+', null=True, blank=True, default=None, on_delete=models.CASCADE)
     candidate = models.ForeignKey(Candidate, verbose_name=_('Candidate'), null=True, blank=True, default=None, on_delete=models.CASCADE)
-    add_date = models.DateTimeField(verbose_name=_(u'Add Date'), auto_now_add=True)
+    add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
 
     def __unicode__(self):
-        return u'Id: %s - Candidate: %s - Job: %s' % (str(self.pk), str(self.candidate.pk), str(self.vacancy.pk))
+        return 'Id: %s - Candidate: %s - Job: %s' % (str(self.pk), str(self.candidate.pk), str(self.vacancy.pk))
 
     class Meta:
-        verbose_name = _(u'Favourite Job')
-        verbose_name_plural = _(u'Favourite Jobs')
+        verbose_name = _('Favourite Job')
+        verbose_name_plural = _('Favourite Jobs')
         ordering = ('-vacancy', '-add_date')
 
 ### Job_Files ###
@@ -428,20 +430,20 @@ class Vacancy_Files(models.Model):
         super(Vacancy_Files, self).delete(*args, **kwargs)
 
     def __unicode__(self):
-        return u'Id: %s - Job: %s - File: %s' % (str(self.pk), str(self.vacancy.pk), self.file.name)
+        return 'Id: %s - Job: %s - File: %s' % (str(self.pk), str(self.vacancy.pk), self.file.name)
 
     class Meta:
-        verbose_name = _(u'File for Job')
-        verbose_name_plural = _(u'Files for Job')
+        verbose_name = _('File for Job')
+        verbose_name_plural = _('Files for Job')
         ordering = ('-vacancy', '-add_date', 'random_number')
 ### Job_Files ###
 
 ### IF YOU ADD ADDITIONAL MODELS, DO NOT FORGET TO REGISTER THEM IN ADMIN ###
 class VacancyStage(models.Model):
-    stage = models.ForeignKey(Stage, verbose_name=_(u'Stage Name'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    vacancy = models.ForeignKey(Vacancy, verbose_name=_(u'Job'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    order = models.PositiveIntegerField(verbose_name=_(u'Order'), null=True, blank=True, default=None)
-    locked = models.BooleanField(verbose_name=_(u'Locked'), default=False)
+    stage = models.ForeignKey(Stage, verbose_name=_('Stage Name'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    order = models.PositiveIntegerField(verbose_name=_('Order'), null=True, blank=True, default=None)
+    locked = models.BooleanField(verbose_name=_('Locked'), default=False)
     # candidates = models.ManyToManyField(Candidate, verbose_name=_(u'Candidate'), default=None)
     recruiters = models.ManyToManyField(Recruiter, default=None)
     criteria = models.TextField(default=None, null=True, blank=True)
@@ -494,12 +496,12 @@ class VacancyStage(models.Model):
             url = self.vacancy.company.subdomain.slug+settings.SITE_SUFFIX
         inurl = reverse('vacancies_get_vacancy_stage_details',kwargs={'vacancy_id':self.id, 'vacancy_stage': self.order})
         url = url.strip('/') + '/' + inurl.strip('/')
-        return u'http://%s/' % url.strip('/')
+        return 'http://%s/' % url.strip('/')
 
 
     class Meta:
-        verbose_name=_(u'Job Process')
-        verbose_name_plural=_(u'Job Processes')
+        verbose_name=_('Job Process')
+        verbose_name_plural=_('Job Processes')
         ordering = ['order']
 
 class StageCriterion(models.Model):
@@ -515,7 +517,7 @@ class StageCriterion(models.Model):
     
 class VacancyTags(models.Model):
     name = models.CharField(verbose_name = 'Tag Name', max_length=50)
-    added = models.DateTimeField(verbose_name=_(u'Add Date'), auto_now_add=True)
+    added = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
     vacancy = models.ForeignKey(Vacancy, null=True, default = None)
 
     def __unicode__(self):
@@ -543,18 +545,18 @@ class Postulate(models.Model):
     """ Indicates whether a candidate is running a Job and if the Company has already seen or not the CV of the candidate nominated """
     default_path = 'vacancies'
 
-    vacancy = models.ForeignKey(Vacancy, verbose_name=_(u'Job'), related_name='postulated', null=True, blank=True, default=None, on_delete=models.CASCADE)
-    candidate = models.ForeignKey(Candidate, verbose_name=_(u'Candidate'), null=True, blank=True, default=None, on_delete=models.CASCADE)
-    seen = models.BooleanField(verbose_name=_(u'Seen'), default=False)
+    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), related_name='postulated', null=True, blank=True, default=None, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, verbose_name=_('Candidate'), null=True, blank=True, default=None, on_delete=models.CASCADE)
+    seen = models.BooleanField(verbose_name=_('Seen'), default=False)
     finalize = models.BooleanField(verbose_name="Selected", default=False)
-    discard = models.BooleanField(verbose_name=_(u'Discarded'), default=False)
+    discard = models.BooleanField(verbose_name=_('Discarded'), default=False)
     withdraw = models.BooleanField(verbose_name=_('Wihdrawen'), default=False)
-    add_date = models.DateTimeField(verbose_name=_(u'Add Date'), auto_now_add=True)
-    tag = models.CharField(max_length=200, verbose_name=_(u'Application Tag'), default=None, null=True, blank=True)
+    add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
+    tag = models.CharField(max_length=200, verbose_name=_('Application Tag'), default=None, null=True, blank=True)
     vacancy_stage = models.ForeignKey(VacancyStage, default=None, null=True, blank=True)
     recruiter = models.ForeignKey(Recruiter, null=True, blank=True, default=None)
     is_recruiter = models.BooleanField(verbose_name = "Added by Recruiter?", blank=True, default=False)
-    description = models.TextField(verbose_name=_(u'Description'), null=True, blank=True, default=None)
+    description = models.TextField(verbose_name=_('Description'), null=True, blank=True, default=None)
     tags = models.ManyToManyField(VacancyTags, default=None)
     has_filled_custom_form = models.BooleanField(verbose_name = 'Filled Custom Form?', default=False, blank= True)
     custom_form_application = models.ManyToManyField(FieldValue, default=None)
@@ -562,11 +564,11 @@ class Postulate(models.Model):
     medium = models.ForeignKey(Medium, null=True, blank=True, default=None, on_delete=models.SET_DEFAULT)
 
     def __unicode__(self):
-        return u'Id: %s - Job: %s - Candidate: %s - Seen: %s - Discard: %s' % (str(self.pk), str(self.vacancy.pk), str(self.candidate.pk), self.seen, self.discard)
+        return 'Id: %s - Job: %s - Candidate: %s - Seen: %s - Discard: %s' % (str(self.pk), str(self.vacancy.pk), str(self.candidate.pk), self.seen, self.discard)
 
     class Meta:
-        verbose_name = _(u'Application')
-        verbose_name_plural = _(u'Aplications')
+        verbose_name = _('Application')
+        verbose_name_plural = _('Aplications')
         ordering = ('-vacancy', '-add_date', '-seen')
 
     def last_status(self):
@@ -639,7 +641,7 @@ class Postulate(models.Model):
             url = self.vacancy.company.subdomain.slug+settings.SITE_SUFFIX
         inurl = reverse('companies_curriculum_detail',kwargs={'candidate_id':self.candidate.id,'vacancy_id':self.vacancy.id})
         url = url + inurl
-        return u'http://%s/' % url.strip('/')
+        return 'http://%s/' % url.strip('/')
 
     def file_content(self):
         return get_file_content(self.candidate.curriculum.file.path)
@@ -699,17 +701,17 @@ class Comment(models.Model):
 
     def stagesection(self):
         if self.stage_section == 0:
-            return u'In Process'
+            return 'In Process'
         elif self.stage_section == 1:
-            return u'Moved to Next'
+            return 'Moved to Next'
         elif self.stage_section == 2:
-            return u'Archived'
+            return 'Archived'
 
     def stage_string(self):
         if self.stage.order == 100:
             return str(self.stage)
         else:
-            return u"%s - %s" % (str(self.stage),self.stagesection())
+            return "%s - %s" % (str(self.stage),self.stagesection())
 
     def get_scores(self):
         if self.postulate:

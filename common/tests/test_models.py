@@ -10,6 +10,7 @@
  """
 
 # Imports
+from __future__ import absolute_import
 from django.test import SimpleTestCase, TestCase
 from common.models import Profile, User
 

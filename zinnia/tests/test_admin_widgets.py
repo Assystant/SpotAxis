@@ -1,5 +1,6 @@
 # coding=utf-8
 """Test cases for Zinnia's admin widgets"""
+from __future__ import absolute_import
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils.encoding import smart_text
@@ -64,8 +65,8 @@ class MPTTFilteredSelectMultipleTestCase(TestCase):
     @override_settings(STATIC_URL='/s/')
     def test_media(self):
         medias = MPTTFilteredSelectMultiple('test', False).media
-        self.assertEquals(medias._css, {})
-        self.assertEquals(medias._js, [
+        self.assertEqual(medias._css, {})
+        self.assertEqual(medias._js, [
             '/s/admin/js/core.js',
             '/s/zinnia/admin/mptt/js/mptt_m2m_selectbox.js',
             '/s/admin/js/SelectFilter2.js'])
@@ -132,9 +133,9 @@ class TagAutoCompleteTestCase(TestCase):
     @override_settings(STATIC_URL='/s/')
     def test_media(self):
         medias = TagAutoComplete().media
-        self.assertEquals(medias._css,
+        self.assertEqual(medias._css,
                           {'all': ['/s/zinnia/admin/select2/css/select2.css']})
-        self.assertEquals(medias._js,
+        self.assertEqual(medias._js,
                           ['/s/zinnia/admin/select2/js/select2.js'])
 
 

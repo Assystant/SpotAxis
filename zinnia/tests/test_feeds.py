@@ -1,9 +1,10 @@
 # coding=utf-8
 """Test cases for Zinnia's feeds"""
+from __future__ import absolute_import
 try:
     from urllib.parse import urljoin
 except ImportError:  # Python 2
-    from urlparse import urljoin
+    from urllib.parse import urljoin
 
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
@@ -208,7 +209,7 @@ class FeedsTestCase(TestCase):
         self.create_published_entry()
         feed = LastEntries()
         self.assertEqual(feed.link(), '/')
-        self.assertEqual(len(feed.items()), 1)
+        self.assertEqual(len(list(feed.items())), 1)
         self.assertEqual(feed.get_title(None), 'Last entries')
         self.assertEqual(
             feed.description(),
@@ -313,7 +314,7 @@ class FeedsTestCase(TestCase):
         self.create_discussions(entry)
         feed = LastDiscussions()
         self.assertEqual(feed.link(), '/')
-        self.assertEqual(len(feed.items()), 3)
+        self.assertEqual(len(list(feed.items())), 3)
         self.assertEqual(feed.get_title(None), 'Last discussions')
         self.assertEqual(
             feed.description(),

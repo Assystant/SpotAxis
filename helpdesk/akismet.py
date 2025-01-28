@@ -55,8 +55,9 @@ Usage example::
 """
 
 
+from __future__ import absolute_import
 import os
-from urllib import urlencode
+from urllib.parse import urlencode
 
 import socket
 if hasattr(socket, 'setdefaulttimeout'):
@@ -85,7 +86,7 @@ urllib2 = None
 try:
     from google.appengine.api import urlfetch
 except ImportError:
-    import urllib2
+    import urllib.request, urllib.error, urllib.parse
 
 if urllib2 is None:
     def _fetch_url(url, data, headers):
@@ -96,8 +97,8 @@ if urllib2 is None:
                         (url, req.status_code))
 else:
     def _fetch_url(url, data, headers):
-        req = urllib2.Request(url, data, headers)
-        h = urllib2.urlopen(req)
+        req = urllib.request.Request(url, data, headers)
+        h = urllib.request.urlopen(req)
         resp = h.read()
         return resp
 

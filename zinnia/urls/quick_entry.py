@@ -1,4 +1,5 @@
 """Url for the Zinnia quick entry view"""
+from __future__ import absolute_import
 from django.conf.urls import url
 
 from zinnia.urls import _

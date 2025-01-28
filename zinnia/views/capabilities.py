@@ -1,4 +1,5 @@
 """Views for Zinnia capabilities"""
+from __future__ import absolute_import
 from django.contrib.sites.models import Site
 from django.views.generic.base import TemplateView
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import migrations
 from django.db.utils import IntegrityError

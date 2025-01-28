@@ -1,12 +1,13 @@
 """Test cases for Zinnia's ping"""
+from __future__ import absolute_import
 try:
     from io import StringIO
     from urllib.error import URLError
     from urllib.response import addinfourl
 except ImportError:  # Python 2
-    from cStringIO import StringIO
+    from io import StringIO
     from urllib import addinfourl
-    from urllib2 import URLError
+    from urllib.error import URLError
 
 from django.test import TestCase
 

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import mammoth
 import docx
 import PyPDF2
@@ -6,6 +8,8 @@ from datetime import datetime
 from django.db.models import Count
 from payments.models import Discount, Discount_Usage
 from time import mktime
+from six.moves import range
+from six.moves import zip
 
 def get_epoch():
     dt = datetime.now()
@@ -69,7 +73,7 @@ def get_file_text(path):
 def get_pdf_content(pdf_path, page_nums=[]):
     content = ''
     try:
-        p = file(pdf_path, "rb")
+        p = open(pdf_path, "rb")
         pdf = PyPDF2.PdfFileReader(p)
         if page_nums:
             for page_num in page_nums:
@@ -87,7 +91,7 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
-from cStringIO import StringIO
+from io import StringIO
 
 def convert_pdf_to_txt(path):
     rsrcmgr = PDFResourceManager()
@@ -95,7 +99,7 @@ def convert_pdf_to_txt(path):
     codec = 'utf-8'
     laparams = LAParams()
     device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
-    fp = file(path, 'rb')
+    fp = open(path, 'rb')
     interpreter = PDFPageInterpreter(rsrcmgr, device)
     password = ""
     maxpages = 0
@@ -142,7 +146,7 @@ from common.models import User
 
 def generate_random_username(length=10, chars=ascii_lowercase+digits, split=4, delimiter='-'):
     
-    username = ''.join([choice(chars) for i in xrange(length)])
+    username = ''.join([choice(chars) for i in range(length)])
     
     if split:
         username = delimiter.join([username[start:start+split] for start in range(0, len(username), split)])
@@ -181,7 +185,7 @@ def posttofbprofile(fbtoken, message="", link=""):
                 # 'appsecret_proof': str(get_fb_app_secret_proof(str(token))),
             }
         )
-    print (r.status_code)
+    print((r.status_code))
     # raise ValueError(r.reason)
     return r
 
@@ -196,7 +200,7 @@ def posttofbgroup(fbtoken, groupid, message="", link=""):
             # 'appsecret_proof': str(get_fb_app_secret_proof(str(fbtoken.oauth_token))),
             }
         )
-    print(r.status_code)
+    print((r.status_code))
     return r
 
 
@@ -229,7 +233,7 @@ def posttofbpage(fbtoken, pageid, message = "", link = ""):
                 # 'appsecret_proof': str(get_fb_app_secret_proof(str(fbtoken.oauth_token))),
                 }
             )
-    print(r.status_code)
+    print((r.status_code))
     return r
 
 def posttoliprofile(litoken, message="", og={}):
@@ -256,8 +260,8 @@ def posttoliprofile(litoken, message="", og={}):
         data = json.dumps(data),
         headers = headers
         )
-    print(r.status_code)
-    print(r.content)
+    print((r.status_code))
+    print((r.content))
     return r
 
 def posttolicompany(litoken, pageid, message="", og={}):
@@ -285,10 +289,10 @@ def posttolicompany(litoken, pageid, message="", og={}):
         data = json.dumps(data),
         headers = headers
         )
-    print(r.status_code)
+    print((r.status_code))
     return r
 from requests_oauthlib import OAuth1
-from urllib import urlencode
+from urllib.parse import urlencode
 def posttotwitter(twtoken, message = "", link=""):
     consumer_key = settings.SOCIALAUTH_TWITTER_OAUTH_KEY
     consumer_secret = settings.SOCIALAUTH_TWITTER_OAUTH_SECRET
@@ -302,8 +306,8 @@ def posttotwitter(twtoken, message = "", link=""):
     r = requests.post(
             post_url, auth=auth, data=""
         )
-    print(r.status_code)
-    print(r.content)
+    print((r.status_code))
+    print((r.content))
     return r
 
 # def gettweets(twtoken):
@@ -345,7 +349,7 @@ def tagcloud(tags, related_name, threshold=0, maxsize=1.75, minsize=.75):
         maxcount = 0
         mincount = 0
     constant = log(maxcount - (mincount - 1))/(maxsize - minsize or 1) or 1
-    tagcount = zip(taglist, counts)
+    tagcount = list(zip(taglist, counts))
     for tag, count in tagcount:
         size = log(count - (mincount - 1))/constant + minsize
         tagcloud.append({'tag': tag, 'count': count, 'size': round(size, 7)})

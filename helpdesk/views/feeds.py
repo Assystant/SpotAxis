@@ -7,6 +7,7 @@ views/feeds.py - A handful of staff-only RSS feeds to provide ticket details
                  to feed readers or similar software.
 """
 
+from __future__ import absolute_import
 from django.contrib.auth import get_user_model
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
@@ -56,13 +57,13 @@ class OpenTicketsByUser(Feed):
 
     def link(self, obj):
         if obj['queue']:
-            return u'%s?assigned_to=%s&queue=%s' % (
+            return '%s?assigned_to=%s&queue=%s' % (
                 reverse('helpdesk_list'),
                 obj['user'].id,
                 obj['queue'].id,
                 )
         else:
-            return u'%s?assigned_to=%s' % (
+            return '%s?assigned_to=%s' % (
                 reverse('helpdesk_list'),
                 obj['user'].id,
                 )

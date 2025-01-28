@@ -1,4 +1,5 @@
 """Views for Zinnia shortlink"""
+from __future__ import absolute_import
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView
 

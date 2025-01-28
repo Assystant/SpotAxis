@@ -1,6 +1,7 @@
 """Preview for Zinnia"""
-from __future__ import division
 
+
+from __future__ import absolute_import
 from bs4 import BeautifulSoup
 
 from django.utils import six

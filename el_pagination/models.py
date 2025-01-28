@@ -1,7 +1,8 @@
 """Ephemeral models used to represent a page and a list of pages."""
 
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from django.template import (
     loader,
     Context,
@@ -13,6 +14,7 @@ from el_pagination import (
     settings,
     utils,
 )
+from six.moves import range
 
 
 # Page templates cache.
@@ -169,7 +171,7 @@ class PageList(utils.UnicodeMixin):
                 elif item == 'previous':
                     pages.append(self.previous())
                 elif item == 'next':
-                    pages.append(self.next())
+                    pages.append(next(self))
                 elif item == 'first':
                     pages.append(self.first_as_arrow())
                 elif item == 'last':
@@ -231,7 +233,7 @@ class PageList(utils.UnicodeMixin):
                 label=settings.PREVIOUS_LABEL)
         return ''
 
-    def next(self):
+    def __next__(self):
         """Return the next page.
 
         The page label is defined in ``settings.NEXT_LABEL``.
