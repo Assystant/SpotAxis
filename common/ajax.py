@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
 import json
 import traceback
 from activities.utils import *
@@ -32,7 +34,7 @@ from django.views.decorators.csrf import csrf_exempt
 from scheduler.models import Schedule
 from TRM.context_processors import subdomain
 from TRM.settings import ROOT_DOMAIN, STATIC_URL
-from urlparse import parse_qsl
+from urllib.parse import parse_qsl
 from utils import validate_code, posttofbprofile, posttofbgroup,posttofbpage, posttoliprofile, posttolicompany, posttotwitter
 from vacancies.forms import Public_FilesForm, diff_month
 from vacancies.models import Question, VacancyStage, Vacancy, Comment, Postulate_Stage, Postulate_Score
@@ -210,12 +212,12 @@ def vacancies_answer_question(request):
         email_template_name = 'mails/answer_vacancy_email.html',
         send_TRM_email(subject_template_name=subject_template_name, email_template_name=email_template_name, context_email=context_email, to_user=question.user.email)
 
-        data = _(u'We have succesfully released a response.')
+        data = _('We have succesfully released a response.')
         # messages.info(request, message)
     except:
         tb = traceback.format_exc()
         print(tb)
-        data = _(u'An error has occured, please try again.')
+        data = _('An error has occured, please try again.')
         # messages.error(request, message)
 
     return HttpResponse(data)
@@ -2409,7 +2411,7 @@ def smart_share(request,id):
         debug_data = debug_token(profile.oauth_token,profile.social_code)
         if profile.social_code == 'fb':
             recruiter_social_profile.fb = profile
-            if debug_data.has_key('data') and not debug_data['data'].has_key('error'):
+            if 'data' in debug_data and 'error' not in debug_data['data']:
                 recruiter_social_profile.fbstatus = 2
                 if 'user_managed_groups' in debug_data['data']['scopes']:
                     recruiter_social_profile.fbgroups = get_fb_user_groups(request.user)['data']
@@ -2425,7 +2427,7 @@ def smart_share(request,id):
                 recruiter_social_profile.fbstatus = 1
         elif profile.social_code == 'li':
             recruiter_social_profile.li = profile
-            if debug_data.has_key('id'):
+            if 'id' in debug_data:
                 recruiter_social_profile.listatus = 2
                 comp = get_li_companies(request.user)
                 if comp['_total'] > 0:
@@ -2437,7 +2439,7 @@ def smart_share(request,id):
                 recruiter_social_profile.listatus = 1
         elif profile.social_code == 'tw':
             recruiter_social_profile.tw = profile    
-            if debug_data.has_key('id'):
+            if 'id' in debug_data:
                 recruiter_social_profile.twstatus = 2
             else:
                 recruiter_social_profile.twstatus = 1

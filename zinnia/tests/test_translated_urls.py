@@ -1,4 +1,5 @@
 """Test cases for Zinnia's translated URLs"""
+from __future__ import absolute_import
 from django.test import TestCase
 from django.utils.translation import activate
 from django.utils.translation import deactivate

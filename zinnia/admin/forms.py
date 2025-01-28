@@ -1,4 +1,5 @@
 """Forms for Zinnia admin"""
+from __future__ import absolute_import
 from django import forms
 from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 from django.utils.translation import ugettext_lazy as _

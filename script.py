@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from common.models import send_TRM_email
 from companies.models import Company
 companies = Company.objects.all()

@@ -1,4 +1,5 @@
 """Test cases for Zinnia's moderator"""
+from __future__ import absolute_import
 from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.urlresolvers import reverse

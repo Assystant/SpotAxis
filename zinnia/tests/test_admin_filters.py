@@ -1,4 +1,5 @@
 """Test cases for Zinnia's admin filters"""
+from __future__ import absolute_import
 from django.contrib.admin import ModelAdmin
 from django.contrib.admin import site
 from django.contrib.admin.views.main import ChangeList

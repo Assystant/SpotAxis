@@ -1,4 +1,6 @@
 
+from __future__ import absolute_import
+from __future__ import print_function
 from datetime import datetime, timedelta
 # from .models import *
 from django.db.models import Q
@@ -10,9 +12,9 @@ from payments.models import Subscription, Transactions, PriceSlab
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
 def EmailTicketCronJob():
-    print(str(datetime.now()) + ' --> Email Ticket Cron start')
+    print((str(datetime.now()) + ' --> Email Ticket Cron start'))
     try:
         call_command('get_email')
     except Exception as e:
         print(e)
-    print(str(datetime.now()) + ' --> Email Ticket Cron completed')
+    print((str(datetime.now()) + ' --> Email Ticket Cron completed'))

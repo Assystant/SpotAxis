@@ -1,4 +1,5 @@
 """Views for Zinnia channels"""
+from __future__ import absolute_import
 from django.views.generic.list import ListView
 
 from zinnia.models.entry import Entry

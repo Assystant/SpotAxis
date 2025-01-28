@@ -1,4 +1,5 @@
 """Comparison tools for Zinnia"""
+from __future__ import absolute_import
 from math import sqrt
 
 from django.contrib.sites.models import Site
@@ -13,6 +14,8 @@ import regex as re
 from zinnia.models.entry import Entry
 from zinnia.settings import COMPARISON_FIELDS
 from zinnia.settings import STOP_WORDS
+from six.moves import map
+from six.moves import range
 
 
 PUNCTUATION = re.compile(r'\p{P}+')
@@ -71,14 +74,14 @@ class ModelVectorBuilder(object):
             return []
 
         object_related = {}
-        for o_id, o_vector in dataset.items():
+        for o_id, o_vector in list(dataset.items()):
             if o_id != object_id:
                 try:
                     object_related[o_id] = score(object_vector, o_vector)
                 except ZeroDivisionError:
                     pass
 
-        related = sorted(object_related.items(),
+        related = sorted(list(object_related.items()),
                          key=lambda k_v: k_v[1], reverse=True)
         return related
 
@@ -117,7 +120,7 @@ class ModelVectorBuilder(object):
         data = {}
         words_total = {}
 
-        for instance, words in self.raw_dataset.items():
+        for instance, words in list(self.raw_dataset.items()):
             words_item_total = {}
             for word in words:
                 words_total.setdefault(word, 0)
@@ -126,12 +129,12 @@ class ModelVectorBuilder(object):
                 words_item_total[word] += 1
             data[instance] = words_item_total
 
-        columns = sorted(words_total.keys(),
+        columns = sorted(list(words_total.keys()),
                          key=lambda w: words_total[w],
                          reverse=True)[:250]
         columns = sorted(columns)
         dataset = {}
-        for instance in data.keys():
+        for instance in list(data.keys()):
             dataset[instance] = [data[instance].get(word, 0)
                                  for word in columns]
         return columns, dataset

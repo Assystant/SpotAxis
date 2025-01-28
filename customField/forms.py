@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from customField.models import *
 from django import forms
 from django.forms import ModelForm
@@ -121,7 +122,7 @@ class BaseOptionFormset(BaseInlineFormSet):
             cleaned_data = form.clean()
             if cleaned_data:
                 option_label = cleaned_data['name']
-                if options.has_key(option_label):
+                if option_label in options:
                     options[option_label] += [index]
                 else:
                     options[option_label] = [index]
@@ -162,7 +163,7 @@ class BaseFieldFormset(BaseNestedFormset):
                 # if not field_label:
                 #     form.add_error('name','Field Label is required')
                 # raise forms.ValidationError(form.errors['name'] = 'Error')
-                if fields.has_key(field_label):
+                if field_label in fields:
                     fields[field_label] += [index]
                 else:
                     fields[field_label] = [index]

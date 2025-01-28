@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from django.shortcuts import render
 from django.conf import settings
 from django.shortcuts import render_to_response, redirect
@@ -326,10 +328,10 @@ def checkout(request):
         })
         if not web_profile.create():
             # messages.error(request,web_profile.error)
-            print(web_profile.error)
+            print((web_profile.error))
             print(name)
         else:
-            print(web_profile.id)
+            print((web_profile.id))
         # return_url = settings.SITE_URL + "/checkout/?success=true&slab="+str(slab)
         return_url = request.scheme+"://"+request.get_host() + "/checkout/?success=true&slab="+str(slab)
         # cancel_url = settings.SITE_URL + "/checkout/?success=true&slab="+str(slab)
@@ -349,18 +351,18 @@ def checkout(request):
                   "currency": "USD" },
                 "description": "Adding Credits to SpotAxis" } ] } )
         if payment.create():
-            print("Payment[%s] created successfully" % (payment.id))
+            print(("Payment[%s] created successfully" % (payment.id)))
             # Redirect the user to given approval url
             for link in payment.links:
                 if link.method == "REDIRECT":
                     # Convert to str to avoid google appengine unicode issue
                     # https://github.com/paypal/rest-api-sdk-python/pull/58
                     redirect_url = str(link.href) #+ '&useraction=commit'
-                    print("Redirect for approval: %s" % (redirect_url))
+                    print(("Redirect for approval: %s" % (redirect_url)))
                     return redirect(redirect_url)
         else:
             print("Error while creating payment:")
-            print(payment.error)
+            print((payment.error))
             messages.error(request,payment.error)
     else:
         try:

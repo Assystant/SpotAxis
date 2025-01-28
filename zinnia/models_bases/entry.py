@@ -1,4 +1,5 @@
 """Base entry models for Zinnia"""
+from __future__ import absolute_import
 import os
 
 from django.contrib.sites.models import Site

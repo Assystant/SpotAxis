@@ -1,4 +1,5 @@
 """Preview mixins for Zinnia views"""
+from __future__ import absolute_import
 from django.http import Http404
 from django.utils.translation import ugettext as _
 

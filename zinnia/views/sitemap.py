@@ -1,4 +1,5 @@
 """Views for Zinnia sitemap"""
+from __future__ import absolute_import
 from django.views.generic import TemplateView
 
 from zinnia.models.author import Author

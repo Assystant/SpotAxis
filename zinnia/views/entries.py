@@ -1,4 +1,5 @@
 """Views for Zinnia entries"""
+from __future__ import absolute_import
 from django.views.generic.dates import BaseDateDetailView
 
 from zinnia.models.entry import Entry

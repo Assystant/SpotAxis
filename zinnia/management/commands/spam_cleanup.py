@@ -1,6 +1,8 @@
 """
 Spam cleanup command module for Zinnia.
 """
+from __future__ import absolute_import
+from __future__ import print_function
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
@@ -27,4 +29,4 @@ class Command(BaseCommand):
         spams.delete()
 
         if verbosity:
-            print('%i spam comments deleted.' % spams_count)
+            print(('%i spam comments deleted.' % spams_count))

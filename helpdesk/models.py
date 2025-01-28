@@ -7,7 +7,8 @@ models.py - Model (and hence database) definitions. This is the core of the
             helpdesk structure.
 """
 
-from __future__ import unicode_literals
+
+from __future__ import absolute_import
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
@@ -242,9 +243,9 @@ class Queue(models.Model):
         in the sender name field, so hopefully the admin can see and fix it.
         """
         if not self.email_address:
-            return u'NO QUEUE EMAIL ADDRESS DEFINED <%s>' % settings.DEFAULT_FROM_EMAIL
+            return 'NO QUEUE EMAIL ADDRESS DEFINED <%s>' % settings.DEFAULT_FROM_EMAIL
         else:
-            return u'%s <%s>' % (self.title, self.email_address)
+            return '%s <%s>' % (self.title, self.email_address)
     from_address = property(_from_address)
 
     def prepare_permission_name(self):
@@ -448,18 +449,18 @@ class Ticket(models.Model):
         """ A user-friendly ticket ID, which is a combination of ticket ID
         and queue slug. This is generally used in e-mail subjects. """
 
-        return u"[%s]" % self.ticket_for_url
+        return "[%s]" % self.ticket_for_url
     ticket = property(_get_ticket)
 
     def _get_ticket_for_url(self):
         """ A URL-friendly ticket ID, used in links. """
-        return u"%s-%s" % (self.queue.slug, self.id)
+        return "%s-%s" % (self.queue.slug, self.id)
     ticket_for_url = property(_get_ticket_for_url)
 
     def _get_priority_img(self):
         """ Image-based representation of the priority """
         from django.conf import settings
-        return u"%shelpdesk/priorities/priority%s.png" % (settings.MEDIA_URL, self.priority)
+        return "%shelpdesk/priorities/priority%s.png" % (settings.MEDIA_URL, self.priority)
     get_priority_img = property(_get_priority_img)
 
     def _get_priority_css_class(self):
@@ -483,7 +484,7 @@ class Ticket(models.Model):
         dep_msg = ''
         if not self.can_be_resolved:
             dep_msg = _(' - Open dependencies')
-        return u'%s%s%s' % (self.get_status_display(), held_msg, dep_msg)
+        return '%s%s%s' % (self.get_status_display(), held_msg, dep_msg)
     get_status = property(_get_status)
 
     def _get_ticket_url(self):
@@ -497,7 +498,7 @@ class Ticket(models.Model):
             site = Site.objects.get_current()
         except:
             site = Site(domain='configure-django-sites.com')
-        return u"http://%s%s?ticket=%s&email=%s" % (
+        return "http://%s%s?ticket=%s&email=%s" % (
             site.domain,
             reverse('helpdesk_public_view'),
             self.ticket_for_url,
@@ -516,7 +517,7 @@ class Ticket(models.Model):
             site = Site.objects.get_current()
         except:
             site = Site(domain='configure-django-sites.com')
-        return u"http://%s%s" % (
+        return "http://%s%s" % (
             site.domain,
             reverse('helpdesk_view',
             args=[self.id])
@@ -647,7 +648,7 @@ class FollowUp(models.Model):
         return '%s' % self.title
 
     def get_absolute_url(self):
-        return u"%s#followup%s" % (self.ticket.get_absolute_url(), self.id)
+        return "%s#followup%s" % (self.ticket.get_absolute_url(), self.id)
 
     def save(self, *args, **kwargs):
         t = self.ticket
@@ -755,8 +756,8 @@ class Attachment(models.Model):
     def get_upload_to(self, field_attname):
         """ Get upload_to path specific to this item """
         if not self.id:
-            return u''
-        return u'helpdesk/attachments/%s/%s' % (
+            return ''
+        return 'helpdesk/attachments/%s/%s' % (
             self.followup.ticket.ticket_for_url,
             self.followup.id
             )
@@ -1080,7 +1081,7 @@ class UserSettings(models.Model):
         try:
             import pickle
         except ImportError:
-            import cPickle as pickle
+            import pickle as pickle
         from helpdesk.lib import b64encode
         self.settings_pickled = b64encode(pickle.dumps(data))
 
@@ -1089,7 +1090,7 @@ class UserSettings(models.Model):
         try:
             import pickle
         except ImportError:
-            import cPickle as pickle
+            import pickle as pickle
         from helpdesk.lib import b64decode
         try:
             return pickle.loads(b64decode(str(self.settings_pickled)))
@@ -1351,7 +1352,7 @@ class CustomField(models.Model):
         )
 
     def _choices_as_array(self):
-        from StringIO import StringIO
+        from io import StringIO
         valuebuffer = StringIO(self.list_values)
         choices = [[item.strip(), item.strip()] for item in valuebuffer.readlines()]
         valuebuffer.close()

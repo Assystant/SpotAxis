@@ -1,4 +1,5 @@
 """URL shortener for Zinnia"""
+from __future__ import absolute_import
 import warnings
 from importlib import import_module
 

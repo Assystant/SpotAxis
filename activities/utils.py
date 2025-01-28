@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from activities.models import *
 
 def post_notification(user=None, actor = None, action = None, target = None, target_action = None, subject = None, subject_action = None, msg=None, url=None, message_chunks = []):

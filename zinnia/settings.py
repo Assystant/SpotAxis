@@ -1,4 +1,5 @@
 """Settings of Zinnia"""
+from __future__ import absolute_import
 from django.conf import settings
 
 from mots_vides import stop_words

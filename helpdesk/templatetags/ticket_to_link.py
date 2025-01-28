@@ -11,6 +11,7 @@ templatetags/ticket_to_link.py - Used in ticket comments to allow wiki-style
                                  ticket would have a strikethrough).
 """
 
+from __future__ import absolute_import
 import re
 
 from django import template

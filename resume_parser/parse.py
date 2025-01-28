@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import datefinder
 import json
 import pdfminer
@@ -6,7 +7,7 @@ import re
 import subprocess
 import sys
 from bs4 import BeautifulSoup
-from cStringIO import StringIO
+from io import StringIO
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter

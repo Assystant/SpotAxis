@@ -1,4 +1,5 @@
 """Author model for Zinnia"""
+from __future__ import absolute_import
 from django.apps import apps
 from django.conf import settings
 from django.db import models

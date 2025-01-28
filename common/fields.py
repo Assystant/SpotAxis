@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -26,9 +27,9 @@ class MultiFileInput(forms.FileInput):
 class MultiFileField(forms.FileField):
     widget = MultiFileInput
     default_error_messages = {
-        'min_num': _(u'El minimo de archivos es de s %(min_num).'),
-        'max_num': _(u'Ha superado el maximo de archivos permitidos por carga (5 archivos).'),
-        'file_size': _(u' %(uploaded_file_name)s supera el tamaño maximo permitido (5 Mb).'),
+        'min_num': _('El minimo de archivos es de s %(min_num).'),
+        'max_num': _('Ha superado el maximo de archivos permitidos por carga (5 archivos).'),
+        'file_size': _(' %(uploaded_file_name)s supera el tamaño maximo permitido (5 Mb).'),
     }
 
     def __init__(self, *args, **kwargs):
@@ -63,17 +64,17 @@ class MultiFileField(forms.FileField):
             if ext in valid_extensions:
                 # Se eliminan los acentos y otros caracteres especiales del nombre de la imagen
                 name = ''.join((c for c in unicodedata.normalize('NFD',name) if unicodedata.category(c) != 'Mn'))
-                uploaded_file.name = u'%s-%s%s' % (name, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"), ext)
+                uploaded_file.name = '%s-%s%s' % (name, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"), ext)
             else:
-                raise ValidationError(u'Tipo de archivo no soportado.')
+                raise ValidationError('Tipo de archivo no soportado.')
 
 
 class SingleFileField(forms.FileField):
     widget = MultiFileInput
     default_error_messages = {
-        'min_num': _(u'El minimo de archivos es de s %(min_num).'),
-        'max_num': _(u'Solo puedes subir un archivo.'),
-        'file_size': _(u' %(uploaded_file_name)s supera el tamaño maximo permitido (20 Mb).'),
+        'min_num': _('El minimo de archivos es de s %(min_num).'),
+        'max_num': _('Solo puedes subir un archivo.'),
+        'file_size': _(' %(uploaded_file_name)s supera el tamaño maximo permitido (20 Mb).'),
     }
 
     def __init__(self, *args, **kwargs):
@@ -108,7 +109,7 @@ class SingleFileField(forms.FileField):
             if ext in valid_extensions:
                 # Se eliminan los acentos y otros caracteres especiales del nombre de la imagen
                 name = ''.join((c for c in unicodedata.normalize('NFD',name) if unicodedata.category(c) != 'Mn'))
-                uploaded_file.name = u'%s-%s%s' % (name, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"), ext)
+                uploaded_file.name = '%s-%s%s' % (name, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"), ext)
             else:
-                raise ValidationError(u'Tipo de archivo no soportado.')
+                raise ValidationError('Tipo de archivo no soportado.')
 

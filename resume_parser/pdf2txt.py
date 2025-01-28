@@ -1,4 +1,5 @@
 #!C:\Python27\python.exe
+from __future__ import absolute_import
 import sys
 from pdfminer.pdfdocument import PDFDocument
 from pdfminer.pdfparser import PDFParser
@@ -53,7 +54,7 @@ def file_name_case(fname, output_file, output_type):
             elif outfile.endswith('.tag'):
                 outtype = 'tag'
     if outfile:
-        outfp = file(outfile, 'w')
+        outfp = open(outfile, 'w')
     else:
         outfp = sys.stdout
     if outtype == 'text':
@@ -71,7 +72,7 @@ def file_name_case(fname, output_file, output_type):
     else:
         return usage()
 
-    fp = file(fname, 'rb')
+    fp = open(fname, 'rb')
     interpreter = PDFPageInterpreter(rsrcmgr, device)
     for page in PDFPage.get_pages(fp, pagenos,
                                   maxpages=maxpages, password=password,
@@ -124,7 +125,7 @@ def file_content_case(file_obj, output_file, output_type):
             elif outfile.endswith('.tag'):
                 outtype = 'tag'
     if outfile:
-        outfp = file(outfile, 'w')
+        outfp = open(outfile, 'w')
     else:
         outfp = sys.stdout
     if outtype == 'text':

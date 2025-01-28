@@ -1,7 +1,8 @@
 """Django EL Pagination object loaders."""
 
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from django.core.exceptions import ImproperlyConfigured
 try:
     from importlib import import_module

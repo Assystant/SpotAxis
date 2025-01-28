@@ -1,4 +1,6 @@
 
+from __future__ import absolute_import
+from __future__ import print_function
 from datetime import datetime, timedelta
 # from .models import *
 from django.db.models import Q
@@ -9,7 +11,7 @@ from TRM.settings import ROOT_DOMAIN, protocol
 from payments.models import Subscription, Transactions, PriceSlab
 from django.core.urlresolvers import reverse
 def SubscriptionCronJob():
-    print(str(datetime.now()) + ' --> Subscription Cron start')
+    print((str(datetime.now()) + ' --> Subscription Cron start'))
     try:
         subscriptions = Subscription.objects.all()
         expired_subscriptions = [subscription for subscription in subscriptions if subscription.expiry and subscription.expired()]
@@ -146,4 +148,4 @@ def SubscriptionCronJob():
             subscription.save()
     except Exception as e:
         print(e)
-    print(str(datetime.now()) + ' --> Subscription Cron completed')
+    print((str(datetime.now()) + ' --> Subscription Cron completed'))

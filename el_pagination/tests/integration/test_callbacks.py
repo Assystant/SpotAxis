@@ -1,7 +1,8 @@
 """Javascript callbacks integration tests."""
 
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from el_pagination.tests.integration import SeleniumTestCase
 
 
@@ -16,7 +17,7 @@ class CallbacksTest(SeleniumTestCase):
         """Assert the given *notifications* equal the ones in the DOM."""
         self.wait_ajax().until(self.notifications_loaded)
         find = self.selenium.find_element_by_id
-        for key, value in notifications.items():
+        for key, value in list(notifications.items()):
             self.assertEqual(value, find(key).text)
 
     def test_can_navigate_site(self):

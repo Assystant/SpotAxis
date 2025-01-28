@@ -1,7 +1,8 @@
 """Calendar module for Zinnia"""
-from __future__ import absolute_import
 
-from calendar import HTMLCalendar
+
+from __future__ import absolute_import
+from .calendar import HTMLCalendar
 from datetime import date
 
 from django.core.urlresolvers import reverse

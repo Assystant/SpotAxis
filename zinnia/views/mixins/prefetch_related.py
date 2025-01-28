@@ -1,4 +1,5 @@
 """Mixins for enabling prefetching in views returning list of entries"""
+from __future__ import absolute_import
 from django.core.exceptions import ImproperlyConfigured
 
 

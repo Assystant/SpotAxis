@@ -1,4 +1,5 @@
 """Views for Zinnia comments"""
+from __future__ import absolute_import
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponsePermanentRedirect
 from django.template.defaultfilters import slugify
