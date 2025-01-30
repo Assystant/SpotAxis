@@ -31,7 +31,7 @@ The key features for this user type include the following
 4. Manage jobs and applicants as a super admin
 5. Subscription/Pricing Management for ATS
 
-#If you need support implementing this ATS on your server, please reach out to holesh+ats@assystant.com#
+# If you need support implementing this ATS on your server, please reach out to holesh+ats@assystant.com #
 
 ## Contributors required ##
 
