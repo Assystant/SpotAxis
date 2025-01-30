@@ -31,6 +31,8 @@ The key features for this user type include the following
 4. Manage jobs and applicants as a super admin
 5. Subscription/Pricing Management for ATS
 
+#If you need support implementing this ATS on your server, please reach out to holesh+ats@assystant.com#
+
 ## Contributors required ##
 
 1. You can submit bugs  and help us verify as they are live
@@ -38,8 +40,6 @@ The key features for this user type include the following
 3. Review and collaborate on source code changes
 4. Write and improve SpotAxis documentation
 5. Contribute new feature development
-
-If you need support implementing this ATS on your server, please reach out to holesh+ats@assystant.com
 
 ## Project Dependencies ##
 
