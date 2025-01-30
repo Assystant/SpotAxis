@@ -4,7 +4,7 @@ Version: 1.0
 
 SpotAxis is an Open-source (MIT Licensed) Applicant Tracking System to streamline your hiring process.
 
-Our vision is to create the most adapted open-source Applicant Tracking System (ATS) that helps businesses manage the entire recruitment process, from attracting candidates to scheduling interviews, making hiring decisions and onboarding.
+Our vision is to create the most adapted open-source Applicant Tracking System (ATS) that helps businesses seamlessly manage the entire recruitment process, from attracting candidates to scheduling interviews, making hiring decisions and onboarding.
 
 ## SpotAxis can satisfy the use cases of two types of users ##
 
@@ -30,6 +30,8 @@ The key features for this user type include the following
 3. Use the default Job Board that is pulled from all the organizations.
 4. Manage jobs and applicants as a super admin
 5. Subscription/Pricing Management for ATS
+
+#If you need support for implementing this ATS in your server, please reach out to: holesh+ats@assystant.com#
 
 ## Contributors required ##
 
