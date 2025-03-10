@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 import ipgetter
 import uuid
 import socket
@@ -51,11 +52,11 @@ class UserPhotoForm(forms.ModelForm):
             # print img.format
             # print img.format.lower()
             if img.format.lower() not in ['jpeg', 'pjpeg', 'png', 'jpg', 'mpo']:
-                raise forms.ValidationError(_(u'You can only use images with extensions JPG, JPEG or PNG'))
+                raise forms.ValidationError(_('You can only use images with extensions JPG, JPEG or PNG'))
 
             #validate file size
             if len(image) > (1 * 1024 * 1024):
-                raise forms.ValidationError(_(u'The image selected is too large (Max 1MB)'))
+                raise forms.ValidationError(_('The image selected is too large (Max 1MB)'))
         else:
             return default_photo
         return image
@@ -97,25 +98,25 @@ class SubdomainForm(forms.ModelForm):
         fields = ('cname',)
 
 class UserDataForm(forms.ModelForm):
-    email_repeat_msg = _(u'Confirm your email')
-    password_repeat_msg = _(u'* Confirm your Password')
+    email_repeat_msg = _('Confirm your email')
+    password_repeat_msg = _('* Confirm your Password')
     username = forms.RegexField(
-        label=_(u"Name of User"),
+        label=_("Name of User"),
         max_length=30,
-        widget=forms.TextInput(attrs={'placeholder': _(u'* Username'),
+        widget=forms.TextInput(attrs={'placeholder': _('* Username'),
                                       'class': "form-control s-form-v4__input"}),
         regex=r'^[\w.-]+$',
         error_messages={
-            'invalid': _(u"Only letters, numbers and the following characters are allowed . - _"),
-            'required': _(u"Enter a username")
+            'invalid': _("Only letters, numbers and the following characters are allowed . - _"),
+            'required': _("Enter a username")
         }
     )
 
     email = forms.EmailField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'* Email'),
+        widget=forms.TextInput(attrs={'placeholder': _('* Email'),
                                       'class': "form-control s-form-v4__input"}),
         max_length=75,
-        error_messages={'required': _(u"Enter your Email")},
+        error_messages={'required': _("Enter your Email")},
         label="Contact Email"
     )
 
@@ -128,11 +129,11 @@ class UserDataForm(forms.ModelForm):
     )
 
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': _(u'* Password'),
+        widget=forms.PasswordInput(attrs={'placeholder': _('* Password'),
                                           'class': "form-control s-form-v4__input"}),
         max_length=128,
-        error_messages={'required': _(u"ENter your Password")},
-        label=_(u"Password")
+        error_messages={'required': _("ENter your Password")},
+        label=_("Password")
     )
 
     password_repeat = forms.CharField(
@@ -144,29 +145,29 @@ class UserDataForm(forms.ModelForm):
     )
 
     first_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'* First Name'),
+        widget=forms.TextInput(attrs={'placeholder': _('* First Name'),
                                       'class': "form-control s-form-v4__input"}),
         max_length=30,
-        error_messages={'required': _(u"Enter your Name")},
-        label=_(u"Name")
+        error_messages={'required': _("Enter your Name")},
+        label=_("Name")
     )
 
     last_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'* Last Name'),
+        widget=forms.TextInput(attrs={'placeholder': _('* Last Name'),
                                       'class': "form-control s-form-v4__input"}),
         max_length=30,
-        error_messages={'required': _(u"Enter your Last Name")},
-        label=_(u"Surname")
+        error_messages={'required': _("Enter your Last Name")},
+        label=_("Surname")
     )
 
     cellphone = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Phone'),
+        widget=forms.TextInput(attrs={'placeholder': _('Phone'),
                                       'class': "form-control s-form-v4__input"}),
         max_length=30,
         min_length=5,
         required=False,
-        error_messages={'required': _(u"Enter your Phone")},
-        label=_(u"Phone")
+        error_messages={'required': _("Enter your Phone")},
+        label=_("Phone")
     )
 
     # photo = forms.ImageField(widget=AjaxClearableFileInput(), required=False)
@@ -210,7 +211,7 @@ class UserDataForm(forms.ModelForm):
             username = self.cleaned_data['username']
             if User.objects.filter(username__iexact=username):
                 raise forms.ValidationError(
-                    _(u"Username already exists. Please try again."))
+                    _("Username already exists. Please try again."))
 
         return username
 
@@ -224,7 +225,7 @@ class UserDataForm(forms.ModelForm):
         
         if emails > 0:
             raise forms.ValidationError(
-                _(u'This email is already registered. Please try a new one.'))
+                _('This email is already registered. Please try a new one.'))
         else:
            emails = EmailVerification.objects.filter(new_email__iexact=new_email, is_expired=False)
            for email in emails:
@@ -239,7 +240,7 @@ class UserDataForm(forms.ModelForm):
                 if self.cleaned_data['email'] != self.cleaned_data['email_repeat']:
                     from django.forms.util import ErrorList
                     self._errors['email'] = ErrorList()
-                    self._errors['email'].append(_(u'Email addresses do not match'))
+                    self._errors['email'].append(_('Email addresses do not match'))
                     # raise forms.ValidationError(_(u'Email addresses do not match.'))
 
         if registration_settings.DOUBLE_CHECK_PASSWORD:
@@ -247,7 +248,7 @@ class UserDataForm(forms.ModelForm):
                 if self.cleaned_data['password'] != self.cleaned_data['password_repeat']:
                     from django.forms.utils import ErrorList
                     self._errors['password'] = ErrorList()
-                    self._errors['password'].append(_(u'The passwords do not match'))
+                    self._errors['password'].append(_('The passwords do not match'))
                     # raise forms.ValidationError(_(u'The passwords do not match.'))
 
         return self.cleaned_data
@@ -297,37 +298,37 @@ class UserDataForm(forms.ModelForm):
 # --------------------------------------------- #
 class BasicUserDataForm(forms.ModelForm):
     first_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Enter your name'),
+        widget=forms.TextInput(attrs={'placeholder': _('Enter your name'),
                                       'class': 'form-control'}),
         max_length=30,
         required=True,
-        error_messages={'required': _(u"Enter your name")},
-        label=_(u"Name(s)")
+        error_messages={'required': _("Enter your name")},
+        label=_("Name(s)")
     )
 
     last_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Enter your Surname'),
+        widget=forms.TextInput(attrs={'placeholder': _('Enter your Surname'),
                                       'class': 'form-control'}),
         max_length=30,
         required=True,
-        error_messages={'required': _(u"Enter your Surname")},
-        label=_(u"Surname")
+        error_messages={'required': _("Enter your Surname")},
+        label=_("Surname")
     )
 
     cellphone = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Phone'),
+        widget=forms.TextInput(attrs={'placeholder': _('Phone'),
                                       'class': "form-control"}),
         max_length=30,
         min_length=5,
         required = False,
-        label=_(u"Phone")
+        label=_("Phone")
     )
 
     email = forms.EmailField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Email'),
+        widget=forms.TextInput(attrs={'placeholder': _('Email'),
                                       'class': 'form-control'}),
         max_length=75,
-        error_messages={'required': _(u"Enter your Email")},
+        error_messages={'required': _("Enter your Email")},
         label="E-mail"
     )
 
@@ -379,12 +380,12 @@ class ChangeEmailForm(forms.Form):
         label=_('New Email'),
         widget=forms.TextInput(
             attrs={'class': 'form-control',
-                   'placeholder': _(u'Enter a new Email')
+                   'placeholder': _('Enter a new Email')
             }
         ),
         max_length=225,
         required=True,
-        error_messages={'required': _(u'Enter a new Email')}
+        error_messages={'required': _('Enter a new Email')}
     )
 
     def clean_new_email(self):
@@ -428,11 +429,11 @@ class ChangeEmailForm(forms.Form):
 class RegisterEmailForm(forms.ModelForm):
     # Form for email registration, when the user does not have any registered
     email = forms.EmailField(
-        label=_(u'Email'),
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _(u'ENter your Email')}),
+        label=_('Email'),
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('ENter your Email')}),
         max_length=75,
         required=True,
-        error_messages={'required': _(u'ENter your Email')}
+        error_messages={'required': _('ENter your Email')}
     )
 
     def clean_email(self):
@@ -441,7 +442,7 @@ class RegisterEmailForm(forms.ModelForm):
         verification_emails = EmailVerification.objects.filter(new_email__iexact=email, is_expired=False).count()
         if user_emails + verification_emails > 0:
             raise forms.ValidationError(_(
-                u'This email already exists. Please try a new one.'))
+                'This email already exists. Please try a new one.'))
         return email
 
     class Meta:
@@ -453,26 +454,26 @@ class RegisterEmailForm(forms.ModelForm):
 # Start Form for Change of Password #
 # --------------------------------------- #
 class ChangePasswordForm(forms.Form):
-    actual_password_lbl = _(u'Actual Password')
-    new_password_lbl = _(u'password new')
-    confirm_new_password_lbl = _(u'Confirm new password')
+    actual_password_lbl = _('Actual Password')
+    new_password_lbl = _('password new')
+    confirm_new_password_lbl = _('Confirm new password')
     old_password = forms.CharField(label=actual_password_lbl,
                                    widget=forms.PasswordInput(
                                        attrs={'class': "form-control", 'placeholder': 'Current Password'}
                                    ),
-                                   error_messages={'required': _(u'Please enter your current password')},
+                                   error_messages={'required': _('Please enter your current password')},
     )
     new_password1 = forms.CharField(label=new_password_lbl,
                                     widget=forms.PasswordInput(
                                         attrs={'class': "form-control", 'placeholder': 'New Password'}
                                     ),
-                                    error_messages={'required': _(u'Please enter your new password')},
+                                    error_messages={'required': _('Please enter your new password')},
     )
     new_password2 = forms.CharField(label=confirm_new_password_lbl,
                                     widget=forms.PasswordInput(
                                         attrs={'class': "form-control", 'placeholder': 'Confirm New Password'}
                                     ),
-                                    error_messages={'required': _(u'Please confirm your new password')},
+                                    error_messages={'required': _('Please confirm your new password')},
     )
 
     def __init__(self, user, *args, **kwargs):
@@ -485,7 +486,7 @@ class ChangePasswordForm(forms.Form):
         """
         old_password = self.cleaned_data["old_password"]
         if not self.user.check_password(old_password):
-            raise forms.ValidationError(_(u'The password is incorrect'))
+            raise forms.ValidationError(_('The password is incorrect'))
         return old_password
 
     def clean_new_password2(self):
@@ -493,7 +494,7 @@ class ChangePasswordForm(forms.Form):
         password2 = self.cleaned_data.get('new_password2')
         if password1 and password2:
             if password1 != password2:
-                raise forms.ValidationError(_(u'The passwords do not match'))
+                raise forms.ValidationError(_('The passwords do not match'))
         return password2
 
     def save(self, commit=True):
@@ -512,7 +513,7 @@ class ChangePasswordForm(forms.Form):
 def get_states(country=None, search_vacancy=False):
     choices = [('0', 'No choices')]
     if country:
-        if type(country) == long or type(country) == int:
+        if type(country) == int or type(country) == int:
             country = Country.objects.get(pk=int(country))
         states = country.state_set.all()
         if states.count() > 0:
@@ -528,7 +529,7 @@ def get_states(country=None, search_vacancy=False):
 def get_municipals(state=None):
     choices = [('0', 'Select a state first')]
     if state:
-        if type(state) == long or type(state) == int:
+        if type(state) == int or type(state) == int:
             state = State.objects.get(pk= int(state))
         # municipals = state.municipal_set.all()
         # if municipals.count() > 0:
@@ -551,27 +552,27 @@ class AdressForm(forms.ModelForm):
     state = forms.ChoiceField(
         choices= get_states(initial_country),
         widget=forms.Select(attrs={'class': "form-control"}),
-        label=_(u'State')
+        label=_('State')
     )
     municipal = forms.ChoiceField(
         choices = get_municipals(None),
         widget=forms.Select(attrs={'class': "form-control"}),
-        label = _(u'City:'),
+        label = _('City:'),
         required=False
     )
     street = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Street No or Colony'),
+        widget=forms.TextInput(attrs={'placeholder': _('Street No or Colony'),
                                       'class': "form-control"}),
         max_length=200,
-        error_messages={'required': _(u"Enter the address of your company")},
-        label=_(u"Address:"),
+        error_messages={'required': _("Enter the address of your company")},
+        label=_("Address:"),
     )
     postal_code = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u' Postal Code'),
+        widget=forms.TextInput(attrs={'placeholder': _(' Postal Code'),
                                       'class': "form-control"}),
         max_length=5,
-        error_messages={'required': _(u"Enter your Postal Code")},
-        label=_(u"Postal Code:"),
+        error_messages={'required': _("Enter your Postal Code")},
+        label=_("Postal Code:"),
     )
 
     def __init__(self, *args, **kwargs):
@@ -603,7 +604,7 @@ class AdressForm(forms.ModelForm):
     def clean_state(self):
         state_id = int(self.cleaned_data.get('state'))
         if state_id < 0:
-            raise forms.ValidationError(_(u'Select a State'))
+            raise forms.ValidationError(_('Select a State'))
         if state_id == 0:
             return None
         try:
@@ -616,21 +617,21 @@ class AdressForm(forms.ModelForm):
             for state in states:
                 choices.append(state.id)
             if state_id not in choices:
-                raise forms.ValidationError(_(u'Select a state'))
+                raise forms.ValidationError(_('Select a state'))
             state = State.objects.get(pk = state_id)
         except State.DoesNotExist:
-            raise forms.ValidationError(_(u'The state selected is invalid'))
+            raise forms.ValidationError(_('The state selected is invalid'))
         return state
 
     def clean_municipal(self):
         try:
             municipal_id = int(self.cleaned_data.get('municipal'))
         except:
-            raise forms.ValidationError(_(u'The city selected is invalid'))
+            raise forms.ValidationError(_('The city selected is invalid'))
         if municipal_id < 0:
-            raise forms.ValidationError(_(u'Select a City'))
+            raise forms.ValidationError(_('Select a City'))
         if municipal_id == 0:
-            raise forms.ValidationError(_(u'Select a State first'))
+            raise forms.ValidationError(_('Select a State first'))
         try:
             choices = [0]
             try:
@@ -643,10 +644,10 @@ class AdressForm(forms.ModelForm):
             except:
                 return None
             if municipal_id not in choices:
-                raise forms.ValidationError(_(u'Select a city'))
+                raise forms.ValidationError(_('Select a city'))
             municipal = Municipal.objects.get(pk = municipal_id)
         except Municipal.DoesNotExist:
-            raise forms.ValidationError(_(u'The selected city is invalid'))
+            raise forms.ValidationError(_('The selected city is invalid'))
         return municipal
 
     class Meta:
@@ -659,7 +660,7 @@ class AdressForm(forms.ModelForm):
 
 # Reset Password
 class CustomPasswordResetForm(forms.Form):
-    email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _(u'* Email'), 'class': "form-control s-form-v4__input"}))
+    email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _('* Email'), 'class': "form-control s-form-v4__input"}))
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -668,14 +669,14 @@ class CustomPasswordResetForm(forms.Form):
         active_users = User.objects.filter(email__iexact=email, is_active=True)
         for user in active_users:
             if user.logued_by == 'FB':
-                raise forms.ValidationError(_(u'Registration was performed using your Facebook account.'))
+                raise forms.ValidationError(_('Registration was performed using your Facebook account.'))
             elif user.logued_by == 'GO':
-                raise forms.ValidationError(_(u'Registration was performed using your Google Accont'))
+                raise forms.ValidationError(_('Registration was performed using your Google Accont'))
 
         # Check who does not have registered email
         user_emails = User.objects.filter(email__iexact=email).count()
         if user_emails <= 0:
-            raise forms.ValidationError(_(u'The email is not registered n the system. Please enter a different one.'))
+            raise forms.ValidationError(_('The email is not registered n the system. Please enter a different one.'))
 
         return email
 
@@ -710,7 +711,7 @@ class CustomPasswordResetForm(forms.Form):
 
 
 class RecoverUserForm(forms.Form):
-    email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _(u'* Email'), 'class': "form-control s-form-v4__input"}))
+    email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _('* Email'), 'class': "form-control s-form-v4__input"}))
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -718,14 +719,14 @@ class RecoverUserForm(forms.Form):
         verification_emails = EmailVerification.objects.filter(
             new_email__iexact=email, is_expired=False).count()
         if user_emails + verification_emails <= 0:
-            raise forms.ValidationError(_(u'This email is not registered in the system. Please enter a different one.'))
+            raise forms.ValidationError(_('This email is not registered in the system. Please enter a different one.'))
         else:
             active_users = User.objects.filter(email__iexact=email, is_active=True)
         for user in active_users:
             if user.logued_by == 'FB':
-                raise forms.ValidationError(_(u'Registration was done with your Facebook account'))
+                raise forms.ValidationError(_('Registration was done with your Facebook account'))
             elif user.logued_by == 'GO':
-                raise forms.ValidationError(_(u'Registration was done with your Google account'))
+                raise forms.ValidationError(_('Registration was done with your Google account'))
 
         return email
 
@@ -880,16 +881,16 @@ class ContactForm(forms.Form):
         self.request = request
 
     name = forms.CharField(max_length=100,
-                           label=_(u'Full Name'),
-                           widget=forms.TextInput(attrs={'placeholder': _(u'* Name'), 'class': "form-control s-form-v3__input"})
+                           label=_('Full Name'),
+                           widget=forms.TextInput(attrs={'placeholder': _('* Name'), 'class': "form-control s-form-v3__input"})
     )
     email = forms.EmailField(max_length=200,
-                             label=_(u'Email'),
-                             widget=forms.TextInput(attrs={'placeholder': _(u'* Email'), 'class': "form-control s-form-v3__input"}),
+                             label=_('Email'),
+                             widget=forms.TextInput(attrs={'placeholder': _('* Email'), 'class': "form-control s-form-v3__input"}),
     )
 
-    body = forms.CharField(widget=forms.Textarea(attrs={'placeholder': _(u'* Your message'), 'class': "form-control s-form-v3__input", 'rows': '5'}),
-                            label=u'Message')
+    body = forms.CharField(widget=forms.Textarea(attrs={'placeholder': _('* Your message'), 'class': "form-control s-form-v3__input", 'rows': '5'}),
+                            label='Message')
 
     from_email = settings.DEFAULT_FROM_EMAIL
 
@@ -987,13 +988,13 @@ class EarlyAccessForm(ContactForm):
         self.fields['body'].required = False
 
     organization = forms.CharField(max_length=100,
-                           label=_(u'Organization'),
-                           widget=forms.TextInput(attrs={'placeholder': _(u'* Organization'), 'class': "form-control s-form-v3__input"})
+                           label=_('Organization'),
+                           widget=forms.TextInput(attrs={'placeholder': _('* Organization'), 'class': "form-control s-form-v3__input"})
     )
     
     position = forms.CharField(max_length=100,
-                           label=_(u'Position'),
-                           widget=forms.TextInput(attrs={'placeholder': _(u'* Position'), 'class': "form-control s-form-v3__input"})
+                           label=_('Position'),
+                           widget=forms.TextInput(attrs={'placeholder': _('* Position'), 'class': "form-control s-form-v3__input"})
     )
     
     subject_template_name = "mails/early_access_form_subject.txt"

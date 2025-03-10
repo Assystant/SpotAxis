@@ -1,13 +1,16 @@
 """Utilities tests."""
 
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from django.test import TestCase
 from django.test.client import RequestFactory
 
 from el_pagination import utils
 from el_pagination.settings import PAGE_LABEL
 from el_pagination.exceptions import PaginationError
+from six.moves import range
+from six.moves import zip
 
 
 class GetDataFromContextTest(TestCase):

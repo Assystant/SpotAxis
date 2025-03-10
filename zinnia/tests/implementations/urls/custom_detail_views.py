@@ -1,4 +1,5 @@
 """Test urls for the zinnia project"""
+from __future__ import absolute_import
 from django.conf.urls import url
 
 from zinnia.tests.implementations.urls.default import (

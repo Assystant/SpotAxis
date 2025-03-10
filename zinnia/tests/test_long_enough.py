@@ -1,4 +1,5 @@
 """Test cases for Zinnia's long_enought spam checker"""
+from __future__ import absolute_import
 from django.contrib.sites.models import Site
 from django.test import TestCase
 from django.utils import timezone

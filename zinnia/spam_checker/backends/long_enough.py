@@ -1,4 +1,5 @@
 """Long enough spam checker backend for Zinnia"""
+from __future__ import absolute_import
 from zinnia.settings import COMMENT_MIN_WORDS
 
 

@@ -1,4 +1,5 @@
 """Views for Zinnia trackback"""
+from __future__ import absolute_import
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.http import HttpResponsePermanentRedirect

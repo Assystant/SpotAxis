@@ -1,4 +1,5 @@
 """Default URL shortener backend for Zinnia"""
+from __future__ import absolute_import
 import string
 
 from django.contrib.sites.models import Site

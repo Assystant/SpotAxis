@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
@@ -6,6 +7,7 @@ from django.test.client import Client
 
 from helpdesk.models import Queue, Ticket
 from helpdesk import settings
+from six.moves import range
 
 
 class PerQueueStaffMembershipTestCase(TestCase):

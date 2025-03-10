@@ -1,4 +1,5 @@
 """Fields for Zinnia admin"""
+from __future__ import absolute_import
 from django import forms
 from django.utils.encoding import smart_text
 

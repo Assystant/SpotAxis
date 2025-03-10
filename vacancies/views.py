@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
 import ast
 import json
 import traceback
@@ -33,6 +35,7 @@ from vacancies.forms import BasicSearchVacancyForm, QuestionVacancyForm, Public_
 from vacancies.models import Vacancy, PubDate_Search, Vacancy_Status, Postulate, Salary_Type, \
     Employment_Experience, Degree,Question, Vacancy_Files, Candidate_Fav, VacancyStage, \
     Postulate_Stage, Postulate_Score, Comment, Medium
+from six.moves import range
 referer_hash = Hashids(salt='Job Referal', min_length = 5)
 external_referer_hash = Hashids(salt='Job External Referal', min_length=5)
 
@@ -367,7 +370,7 @@ def search_vacancies(request, template_name):
             if vacancies:
                 form = BasicSearchVacancyForm(initial={'vacancyPubDateSearch': PubDate_Search.objects.get(days=days_default_search)})
             else:
-                messages.error(request, _(u'No vacancy that meets the criteria found in selected search '))
+                messages.error(request, _('No vacancy that meets the criteria found in selected search '))
     else:
         form = BasicSearchVacancyForm(initial={'vacancyPubDateSearch': PubDate_Search.objects.get(days=days_default_search)})
         if template_name != 'index.html':
@@ -378,20 +381,20 @@ def search_vacancies(request, template_name):
         total_vacancies = vacancies.count()
 
     if not request.session.get('vacancies_search_state'):
-        search_state = _(u'All')
+        search_state = _('All')
     else:
         search_state = request.session.get('vacancies_search_state')
     if not request.session.get('vacancies_search_industry'):
-        search_industry = _(u'All Industries')
+        search_industry = _('All Industries')
     else:
         search_industry = request.session.get('vacancies_search_industry')
     if not request.session.get('vacancies_search_area'):
-        search_area = _(u'All Areas')
+        search_area = _('All Areas')
     else:
         search_area = request.session.get('vacancies_search_area')
         request.session['vacancies_search_area'] = None
     if not request.session.get('vacancies_search_employment_type'):
-        search_employment_type = _(u'Any Kind')
+        search_employment_type = _('Any Kind')
     else:
         search_employment_type = request.session.get('vacancies_search_employment_type')
 
@@ -495,7 +498,7 @@ def search_vacancies(request, template_name):
 
 @csrf_exempt
 def vacancy_details(request, vacancy_id=None, referer = None, external_referer = None, social_code=None):
-    error_message = _(u'The job opening you are trying to find does not exist or has ended')
+    error_message = _('The job opening you are trying to find does not exist or has ended')
     redirect_type = None
     socialUser = None
     templated_form = None
@@ -605,13 +608,13 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
             socialUser = socialUser[0]
             debug_data = debug_token(socialUser.oauth_token,socialUser.social_code)
             if socialUser.social_code == 'fb':
-                if not debug_data.has_key('data') or debug_data.has_key('data') and debug_data['data'].has_key('error'):
+                if 'data' not in debug_data or 'data' in debug_data and 'error' in debug_data['data']:
                     return redirect('social_login',social_code=social_code, vacancy_id=vacancy_id, recruiter_id=recruiter.id)
             elif socialUser.social_code == 'li':
-                if not debug_data.has_key('id'):
+                if 'id' not in debug_data:
                     return redirect('social_login',social_code=social_code, vacancy_id=vacancy_id, recruiter_id=recruiter.id)
             elif socialUser.social_code == 'tw':
-                if not debug_data.has_key('id'):
+                if 'id' not in debug_data:
                     return redirect('social_login',social_code=social_code, vacancy_id=vacancy_id, recruiter_id=recruiter.id)
             return redirect('vacancies_get_vacancy_details',vacancy_id=vacancy_id)
 
@@ -813,7 +816,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
                 fbfail = False
                 lifail = False
                 twfail = False
-                for key,value in request.POST.iteritems():
+                for key,value in list(request.POST.items()):
                     if not fbfail and key.startswith('fb'):
                         fbtoken = recruiter_social.filter(social_code = 'fb')
                         if fbtoken:
@@ -983,7 +986,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
 def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_section=0):
 
     
-    error_message = _(u'The job opening you are trying to find does not exist or has ended')
+    error_message = _('The job opening you are trying to find does not exist or has ended')
     today = date.today()
     postulate = False
     form_question = None
@@ -1026,7 +1029,7 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
-            print message
+            print(message)
             tb = traceback.format_exc()
             print(tb)
             messages.error(request, error_message)
@@ -1343,7 +1346,7 @@ def create_vacancies(request):
     return redirect('TRM-Subindex')
 
 def public_apply(request, vacancy_id = None, referer = None, external_referer=None):
-    error_message = _(u'The job opening you are trying to find does not exist or has ended')
+    error_message = _('The job opening you are trying to find does not exist or has ended')
     today = date.today()
     postulate = False
     form_question = None
@@ -1535,14 +1538,14 @@ def save_public_application(request,vacancy, recruiter, referer = None, external
                         # send_TRM_email(subject_template_name=subject_template_name, email_template_name=email_template_name, context_email=context_email, to_user=email,file=file_path)
                         # public_form = Public_FilesForm()
                     if recruiter:
-                        messages.success(request,u'Candidate Profile added to the job opening "%s"' % vacancy.employment)
+                        messages.success(request,'Candidate Profile added to the job opening "%s"' % vacancy.employment)
                         # context['msg'] = u'Candidate Profile added to the job opening "%s"' % vacancy.employment
                     else:
-                        messages.success(request,u'We have successfully submitted your profile to the job opening "%s"' % vacancy.employment)
+                        messages.success(request,'We have successfully submitted your profile to the job opening "%s"' % vacancy.employment)
                         # context['msg'] = u'We have successfully submitted your profile to the job opening "%s"' % vacancy.employment
                     saved = True
                 else:
-                    messages.error(request, u'Already Applied')
+                    messages.error(request, 'Already Applied')
                     # context['msg'] = u'Already Applied'
         else:
             # context['errors'] = public_form.errors
@@ -1550,7 +1553,7 @@ def save_public_application(request,vacancy, recruiter, referer = None, external
     except:
         tb = traceback.format_exc()
         print(tb)
-        messages.error(request,  u'Failed to apply to this job opening, please try again...')
+        messages.error(request,  'Failed to apply to this job opening, please try again...')
         # context['msg'] = u'Failed to apply to this job opening, please try again...'
         public_form = Public_FilesForm()
         new_cv_public = None
@@ -1569,7 +1572,7 @@ def extract_public_form_content(public_form):
     # new_cv_public = Postulate.objects.create(vacancy=vacancy, candidate = candidate, description=description, vacancy_stage=first_stage)
     # dat = read_file_content_directly(uploaded_file)
     dat = extract_file_content(curriculum.file.path, 'json')
-    print dat
+    print(dat)
     if dat['name']:
         names = dat['name'][0].split(' ')
         candidate.first_name = names[0]

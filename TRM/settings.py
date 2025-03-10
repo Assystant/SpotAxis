@@ -2,6 +2,7 @@
 
 # Django settings for TRM project.
 
+from __future__ import absolute_import
 import os.path
 
 PROJECT_NAME = 'SpotAxis'
@@ -34,16 +35,16 @@ else:
 
 # Dependiendo el ambiente se importan diferentes configuraciones
 if ENVIRONMENT == 'local_development':
-    from settings_local_development import *
+    from .settings_local_development import *
     HOSTED_URL = "http://spotaxis.com"
     ROOT_DOMAIN = "spotaxis"
 elif ENVIRONMENT == 'server_development':
     HOSTED_URL = "http://demo.spotaxis.com"
     ROOT_DOMAIN = "demo.spotaxis"
-    from settings_server_development import *
+    from .settings_server_development import *
 elif ENVIRONMENT == 'productive':
     HOSTED_URL = "https://spotaxis.com"
-    from settings_productive import *
+    from .settings_productive import *
     ROOT_DOMAIN = "spotaxis"
 
 TIME_ZONE = 'Asia/Kolkata'
@@ -53,7 +54,7 @@ LANGUAGE_CODE = 'en-IN'
 ugettext = lambda s: s
 
 LANGUAGES = (
-    ('en', ugettext(u'English')),
+    ('en', ugettext('English')),
 )
 
 SITE_ID = 1

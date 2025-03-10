@@ -6,6 +6,7 @@ django-helpdesk - A Django powered ticket tracker for small enterprise.
 lib.py - Common functions (eg multipart e-mail)
 """
 
+from __future__ import absolute_import
 import logging
 
 try:
@@ -189,7 +190,7 @@ def apply_query(queryset, params):
 
         sorting: The name of the column to sort by
     """
-    for key in params['filtering'].keys():
+    for key in list(params['filtering'].keys()):
         filter = {key: params['filtering'][key]}
         queryset = queryset.filter(**filter)
 

@@ -1,8 +1,9 @@
 """Django pagination tools supporting Ajax, multiple and lazy pagination,
 Twitter-style and Digg-style pagination.
 """
+from six.moves import map
 
-from __future__ import unicode_literals
+
 
 
 VERSION = (3, 0, 1)

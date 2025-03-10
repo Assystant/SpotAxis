@@ -1,4 +1,5 @@
 """Context Processors for Zinnia"""
+from __future__ import absolute_import
 from zinnia import __version__
 from zinnia.models import Category
 from django.db.models import Count

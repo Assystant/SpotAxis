@@ -1,8 +1,9 @@
 """Views for Zinnia quick entry"""
+from __future__ import absolute_import
 try:
     from urllib.parse import urlencode
 except:  # Python 2
-    from urllib import urlencode
+    from urllib.parse import urlencode
 
 from django import forms
 from django.contrib.auth.decorators import permission_required

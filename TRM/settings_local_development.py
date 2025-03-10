@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 import os.path
 
 PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))

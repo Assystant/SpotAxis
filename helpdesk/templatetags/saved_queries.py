@@ -1,25 +1,27 @@
-"""
-django-helpdesk - A Django powered ticket tracker for small enterprise.
+from __future__ import absolute_import
+from django import template
+from helpdesk import settings as helpdesk_settings_config
+import logging
 
-templatetags/saved_queries.py - This template tag returns previously saved 
-                                queries. Therefore you don't need to modify
-                                any views.
-"""
+# Initialize logger for this module
+logger = logging.getLogger(__name__)
 
-from django.template import Library
-from django.db.models import Q
-from helpdesk.models import SavedSearch
+# Register the template library
+register = template.Library()
 
-
-def saved_queries(user):
+@register.simple_tag
+def load_helpdesk_settings():
+    """
+    Returns the helpdesk settings for use in templates.
+    """
     try:
-        user_saved_queries = SavedSearch.objects.filter(Q(user=user) | Q(shared__exact=True))
-        return user_saved_queries
+        # Return the settings object for use in templates
+        return helpdesk_settings_config
     except Exception as e:
-        import sys
-        print >> sys.stderr,  "'saved_queries' template tag (django-helpdesk) crashed with following error:"
-        print >> sys.stderr,  e
-        return ''
-
-register = Library()
-register.filter('saved_queries', saved_queries)
+        # Log the error with full traceback for debugging
+        logger.error(
+            "'load_helpdesk_settings' template tag (django-helpdesk) encountered an error.",
+            exc_info=True
+        )
+        # Return an empty dictionary or default fallback value
+        return {}

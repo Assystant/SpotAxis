@@ -1,4 +1,5 @@
 """Base models for Zinnia"""
+from __future__ import absolute_import
 from importlib import import_module
 
 from django.core.exceptions import ImproperlyConfigured

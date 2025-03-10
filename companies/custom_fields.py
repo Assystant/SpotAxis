@@ -2,7 +2,8 @@
 """
 Mexican-specific form helpers.
 """
-from __future__ import unicode_literals
+
+from __future__ import absolute_import
 import re
 
 from django.forms import ValidationError
@@ -10,6 +11,8 @@ from django.forms.fields import RegexField, CharField
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EMPTY_VALUES
+from six.moves import range
+from six.moves import zip
 
 DATE_RE = r'\d{2}((01|03|05|07|08|10|12)(0[1-9]|[12]\d|3[01])|02(0[1-9]|[12]\d)|(04|06|09|11)(0[1-9]|[12]\d|30))'
 
@@ -61,9 +64,9 @@ class MXRFCField_Custom(RegexField, CharField):
         http://es.wikipedia.org/wiki/Registro_Federal_de_Contribuyentes_(M%C3%A9xico)
     """
     default_error_messages = {
-        'invalid': _(u'Ingrese un RFC válido'),
-        'invalid_checksum': _(u'Suma de verificación inválida'),
-        'required': _(u'Ingrese el RFC de la empresa'),
+        'invalid': _('Ingrese un RFC válido'),
+        'invalid_checksum': _('Suma de verificación inválida'),
+        'required': _('Ingrese el RFC de la empresa'),
     }
 
     def __init__(self, min_length=9, max_length=13, *args, **kwargs):
@@ -104,7 +107,7 @@ class MXRFCField_Custom(RegexField, CharField):
             rfc = '-' + rfc
 
         sum_ = sum(i * chars.index(c)
-                   for i, c in zip(reversed(range(14)), rfc))
+                   for i, c in zip(reversed(list(range(14))), rfc))
         checksum = 11 - sum_ % 11
 
         if checksum == 10:

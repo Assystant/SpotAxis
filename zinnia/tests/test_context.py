@@ -1,4 +1,5 @@
 """Test cases for Zinnia Context"""
+from __future__ import absolute_import
 from django.core.paginator import Paginator
 from django.template import Context
 from django.test import TestCase
@@ -6,6 +7,7 @@ from django.test import TestCase
 from zinnia.context import get_context_first_matching_object
 from zinnia.context import get_context_first_object
 from zinnia.context import get_context_loop_positions
+from six.moves import range
 
 
 class ContextTestCase(TestCase):
@@ -36,7 +38,7 @@ class ContextTestCase(TestCase):
             2)
 
     def test_get_context_loop_positions(self):
-        paginator = Paginator(range(50), 10)
+        paginator = Paginator(list(range(50)), 10)
         context = Context({})
         self.assertEqual(
             get_context_loop_positions(context),

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 import sys
 from django.contrib.auth import get_user_model
+import importlib
 
 User = get_user_model()
 
@@ -28,10 +30,10 @@ def reload_urlconf(urlconf=None):
         urlconf = settings.ROOT_URLCONF
 
     if HELPDESK_URLCONF in sys.modules:
-        reload(sys.modules[HELPDESK_URLCONF])
+        importlib.reload(sys.modules[HELPDESK_URLCONF])
 
     if urlconf in sys.modules:
-        reload(sys.modules[urlconf])
+        importlib.reload(sys.modules[urlconf])
 
     from django.core.urlresolvers import clear_url_caches
     clear_url_caches()

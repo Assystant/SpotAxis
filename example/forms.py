@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 from django import forms
 import os
 from django.utils.translation import ugettext as _

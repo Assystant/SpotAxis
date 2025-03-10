@@ -1,14 +1,15 @@
 """XML-RPC methods of Zinnia Pingback"""
+from __future__ import absolute_import
 try:
     from urllib.error import HTTPError
     from urllib.error import URLError
     from urllib.parse import urlsplit
     from urllib.request import urlopen
 except ImportError:  # Python 2
-    from urllib2 import HTTPError
-    from urllib2 import URLError
-    from urllib2 import urlopen
-    from urlparse import urlsplit
+    from urllib.error import HTTPError
+    from urllib.error import URLError
+    from urllib.request import urlopen
+    from urllib.parse import urlsplit
 
 from bs4 import BeautifulSoup
 
@@ -82,9 +83,7 @@ def pingback_ping(source, target):
 
         site = Site.objects.get_current()
         try:
-            document = ''.join(map(
-                lambda byte_line: byte_line.decode('utf-8'),
-                urlopen(source).readlines()))
+            document = ''.join([byte_line.decode('utf-8') for byte_line in urlopen(source).readlines()])
         except (HTTPError, URLError):
             return SOURCE_DOES_NOT_EXIST
 
