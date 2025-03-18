@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.db import models
 from django.utils import timezone
 from common import registration_settings as registration_settings
