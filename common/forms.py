@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-import ipgetter
+import ipgetter2
 import uuid
 import socket
 from django import forms
@@ -88,7 +88,7 @@ class SubdomainForm(forms.ModelForm):
             if domains[::-1][1] == 'spotaxis' and domains[::-1][0] == 'com':
                 raise forms.ValidationError("Whoa! You can't use our own domain for your website.")
             ip = socket.gethostbyname(cname)
-            if ipgetter.myip() == ip:
+            if ipgetter2.myip() == ip:
                 return cname
             else:
                 raise forms.ValidationError('It looks like this subdomain does not point to us. Please add the CNAME setting to your DNS before proceeding.')
