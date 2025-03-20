@@ -13,7 +13,7 @@ ADMINS = (('Saket', 'saket@spotaxis.com'),('Holesh','holesh@spotaxis.com'))
 
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = '*'
+ALLOWED_HOSTS = ['*']
 
 # SESSION_COOKIE_DOMAIN = '.'
 
@@ -24,9 +24,11 @@ ALLOWED_HOSTS = '*'
     # server_development: Desarrollo y pruebas en el servidor antes de pasar en productivo
     # productive: Ambiente totalmente en productivo
 
-from environment import ENVIRONMENT
+from environment import Environment
 
-if ENVIRONMENT == 'local_development' or ENVIRONMENT == 'server_development':
+print(Environment)
+
+if Environment == 'local_development' or Environment == 'server_development':
     NOTIFICATION_EMAILS = ['notify@spotaxis.com']
     DEBUG = True
 else:
@@ -34,15 +36,15 @@ else:
     DEBUG = False
 
 # Dependiendo el ambiente se importan diferentes configuraciones
-if ENVIRONMENT == 'local_development':
+if Environment == 'local_development':
     from .settings_local_development import *
     HOSTED_URL = "http://spotaxis.com"
     ROOT_DOMAIN = "spotaxis"
-elif ENVIRONMENT == 'server_development':
+elif Environment == 'server_development':
     HOSTED_URL = "http://demo.spotaxis.com"
     ROOT_DOMAIN = "demo.spotaxis"
     from .settings_server_development import *
-elif ENVIRONMENT == 'productive':
+elif Environment == 'productive':
     HOSTED_URL = "https://spotaxis.com"
     from .settings_productive import *
     ROOT_DOMAIN = "spotaxis"
@@ -51,10 +53,10 @@ TIME_ZONE = 'Asia/Kolkata'
 
 LANGUAGE_CODE = 'en-IN'
 
-ugettext = lambda s: s
+gettext = lambda s: s
 
 LANGUAGES = (
-    ('en', ugettext('English')),
+    ('en', gettext('English')),
 )
 
 SITE_ID = 1
@@ -119,7 +121,7 @@ INSTALLED_APPS = (
     'payments',
     'django_crontab',
     'django_extensions',
-    'markdown_deux',
+    'markdown',
     'bootstrapform',
     'helpdesk',
     'django_comments',
@@ -299,7 +301,7 @@ LOGO_COMPANY_DEFAULT = "logos_TRM/logo_TRM_company_default.png"
 # SOCIALMULTISHARE_TWITTER_OAUTH_KEY = "7Y2xar0P1UPdolrt3XmKawlMh"
 # SOCIALMULTISHARE_TWITTER_OAUTH_SECRET = "Mhdx5JEYN73htm0PnNDtgbsGZvgy03fMghFATzyfrcx6NpCqhB"
 
-# if ENVIRONMENT == 'productive':
+# if Environment == 'productive':
 #     pass
 #     SOCIALMULTISHARE_FACEBOOK_OAUTH_KEY = "886020148168119"
 #     SOCIALMULTISHARE_FACEBOOK_OAUTH_SECRET = "b7e32633ce8789a7ff072971cf12e303"
