@@ -13,7 +13,7 @@ ADMINS = (('Saket', 'saket@spotaxis.com'),('Holesh','holesh@spotaxis.com'))
 
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = '*'
+ALLOWED_HOSTS = ['*']
 
 # SESSION_COOKIE_DOMAIN = '.'
 
@@ -51,10 +51,10 @@ TIME_ZONE = 'Asia/Kolkata'
 
 LANGUAGE_CODE = 'en-IN'
 
-ugettext = lambda s: s
+gettext = lambda s: s
 
 LANGUAGES = (
-    ('en', ugettext('English')),
+    ('en', gettext('English')),
 )
 
 SITE_ID = 1
@@ -119,7 +119,7 @@ INSTALLED_APPS = (
     'payments',
     'django_crontab',
     'django_extensions',
-    'markdown_deux',
+    'markdownify',
     'bootstrapform',
     'helpdesk',
     'django_comments',
