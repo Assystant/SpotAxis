@@ -1,5 +1,5 @@
-name: "🐞 Bug Report"
-description: "Create a detailed report to help us fix issues quickly."
+name: "Bug Report"
+Description: "Create a detailed report to help us fix issues quickly."
 title: "[BUG] "
 labels:
   - bug
