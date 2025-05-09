@@ -31,9 +31,9 @@ body:
         - "v1.0 – v1.4"
         - "v1.5 – v1.9"
         - "v2.0 and above"
+      default: 0
     validations:
       required: true
-    default: 0
 
   - type: textarea
     id: user_role
@@ -85,9 +85,9 @@ body:
         - "P1 (High – next release)"
         - "P2 (Medium – future release)"
         - "P3 (Low – nice to have)"
+      default: 1
     validations:
       required: true
-    default: 1
 
   - type: textarea
     id: mockups
