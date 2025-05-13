@@ -31,7 +31,7 @@ class ServiceCategory(models.Model):
 class Services(models.Model):
     name = models.CharField(verbose_name=_('Name of Service'), max_length=100, null=True, blank=True, default=None)
     codename = models.CharField(verbose_name=_('Codename'), max_length=30, null=True, blank=True, default=None)
-    category = models.ForeignKey(ServiceCategory, null=True, blank=True, default=None)
+    category = models.ForeignKey(ServiceCategory, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     enabled = models.BooleanField(default=True, blank = True)
     # cost = models.DecimalField(verbose_name=_(u'Cost for Service'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     # iva = models.DecimalField(verbose_name=_(u'IVA'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
@@ -94,14 +94,14 @@ SLAB_PERIOD = (
 )
 
 class PriceSlab(models.Model):
-    currency = models.ForeignKey(Currency, null=True, blank=True, default=None)
+    currency = models.ForeignKey(Currency, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     slab_period = models.CharField(choices = SLAB_PERIOD, max_length = 1, null=True, blank=True, default=None)
     expiry_period = models.PositiveSmallIntegerField(null=True, blank=True, default =0)
     amount = models.DecimalField(verbose_name=_('Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     buffered_amount = models.DecimalField(verbose_name=_('Buffered Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     price_per_user = models.DecimalField(verbose_name=_('Price Per User'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     buffered_price_per_user = models.DecimalField(verbose_name=_('Buffered Price Per User'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
-    package = models.ForeignKey(Package, null=True, blank=True, default=None)
+    package = models.ForeignKey(Package, null=True, blank=True, default=None,on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = "Price Slab"
@@ -123,7 +123,7 @@ class Subscription(models.Model):
     company = models.OneToOneField(Company, null=True, blank=True, default=None)
     expiry = models.DateTimeField(null=True, blank=True, default=None)
     added_users = models.PositiveIntegerField(null=True, blank=True, default=0)
-    price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None)
+    price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     auto_renew = models.BooleanField(default = True, blank=True)
     last_week = models.BooleanField(default=False, blank=True)
     last_day = models.BooleanField(default=False, blank=True)
@@ -193,7 +193,7 @@ class Discount(models.Model):
     expiry = models.DateField(default=None, null=True, blank=True)
     type = models.CharField(verbose_name=_('Type of Value'), choices=DISCOUNT_VALUE_TYPE, max_length=1, null=True, blank=True, default=None)
     transaction_type = models.CharField(verbose_name=_('Type of Movement'), choices=DISCOUNT_TRANSACTION_TYPE, max_length=1, null=True, blank=True, default=None)
-    currency = models.ForeignKey(Currency, null=True, blank=True, default=None)
+    currency = models.ForeignKey(Currency, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     amount = models.DecimalField(verbose_name=_('Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     # min_amount = models.DecimalField(verbose_name=_(u'Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     max_usage = models.PositiveSmallIntegerField(default=1, null=True, blank=True)
@@ -219,7 +219,7 @@ class ScheduledTransactions(models.Model):
     timestamp = models.DateTimeField(verbose_name='Timestamp', auto_now=True)
     discount = models.ForeignKey(Discount, null=True, blank=True, default=None)
     added_users = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
-    price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None)
+    price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None,on_delete=models.SET_NULL)
 
     def __unicode__(self):
         return '%s' % str(self.company)

@@ -205,7 +205,7 @@ class Recruiter(models.Model):
 class Ban(models.Model):
     email = models.EmailField(verbose_name = 'Email', null=True, blank=True, default=None)
     duration = models.PositiveIntegerField(default=0, null=True, blank=True)
-    company = models.ForeignKey(Company, null=True, blank=True, default=None)
+    company = models.ForeignKey(Company, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     add_date = models.DateTimeField(auto_now_add=True)
     ban_function = models.TextField(default=None)
     def __unicode__(self):
@@ -218,7 +218,7 @@ class Ban(models.Model):
 class RecruiterInvitation(models.Model):
     email = models.EmailField(verbose_name = 'email', null=True, blank=True, default=None)
     token = models.CharField(verbose_name='token', max_length=50, null=True, blank=True, default=None)
-    invited_by  = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name = 'Invited by', null=True, blank=True, default=None)
+    invited_by  = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name = 'Invited by', null=True, blank=True, default=None,on_delete=models.SET_NULL)
     membership = models.PositiveSmallIntegerField(default=1)
 
     def __unicode__(self):
@@ -230,7 +230,7 @@ class RecruiterInvitation(models.Model):
 
 class Wallet(models.Model):
     company = models.OneToOneField(Company, verbose_name='Company', null=True, blank=True, default=None, on_delete=models.CASCADE)
-    currency = models.ForeignKey(Currency, null=True, blank=True, default=None)
+    currency = models.ForeignKey(Currency, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     available = models.DecimalField(verbose_name=_('Available'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     last_updated = models.DateTimeField(auto_now=True, null=True, blank=True)
 

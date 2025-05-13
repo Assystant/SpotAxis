@@ -23,9 +23,9 @@ class MessageChunk(models.Model):
 class Activity(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
-    actor = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+    actor = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,on_delete=models.SET_NULL)
     action = models.CharField(max_length=200, null=True, blank=True)
-    target = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='target')
+    target = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='target',on_delete=models.SET_NULL)
     target_action = models.CharField(max_length=200, null=True, blank=True)
     subject = models.CharField(max_length=200, null=True, blank=True)
     subject_action = models.CharField(max_length=200, null=True, blank=True)
@@ -33,8 +33,8 @@ class Activity(models.Model):
     message = models.TextField(null=True, blank=True)
     subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="subscribers")
     activity_type = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
-    postulate = models.ForeignKey(Postulate,null=True,default=None, blank=True)
-    # public_postulate = models.ForeignKey(Public_Postulate,null=True,default=None, blank=True)
+    postulate = models.ForeignKey(Postulate,null=True,default=None, blank=True,on_delete=models.SET_NULL)
+    # public_postulate = models.ForeignKey(Public_Postulate,null=True,default=None, blank=True,on_delete=models.SET_NULL))
     comments = models.ManyToManyField(Comment)
     message_chunks = models.ManyToManyField(MessageChunk)
     spotters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='Spotters')
@@ -57,8 +57,8 @@ class Activity(models.Model):
             return self.actor.recruiter.company.all()[0].geturl() + "/activities/" + str(self.id) + "/"
 
 class Notification(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    # template = models.ForeignKey(NotificationTemplate, null=True, blank=True, default=None)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    #template = models.ForeignKey(NotificationTemplate, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     timestamp = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     action = models.CharField(max_length=200, null=True, blank=True)
@@ -69,8 +69,8 @@ class Notification(models.Model):
 
     action_url = models.URLField(default=None, null=True, blank=True)
     message = models.TextField(null=True, blank=True)
-    actor = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='actor', null=True, blank=True, default=None)
-    target = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='notification_target', null=True, blank=True, default=None)
+    actor = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='actor', null=True, blank=True, default=None,on_delete=models.SET_NULL)
+    target = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='notification_target', null=True, blank=True, default=None,on_delete=models.SET_NULL)
     actor_count = models.PositiveIntegerField(default=0, null=True, blank=True)
     message_chunks = models.ManyToManyField(MessageChunk)
 

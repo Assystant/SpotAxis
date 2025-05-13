@@ -172,7 +172,7 @@ class Vacancy(models.Model):
     min_age = models.CharField(choices=get_ages(), null=True, blank=True, default=None, max_length=2)
     max_age = models.CharField(choices=get_ages(), null=True, blank=True, default=None, max_length=2)
     
-    currency = models.ForeignKey(Currency, verbose_name=_('Currency'), null=True, blank=True, default=None)
+    currency = models.ForeignKey(Currency, verbose_name=_('Currency'), null=True, blank=True, default=None,on_delete=models.SET_NULL)
     salaryType = models.ForeignKey(Salary_Type, verbose_name=_('Type of Salary'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     min_salary = models.CharField(verbose_name=_('Minimum Salary'),max_length=50, null=True, blank=True, default=None)
     max_salary = models.CharField(verbose_name=_('Maximum Salary'),max_length=50, null=True, blank=True, default=None)
@@ -208,7 +208,7 @@ class Vacancy(models.Model):
     ban_all = models.BooleanField(verbose_name =' Ban All', default=False)
 
     has_custom_form = models.BooleanField(verbose_name='Has Custom Form?', blank=True, default=False)
-    form_template = models.ForeignKey(Template, null=True, blank=True, default=None)
+    form_template = models.ForeignKey(Template, null=True, blank=True, default=None,on_delete=models.CASCADE)
 
 
     objects = models.Manager()
@@ -505,7 +505,7 @@ class VacancyStage(models.Model):
         ordering = ['order']
 
 class StageCriterion(models.Model):
-    vacancy_stage = models.ForeignKey(VacancyStage,verbose_name='Job Stage', null=True, blank=True, default=None)
+    vacancy_stage = models.ForeignKey(VacancyStage,verbose_name='Job Stage', null=True, blank=True, default=None,on_delete=models.SET_NULL)
     name = models.CharField(verbose_name="Criteria Name", max_length=50)
 
     class Meta:
@@ -518,7 +518,7 @@ class StageCriterion(models.Model):
 class VacancyTags(models.Model):
     name = models.CharField(verbose_name = 'Tag Name', max_length=50)
     added = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
-    vacancy = models.ForeignKey(Vacancy, null=True, default = None)
+    vacancy = models.ForeignKey(Vacancy, null=True, default = None,on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name  
@@ -553,8 +553,8 @@ class Postulate(models.Model):
     withdraw = models.BooleanField(verbose_name=_('Wihdrawen'), default=False)
     add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
     tag = models.CharField(max_length=200, verbose_name=_('Application Tag'), default=None, null=True, blank=True)
-    vacancy_stage = models.ForeignKey(VacancyStage, default=None, null=True, blank=True)
-    recruiter = models.ForeignKey(Recruiter, null=True, blank=True, default=None)
+    vacancy_stage = models.ForeignKey(VacancyStage, default=None, null=True, blank=True,on_delete=models.CASCADE)
+    recruiter = models.ForeignKey(Recruiter, null=True, blank=True, default=None,on_delete=models.CASCADE)
     is_recruiter = models.BooleanField(verbose_name = "Added by Recruiter?", blank=True, default=False)
     description = models.TextField(verbose_name=_('Description'), null=True, blank=True, default=None)
     tags = models.ManyToManyField(VacancyTags, default=None)
@@ -684,11 +684,11 @@ def public_path(instance, filename):
 class Comment(models.Model):
     text = models.TextField()
     comment_type = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
-    recruiter = models.ForeignKey(Recruiter, default=None, null=True, blank=True)
+    recruiter = models.ForeignKey(Recruiter, default=None, null=True, blank=True,on_delete=models.CASCADE)
     logtime = models.DateTimeField(verbose_name='TimeStamp', auto_now_add=True)
-    postulate = models.ForeignKey(Postulate, default=None, null=True, blank=True)
+    postulate = models.ForeignKey(Postulate, default=None, null=True, blank=True,on_delete=models.CASCADE)
     # public_postulate = models.ForeignKey(Public_Postulate, default=None, null=True, blank=True)
-    stage = models.ForeignKey(VacancyStage, default=None, null=True, blank=True)
+    stage = models.ForeignKey(VacancyStage, default=None, null=True, blank=True,on_delete=models.CASCADE)
     stage_section = models.PositiveSmallIntegerField(default=0, null= True, blank = True)
 
     class Meta:
@@ -774,7 +774,7 @@ class Comment(models.Model):
 class Postulate_Score(models.Model):
     name = models.CharField(verbose_name="Criteria Name", max_length=50)
     score = models.PositiveIntegerField(default=0)
-    recruiter = models.ForeignKey(Recruiter, default=None, null=True, blank=True)
+    recruiter = models.ForeignKey(Recruiter, default=None, null=True, blank=True,on_delete=models.CASCADE)
     # comment = models.TextField()
 
     class Meta:
@@ -808,8 +808,8 @@ class Postulate_Score(models.Model):
         return process.postulate.comment_set.all().filter(comment_type=2, recruiter=self.recruiter)[0]
 
 class Postulate_Stage(models.Model):
-    vacancy_stage = models.ForeignKey(VacancyStage,verbose_name='Job Stage', null=True, blank=True, default=None)
-    postulate = models.ForeignKey(Postulate, verbose_name='Postulate Stage', default=None, null=True, blank=True)
+    vacancy_stage = models.ForeignKey(VacancyStage,verbose_name='Job Stage', null=True, blank=True, default=None,on_delete=models.SET_NULL)
+    postulate = models.ForeignKey(Postulate, verbose_name='Postulate Stage', default=None, null=True, blank=True,on_delete=models.SET_NULL)
     scores = models.ManyToManyField(Postulate_Score, default=None)
     
     class Meta:

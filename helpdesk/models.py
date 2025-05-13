@@ -226,6 +226,7 @@ class Queue(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Default owner'),
+        on_delete=models.SET_NULL,
     )
 
     def __str__(self):
@@ -353,6 +354,7 @@ class Ticket(models.Model):
     queue = models.ForeignKey(
         Queue,
         verbose_name=_('Queue'),
+        on_delete=models.CASCADE,
         )
 
     created = models.DateTimeField(
@@ -381,6 +383,7 @@ class Ticket(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Assigned to'),
+        on_delete=models.SET_NULL,
         )
 
     status = models.IntegerField(
@@ -594,6 +597,7 @@ class FollowUp(models.Model):
     ticket = models.ForeignKey(
         Ticket,
         verbose_name=_('Ticket'),
+        on_delete=models.CASCADE,
         )
 
     date = models.DateTimeField(
@@ -627,6 +631,7 @@ class FollowUp(models.Model):
         blank=True,
         null=True,
         verbose_name=_('User'),
+        on_delete=models.CASCADE,
         )
 
     new_status = models.IntegerField(
@@ -667,6 +672,7 @@ class TicketChange(models.Model):
     followup = models.ForeignKey(
         FollowUp,
         verbose_name=_('Follow-up'),
+        on_delete=models.CASCADE,
         )
 
     field = models.CharField(
@@ -730,6 +736,7 @@ class Attachment(models.Model):
     followup = models.ForeignKey(
         FollowUp,
         verbose_name=_('Follow-up'),
+        on_delete=models.CASCADE,
         )
 
     file = models.FileField(
@@ -952,6 +959,7 @@ class KBItem(models.Model):
     category = models.ForeignKey(
         KBCategory,
         verbose_name=_('Category'),
+        on_delete=models.CASCADE,
         )
 
     title = models.CharField(
@@ -1025,6 +1033,7 @@ class SavedSearch(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_('User'),
+        on_delete=models.CASCADE,
         )
 
     title = models.CharField(
@@ -1214,6 +1223,7 @@ class TicketCC(models.Model):
     ticket = models.ForeignKey(
         Ticket,
         verbose_name=_('Ticket'),
+        on_delete=models.CASCADE,
         )
 
     user = models.ForeignKey(
@@ -1222,6 +1232,7 @@ class TicketCC(models.Model):
         null=True,
         help_text=_('User who wishes to receive updates for this ticket.'),
         verbose_name=_('User'),
+        on_delete=models.SET_NULL
         )
 
     email = models.EmailField(
@@ -1392,6 +1403,7 @@ class TicketCustomFieldValue(models.Model):
     field = models.ForeignKey(
         CustomField,
         verbose_name=_('Field'),
+        on_delete=models.CASCADE,
         )
 
     value = models.TextField(blank=True, null=True)
@@ -1421,12 +1433,14 @@ class TicketDependency(models.Model):
         Ticket,
         verbose_name=_('Ticket'),
         related_name='ticketdependency',
+        on_delete=models.CASCADE,
         )
 
     depends_on = models.ForeignKey(
         Ticket,
         verbose_name=_('Depends On Ticket'),
         related_name='depends_on',
+        on_delete=models.CASCADE,
         )
 
     def __str__(self):

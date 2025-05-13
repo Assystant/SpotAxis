@@ -489,7 +489,7 @@ class SocialAuth(models.Model):
     oauth_token = models.TextField()
     oauth_secret = models.TextField()
     identifier = models.TextField()
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     social_code = models.CharField(max_length=50,choices=MEDIA_CHOICES)
     photo = models.ImageField(verbose_name=_('Photo'), upload_to='photos/', default=PHOTO_USER_DEFAULT, blank=True, null=True, max_length=200)
     social_name = models.CharField(max_length=100,null=True, blank=True, default="")
