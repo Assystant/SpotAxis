@@ -14,7 +14,7 @@ class socialmultishareoauth(models.Model):
     oauth_token = models.TextField()
     oauth_secret = models.TextField()
     identifier = models.TextField()
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     media = models.CharField(max_length=50,choices=MEDIA_CHOICES)
     class Meta:
         verbose_name = "socialmultishareoauth"
