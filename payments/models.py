@@ -217,7 +217,7 @@ class ScheduledTransactions(models.Model):
     company = models.ForeignKey(Company, verbose_name=_('Company'), null=True, blank=True, default=None, on_delete = models.SET_NULL)
     # amount = models.DecimalField(verbose_name="Amount", max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     timestamp = models.DateTimeField(verbose_name='Timestamp', auto_now=True)
-    discount = models.ForeignKey(Discount, null=True, blank=True, default=None)
+    discount = models.ForeignKey(Discount, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     added_users = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
     price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None,on_delete=models.SET_NULL)
 

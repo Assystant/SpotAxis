@@ -294,7 +294,7 @@ REFERAL_TYPES = (
 )
 
 class ExternalReferal(models.Model):
-    company = models.ForeignKey(Company, default=None, blank=True, null=True)
+    company = models.ForeignKey(Company, default=None, blank=True, null=True,on_delete=models.SET_NULL)
     name = models.CharField(max_length=50, default = "")
     active = models.BooleanField(default=True, blank=True)
     referal_type = models.CharField(choices=REFERAL_TYPES, max_length=2)
