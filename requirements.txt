@@ -38,7 +38,7 @@ django-xhtml2pdf==0.0.3
 django-xmlrpc==0.1.7
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.4.0
-docutils==0.12
+docutils==0.21.1
 email_reply_parser==0.5.9
 enum34==1.1.6
 filebrowser-safe==0.4.6
