@@ -260,7 +260,7 @@ def get_last_50_years():
 
 class Expertise(models.Model):
     """ Professional Experience of a candidate, Relationship: Expertise-Curriculum """
-    candidate = models.ForeignKey(Candidate, verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     company = models.CharField(verbose_name=_('Company'), max_length=30, null=True, blank=True, default=None)
     industry = models.ForeignKey(Company_Industry, verbose_name='Industry', null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # area = models.ForeignKey(Company_Area, verbose_name=_(u'Area'), null=True, blank=True, default=None, related_name='+', on_delete=models.SET_NULL)
@@ -363,7 +363,7 @@ class Academic_Status(models.Model):
 
 class Academic(models.Model):
     """ Academic background of a candidate, Relation Academic - Curriculum """
-    candidate = models.ForeignKey(Candidate, verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     degree = models.ForeignKey(Degree, verbose_name=_('Level of Study'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # area = models.ForeignKey(Academic_Area, verbose_name=_(u'Academic Area'), null=True, blank=True, related_name='+', default=None, on_delete=models.SET_NULL)
     area = models.CharField(verbose_name=_('Specialisation'),null=True, blank=True, default=None, max_length=100)
@@ -475,7 +475,7 @@ class Language_Level(models.Model):
 
 class CV_Language(models.Model):
     """ Language proficiency of a candidate, Relatiom Language - Curriculum """
-    candidate = models.ForeignKey(Candidate, verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     language = models.ForeignKey(Language, verbose_name=_('Language'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # level = models.ForeignKey(Language_Level, verbose_name=_(u'Level'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     read = models.BooleanField(verbose_name=_('Can Read?'), default=False)
@@ -540,7 +540,7 @@ class Training(models.Model):
 ## Start of Section Certificate ##
 
 class Certificate(models.Model):
-    candidate = models.ForeignKey(Candidate,verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate,verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     name = models.CharField(_('Name'), max_length=50)
     description = models.TextField()
 
@@ -587,7 +587,7 @@ def upload_cv_file_path(instance, filename):
 class Curriculum(models.Model):
     """ Indicates Curriculum Information recorded by a candiate """
     default_path = 'candidates'
-    candidate = models.ForeignKey(Candidate, verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     personal_info = models.BooleanField(verbose_name=_('Personal Information?'), default=False)
     objective = models.BooleanField(verbose_name=_('Professional Objective?'), default=False)
     expertise = models.BooleanField(verbose_name=_('Profesional Experience?'), default=False)

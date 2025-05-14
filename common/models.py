@@ -242,7 +242,7 @@ def generate_confirm_expire_date():
 
 
 class EmailVerification(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=False, null=True, default=None, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=False, null=True, default=None, on_delete=models.SET_NULL)
     old_email = models.EmailField(_('Email Old'))
     new_email = models.EmailField(_('Email New'))
     token = models.CharField(_('Token'), max_length=40, default=generate_token)
@@ -305,7 +305,7 @@ class Country(models.Model):
 
 
 class State(models.Model):
-    country = models.ForeignKey(Country,verbose_name=_('Country'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country,verbose_name=_('Country'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.SET_NULL)
     name = models.CharField(Name, max_length=60, null=True, blank=True, default=None)
 
     def __unicode__(self):
@@ -318,7 +318,7 @@ class State(models.Model):
 
 
 class Municipal(models.Model):
-    state = models.ForeignKey(State, verbose_name=_('State'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.CASCADE)
+    state = models.ForeignKey(State, verbose_name=_('State'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.SET_NULL)
     name = models.CharField(Name, max_length=80, null=True, blank=True, default=None)
 
     def __unicode__(self):

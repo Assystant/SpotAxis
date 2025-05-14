@@ -631,7 +631,7 @@ class FollowUp(models.Model):
         blank=True,
         null=True,
         verbose_name=_('User'),
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         )
 
     new_status = models.IntegerField(
@@ -1398,6 +1398,7 @@ class TicketCustomFieldValue(models.Model):
     ticket = models.ForeignKey(
         Ticket,
         verbose_name=_('Ticket'),
+        on_delete=models.CASCADE,
         )
 
     field = models.ForeignKey(

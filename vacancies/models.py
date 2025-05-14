@@ -144,8 +144,8 @@ def get_30_days_later():
 
 class Vacancy(models.Model):
     """ Jobs """
-    company = models.ForeignKey(Company, verbose_name=_('Company'), blank=True, null=True, default=None, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=True, null=True, default=None, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, verbose_name=_('Company'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     
     employment = models.CharField(verbose_name=_('Job Role'), max_length=70, blank=True, null=True, default=None)
     status = models.ForeignKey(Vacancy_Status, verbose_name=_('Status'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
@@ -208,7 +208,7 @@ class Vacancy(models.Model):
     ban_all = models.BooleanField(verbose_name =' Ban All', default=False)
 
     has_custom_form = models.BooleanField(verbose_name='Has Custom Form?', blank=True, default=False)
-    form_template = models.ForeignKey(Template, null=True, blank=True, default=None,on_delete=models.CASCADE)
+    form_template = models.ForeignKey(Template, null=True, blank=True, default=None,on_delete=models.SET_NULL)
 
 
     objects = models.Manager()
@@ -358,7 +358,7 @@ ACTION_CHOICES = (
 
 class Publish_History(models.Model):
     """ Log of the published jobs """
-    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     action = models.CharField(choices=ACTION_CHOICES, null=True, blank=True, default=None, max_length=2)
     action_date = models.DateField(verbose_name=_('On'), auto_now_add=True)
     
@@ -373,8 +373,8 @@ class Publish_History(models.Model):
 
 class Question(models.Model):
     """ Questions/Comments on the published jobs """
-    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=True, null=True, default=None, on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     question = models.CharField(verbose_name=_('Question'), max_length=200, null=True, blank=True, default=None)
     answer = models.CharField(verbose_name=_('Answer'), max_length=200, null=True, blank=True, default=None)
     question_date = models.DateTimeField(verbose_name=_('Question date'), auto_now_add=True)
@@ -389,8 +389,8 @@ class Question(models.Model):
         ordering = ('-question_date',)
 
 class Candidate_Fav(models.Model):
-    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), related_name='+', null=True, blank=True, default=None, on_delete=models.CASCADE)
-    candidate = models.ForeignKey(Candidate, verbose_name=_('Candidate'), null=True, blank=True, default=None, on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), related_name='+', null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    candidate = models.ForeignKey(Candidate, verbose_name=_('Candidate'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
 
     def __unicode__(self):
@@ -415,7 +415,7 @@ class Vacancy_Files(models.Model):
     default_path = 'vacancies'
     tmp_folder = 'tmp-files'
     file = models.FileField(upload_to=upload_files_to_vacancy_path)
-    vacancy = models.ForeignKey(Vacancy, verbose_name='Job', default=None, blank=True, null=True, on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, verbose_name='Job', default=None, blank=True, null=True, on_delete=models.SET_NULL)
     random_number = models.IntegerField(verbose_name='Identificador', blank=True, null=True, default=None)
     add_date = models.DateTimeField('Fecha de alta', auto_now_add=True)
 
@@ -518,7 +518,7 @@ class StageCriterion(models.Model):
 class VacancyTags(models.Model):
     name = models.CharField(verbose_name = 'Tag Name', max_length=50)
     added = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
-    vacancy = models.ForeignKey(Vacancy, null=True, default = None,on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, null=True, default = None,on_delete=models.SET_NULL)
 
     def __unicode__(self):
         return self.name  
@@ -545,16 +545,16 @@ class Postulate(models.Model):
     """ Indicates whether a candidate is running a Job and if the Company has already seen or not the CV of the candidate nominated """
     default_path = 'vacancies'
 
-    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), related_name='postulated', null=True, blank=True, default=None, on_delete=models.CASCADE)
-    candidate = models.ForeignKey(Candidate, verbose_name=_('Candidate'), null=True, blank=True, default=None, on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), related_name='postulated', null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    candidate = models.ForeignKey(Candidate, verbose_name=_('Candidate'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     seen = models.BooleanField(verbose_name=_('Seen'), default=False)
     finalize = models.BooleanField(verbose_name="Selected", default=False)
     discard = models.BooleanField(verbose_name=_('Discarded'), default=False)
     withdraw = models.BooleanField(verbose_name=_('Wihdrawen'), default=False)
     add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
     tag = models.CharField(max_length=200, verbose_name=_('Application Tag'), default=None, null=True, blank=True)
-    vacancy_stage = models.ForeignKey(VacancyStage, default=None, null=True, blank=True,on_delete=models.CASCADE)
-    recruiter = models.ForeignKey(Recruiter, null=True, blank=True, default=None,on_delete=models.CASCADE)
+    vacancy_stage = models.ForeignKey(VacancyStage, default=None, null=True, blank=True,on_delete=models.SET_NULL)
+    recruiter = models.ForeignKey(Recruiter, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     is_recruiter = models.BooleanField(verbose_name = "Added by Recruiter?", blank=True, default=False)
     description = models.TextField(verbose_name=_('Description'), null=True, blank=True, default=None)
     tags = models.ManyToManyField(VacancyTags, default=None)
@@ -684,11 +684,11 @@ def public_path(instance, filename):
 class Comment(models.Model):
     text = models.TextField()
     comment_type = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
-    recruiter = models.ForeignKey(Recruiter, default=None, null=True, blank=True,on_delete=models.CASCADE)
+    recruiter = models.ForeignKey(Recruiter, default=None, null=True, blank=True,on_delete=models.SET_NULL)
     logtime = models.DateTimeField(verbose_name='TimeStamp', auto_now_add=True)
-    postulate = models.ForeignKey(Postulate, default=None, null=True, blank=True,on_delete=models.CASCADE)
+    postulate = models.ForeignKey(Postulate, default=None, null=True, blank=True,on_delete=models.SET_NULL)
     # public_postulate = models.ForeignKey(Public_Postulate, default=None, null=True, blank=True)
-    stage = models.ForeignKey(VacancyStage, default=None, null=True, blank=True,on_delete=models.CASCADE)
+    stage = models.ForeignKey(VacancyStage, default=None, null=True, blank=True,on_delete=models.SET_NULL)
     stage_section = models.PositiveSmallIntegerField(default=0, null= True, blank = True)
 
     class Meta:
@@ -774,7 +774,7 @@ class Comment(models.Model):
 class Postulate_Score(models.Model):
     name = models.CharField(verbose_name="Criteria Name", max_length=50)
     score = models.PositiveIntegerField(default=0)
-    recruiter = models.ForeignKey(Recruiter, default=None, null=True, blank=True,on_delete=models.CASCADE)
+    recruiter = models.ForeignKey(Recruiter, default=None, null=True, blank=True,on_delete=models.SET_NULL)
     # comment = models.TextField()
 
     class Meta:
