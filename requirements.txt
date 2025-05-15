@@ -54,7 +54,6 @@ httplib2==0.9.2
 hyperlink==21.0.0
 idna==3.8
 incremental==17.5.0
-ipaddress==1.0.17
 ipgetter2==1.1.10
 lxml==5.3.0
 mammoth==1.9.0
