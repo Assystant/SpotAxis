@@ -83,7 +83,7 @@ pycryptodomex==3.4.2
 pydot==1.2.3
 pyflakes==3.2.0
 PyJWT==1.4.2
-PyMySQL==0.7.6
+PyMySQL==1.1.1
 pyOpenSSL==16.2.0
 pyparsing==2.1.10
 pypdf==5.5.0
