@@ -93,7 +93,7 @@ pyproject_hooks==1.2.0
 pyquery==2.0.1
 pyth==0.6.0
 python-dateutil==2.9.0.post0
-python-docx==0.8.6
+python-docx==1.1.2
 python-linkedin==4.1
 python-openid==2.2.5
 pytz==2024.2
