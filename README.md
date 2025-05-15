@@ -63,7 +63,7 @@ The key features for this user type include the following
 * PyJWT
 * PyMySQL
 * pyPdf
-* PyPDF2
+* ~PyPDF2~
 * python-dateutil
 * python-openid
 * python-social-auth
