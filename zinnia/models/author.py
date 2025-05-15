@@ -58,3 +58,4 @@ class Author(safe_get_user_model(),
         Author's meta informations.
         """
         proxy = True
+        app_label = 'zinnia'

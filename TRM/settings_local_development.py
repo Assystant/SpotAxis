@@ -6,6 +6,10 @@ PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
 protocol = 'http'
 
+SESSION_COOKIE_DOMAIN = None
+
+
+
 SITE_URL = 'http://spotaxis.com'
 SITE_SUFFIX = '.spotaxis.com/'
 DATABASES = {

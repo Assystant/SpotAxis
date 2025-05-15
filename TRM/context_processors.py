@@ -19,11 +19,14 @@ def project_name(request):
 
 def candidate_full_name(request):
     full_name = _(u'Your Name')
-    if request.user.is_authenticated():
-        user_profile = request.user.profile.codename
-        if user_profile == 'candidate':
-            candidate = get_object_or_404(Candidate, user=request.user)
-            full_name = '%s %s' % (candidate.first_name, candidate.last_name)
+    try:
+        if request.user.is_authenticated():
+            profile = getattr(request.user, 'profile', None)
+            if profile and profile.codename == 'candidate':
+                candidate = get_object_or_404(Candidate, user=request.user)
+                full_name = '%s %s' % (candidate.first_name, candidate.last_name)
+    except:
+        pass
     return {'candidate_full_name': full_name}
 
 def logo_company_default(request):
@@ -82,10 +85,11 @@ def subdomain(request):
     return {'active_subdomain': slug,'active_host':active_host, 'isRoot':False, 'hasCNAME':hasCNAME}
 
 def user_profile(request):
+    user_profile = None
     if request.user.is_authenticated():
-        user_profile = request.user.profile.codename
-    else:
-        user_profile = None
+        profile = getattr(request.user, 'profile', None)
+        if profile:
+            user_profile = profile.codename
     try:
         company = Company.objects.get(subdomain__slug=subdomain(request)['active_subdomain'])
     except:

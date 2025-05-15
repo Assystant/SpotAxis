@@ -7,3 +7,5 @@ class Entry(load_model_class(ENTRY_BASE_MODEL)):
     """
     The final Entry model based on inheritence.
     """
+    class Meta:
+        app_label= 'zinnia'

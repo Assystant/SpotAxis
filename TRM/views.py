@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.http import HttpResponse
 import datetime
 from datetime import date
 from django.shortcuts import render_to_response, redirect
@@ -19,6 +19,7 @@ from common.forms import ContactForm, EarlyAccessForm
 from payments.models import Package
 
 def index(request):
+
     if request.method == 'POST':
         try:
             if int(request.POST['industry']) <= 0:
@@ -64,6 +65,7 @@ def pricing_comparison(request):
     return render_to_response('pricing.html',{},RequestContext(request))
 
 def about_us(request):
+    print("SESSION_COOKIE_DOMAIN =", settings.SESSION_COOKIE_DOMAIN)
     return render_to_response('about_us.html',{},context_instance = RequestContext(request))
 
 def product(request):

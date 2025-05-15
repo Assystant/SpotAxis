@@ -6,6 +6,8 @@ import os.path
 
 PROJECT_NAME = 'SpotAxis'
 
+logo_email = 'noreply@spotaxis.com'
+
 PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
 ADMINS = (('Saket', 'saket@spotaxis.com'),('Holesh','holesh@spotaxis.com'))
@@ -13,6 +15,14 @@ ADMINS = (('Saket', 'saket@spotaxis.com'),('Holesh','holesh@spotaxis.com'))
 MANAGERS = ADMINS
 
 ALLOWED_HOSTS = '*'
+
+AUTHENTICATION_BACKENDS = [
+   'django.contrib.auth.backends.ModelBackend',
+]
+
+SESSION_COOKIE_DOMAIN = ".spotaxis.com"
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # SESSION_COOKIE_DOMAIN = '.'
 
@@ -132,6 +142,12 @@ INSTALLED_APPS = (
 
 AUTH_USER_MODEL = 'common.User'
 
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     # 'TRM.middleware.CrossDomainSessionMiddleware',
@@ -144,9 +160,9 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'TRM.middleware.CustomSocialAuthExceptionMiddleware',
-    'TRM.middleware.SubdomainMiddleware',
-    'TRM.middleware.ExpiredPlanMiddleware',
-    'TRM.middleware.MediumMiddleware',
+    # 'TRM.middleware.SubdomainMiddleware',
+    # 'TRM.middleware.ExpiredPlanMiddleware',
+    # 'TRM.middleware.MediumMiddleware',
 ]
 CRONJOBS = [
     ('*/5 * * * *', 'helpdesk.cron.EmailTicketCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
@@ -182,7 +198,7 @@ TEMPLATES = [
                 'TRM.context_processors.packages',
                 # 'social.apps.django_app.context_processors.backends',
                 # 'social.apps.django_app.context_processors.login_redirect',
-                'zinnia.context_processors.version',
+                # 'zinnia.context_processors.version',
             ],
         },
     },
@@ -246,7 +262,6 @@ LOGGING = {
         },
     },
 }
-SESSION_COOKIE_DOMAIN = '.spotaxis.com'
 
 days_default_search = 30
 
@@ -275,7 +290,7 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 # Para el correcto funcionamiento al momento de loguearse
-LOGIN_URL = '/login/'  # @login_required
+# LOGIN_URL = '/login/'  # @login_required
 LOGIN_ERROR_URL = '/login/'
 LOGIN_REDIRECT_URL = 'common_redirect_after_login'
 
@@ -316,3 +331,11 @@ num_pages=8
 number_objects_page=20
 
 social_application_list = ['fb', 'li', 'gp', 'an', 'gh', 'so', 'tw']
+
+SITE_URL = 'http://localhost:8000'
+PHOTO_USER_DEFAULT = '/static/images/default_user.jpg'
+NOTIFICATION_EMAILS = ['admin@spotaxis.com']
+MEDIA_URL = '/media/'
+SITE_SUFFIX = '.spotaxis.com'
+DEFAULT_FROM_EMAIL = 'admin@spotaxis.com'
+ADMINS = [('Admin', 'admin@spotaxis.com')]

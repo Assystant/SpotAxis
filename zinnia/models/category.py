@@ -73,6 +73,7 @@ class Category(MPTTModel):
         ordering = ['title']
         verbose_name = _('category')
         verbose_name_plural = _('categories')
+        app_label= 'zinnia'
 
     class MPTTMeta:
         """

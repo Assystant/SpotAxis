@@ -26,6 +26,9 @@ admin.autodiscover()
 handler500 = 'TRM.views.handler500'
 
 urlpatterns = [
+    
+    url(r'^test/$', lambda r: HttpResponse("It works!")),
+
     # Admin:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
