@@ -1,24 +1,49 @@
-"""Urls for the Zinnia archives"""
+"""
+URLs for the Zinnia archive views.
+
+These routes provide access to blog entries grouped by:
+- Index (all entries)
+- Year
+- Week
+- Month
+- Day
+- Today
+
+Each view supports optional pagination via a `page/<page_number>/` suffix.
+
+View Classes Used:
+- EntryIndex:     Archive of all entries
+- EntryYear:      Year-based archive
+- EntryWeek:      Week-based archive (ISO week number)
+- EntryMonth:     Month-based archive
+- EntryDay:       Day-based archive
+- EntryToday:     Entries from the current day
+"""
+
 from django.conf.urls import url
 
-from zinnia.urls import _
-from zinnia.views.archives import EntryDay
-from zinnia.views.archives import EntryIndex
-from zinnia.views.archives import EntryMonth
-from zinnia.views.archives import EntryToday
-from zinnia.views.archives import EntryWeek
-from zinnia.views.archives import EntryYear
+from zinnia.urls import _  # Optional translation for URL patterns
+from zinnia.views.archives import (
+    EntryIndex, EntryYear, EntryWeek,
+    EntryMonth, EntryDay, EntryToday
+)
 
-
+# --------------------------
+# Index Archives (all posts)
+# --------------------------
 index_patterns = [
     url(r'^$',
         EntryIndex.as_view(),
         name='entry_archive_index'),
     url(_(r'^page/(?P<page>\d+)/$'),
         EntryIndex.as_view(),
-        name='entry_archive_index_paginated')
+        name='entry_archive_index_paginated'),
 ]
 
+# --------------------------
+# Year-Based Archives
+# Example: /2025/ or /2025/page/2/
+# --------------------------
 year_patterns = [
     url(r'^(?P<year>\d{4})/$',
         EntryYear.as_view(),
@@ -28,6 +53,10 @@ year_patterns = [
         name='entry_archive_year_paginated'),
 ]
 
+# --------------------------
+# Week-Based Archives
+# Example: /2025/week/20/ or /2025/week/20/page/2/
+# --------------------------
 week_patterns = [
     url(_(r'^(?P<year>\d{4})/week/(?P<week>\d+)/$'),
         EntryWeek.as_view(),
@@ -37,6 +66,10 @@ week_patterns = [
         name='entry_archive_week_paginated'),
 ]
 
+# --------------------------
+# Month-Based Archives
+# Example: /2025/05/ or /2025/05/page/2/
+# --------------------------
 month_patterns = [
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/$',
         EntryMonth.as_view(),
@@ -46,16 +79,23 @@ month_patterns = [
         name='entry_archive_month_paginated'),
 ]
 
+# --------------------------
+# Day-Based Archives
+# Example: /2025/05/15/ or /2025/05/15/page/2/
+# --------------------------
 day_patterns = [
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$',
         EntryDay.as_view(),
         name='entry_archive_day'),
-    url(_(r'^(?P<year>\d{4})/(?P<month>\d{2})/'
-          '(?P<day>\d{2})/page/(?P<page>\d+)/$'),
+    url(_(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/page/(?P<page>\d+)/$'),
         EntryDay.as_view(),
         name='entry_archive_day_paginated'),
 ]
 
+# --------------------------
+# Today's Archive
+# Example: /today/ or /today/page/2/
+# --------------------------
 today_patterns = [
     url(_(r'^today/$'),
         EntryToday.as_view(),
@@ -65,8 +105,17 @@ today_patterns = [
         name='entry_archive_today_paginated'),
 ]
 
-archive_patterns = (index_patterns + year_patterns +
-                    week_patterns + month_patterns +
-                    day_patterns + today_patterns)
+# ----------------------------------
+# Combine all patterns into a list
+# ----------------------------------
+archive_patterns = (
+    index_patterns +
+    year_patterns +
+    week_patterns +
+    month_patterns +
+    day_patterns +
+    today_patterns
+)
 
+# Main URL patterns exposed by this module
 urlpatterns = archive_patterns

@@ -1,23 +1,33 @@
-"""Views for Zinnia archives"""
+"""
+Views for Zinnia archives.
+
+This module provides class-based views for displaying blog entry archives 
+organized by date — including year, month, week, day, and today's archives.
+It leverages Django's generic date-based views with additional functionality 
+from Zinnia's custom mixins.
+"""
+
 import datetime
 
 from django.utils import timezone
-from django.views.generic.dates import BaseArchiveIndexView
-from django.views.generic.dates import BaseDayArchiveView
-from django.views.generic.dates import BaseMonthArchiveView
-from django.views.generic.dates import BaseTodayArchiveView
-from django.views.generic.dates import BaseWeekArchiveView
-from django.views.generic.dates import BaseYearArchiveView
+from django.views.generic.dates import (
+    BaseArchiveIndexView,
+    BaseDayArchiveView,
+    BaseMonthArchiveView,
+    BaseTodayArchiveView,
+    BaseWeekArchiveView,
+    BaseYearArchiveView
+)
 
 from zinnia.models.entry import Entry
 from zinnia.views.mixins.archives import ArchiveMixin
 from zinnia.views.mixins.archives import PreviousNextPublishedMixin
 from zinnia.views.mixins.callable_queryset import CallableQuerysetMixin
 from zinnia.views.mixins.prefetch_related import PrefetchCategoriesAuthorsMixin
-from zinnia.views.mixins.templates import \
-    EntryQuerysetArchiveTemplateResponseMixin
-from zinnia.views.mixins.templates import \
+from zinnia.views.mixins.templates import (
+    EntryQuerysetArchiveTemplateResponseMixin,
     EntryQuerysetArchiveTodayTemplateResponseMixin
+)
 
 
 class EntryArchiveMixin(ArchiveMixin,
@@ -26,14 +36,14 @@ class EntryArchiveMixin(ArchiveMixin,
                         CallableQuerysetMixin,
                         EntryQuerysetArchiveTemplateResponseMixin):
     """
-    Mixin combinating:
+    Base mixin for all archive views of Entry.
 
-    - ArchiveMixin configuration centralizing conf for archive views.
-    - PrefetchCategoriesAuthorsMixin to prefetch related objects.
-    - PreviousNextPublishedMixin for returning published archives.
-    - CallableQueryMixin to force the update of the queryset.
-    - EntryQuerysetArchiveTemplateResponseMixin to provide a
-      custom templates for archives.
+    Combines several mixins to:
+    - Centralize archive configuration (ArchiveMixin).
+    - Prefetch related authors and categories to reduce DB hits.
+    - Provide navigation to previous/next published entries.
+    - Force queryset re-evaluation using CallableQuerysetMixin.
+    - Render using custom archive templates.
     """
     queryset = Entry.published.all
 
@@ -42,14 +52,19 @@ class EntryIndex(EntryArchiveMixin,
                  EntryQuerysetArchiveTodayTemplateResponseMixin,
                  BaseArchiveIndexView):
     """
-    View returning the archive index.
+    Archive index view.
+
+    Displays a general list of all published entries using today's date
+    as the reference.
     """
     context_object_name = 'entry_list'
 
 
 class EntryYear(EntryArchiveMixin, BaseYearArchiveView):
     """
-    View returning the archives for a year.
+    Year-based archive view.
+
+    Displays a list of entries grouped by year.
     """
     make_object_list = True
     template_name_suffix = '_archive_year'
@@ -57,48 +72,61 @@ class EntryYear(EntryArchiveMixin, BaseYearArchiveView):
 
 class EntryMonth(EntryArchiveMixin, BaseMonthArchiveView):
     """
-    View returning the archives for a month.
+    Month-based archive view.
+
+    Displays a list of entries grouped by month.
     """
     template_name_suffix = '_archive_month'
 
 
 class EntryWeek(EntryArchiveMixin, BaseWeekArchiveView):
     """
-    View returning the archive for a week.
+    Week-based archive view.
+
+    Displays a list of entries grouped by week.
+    Adds `week_end_day` to context for displaying week range.
     """
     template_name_suffix = '_archive_week'
 
     def get_dated_items(self):
         """
-        Override get_dated_items to add a useful 'week_end_day'
-        variable in the extra context of the view.
+        Adds 'week_end_day' to extra context.
+
+        Overrides default behavior to include the last day of the week 
+        (starting from `week` + 6 days) in the template context.
         """
         self.date_list, self.object_list, extra_context = super(
             EntryWeek, self).get_dated_items()
         self.date_list = self.get_date_list(self.object_list, 'day')
-        extra_context['week_end_day'] = extra_context[
-            'week'] + datetime.timedelta(days=6)
+        extra_context['week_end_day'] = extra_context['week'] + datetime.timedelta(days=6)
         return self.date_list, self.object_list, extra_context
 
 
 class EntryDay(EntryArchiveMixin, BaseDayArchiveView):
     """
-    View returning the archive for a day.
+    Day-based archive view.
+
+    Displays all entries published on a specific day.
     """
     template_name_suffix = '_archive_day'
 
 
 class EntryToday(EntryArchiveMixin, BaseTodayArchiveView):
     """
-    View returning the archive for the current day.
+    Today-based archive view.
+
+    Displays all entries published on the current day.
+    Also sets the `year`, `month`, and `day` attributes explicitly 
+    for use in template response mixins.
     """
     template_name_suffix = '_archive_today'
 
     def get_dated_items(self):
         """
-        Return (date_list, items, extra_context) for this request.
-        And defines self.year/month/day for
-        EntryQuerysetArchiveTemplateResponseMixin.
+        Retrieves dated items for today.
+
+        Sets the instance variables `year`, `month`, and `day` from today's date.
+        Returns the list of entries for today.
         """
         now = timezone.now()
         if timezone.is_aware(now):

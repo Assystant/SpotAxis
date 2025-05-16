@@ -1,6 +1,26 @@
-"""Settings of Zinnia"""
-from django.conf import settings
+"""
+Settings of Zinnia
 
+This module defines configurable settings for the Zinnia blogging application,
+sourced from the main Django project's `settings.py`.
+
+It provides default values for various aspects of Zinnia, including:
+
+- Pingback/Trackback settings
+- Markup language configuration (Markdown, reStructuredText, Textile)
+- Entry templates
+- Comment and moderation settings
+- Pagination and preview control
+- Spam detection backends
+- Feed behavior
+- Stop words filtering for comparison/search
+- Media upload destinations
+
+Most values are retrieved using `getattr` so they can be overridden by
+the main Django project's settings.
+"""
+
+from django.conf import settings
 from mots_vides import stop_words
 
 

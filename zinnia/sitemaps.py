@@ -1,4 +1,52 @@
-"""Sitemaps for Zinnia"""
+"""
+Sitemaps for Zinnia
+
+This module defines sitemap classes for Zinnia's blog engine using Django's `Sitemap` framework.
+Sitemaps are XML files that list site URLs and metadata to help search engines index content efficiently.
+
+Zinnia supports sitemaps for:
+  - Individual blog entries (`EntrySitemap`)
+  - Related models like categories, authors, and tags (`EntryRelatedSitemap` and subclasses)
+
+Key Classes:
+------------
+- `ZinniaSitemap`: Base sitemap with site protocol configuration.
+- `EntrySitemap`: Lists all published blog entries, ordered by last update.
+- `EntryRelatedSitemap`: Abstract base class for sitemaps involving related models like tags or authors. Computes `priority` based on the number of published entries.
+- `CategorySitemap`, `AuthorSitemap`, `TagSitemap`: Subclasses of `EntryRelatedSitemap` that implement model-specific logic.
+
+How Priority Works:
+--------------------
+`EntryRelatedSitemap` calculates `priority` dynamically by:
+  1. Annotating each item (e.g., category, author) with the count of published entries.
+  2. Finding the max entry count across items.
+  3. Assigning priority as a float in the range `[0.1, 1.0]` based on count/max ratio.
+
+Tag-specific Enhancements:
+---------------------------
+`TagSitemap` overrides `get_queryset()` to use the `tagging` library and returns only tags in use on published entries. It also overrides `location()` to build tag URLs manually.
+
+Integration:
+------------
+These sitemaps are registered in the project’s `urls.py` using Django’s `sitemaps` dictionary:
+
+```python
+sitemaps = {
+    'entries': EntrySitemap(),
+    'authors': AuthorSitemap(),
+    'categories': CategorySitemap(),
+    'tags': TagSitemap(),
+}
+```
+
+They can then be exposed via:
+```python
+url(r'^sitemap.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
+```
+
+Search engines like Google will crawl these URLs to index the blog's content efficiently.
+"""
+
 from django.contrib.sitemaps import Sitemap
 from django.core.urlresolvers import reverse
 from django.db.models import Count

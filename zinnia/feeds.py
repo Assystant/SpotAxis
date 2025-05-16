@@ -1,4 +1,60 @@
-"""Feeds for Zinnia"""
+"""
+Feeds for Zinnia
+
+This module implements the RSS and Atom feeds used in the Zinnia blog engine.
+It provides a variety of feeds for publishing blog content and discussions in a structured and standardized format.
+
+Feed Categories:
+----------------
+1. Entry Feeds (based on blog posts):
+   - LastEntries: Most recent published blog entries.
+   - CategoryEntries: Entries filtered by category.
+   - AuthorEntries: Entries written by a specific author.
+   - TagEntries: Entries tagged with a specific keyword.
+   - SearchEntries: Entries matching a search pattern.
+
+2. Discussion Feeds (based on entry discussions):
+   - LastDiscussions: Recent discussions (comments, pingbacks, trackbacks).
+   - EntryDiscussions: All discussions on a specific entry.
+   - EntryComments: Only comments on a specific entry.
+   - EntryPingbacks: Only pingbacks on a specific entry.
+   - EntryTrackbacks: Only trackbacks on a specific entry.
+
+Base Classes:
+-------------
+- ZinniaFeed: Provides base functionality like site metadata, Atom/RSS support, and formatting.
+- EntryFeed: Used for entry-based feeds; handles publication dates, author info, enclosures (images).
+- DiscussionFeed: Used for comment-related feeds; handles commenter name, email, gravatar, etc.
+
+Core Features:
+--------------
+- Supports RSS and Atom formats via the FEEDS_FORMAT setting.
+- Uses Django's syndication framework and custom templates for flexibility.
+- Enclosures (images, avatars) included when available.
+- Automatically detects the site's current domain and protocol (HTTP/HTTPS).
+
+How It Works:
+-------------
+Each feed is a class-based view inheriting from Django's `Feed` class, extended via `ZinniaFeed`, `EntryFeed`, or `DiscussionFeed`.
+They define:
+- `get_object`: Retrieves the context object (e.g. category, author, tag).
+- `items`: Returns the list of items (entries/comments) to include in the feed.
+- `get_title`, `description`, `link`: Populate metadata for the feed.
+
+Integration:
+------------
+Feeds are registered in `urls/feeds.py` and can be accessed via URLs like:
+- /feeds/                   → LastEntries
+- /feeds/authors/<username>/ → AuthorEntries
+- /feeds/categories/<slug>/ → CategoryEntries
+- /feeds/tags/<tag>/        → TagEntries
+- /feeds/comments/<entry>/  → EntryComments
+
+Feeds are consumable by RSS/Atom readers, aggregators, or services like Feedly.
+They are also useful for syndicating blog content across platforms.
+
+"""
+
 import os
 from mimetypes import guess_type
 try:

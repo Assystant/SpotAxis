@@ -1,9 +1,25 @@
-"""Comparison tools for Zinnia"""
-from math import sqrt
+"""
+Comparison tools for Zinnia
 
+This module provides tools for comparing blog entries based on their textual
+content, using vector models and Pearson correlation to compute similarities.
+
+Features include:
+- Vectorization of model fields (e.g., title + content)
+- Text cleaning (punctuation, stopword removal)
+- Pearson correlation score computation
+- High-level caching for performance
+- Site-aware caching for multi-site support
+
+Main classes:
+- `ModelVectorBuilder`: Builds a raw word vector dataset from queryset.
+- `CachedModelVectorBuilder`: Adds caching on top of vector builder.
+- `EntryPublishedVectorBuilder`: Specific to published blog entries.
+"""
+
+from math import sqrt
 from django.contrib.sites.models import Site
-from django.core.cache import InvalidCacheBackendError
-from django.core.cache import caches
+from django.core.cache import InvalidCacheBackendError, caches
 from django.utils import six
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
@@ -11,36 +27,46 @@ from django.utils.html import strip_tags
 import regex as re
 
 from zinnia.models.entry import Entry
-from zinnia.settings import COMPARISON_FIELDS
-from zinnia.settings import STOP_WORDS
+from zinnia.settings import COMPARISON_FIELDS, STOP_WORDS
 
-
+# Regex to strip punctuation
 PUNCTUATION = re.compile(r'\p{P}+')
-
 
 def pearson_score(list1, list2):
     """
-    Compute the Pearson' score between 2 lists of vectors.
+    Compute Pearson correlation coefficient between two equal-length lists.
+
+    Returns a float between -1 (negatively correlated) and 1 (positively correlated).
+
+    Args:
+        list1 (list of float/int): First vector
+        list2 (list of float/int): Second vector
+
+    Returns:
+        float: Pearson score
     """
     size = len(list1)
-    sum1 = sum(list1)
-    sum2 = sum(list2)
-    sum_sq1 = sum([pow(l, 2) for l in list1])
-    sum_sq2 = sum([pow(l, 2) for l in list2])
-
+    sum1, sum2 = sum(list1), sum(list2)
+    sum_sq1 = sum([x ** 2 for x in list1])
+    sum_sq2 = sum([x ** 2 for x in list2])
     prod_sum = sum([list1[i] * list2[i] for i in range(size)])
 
     num = prod_sum - (sum1 * sum2 / float(size))
-    den = sqrt((sum_sq1 - pow(sum1, 2.0) / size) *
-               (sum_sq2 - pow(sum2, 2.0) / size))
+    den = sqrt((sum_sq1 - sum1 ** 2 / size) * (sum_sq2 - sum2 ** 2 / size))
 
-    return num / den
+    return num / den if den != 0 else 0
 
 
 class ModelVectorBuilder(object):
     """
-    Build a list of vectors based on a Queryset.
+    Builds word-frequency vectors from a queryset to compare objects.
+
+    Attributes:
+        limit (int): Max number of items to include.
+        fields (list): List of field names to extract text from.
+        queryset (QuerySet): The queryset of objects to analyze.
     """
+
     limit = None
     fields = None
     queryset = None
@@ -52,10 +78,13 @@ class ModelVectorBuilder(object):
 
     def get_related(self, instance, number):
         """
-        Return a list of the most related objects to instance.
+        Get the top `number` related objects to a given instance.
+
+        Returns:
+            list: Related model instances
         """
         related_pks = self.compute_related(instance.pk)[:number]
-        related_pks = [pk for pk, score in related_pks]
+        related_pks = [pk for pk, _ in related_pks]
         related_objects = sorted(
             self.queryset.model.objects.filter(pk__in=related_pks),
             key=lambda x: related_pks.index(x.pk))
@@ -63,7 +92,10 @@ class ModelVectorBuilder(object):
 
     def compute_related(self, object_id, score=pearson_score):
         """
-        Compute the most related pks to an object's pk.
+        Compute a sorted list of (pk, similarity_score) tuples.
+
+        Returns:
+            list of tuple: Most similar objects to given object_id
         """
         dataset = self.dataset
         object_vector = dataset.get(object_id)
@@ -76,157 +108,162 @@ class ModelVectorBuilder(object):
                 try:
                     object_related[o_id] = score(object_vector, o_vector)
                 except ZeroDivisionError:
-                    pass
+                    continue
 
-        related = sorted(object_related.items(),
-                         key=lambda k_v: k_v[1], reverse=True)
-        return related
+        return sorted(object_related.items(), key=lambda x: x[1], reverse=True)
 
     @cached_property
     def raw_dataset(self):
         """
-        Generate a raw dataset based on the queryset
-        and the specified fields.
+        Raw token dataset from queryset and fields.
+
+        Returns:
+            dict: {pk: [list of words]}
         """
         dataset = {}
-        queryset = self.queryset.values_list(*(['pk'] + self.fields))
+        qs = self.queryset.values_list(*(['pk'] + self.fields))
         if self.limit:
-            queryset = queryset[:self.limit]
-        for item in queryset:
+            qs = qs[:self.limit]
+
+        for item in qs:
             item = list(item)
-            item_pk = item.pop(0)
-            datas = ' '.join(map(six.text_type, item))
-            dataset[item_pk] = self.raw_clean(datas)
+            pk = item.pop(0)
+            text = ' '.join(map(six.text_type, item))
+            dataset[pk] = self.raw_clean(text)
+
         return dataset
 
-    def raw_clean(self, datas):
+    def raw_clean(self, text):
         """
-        Apply a cleaning on raw datas.
+        Clean text by stripping HTML, stopwords, punctuation, and lowercasing.
+
+        Returns:
+            list: Cleaned list of words
         """
-        datas = strip_tags(datas)             # Remove HTML
-        datas = STOP_WORDS.rebase(datas, '')  # Remove STOP WORDS
-        datas = PUNCTUATION.sub('', datas)    # Remove punctuation
-        datas = datas.lower()
-        return [d for d in datas.split() if len(d) > 1]
+        text = strip_tags(text)
+        text = STOP_WORDS.rebase(text, '')  # Remove stop words
+        text = PUNCTUATION.sub('', text)
+        text = text.lower()
+        return [word for word in text.split() if len(word) > 1]
 
     @cached_property
     def columns_dataset(self):
         """
-        Generate the columns and the whole dataset.
+        Construct full vector dataset and its word columns.
+
+        Returns:
+            tuple: (columns, {pk: vector})
         """
         data = {}
-        words_total = {}
+        word_totals = {}
 
-        for instance, words in self.raw_dataset.items():
-            words_item_total = {}
+        for pk, words in self.raw_dataset.items():
+            word_counts = {}
             for word in words:
-                words_total.setdefault(word, 0)
-                words_item_total.setdefault(word, 0)
-                words_total[word] += 1
-                words_item_total[word] += 1
-            data[instance] = words_item_total
+                word_totals[word] = word_totals.get(word, 0) + 1
+                word_counts[word] = word_counts.get(word, 0) + 1
+            data[pk] = word_counts
 
-        columns = sorted(words_total.keys(),
-                         key=lambda w: words_total[w],
-                         reverse=True)[:250]
-        columns = sorted(columns)
-        dataset = {}
-        for instance in data.keys():
-            dataset[instance] = [data[instance].get(word, 0)
-                                 for word in columns]
+        # Use the most common words (top 250) as vector dimensions
+        columns = sorted(
+            sorted(word_totals.keys()),
+            key=lambda w: word_totals[w],
+            reverse=True)[:250]
+
+        dataset = {
+            pk: [data[pk].get(word, 0) for word in columns]
+            for pk in data
+        }
+
         return columns, dataset
 
     @property
     def columns(self):
         """
-        Access to columns.
+        Return the vector dimensions (vocabulary).
+
+        Returns:
+            list of str: List of words used as vector columns
         """
         return self.columns_dataset[0]
 
     @property
     def dataset(self):
         """
-        Access to dataset.
+        Return the final vector dataset.
+
+        Returns:
+            dict: {pk: vector}
         """
         return self.columns_dataset[1]
 
 
 class CachedModelVectorBuilder(ModelVectorBuilder):
     """
-    Cached version of VectorBuilder.
+    Adds caching to avoid recomputing vectors or comparisons repeatedly.
     """
 
     @property
     def cache_backend(self):
         """
-        Try to access to ``comparison`` cache value,
-        if fail use the ``default`` cache backend config.
+        Returns the cache configured as 'comparison', or 'default' fallback.
         """
         try:
-            comparison_cache = caches['comparison']
+            return caches['comparison']
         except InvalidCacheBackendError:
-            comparison_cache = caches['default']
-        return comparison_cache
+            return caches['default']
 
     @property
     def cache_key(self):
         """
-        Key for the cache.
+        Cache key used to store the vector dataset and results.
+
+        Returns:
+            str
         """
         return self.__class__.__name__
 
     def get_cache(self):
-        """
-        Get the cache from cache.
-        """
         return self.cache_backend.get(self.cache_key, {})
 
     def set_cache(self, value):
-        """
-        Assign the cache in cache.
-        """
-        value.update(self.cache)
-        return self.cache_backend.set(self.cache_key, value)
+        updated = {**self.cache, **value}
+        self.cache_backend.set(self.cache_key, updated)
 
     cache = property(get_cache, set_cache)
 
     def cache_flush(self):
         """
-        Flush the cache for this instance.
+        Flush all cached data for this vector builder.
         """
-        return self.cache_backend.delete(self.cache_key)
+        self.cache_backend.delete(self.cache_key)
 
     def get_related(self, instance, number):
         """
-        Implement high level cache system for get_related.
+        Cached version of get_related.
         """
-        cache = self.cache
-        cache_key = '%s:%s' % (instance.pk, number)
-        if cache_key not in cache:
-            related_objects = super(CachedModelVectorBuilder,
-                                    self).get_related(instance, number)
-            cache[cache_key] = related_objects
-            self.cache = cache
-        return cache[cache_key]
+        key = f'{instance.pk}:{number}'
+        if key not in self.cache:
+            self.cache = {key: super().get_related(instance, number)}
+        return self.cache[key]
 
     @property
     def columns_dataset(self):
         """
-        Implement high level cache system for columns and dataset.
+        Cached version of columns_dataset property.
         """
-        cache = self.cache
-        cache_key = 'columns_dataset'
-        if cache_key not in cache:
-            columns_dataset = super(CachedModelVectorBuilder, self
-                                    ).columns_dataset
-            cache[cache_key] = columns_dataset
-            self.cache = cache
-        return cache[cache_key]
+        key = 'columns_dataset'
+        if key not in self.cache:
+            self.cache = {key: super().columns_dataset}
+        return self.cache[key]
 
 
 class EntryPublishedVectorBuilder(CachedModelVectorBuilder):
     """
-    Vector builder for published entries.
+    Vector builder specific to Zinnia's published entries.
+
+    Uses a queryset of only published entries and fields from settings.
+    Limits to 100 entries by default.
     """
     limit = 100
     queryset = Entry.published
@@ -235,7 +272,6 @@ class EntryPublishedVectorBuilder(CachedModelVectorBuilder):
     @property
     def cache_key(self):
         """
-        Key for the cache handling current site.
+        Cache key includes the site ID to support multi-site setup.
         """
-        return '%s:%s' % (super(EntryPublishedVectorBuilder, self).cache_key,
-                          Site.objects.get_current().pk)
+        return f'{super().cache_key}:{Site.objects.get_current().pk}'

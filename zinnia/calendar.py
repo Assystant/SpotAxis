@@ -1,4 +1,17 @@
-"""Calendar module for Zinnia"""
+"""Calendar module for Zinnia
+
+Provides a custom Calendar class that extends Python’s HTMLCalendar to display
+a monthly calendar view with integration of Zinnia blog entries.
+
+Features:
+- Highlights days with published entries using a CSS class and link.
+- Displays weekday headers and localized first day of week.
+- Adds footer with previous/next month navigation.
+
+Classes:
+    Calendar: Custom calendar for rendering Zinnia blog entries.
+"""
+
 from __future__ import absolute_import
 
 from calendar import HTMLCalendar
@@ -17,21 +30,28 @@ AMERICAN_TO_EUROPEAN_WEEK_DAYS = [6, 0, 1, 2, 3, 4, 5]
 
 class Calendar(HTMLCalendar):
     """
-    Extension of the HTMLCalendar.
+    Extension of the HTMLCalendar that integrates Zinnia blog entries.
+
+    Highlights dates with published entries, adding hyperlinks to archive day views.
     """
 
     def __init__(self):
         """
-        Retrieve and convert the localized first week day
-        at initialization.
+        Retrieve and convert the localized first weekday at initialization.
         """
         HTMLCalendar.__init__(self, AMERICAN_TO_EUROPEAN_WEEK_DAYS[
             get_format('FIRST_DAY_OF_WEEK')])
 
     def formatday(self, day, weekday):
         """
-        Return a day as a table cell with a link
-        if entries are published this day.
+        Return a day as a table cell with a link if entries are published this day.
+
+        Args:
+            day (int): Day of the month
+            weekday (int): Day of the week (0 = Monday, 6 = Sunday)
+
+        Returns:
+            str: HTML <td> element
         """
         if day and day in self.day_entries:
             day_date = date(self.current_year, self.current_month, day)
@@ -48,19 +68,35 @@ class Calendar(HTMLCalendar):
     def formatweekday(self, day):
         """
         Return a weekday name translated as a table header.
+
+        Args:
+            day (int): Weekday number
+
+        Returns:
+            str: HTML <th> element
         """
         return '<th class="%s">%s</th>' % (self.cssclasses[day],
                                            WEEKDAYS_ABBR[day].title())
 
     def formatweekheader(self):
         """
-        Return a header for a week as a table row.
+        Return a header row for the week wrapped in <thead>.
+
+        Returns:
+            str: HTML <thead> element
         """
         return '<thead>%s</thead>' % super(Calendar, self).formatweekheader()
 
     def formatfooter(self, previous_month, next_month):
         """
-        Return a footer for a previous and next month.
+        Return a footer with navigation links for previous and next months.
+
+        Args:
+            previous_month (date): Previous month to link
+            next_month (date): Next month to link
+
+        Returns:
+            str: HTML <tfoot> row
         """
         footer = '<tfoot><tr>' \
                  '<td colspan="3" class="prev">%s</td>' \
@@ -88,16 +124,34 @@ class Calendar(HTMLCalendar):
         return footer % (previous_content, next_content)
 
     def formatmonthname(self, theyear, themonth, withyear=True):
-        """Return a month name translated as a table row."""
+        """
+        Return a month name translated as a table caption.
+
+        Args:
+            theyear (int): Year to display
+            themonth (int): Month to display
+            withyear (bool): Include year in the name
+
+        Returns:
+            str: HTML <caption> element
+        """
         monthname = '%s %s' % (MONTHS[themonth].title(), theyear)
         return '<caption>%s</caption>' % monthname
 
     def formatmonth(self, theyear, themonth, withyear=True,
                     previous_month=None, next_month=None):
         """
-        Return a formatted month as a table
-        with new attributes computed for formatting a day,
-        and thead/tfooter.
+        Return a full formatted month table with day links and navigation.
+
+        Args:
+            theyear (int): Year to render
+            themonth (int): Month to render
+            withyear (bool): Show year in the month caption
+            previous_month (date): Previous month date for nav link
+            next_month (date): Next month date for nav link
+
+        Returns:
+            str: HTML <table> representing the calendar
         """
         self.current_year = theyear
         self.current_month = themonth

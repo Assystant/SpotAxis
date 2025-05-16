@@ -1,20 +1,31 @@
-"""Pings utilities for Zinnia"""
+"""
+Pings utilities for Zinnia
+
+This module provides threaded utilities to notify external services and
+directories about new or updated blog entries via:
+- XML-RPC pinging of web directories (e.g., Technorati)
+- Pingbacks to external URLs referenced in blog entries
+
+It defines:
+- `DirectoryPinger`: Notifies directory services about new blog entries.
+- `ExternalUrlsPinger`: Notifies external websites that a blog post links to them.
+"""
+
 import socket
 import threading
 from logging import getLogger
+
+# Compatibility for Python 2 and 3
 try:
     from urllib.request import urlopen
     from urllib.parse import urlsplit
-    from xmlrpc.client import Error
-    from xmlrpc.client import ServerProxy
-except ImportError:  # Python 2
+    from xmlrpc.client import Error, ServerProxy
+except ImportError:  # Python 2 fallback
     from urllib2 import urlopen
     from urlparse import urlsplit
-    from xmlrpclib import Error
-    from xmlrpclib import ServerProxy
+    from xmlrpclib import Error, ServerProxy
 
 from bs4 import BeautifulSoup
-
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 
@@ -24,7 +35,10 @@ from zinnia.settings import PROTOCOL
 
 class URLRessources(object):
     """
-    Object defining the ressources of the Website.
+    A helper object that defines URLs related to the current blog site:
+    - Full site URL
+    - Blog index URL
+    - Blog feed URL
     """
 
     def __init__(self):
@@ -38,7 +52,14 @@ class URLRessources(object):
 
 class DirectoryPinger(threading.Thread):
     """
-    Threaded web directory pinger.
+    Threaded pinger that sends blog updates to directory services
+    (e.g., Google Blog Search, Technorati, etc.)
+
+    Args:
+        server_name (str): XML-RPC URL of the directory.
+        entries (list): List of Entry instances to ping.
+        timeout (int): Socket timeout duration.
+        start_now (bool): Whether to start pinging immediately.
     """
 
     def __init__(self, server_name, entries, timeout=10, start_now=True):
@@ -55,7 +76,7 @@ class DirectoryPinger(threading.Thread):
 
     def run(self):
         """
-        Ping entries to a directory in a thread.
+        Thread entrypoint to ping each entry to the directory.
         """
         logger = getLogger('zinnia.ping.directory')
         socket.setdefaulttimeout(self.timeout)
@@ -67,10 +88,12 @@ class DirectoryPinger(threading.Thread):
 
     def ping_entry(self, entry):
         """
-        Ping an entry to a directory.
+        Ping an individual entry to the directory server.
+
+        Returns:
+            dict: Server response or error message.
         """
-        entry_url = '%s%s' % (self.ressources.site_url,
-                              entry.get_absolute_url())
+        entry_url = '%s%s' % (self.ressources.site_url, entry.get_absolute_url())
         categories = '|'.join([c.title for c in entry.categories.all()])
 
         try:
@@ -82,18 +105,23 @@ class DirectoryPinger(threading.Thread):
             try:
                 reply = self.server.weblogUpdates.ping(
                     self.ressources.current_site.name,
-                    self.ressources.blog_url, entry_url,
-                    categories)
+                    self.ressources.blog_url, entry_url, categories)
             except Exception:
-                reply = {'message': '%s is an invalid directory.' %
-                         self.server_name,
-                         'flerror': True}
+                reply = {
+                    'message': '%s is an invalid directory.' % self.server_name,
+                    'flerror': True
+                }
         return reply
 
 
 class ExternalUrlsPinger(threading.Thread):
     """
-    Threaded external URLs pinger.
+    Threaded pinger that sends pingbacks to external URLs linked from a blog entry.
+
+    Args:
+        entry (Entry): The Entry instance to scan for outbound links.
+        timeout (int): Timeout for socket/network requests.
+        start_now (bool): Whether to begin pinging immediately.
     """
 
     def __init__(self, entry, timeout=10, start_now=True):
@@ -110,7 +138,7 @@ class ExternalUrlsPinger(threading.Thread):
 
     def run(self):
         """
-        Ping external URLs in a Thread.
+        Main logic: find external links, identify pingback servers, and ping them.
         """
         logger = getLogger('zinnia.ping.external_urls')
         socket.setdefaulttimeout(self.timeout)
@@ -127,7 +155,10 @@ class ExternalUrlsPinger(threading.Thread):
 
     def is_external_url(self, url, site_url):
         """
-        Check if the URL is an external URL.
+        Determine if a URL is external to the current blog site.
+
+        Returns:
+            bool: True if the link is external.
         """
         url_splitted = urlsplit(url)
         if not url_splitted.netloc:
@@ -136,29 +167,36 @@ class ExternalUrlsPinger(threading.Thread):
 
     def find_external_urls(self, entry):
         """
-        Find external URLs in an entry.
+        Parse the entry's HTML content to find all external <a href="..."> links.
+
+        Returns:
+            list: List of external URL strings.
         """
         soup = BeautifulSoup(entry.html_content, 'html.parser')
-        external_urls = [a['href'] for a in soup.find_all('a')
-                         if self.is_external_url(
-                             a['href'], self.ressources.site_url)]
-        return external_urls
+        return [a['href'] for a in soup.find_all('a', href=True)
+                if self.is_external_url(a['href'], self.ressources.site_url)]
 
     def find_pingback_href(self, content):
         """
-        Try to find LINK markups to pingback URL.
+        Parse the HTML to look for <link rel="pingback" href="...">.
+
+        Returns:
+            str or None: Pingback server URL if found.
         """
         soup = BeautifulSoup(content, 'html.parser')
         for link in soup.find_all('link'):
-            dict_attr = dict(link.attrs)
-            if 'rel' in dict_attr and 'href' in dict_attr:
-                for rel_type in dict_attr['rel']:
+            attrs = dict(link.attrs)
+            if 'rel' in attrs and 'href' in attrs:
+                for rel_type in attrs['rel']:
                     if rel_type.lower() == PINGBACK:
-                        return dict_attr.get('href')
+                        return attrs.get('href')
 
     def find_pingback_urls(self, urls):
         """
-        Find the pingback URL for each URLs.
+        Determine pingback server URLs for each external link.
+
+        Returns:
+            dict: Mapping from target URL → pingback server URL.
         """
         pingback_urls = {}
 
@@ -166,35 +204,39 @@ class ExternalUrlsPinger(threading.Thread):
             try:
                 page = urlopen(url)
                 headers = page.info()
-
                 server_url = headers.get('X-Pingback')
 
+                # If X-Pingback header is missing, check HTML content
                 if not server_url:
-                    content_type = headers.get('Content-Type', '').split(
-                        ';')[0].strip().lower()
+                    content_type = headers.get('Content-Type', '').split(';')[0].strip().lower()
                     if content_type in ['text/html', 'application/xhtml+xml']:
-                        server_url = self.find_pingback_href(
-                            page.read(5 * 1024))
+                        server_url = self.find_pingback_href(page.read(5 * 1024))
 
+                # Normalize relative server URLs
                 if server_url:
                     server_url_splitted = urlsplit(server_url)
                     if not server_url_splitted.netloc:
                         url_splitted = urlsplit(url)
-                        server_url = '%s://%s%s' % (url_splitted.scheme,
-                                                    url_splitted.netloc,
-                                                    server_url)
+                        server_url = '%s://%s%s' % (
+                            url_splitted.scheme,
+                            url_splitted.netloc,
+                            server_url
+                        )
                     pingback_urls[url] = server_url
             except IOError:
                 pass
+
         return pingback_urls
 
     def pingback_url(self, server_name, target_url):
         """
-        Do a pingback call for the target URL.
+        Call the pingback XML-RPC method to notify a target URL.
+
+        Returns:
+            str: Reply message or failure note.
         """
         try:
             server = ServerProxy(server_name)
-            reply = server.pingback.ping(self.entry_url, target_url)
+            return server.pingback.ping(self.entry_url, target_url)
         except (Error, socket.error):
-            reply = '%s cannot be pinged.' % target_url
-        return reply
+            return '%s cannot be pinged.' % target_url

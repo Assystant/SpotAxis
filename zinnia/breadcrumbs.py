@@ -1,4 +1,62 @@
-"""Breadcrumb module for Zinnia"""
+"""
+Breadcrumb module for Zinnia
+
+This module builds contextual breadcrumbs for various views in the Zinnia blogging engine.
+Breadcrumbs are used in templates to help users understand the structure and location of the current page.
+
+Key Concepts:
+-------------
+- Each breadcrumb is represented by a `Crumb` object, which has a `name` and an optional `url`.
+- This module provides breadcrumbs for:
+    - Archive views by date (year, month, day, week)
+    - Entry detail pages
+    - Author, Category, Tag listing and detail pages
+    - Paginated views (e.g., Page 2 of Author list)
+
+Breadcrumb Building Functions:
+------------------------------
+- `year_crumb(date)`, `month_crumb(date)`, `day_crumb(date)`:
+    Generate date-based crumbs for archive navigation.
+
+- `entry_breadcrumbs(entry)`:
+    Returns a list of breadcrumbs for a blog entry including its year, month, day, and title.
+
+- `MODEL_BREADCRUMBS`:
+    A dispatch table mapping model names (e.g., 'Author', 'Category') to breadcrumb generator functions.
+
+- `retrieve_breadcrumbs(path, model_instance, root_name)`:
+    Main function to build breadcrumbs for any Zinnia-managed URL.
+    Handles:
+      - Model detail views
+      - Archive views with or without dates
+      - Week-based archive URLs
+      - Paginated pages (via `handle_page_crumb` decorator)
+
+Regular Expressions:
+---------------------
+- `ARCHIVE_REGEXP`: Matches URLs containing year/month/day components.
+- `ARCHIVE_WEEK_REGEXP`: Matches URLs containing year/week.
+- `PAGE_REGEXP`: Matches pagination URLs (e.g., `/page/2/`).
+
+Decorator:
+----------
+- `handle_page_crumb(func)`:
+    Wraps the main breadcrumb function to detect and append page-specific breadcrumbs
+    like "Page 2" if applicable.
+
+Example Usage:
+--------------
+Called internally in Zinnia views or templates to generate breadcrumbs like:
+```
+[Home] > [Categories] > [Web Development] > [Django] > [Page 2]
+[Home] > [2023] > [May] > [10] > [My Blog Post Title]
+```
+
+All breadcrumbs are returned as a list of `Crumb` objects.
+These can be iterated in a template to render a navigation trail.
+"""
+
+
 import re
 from datetime import datetime
 from functools import wraps

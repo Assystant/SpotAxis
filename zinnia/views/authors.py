@@ -1,8 +1,13 @@
-"""Views for Zinnia authors"""
+"""
+Views for Zinnia authors.
+
+This module provides class-based views for displaying lists of authors
+and detailed views showing entries published by specific authors.
+"""
+
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
-from django.views.generic.list import BaseListView
-from django.views.generic.list import ListView
+from django.views.generic.list import BaseListView, ListView
 
 from zinnia.models.author import Author
 from zinnia.settings import PAGINATION
@@ -13,12 +18,17 @@ from zinnia.views.mixins.templates import EntryQuerysetTemplateResponseMixin
 class AuthorList(ListView):
     """
     View returning a list of all published authors.
+
+    Displays all authors who have published entries, annotated with the 
+    number of entries they’ve published.
     """
 
     def get_queryset(self):
         """
-        Return a queryset of published authors,
-        with a count of their entries published.
+        Returns a queryset of published authors with their entry count.
+
+        Uses `.annotate()` to add a `count_entries_published` field 
+        representing how many entries each author has published.
         """
         return Author.published.all().annotate(
             count_entries_published=Count('entries'))
@@ -26,23 +36,26 @@ class AuthorList(ListView):
 
 class BaseAuthorDetail(object):
     """
-    Mixin providing the behavior of the author detail view,
-    by returning in the context the current author and a
-    queryset containing the entries written by author.
+    Mixin providing logic for the author detail view.
+
+    This mixin:
+    - Fetches the author object using the `username` from the URL.
+    - Returns a queryset of all published entries by that author.
+    - Adds the author to the view's context.
     """
 
     def get_queryset(self):
         """
-        Retrieve the author by his username and
-        build a queryset of his published entries.
+        Fetch the author by their username and return their published entries.
         """
         self.author = get_object_or_404(
-            Author, **{Author.USERNAME_FIELD: self.kwargs['username']})
+            Author, **{Author.USERNAME_FIELD: self.kwargs['username']}
+        )
         return self.author.entries_published()
 
     def get_context_data(self, **kwargs):
         """
-        Add the current author in context.
+        Add the current `author` object to the context for template access.
         """
         context = super(BaseAuthorDetail, self).get_context_data(**kwargs)
         context['author'] = self.author
@@ -54,21 +67,27 @@ class AuthorDetail(EntryQuerysetTemplateResponseMixin,
                    BaseAuthorDetail,
                    BaseListView):
     """
-    Detailed view for an Author combinating these mixins:
+    Detailed author view combining multiple mixins:
 
-    - EntryQuerysetTemplateResponseMixin to provide custom templates
-      for the author display page.
-    - PrefetchCategoriesAuthorsMixin to prefetch related Categories
-      and Authors to belonging the entry list.
-    - BaseAuthorDetail to provide the behavior of the view.
-    - BaseListView to implement the ListView.
+    - EntryQuerysetTemplateResponseMixin:
+        Provides custom template support based on entry list context.
+    - PrefetchCategoriesAuthorsMixin:
+        Optimizes DB queries by prefetching related authors and categories.
+    - BaseAuthorDetail:
+        Provides core logic to get the author and their entries.
+    - BaseListView:
+        Implements list-like behavior to display a list of entries.
+
+    This view shows all blog entries published by a specific author.
     """
     model_type = 'author'
     paginate_by = PAGINATION
 
     def get_model_name(self):
         """
-        The model name is the author's username.
+        Return a display-friendly name for the current author.
+
+        Defaults to the author's full name. Could be changed to `get_username()`
+        for stricter uniqueness or legacy usage.
         """
-        # return self.author.get_username()
         return self.author.get_full_name()

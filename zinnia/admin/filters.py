@@ -1,9 +1,16 @@
-"""Filters for Zinnia admin"""
+"""
+Filters for Zinnia admin
+
+Provides custom Django admin list filters for:
+- Filtering entries by published authors.
+- Filtering entries by categories with published entries.
+These filters appear in the sidebar of the admin interface.
+"""
+
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Count
 from django.utils.encoding import smart_text
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ungettext_lazy
+from django.utils.translation import ugettext_lazy as _, ungettext_lazy
 
 from zinnia.models.author import Author
 from zinnia.models.category import Category
@@ -11,39 +18,60 @@ from zinnia.models.category import Category
 
 class RelatedPublishedFilter(SimpleListFilter):
     """
-    Base filter for related objects to published entries.
+    Abstract base class for admin filters that operate on related objects
+    which have published entries (e.g., authors, categories).
+
+    Subclasses must define:
+        - model: the related model to filter by (e.g., Author)
+        - lookup_key: the queryset filter key (e.g., 'authors__id')
     """
     model = None
     lookup_key = None
 
     def lookups(self, request, model_admin):
         """
-        Return published objects with the number of entries.
+        Define the filter options displayed in the sidebar.
+
+        Returns:
+            list of tuple: Each tuple is (ID, label) for filter dropdown.
         """
         active_objects = self.model.published.all().annotate(
-            count_entries_published=Count('entries')).order_by(
-            '-count_entries_published', '-pk')
+            count_entries_published=Count('entries')
+        ).order_by('-count_entries_published', '-pk')
+
         for active_object in active_objects:
             yield (
-                str(active_object.pk), ungettext_lazy(
+                str(active_object.pk),
+                ungettext_lazy(
                     '%(item)s (%(count)i entry)',
                     '%(item)s (%(count)i entries)',
-                    active_object.count_entries_published) % {
+                    active_object.count_entries_published
+                ) % {
                     'item': smart_text(active_object),
-                    'count': active_object.count_entries_published})
+                    'count': active_object.count_entries_published
+                }
+            )
 
     def queryset(self, request, queryset):
         """
-        Return the object's entries if a value is set.
+        Filter the queryset based on selected filter value.
+
+        Args:
+            request: The current request.
+            queryset: The base queryset.
+
+        Returns:
+            QuerySet: The filtered queryset.
         """
         if self.value():
-            params = {self.lookup_key: self.value()}
-            return queryset.filter(**params)
+            return queryset.filter(**{self.lookup_key: self.value()})
 
 
 class AuthorListFilter(RelatedPublishedFilter):
     """
-    List filter for EntryAdmin with published authors only.
+    Custom admin filter to show only published authors.
+
+    Appears in EntryAdmin's sidebar under "published authors".
     """
     model = Author
     lookup_key = 'authors__id'
@@ -53,8 +81,9 @@ class AuthorListFilter(RelatedPublishedFilter):
 
 class CategoryListFilter(RelatedPublishedFilter):
     """
-    List filter for EntryAdmin about categories
-    with published entries.
+    Custom admin filter to show only categories with published entries.
+
+    Appears in EntryAdmin's sidebar under "published categories".
     """
     model = Category
     lookup_key = 'categories__id'

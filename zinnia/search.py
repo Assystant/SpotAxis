@@ -1,4 +1,48 @@
-"""Search module with complex query parsing for Zinnia"""
+"""
+Search module with complex query parsing for Zinnia
+
+This module implements an advanced search grammar using pyparsing to allow users
+to perform flexible, full-text search queries across entries in the Zinnia blog engine.
+
+Search Features:
+----------------
+- Boolean operators: `and`, `or`, `-` (negation)
+- Quoted string matching: e.g., `"django blog"`
+- Field-specific filters:
+    - `author:arjun`
+    - `tag:python`
+    - `category:web`
+- Wildcard matching: prefix, suffix, and full wildcard support with `*`
+
+Grammar Parsing:
+----------------
+The parser uses `pyparsing` to tokenize and interpret the search string into a Django `Q()` object.
+It supports nested expressions and operator precedence:
+  - AND is the default operation
+  - `-term` negates a match
+  - Parentheses can group sub-expressions
+
+Key Functions:
+--------------
+- `create_q(token)`: Converts a parsed search term into a `Q` object.
+- `union_q(token)`: Combines `Q` objects using `and` / `or` / negation logic.
+- `advanced_search(pattern)`: Entry point that takes a string pattern and returns filtered published entries.
+
+Supported Fields (via SEARCH_FIELDS):
+--------------------------------------
+Zinnia uses the `SEARCH_FIELDS` setting to define which fields are matched for non-prefixed queries.
+The special filters `author`, `category`, and `tag` are handled explicitly with optional wildcard support.
+
+Example Queries:
+----------------
+- `django and blog`
+- `"machine learning" or python`
+- `author:arjun and category:ai`
+- `tag:data* or category:science`
+- `-django` (exclude posts with 'django')
+
+This module makes Zinnia’s search system competitive with CMS-grade advanced filters by combining expressive grammar with Django ORM power.
+""""""Search module with complex query parsing for Zinnia"""
 from django.db.models import Q
 from django.utils import six
 
@@ -143,3 +187,4 @@ def advanced_search(pattern):
     """
     query_parsed = QUERY.parseString(pattern)
     return Entry.published.filter(query_parsed[0]).distinct()
+

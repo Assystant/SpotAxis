@@ -1,4 +1,17 @@
-"""XML-RPC methods of Zinnia Pingback"""
+"""
+XML-RPC methods of Zinnia Pingback
+
+Implements the Pingback 1.0 specification and extensions to:
+- Handle incoming pingbacks from external websites.
+- Validate the source and target URLs.
+- Create pingback comments on blog entries.
+- Retrieve a list of pingbacks for a specific entry.
+
+References:
+- Official spec: http://hixie.ch/specs/pingback/pingback-1.0
+- Extensions: http://www.aquarionics.com/misc/archives/blogite/0198.html
+"""
+
 try:
     from urllib.error import HTTPError
     from urllib.error import URLError
@@ -31,6 +44,7 @@ from zinnia.models.entry import Entry
 from zinnia.settings import PINGBACK_CONTENT_LENGTH
 from zinnia.signals import pingback_was_posted
 
+# Error codes defined by Pingback 1.0 spec
 UNDEFINED_ERROR = 0
 SOURCE_DOES_NOT_EXIST = 16
 SOURCE_DOES_NOT_LINK = 17
@@ -41,7 +55,16 @@ PINGBACK_ALREADY_REGISTERED = 48
 
 def generate_pingback_content(soup, target, max_length, trunc_char='...'):
     """
-    Generate a description text for the pingback.
+    Generate a description snippet from the source HTML around the link to target.
+
+    Args:
+        soup (BeautifulSoup): Parsed source HTML document.
+        target (str): The target URL being linked.
+        max_length (int): Maximum allowed length for the returned excerpt.
+        trunc_char (str): String used to indicate text truncation.
+
+    Returns:
+        str: Extracted text excerpt containing the link context.
     """
     link = soup.find('a', href=target)
 
@@ -69,12 +92,16 @@ def generate_pingback_content(soup, target, max_length, trunc_char='...'):
 @xmlrpc_func(returns='string', args=['string', 'string'])
 def pingback_ping(source, target):
     """
-    pingback.ping(sourceURI, targetURI) => 'Pingback message'
+    XML-RPC: pingback.ping(sourceURI, targetURI)
 
-    Notifies the server that a link has been added to sourceURI,
-    pointing to targetURI.
+    Registers a pingback if `source` links to a valid blog `target`.
 
-    See: http://hixie.ch/specs/pingback/pingback-1.0
+    Args:
+        source (str): The source URL initiating the pingback.
+        target (str): The target entry URL.
+
+    Returns:
+        str: Success message or an integer error code.
     """
     try:
         if source == target:
@@ -136,11 +163,15 @@ def pingback_ping(source, target):
 @xmlrpc_func(returns='string[]', args=['string'])
 def pingback_extensions_get_pingbacks(target):
     """
-    pingback.extensions.getPingbacks(url) => '[url, url, ...]'
+    XML-RPC: pingback.extensions.getPingbacks(targetURI)
 
-    Returns an array of URLs that link to the specified url.
+    Retrieves a list of all registered pingback source URLs for a given target.
 
-    See: http://www.aquarionics.com/misc/archives/blogite/0198.html
+    Args:
+        target (str): The target URL to query pingbacks for.
+
+    Returns:
+        list of str: All source URLs that linked to the target.
     """
     site = Site.objects.get_current()
 

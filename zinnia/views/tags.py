@@ -1,12 +1,16 @@
-"""Views for Zinnia tags"""
+"""
+Views for Zinnia tags.
+
+This module defines views to list all tags used in blog entries,
+and to display all entries associated with a specific tag.
+"""
+
 from django.http import Http404
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
-from django.views.generic.list import BaseListView
-from django.views.generic.list import ListView
+from django.views.generic.list import ListView, BaseListView
 
-from tagging.models import Tag
-from tagging.models import TaggedItem
+from tagging.models import Tag, TaggedItem
 from tagging.utils import get_tag
 
 from zinnia.models.entry import Entry
@@ -17,42 +21,51 @@ from zinnia.views.mixins.templates import EntryQuerysetTemplateResponseMixin
 
 class TagList(ListView):
     """
-    View return a list of all published tags.
+    View for listing all tags associated with published entries.
+
+    Renders a template with all tags used on the site, along with
+    the number of times each tag appears.
     """
     template_name = 'zinnia/tag_list.html'
     context_object_name = 'tag_list'
 
     def get_queryset(self):
         """
-        Return a queryset of published tags,
-        with a count of their entries published.
+        Return a list of tags used by published entries.
+
+        Each tag is annotated with `count` — the number of entries tagged with it.
         """
         return Tag.objects.usage_for_queryset(
-            Entry.published.all(), counts=True)
+            Entry.published.all(), counts=True
+        )
 
 
 class BaseTagDetail(object):
     """
-    Mixin providing the behavior of the tag detail view,
-    by returning in the context the current tag and a
-    queryset containing the entries published with the tag.
+    Mixin that provides the logic for tag detail views.
+
+    Responsibilities:
+    - Resolve a tag name to a `Tag` object
+    - Retrieve entries associated with that tag
+    - Inject the tag object into the template context
     """
 
     def get_queryset(self):
         """
-        Retrieve the tag by his name and
-        build a queryset of his published entries.
+        Retrieve the tag by name and return entries tagged with it.
+
+        Raises:
+            Http404: If no tag is found for the given name.
         """
         self.tag = get_tag(self.kwargs['tag'])
         if self.tag is None:
-            raise Http404(_('No Tag found matching "%s".') %
-                          self.kwargs['tag'])
-        return TaggedItem.objects.get_by_model(
-            Entry.published.all(), self.tag)
+            raise Http404(_('No Tag found matching "%s".') % self.kwargs['tag'])
+
+        return TaggedItem.objects.get_by_model(Entry.published.all(), self.tag)
 
     def get_context_data(self, **kwargs):
         """
-        Add the current tag in context.
+        Add the resolved tag to the template context.
         """
         context = super(BaseTagDetail, self).get_context_data(**kwargs)
         context['tag'] = self.tag
@@ -64,20 +77,20 @@ class TagDetail(EntryQuerysetTemplateResponseMixin,
                 BaseTagDetail,
                 BaseListView):
     """
-    Detailed view for a Tag combinating these mixins:
+    View for displaying all entries associated with a specific tag.
 
-    - EntryQuerysetTemplateResponseMixin to provide custom templates
-      for the tag display page.
-    - PrefetchCategoriesAuthorsMixin to prefetch related Categories
-      and Authors to belonging the entry list.
-    - BaseTagDetail to provide the behavior of the view.
-    - BaseListView to implement the ListView.
+    Combines:
+    - EntryQuerysetTemplateResponseMixin: for customizable templates.
+    - PrefetchCategoriesAuthorsMixin: for performance optimizations.
+    - BaseTagDetail: for tag resolution and entry retrieval.
+    - BaseListView: for list pagination and rendering.
     """
     model_type = 'tag'
     paginate_by = PAGINATION
 
     def get_model_name(self):
         """
-        The model name is the tag slugified.
+        Return the slugified version of the tag name.
+        Useful for template resolution and breadcrumbs.
         """
         return slugify(self.tag)

@@ -1,4 +1,14 @@
-"""Views for Zinnia entries"""
+"""
+Views for Zinnia entries.
+
+This module provides detail views for individual blog entries,
+with support for:
+- Date-based URL resolution
+- Entry preview handling
+- Password protection
+- Caching
+"""
+
 from django.views.generic.dates import BaseDateDetailView
 
 from zinnia.models.entry import Entry
@@ -15,14 +25,17 @@ class EntryDateDetail(ArchiveMixin,
                       CallableQuerysetMixin,
                       BaseDateDetailView):
     """
-    Mixin combinating:
+    View for retrieving a single Entry based on its publication date and slug.
 
-    - ArchiveMixin configuration centralizing conf for archive views
-    - EntryArchiveTemplateResponseMixin to provide a
-      custom templates depending on the date
-    - BaseDateDetailView to retrieve the entry with date and slug
-    - CallableQueryMixin to defer the execution of the *queryset*
-      property when imported
+    Combines the following mixins:
+    - `ArchiveMixin`: Provides shared configuration (like date field, formats).
+    - `EntryArchiveTemplateResponseMixin`: Selects custom templates for entries.
+    - `CallableQuerysetMixin`: Defers queryset execution until runtime.
+    - `BaseDateDetailView`: Core Django CBV to retrieve object by date and slug.
+
+    Queryset is scoped to:
+    - Published entries
+    - Entries associated with the current site (via `on_site` manager)
     """
     queryset = Entry.published.on_site
 
@@ -32,6 +45,12 @@ class EntryDetail(EntryCacheMixin,
                   EntryProtectionMixin,
                   EntryDateDetail):
     """
-    Detailled archive view for an Entry with password
-    and login protections and restricted preview.
+    Full-featured detail view for a single Entry.
+
+    Adds:
+    - `EntryCacheMixin`: Enables per-entry caching for performance.
+    - `EntryPreviewMixin`: Allows previewing unpublished or future entries.
+    - `EntryProtectionMixin`: Handles login and password protection for entries.
+
+    Inherits date-based URL resolution and template handling from `EntryDateDetail`.
     """

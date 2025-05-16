@@ -1,21 +1,39 @@
 """
-Set of" markup" function to transform plain text into HTML for Zinnia.
-Code originally provided by django.contrib.markups
+Set of "markup" functions to transform plain text into HTML for Zinnia.
+
+Originally adapted from `django.contrib.markup`.
+
+This module supports multiple markup languages including:
+- Markdown
+- Textile
+- reStructuredText
+
+The markup used depends on the `MARKUP_LANGUAGE` setting in Zinnia.
 """
+
 import warnings
 
-from django.utils.encoding import force_bytes
-from django.utils.encoding import force_text
+from django.utils.encoding import force_bytes, force_text
 from django.utils.html import linebreaks
 
-from zinnia.settings import MARKDOWN_EXTENSIONS
-from zinnia.settings import MARKUP_LANGUAGE
-from zinnia.settings import RESTRUCTUREDTEXT_SETTINGS
+from zinnia.settings import (
+    MARKDOWN_EXTENSIONS,
+    MARKUP_LANGUAGE,
+    RESTRUCTUREDTEXT_SETTINGS
+)
 
 
 def textile(value):
     """
-    Textile processing.
+    Convert plain text written in Textile markup to HTML.
+
+    Requires the `textile` Python library.
+
+    Args:
+        value (str): The Textile-formatted text.
+
+    Returns:
+        str: HTML output or original input if textile is not available.
     """
     try:
         import textile
@@ -30,10 +48,14 @@ def textile(value):
 
 def markdown(value, extensions=MARKDOWN_EXTENSIONS):
     """
-    Markdown processing with optionally using various extensions
-    that python-markdown supports.
-    `extensions` is an iterable of either markdown.Extension instances
-    or extension paths.
+    Convert Markdown text to HTML using the `markdown` library.
+
+    Args:
+        value (str): Markdown-formatted text.
+        extensions (list): List of Markdown extensions to use.
+
+    Returns:
+        str: HTML output or original input if markdown is not available.
     """
     try:
         import markdown
@@ -47,7 +69,14 @@ def markdown(value, extensions=MARKDOWN_EXTENSIONS):
 
 def restructuredtext(value, settings=RESTRUCTUREDTEXT_SETTINGS):
     """
-    RestructuredText processing with optionnally custom settings.
+    Convert reStructuredText to HTML using `docutils`.
+
+    Args:
+        value (str): reStructuredText-formatted text.
+        settings (dict): Optional docutils settings.
+
+    Returns:
+        str: HTML fragment or original input if docutils is not available.
     """
     try:
         from docutils.core import publish_parts
@@ -64,8 +93,16 @@ def restructuredtext(value, settings=RESTRUCTUREDTEXT_SETTINGS):
 
 def html_format(value):
     """
-    Returns the value formatted in HTML,
-    depends on MARKUP_LANGUAGE setting.
+    Convert plain text to HTML using the configured MARKUP_LANGUAGE.
+
+    If no markup language is configured, falls back to Django's linebreaks
+    unless the value already contains paragraph tags.
+
+    Args:
+        value (str): The raw input string.
+
+    Returns:
+        str: HTML-formatted output.
     """
     if not value:
         return ''
