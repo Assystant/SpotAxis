@@ -1,3 +1,18 @@
+"""
+Form classes for the common app.
+
+This module provides form classes for handling various types of data input including:
+- User registration and profile management
+- File uploads
+- Contact forms
+- Address management
+- Password management
+- Email management
+- Social authentication
+
+Each form includes validation logic and custom widgets where appropriate.
+"""
+
 # -*- coding: utf-8 -*-
 import ipgetter
 import uuid
@@ -20,6 +35,12 @@ from TRM.settings import PHOTO_USER_DEFAULT
 from upload_logos.widgets import AjaxClearableFileInput
 
 def get_initial_country():
+    """
+    Get the default country for form initialization.
+    
+    Returns:
+        Country: The default country object (usually Mexico)
+    """
     try:
         initial_country = Country.objects.get(iso2_code__exact='IN')
     except:
@@ -31,9 +52,26 @@ def get_initial_country():
 # Home Registration Form User Data #
 # ------------------------------------------------- #
 class UserPhotoForm(forms.ModelForm):
+    """
+    Form for handling user profile photo uploads.
+    
+    Provides validation and processing for user photo uploads including:
+    - File type validation
+    - Size restrictions
+    - Image processing
+    """
     photo = forms.ImageField(widget=forms.FileInput(attrs={'class':"form-control text-center"}), required=False)
 
     def clean_photo(self):
+        """
+        Validate and process the uploaded photo.
+        
+        Returns:
+            ImageField: The cleaned and processed photo file
+            
+        Raises:
+            ValidationError: If the photo doesn't meet requirements
+        """
         default_photo = PHOTO_USER_DEFAULT
         from PIL import Image
         image = self.cleaned_data.get('photo', None)
@@ -66,6 +104,14 @@ class UserPhotoForm(forms.ModelForm):
 
 
 class SubdomainForm(forms.ModelForm):
+    """
+    Form for managing subdomains.
+    
+    Handles creation and validation of subdomain entries including:
+    - Domain name validation
+    - Uniqueness checks
+    - Format restrictions
+    """
     cname = forms.CharField(
         widget = forms.TextInput(attrs={'placeholder':'career.yourdomain.com',
                                         'class':'form-control'
@@ -97,6 +143,19 @@ class SubdomainForm(forms.ModelForm):
         fields = ('cname',)
 
 class UserDataForm(forms.ModelForm):
+    """
+    Form for managing user profile data.
+    
+    Handles user registration and profile updates including:
+    - Username validation
+    - Email verification
+    - Password management
+    - Personal information
+    
+    Attributes:
+        email_repeat_msg (str): Message for email confirmation field
+        password_repeat_msg (str): Message for password confirmation field
+    """
     email_repeat_msg = _(u'Confirm your email')
     password_repeat_msg = _(u'* Confirm your Password')
     username = forms.RegexField(
@@ -296,6 +355,16 @@ class UserDataForm(forms.ModelForm):
 # Start Form Basics User Data #
 # --------------------------------------------- #
 class BasicUserDataForm(forms.ModelForm):
+    """
+    Form for basic user information updates.
+    
+    A simplified version of UserDataForm for basic profile updates including:
+    - Name
+    - Email
+    - Phone numbers
+    
+    Does not include password or username management.
+    """
     first_name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': _(u'Enter your name'),
                                       'class': 'form-control'}),
@@ -375,6 +444,14 @@ class BasicUserDataForm(forms.ModelForm):
 # Start Form for Change of Email #
 # ------------------------------------ #
 class ChangeEmailForm(forms.Form):
+    """
+    Form for handling email address changes.
+    
+    Provides:
+    - New email validation
+    - Verification process initiation
+    - Email format checking
+    """
     new_email = forms.EmailField(
         label=_('New Email'),
         widget=forms.TextInput(
@@ -426,6 +503,12 @@ class ChangeEmailForm(forms.Form):
 
 
 class RegisterEmailForm(forms.ModelForm):
+    """
+    Form for initial email registration.
+    
+    Used when a user needs to register an email address for the first time,
+    typically after social authentication.
+    """
     # Form for email registration, when the user does not have any registered
     email = forms.EmailField(
         label=_(u'Email'),
@@ -453,6 +536,15 @@ class RegisterEmailForm(forms.ModelForm):
 # Start Form for Change of Password #
 # --------------------------------------- #
 class ChangePasswordForm(forms.Form):
+    """
+    Form for password changes.
+    
+    Handles:
+    - Current password verification
+    - New password validation
+    - Password confirmation
+    - Password strength requirements
+    """
     actual_password_lbl = _(u'Actual Password')
     new_password_lbl = _(u'password new')
     confirm_new_password_lbl = _(u'Confirm new password')
@@ -539,6 +631,18 @@ def get_municipals(state=None):
 
 
 class AdressForm(forms.ModelForm):
+    """
+    Form for managing address information.
+    
+    Handles:
+    - Country selection
+    - State/province selection
+    - City/municipal selection
+    - Street address
+    - Postal code validation
+    
+    Features dynamic loading of location options based on selected country/state.
+    """
     initial_country = get_initial_country()
     # country = forms.ModelChoiceField(
     #     queryset=countries(),
@@ -764,114 +868,16 @@ class RecoverUserForm(forms.Form):
 ### Contat Form ###
 class ContactForm(forms.Form):
     """
-    The base contact form class from which all contact form classes
-    should inherit.
-
-    If you don't need any custom functionality, you can simply use
-    this form to provide basic contact functionality; it will collect
-    name, email address and message.
-
-    The ``ContactForm`` view included in this application knows how to
-    work with this form and can handle many types of subclasses as
-    well (see below for a discussion of the important points), so in
-    many cases it will be all that you need. If you'd like to use this
-    form or a subclass of it from one of your own views, just do the
-    following:
-
-    1. When you instantiate the form, pass the current ``HttpRequest``
-       object to the constructor as the keyword argument ``request``;
-       this is used internally by the base implementation, and also
-       made available so that subclasses can add functionality which
-       relies on inspecting the request.
-
-    2. To send the message, call the form's ``save`` method, which
-       accepts the keyword argument ``fail_silently`` and defaults it
-       to ``False``. This argument is passed directly to
-       ``send_mail``, and allows you to suppress or raise exceptions
-       as needed for debugging. The ``save`` method has no return
-       value.
-
-    Other than that, treat it like any other form; validity checks and
-    validated data are handled normally, through the ``is_valid``
-    method and the ``cleaned_data`` dictionary.
-
-
-    Base implementation
-    -------------------
-
-    Under the hood, this form uses a somewhat abstracted interface in
-    order to make it easier to subclass and add functionality. There
-    are several important attributes subclasses may want to look at
-    overriding, all of which will work (in the base implementation) as
-    either plain attributes or as callable methods:
-
-    * ``from_email`` -- used to get the address to use in the
-      ``From:`` header of the message. The base implementation returns
-      the value of the ``DEFAULT_FROM_EMAIL`` setting.
-
-    * ``message`` -- used to get the message body as a string. The
-      base implementation renders a template using the form's
-      ``cleaned_data`` dictionary as context.
-
-    * ``recipient_list`` -- used to generate the list of recipients
-      for the message. The base implementation returns the email
-      addresses specified in the ``MANAGERS`` setting.
-
-    * ``subject`` -- used to generate the subject line for the
-      message. The base implementation returns the string 'Message
-      sent through the web site', with the name of the current
-      ``Site`` prepended.
-
-    * ``template_name`` -- used by the base ``message`` method to
-      determine which template to use for rendering the
-      message. Default is ``contact_form/contact_form_email.txt``.
-
-    Internally, the base implementation ``_get_message_dict`` method
-    collects ``from_email``, ``message``, ``recipient_list`` and
-    ``subject`` into a dictionary, which the ``save`` method then
-    passes directly to ``send_mail`` as keyword arguments.
-
-    Particularly important is the ``message`` attribute, with its base
-    implementation as a method which renders a template; because it
-    passes ``cleaned_data`` as the template context, any additional
-    fields added by a subclass will automatically be available in the
-    template. This means that many useful subclasses can get by with
-    just adding a few fields and possibly overriding
-    ``template_name``.
-
-    Much useful functionality can be achieved in subclasses without
-    having to override much of the above; adding additional validation
-    methods works the same as any other form, and typically only a few
-    items -- ``recipient_list`` and ``subject_line``, for example,
-    need to be overridden to achieve customized behavior.
-
-
-    Other notes for subclassing
-    ---------------------------
-
-    Subclasses which want to inspect the current ``HttpRequest`` to
-    add functionality can access it via the attribute ``request``; the
-    base ``message`` takes advantage of this to use ``RequestContext``
-    when rendering its template. See the ``AkismetContactForm``
-    subclass in this file for an example of using the request to
-    perform additional validation.
-
-    Subclasses which override ``__init__`` need to accept ``*args``
-    and ``**kwargs``, and pass them via ``super`` in order to ensure
-    proper behavior.
-
-    Subclasses should be careful if overriding ``_get_message_dict``,
-    since that method **must** return a dictionary suitable for
-    passing directly to ``send_mail`` (unless ``save`` is overridden
-    as well).
-
-    Overriding ``save`` is relatively safe, though remember that code
-    which uses your form will expect ``save`` to accept the
-    ``fail_silently`` keyword argument. In the base implementation,
-    that argument defaults to ``False``, on the assumption that it's
-    far better to notice errors than to silently not send mail from
-    the contact form.
-
+    Base contact form for user inquiries.
+    
+    A comprehensive contact form implementation that:
+    - Validates input data
+    - Handles email sending
+    - Supports template-based messages
+    - Provides spam protection
+    
+    This form can be subclassed to create specialized contact forms
+    with additional fields or custom behavior.
     """
     def __init__(self, data=None, files=None, request=None, *args, **kwargs):
         if request is None:

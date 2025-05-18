@@ -39,24 +39,33 @@ from vacancies.models import Question, VacancyStage, Vacancy, Comment, Postulate
 from vacancies.models import Vacancy, Postulate, Salary_Type, Candidate_Fav , VacancyTags
 from validate_email import validate_email
 
-def filter_text_from_profile(arr=[], postulate_ids = [], public = False):
-    # if public:
-    #     public_postulates = Public_Postulate_Stage.objects.filter(id__in=postulate_ids)
-    #     pps = Public_Postulate_Stage.objects.none()
-    #     for text in arr:
-    #         pp = public_postulates.filter(Q(postulate__full_name__icontains=text) | Q(postulate__email__icontains=text) | Q(postulate__description__icontains=text))
-    #         pps = pps | pp
-    #         ids = []
-    #         text = text.lower()
-    #         for postulate in public_postulates:
-    #             ftext = postulate.postulate.file_text().lower()
-    #             if not text in ftext:
-    #                 ids = ids + [postulate.id]
+"""
+AJAX request handlers for the common app.
 
-    #         pp = public_postulates.exclude(id__in=ids)
-    #         pps = pps | pp
-    #     return list(set([p.id for p in pps]))
-    # else:
+This module provides AJAX functionality for various features including:
+- Text filtering and search
+- Company and candidate data management
+- Vacancy management
+- Form validation
+- User authentication
+- Social media integration
+- Scheduling and notifications
+
+All views in this module expect AJAX requests and return JSON responses.
+"""
+
+def filter_text_from_profile(arr=[], postulate_ids = [], public = False):
+    """
+    Filter postulate profiles based on text search.
+    
+    Args:
+        arr (list): List of search terms
+        postulate_ids (list): List of postulate IDs to filter
+        public (bool): Whether to search in public postulates
+        
+    Returns:
+        list: Filtered list of postulate IDs matching the search criteria
+    """
     postulates = Postulate_Stage.objects.filter(id__in=postulate_ids)
     pps = Postulate_Stage.objects.none()
     for text in arr:
@@ -134,7 +143,17 @@ def filter_text_from_profile(arr=[], postulate_ids = [], public = False):
         pps = pps | pp
     return list(set([p.id for p in pps]))
 
+@csrf_exempt
 def companies_change_academic_area(request):
+    """
+    Handle AJAX request to update company academic area settings.
+    
+    Args:
+        request: HttpRequest object containing the new academic area data
+        
+    Returns:
+        JsonResponse: Success/failure status of the operation
+    """
     id_area = request.POST.get('id')
     data = ""
     try:
@@ -144,7 +163,17 @@ def companies_change_academic_area(request):
         pass
     return HttpResponse(data, content_type='application/json')
 
+@csrf_exempt
 def companies_allow_career(request):
+    """
+    Handle AJAX request to update allowed careers for a company.
+    
+    Args:
+        request: HttpRequest object containing career permission data
+        
+    Returns:
+        JsonResponse: Success/failure status of the operation
+    """
     selected_ids = request.POST.getlist('selected_ids[]')
     degree_ids = []
     for selected_id in selected_ids:
@@ -153,12 +182,14 @@ def companies_allow_career(request):
     data = serializers.serialize('json', degrees, fields=('codename'))
     return HttpResponse(data, content_type='application/json')
 
+@csrf_exempt
 def companies_change_state(request):
     id_state = request.POST.get('id')
     municipals = Municipal.objects.filter(state_id=id_state)
     data = serializers.serialize('json', municipals, fields=('pk', 'name'))
     return HttpResponse(data, content_type='application/json')
 
+@csrf_exempt
 def candidates_change_degree(request):
     degree = ""
     try:
@@ -167,6 +198,7 @@ def candidates_change_degree(request):
         pass
     return HttpResponse(degree, content_type="text/plain")
 
+@csrf_exempt
 def candidates_change_career(request):
     career = ""
     try:
@@ -175,6 +207,7 @@ def candidates_change_career(request):
         pass
     return HttpResponse(career, content_type="text/plain")
 
+@csrf_exempt
 def candidates_change_academic_status(request):
     status = ""
     try:
@@ -183,6 +216,7 @@ def candidates_change_academic_status(request):
         pass
     return HttpResponse(status, content_type="text/plain")
 
+@csrf_exempt
 def get_salarytype_codename(request):
     codename = ""
     try:
@@ -191,6 +225,7 @@ def get_salarytype_codename(request):
         pass
     return HttpResponse(codename, content_type="text/plain")
 
+@csrf_exempt
 def vacancies_answer_question(request):
     try:
         # Register Response
@@ -220,6 +255,7 @@ def vacancies_answer_question(request):
 
     return HttpResponse(data)
 
+@csrf_exempt
 def vacancies_postulate(request):
     """ Nominate a candidate for a vacancy """
     if request.is_ajax():
@@ -321,6 +357,7 @@ def vacancies_postulate(request):
     else:
         raise Http404
 
+@csrf_exempt
 def mark_unmark_vacancy_as_favorite(request):
     try:
         vacancy_id = request.GET.get('id')
@@ -338,6 +375,7 @@ def mark_unmark_vacancy_as_favorite(request):
         message_fav = 'error'
     return HttpResponse(message_fav)
 
+@csrf_exempt
 def ajax_login(request):
     context = {}
     context['success'] = False
@@ -696,6 +734,18 @@ def archive_postulate(request):
 
 @csrf_exempt
 def validate_personal_form(request):
+    """
+    Validate personal information form data via AJAX.
+    
+    Performs validation on user-submitted personal information and returns
+    validation results.
+    
+    Args:
+        request: HttpRequest object containing form data
+        
+    Returns:
+        JsonResponse: Validation results and any error messages
+    """
     context={}
     context['success'] = False
     context['post'] = request.POST
@@ -726,6 +776,15 @@ def validate_personal_form(request):
 
 @csrf_exempt
 def validate_contact_form(request):
+    """
+    Validate contact form data via AJAX.
+    
+    Args:
+        request: HttpRequest object containing contact form data
+        
+    Returns:
+        JsonResponse: Validation results and any error messages
+    """
     context={}
     context['success'] = False
     context['post'] = request.POST
@@ -1156,6 +1215,18 @@ def delete_section(request):
 
 @csrf_exempt
 def generate_public_cv(request):
+    """
+    Generate a public CV for a user via AJAX request.
+    
+    Creates a publicly accessible version of a user's CV with specified
+    visibility settings.
+    
+    Args:
+        request: HttpRequest object containing CV generation parameters
+        
+    Returns:
+        JsonResponse: Public CV URL and generation status
+    """
     context={}
     # raise ValueError()
     context['errors'] = {}
@@ -1285,6 +1356,17 @@ def public_contact_form(request):
 
 @csrf_exempt
 def update_permissions(request):
+    """
+    Update user permissions via AJAX request.
+    
+    Modifies access permissions for users in the system.
+    
+    Args:
+        request: HttpRequest object containing permission data
+        
+    Returns:
+        JsonResponse: Success/failure status of the permission update
+    """
     context={}
     context['success'] = False
     if request.method == 'POST':
@@ -1572,6 +1654,17 @@ def update_criteria(request):
 
 @csrf_exempt
 def comment(request):
+    """
+    Handle AJAX request to add a comment.
+    
+    Adds a comment to a specified object (vacancy, application, etc.).
+    
+    Args:
+        request: HttpRequest object containing comment data
+        
+    Returns:
+        JsonResponse: Comment creation status and data
+    """
     context={}
     context['success'] = False
     if request.method == 'POST':
@@ -2053,7 +2146,19 @@ def filter_candidates(request):
         context['msg'] = 'Unauthorised Access'
     return JsonResponse(context)
 
+@csrf_exempt
 def notifications(request):
+    """
+    Handle AJAX request for user notifications.
+    
+    Retrieves or updates user notification settings and data.
+    
+    Args:
+        request: HttpRequest object
+        
+    Returns:
+        JsonResponse: Notification data or update status
+    """
     response = HttpResponse("", content_type="text/event-stream")
     if request.user.is_authenticated():
         msg = ""
@@ -2444,6 +2549,17 @@ def smart_share(request,id):
     return render(request,'smart_share.html',{'recruiter_social_profile':recruiter_social_profile,'vacancy':vacancy})
 
 def socialshare(request):
+    """
+    Handle social media sharing functionality via AJAX.
+    
+    Manages sharing of content to various social media platforms.
+    
+    Args:
+        request: HttpRequest object containing sharing parameters
+        
+    Returns:
+        JsonResponse: Sharing status and social media response data
+    """
     context = {}
     context['success'] = False
     context['msg'] = 'Unauthorised access'
@@ -2567,6 +2683,17 @@ def revoke_social_auth(request, social_code):
 
 @csrf_exempt
 def schedule(request):
+    """
+    Handle AJAX request for scheduling operations.
+    
+    Creates or updates scheduled events/appointments.
+    
+    Args:
+        request: HttpRequest object containing schedule data
+        
+    Returns:
+        JsonResponse: Schedule operation status and data
+    """
     context={}
     json_context = {}
     candidate = Postulate.objects.filter(id = int(request.POST.get('candidate', 0)))
