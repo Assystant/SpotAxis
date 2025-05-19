@@ -7,6 +7,20 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """
+    Migration class to modify the `hobbies`, `interests`, and `others` fields in the `Candidate` model.
+
+    Purpose:
+        - Converts standard `TextField` instances to `RichTextField` for enhanced user input.
+        - Enables better formatting for personal information stored in these fields.
+
+    Attributes:
+        dependencies (list): Ensures this migration is applied after '0008_auto_20160908_1753'.
+        operations (list): Contains `AlterField` operations for `hobbies`, `interests`, and `others`.
+
+    Inherits:
+        django.db.migrations.Migration
+    """
 
     dependencies = [
         ('candidates', '0008_auto_20160908_1753'),

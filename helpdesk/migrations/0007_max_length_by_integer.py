@@ -5,6 +5,7 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
+    """Migration to alter the 'label' field in the CustomField model."""
 
     dependencies = [
         ('helpdesk', '0006_email_maxlength'),

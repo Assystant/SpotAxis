@@ -25,6 +25,18 @@ from helpdesk.models import Queue
 
 
 class Command(BaseCommand):
+    """
+    Django management command to create or update permissions for Queues.
+
+    Options:
+        --queues, -q: Comma-separated list of queue slugs to process.
+                      If omitted, all Queues will be processed.
+
+    For each Queue:
+        - Generates a permission codename if missing.
+        - Creates a permission object if it does not already exist.
+        - Skips creation if permission already exists.
+    """
     def __init__(self):
         BaseCommand.__init__(self)
 
@@ -35,6 +47,16 @@ class Command(BaseCommand):
             )
 
     def handle(self, *args, **options):
+        """
+        Execute the command.
+
+        Args:
+            *args: Positional arguments (unused).
+            **options: Command line options parsed by optparse.
+
+        Raises:
+            CommandError: If a specified Queue slug does not exist.
+        """
         queue_slugs = options['queues']
         queues = []
 

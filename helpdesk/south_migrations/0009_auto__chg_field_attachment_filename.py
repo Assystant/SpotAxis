@@ -6,14 +6,29 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
+    """
+    Migration to alter the 'filename' field in the 'Attachment' model of the 'helpdesk' app.
 
+    This migration changes the maximum length of the 'filename' field from 100 characters to 1000 characters.
+    The forwards() method applies this change, and the backwards() method reverts it.
+    """
     def forwards(self, orm):
-
+        """
+        Apply the migration: increase the max_length of 'filename' in 'Attachment' model to 1000.
+        
+        Args:
+            orm: The ORM models used for schema migrations.
+        """
         # Changing field 'Attachment.filename'
         db.alter_column(u'helpdesk_attachment', 'filename', self.gf('django.db.models.fields.CharField')(max_length=1000))
 
     def backwards(self, orm):
-
+        """
+        Revert the migration: reset the max_length of 'filename' in 'Attachment' model back to 100.
+        
+        Args:
+            orm: The ORM models used for schema migrations.
+        """
         # Changing field 'Attachment.filename'
         db.alter_column(u'helpdesk_attachment', 'filename', self.gf('django.db.models.fields.CharField')(max_length=100))
 

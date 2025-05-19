@@ -5,7 +5,9 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
+    """
+    Removes the QueueMembership model and its fields.
+    """
     dependencies = [
         ('helpdesk', '0009_migrate_queuemembership'),
     ]

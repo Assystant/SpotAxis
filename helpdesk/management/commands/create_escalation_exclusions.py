@@ -21,6 +21,19 @@ from helpdesk.models import EscalationExclusion, Queue
 
 
 class Command(BaseCommand):
+    """
+    Django management command to add escalation exclusion days easily.
+
+    This command allows you to specify certain days of the week on which 
+    no escalation should occur, optionally limited to specific queues, 
+    and for a number of future occurrences (weeks).
+
+    Options:
+        --days, -d: Comma-separated list of days (e.g., monday,tuesday).
+        --occurrences, -o: Number of weeks ahead to add exclusions.
+        --queues, -q: Comma-separated list of queue slugs to limit exclusions.
+        --escalate-verbosely, -x: Print detailed exclusion creation info.
+    """
     def __init__(self):
         BaseCommand.__init__(self)
 
@@ -45,6 +58,15 @@ class Command(BaseCommand):
             )
 
     def handle(self, *args, **options):
+        """
+        Execute the command.
+
+        Processes the command line options, validates input, loads queues if specified,
+        and creates escalation exclusions for the given days and occurrences.
+
+        Raises:
+            CommandError: If required options are missing or queues do not exist.
+        """
         days = options['days']
         # optparse should already handle the `or 1`
         occurrences = options['occurrences'] or 1
@@ -82,6 +104,20 @@ day_names = {
 
 
 def create_exclusions(days, occurrences, verbose, queues):
+    """
+    Create escalation exclusions for specified days and occurrences.
+
+    Args:
+        days (str): Comma-separated days of the week (e.g., 'monday,tuesday').
+        occurrences (int): Number of future weeks to add exclusions.
+        verbose (bool): Whether to print detailed information during creation.
+        queues (list): List of Queue objects to which exclusions apply. If empty,
+                       exclusions apply to all queues.
+
+    For each specified day, exclusions are created starting from today, for the
+    given number of occurrences (weeks ahead). If verbose is True, each creation
+    step prints information about the exclusion and associated queues.
+    """
     days = days.split(',')
     for day in days:
         day_name = day
@@ -107,6 +143,11 @@ def create_exclusions(days, occurrences, verbose, queues):
 
 
 def usage():
+    """
+    Print command line usage instructions for this script.
+
+    Lists available options and their descriptions to guide the user.
+    """
     print("Options:")
     print(" --days, -d: Days of week (monday, tuesday, etc)")
     print(" --occurrences, -o: Occurrences: How many weeks ahead to exclude this day")

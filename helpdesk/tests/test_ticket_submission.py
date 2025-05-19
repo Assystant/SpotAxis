@@ -1,3 +1,12 @@
+"""
+This module tests ticket submission workflows in the Django Helpdesk application.
+It covers direct ticket creation via ORM and public ticket submission through forms.
+Scenarios tested include:
+- Public and private queue handling
+- Email notifications upon submission
+- Handling of custom fields in tickets
+"""
+
 from helpdesk.models import Queue, CustomField, Ticket
 from django.test import TestCase
 from django.core import mail
@@ -11,9 +20,19 @@ except ImportError:  # python 2
 
 
 class TicketBasicsTestCase(TestCase):
+    """
+    TestCase for basic ticket submission behaviors:
+    - Direct ORM-based creation
+    - Public form submission
+    - Email notification handling
+    - Custom field submission
+    """
     fixtures = ['emailtemplate.json']
 
     def setUp(self):
+        """
+        Set up test queues and default ticket data.
+        """
         self.queue_public = Queue.objects.create(
             title='Category 1',
             slug='q1',
@@ -35,6 +54,10 @@ class TicketBasicsTestCase(TestCase):
         self.client = Client()
 
     def test_create_ticket_direct(self):
+        """
+        Test creating a ticket directly using the model.
+        Ensure ticket URL format and email count remain unchanged.
+        """
         email_count = len(mail.outbox)
         ticket_data = dict(queue=self.queue_public, **self.ticket_data)
         ticket = Ticket.objects.create(**ticket_data)
@@ -42,6 +65,11 @@ class TicketBasicsTestCase(TestCase):
         self.assertEqual(email_count, len(mail.outbox))
 
     def test_create_ticket_public(self):
+        """
+        Test ticket submission via the public helpdesk form.
+        Ensure valid redirection and that three emails are sent:
+        - Submitter, New Ticket CC, Updated Ticket CC
+        """
         email_count = len(mail.outbox)
 
         response = self.client.get(reverse('helpdesk_home'))
@@ -70,6 +98,10 @@ class TicketBasicsTestCase(TestCase):
         self.assertEqual(email_count+3, len(mail.outbox))
 
     def test_create_ticket_private(self):
+        """
+        Test that submitting to a private queue via the public form fails.
+        Expect no emails and a validation error in the response.
+        """
         email_count = len(mail.outbox)
         post_data = {
             'title': 'Private ticket test',
@@ -85,6 +117,10 @@ class TicketBasicsTestCase(TestCase):
         self.assertContains(response, 'Select a valid choice.')
 
     def test_create_ticket_customfields(self):
+        """
+        Test ticket submission with a custom field.
+        Ensure correct email notifications and redirect.
+        """
         email_count = len(mail.outbox)
         queue_custom = Queue.objects.create(
             title='Category 3',

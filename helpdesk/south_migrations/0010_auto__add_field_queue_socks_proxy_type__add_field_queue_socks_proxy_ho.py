@@ -6,8 +6,23 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
+    """
+    Database schema migration for adding SOCKS proxy fields to the Queue model.
 
+    This migration adds the following fields to the 'helpdesk_queue' table:
+      - socks_proxy_type: CharField(max_length=8), optional.
+      - socks_proxy_host: GenericIPAddressField(max_length=39), optional.
+      - socks_proxy_port: IntegerField, optional.
+
+    The backwards method removes these fields.
+    """
     def forwards(self, orm):
+        """
+        Apply the migration: add SOCKS proxy related fields to the Queue model.
+
+        Args:
+            orm: The South ORM object for interacting with models during migration.
+        """
         # Adding field 'Queue.socks_proxy_type'
         db.add_column(u'helpdesk_queue', 'socks_proxy_type',
                       self.gf('django.db.models.fields.CharField')(max_length=8, null=True, blank=True),
@@ -25,6 +40,12 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        """
+        Revert the migration: remove the SOCKS proxy related fields from the Queue model.
+
+        Args:
+            orm: The South ORM object for interacting with models during migration.
+        """
         # Deleting field 'Queue.socks_proxy_type'
         db.delete_column(u'helpdesk_queue', 'socks_proxy_type')
 

@@ -21,6 +21,16 @@ from helpdesk.models import Ticket
 
 
 def num_to_link(text):
+    """
+    Converts occurrences of '#<ticket_id>' in the text into clickable links
+    to the corresponding ticket, with CSS classes reflecting ticket status.
+
+    Args:
+        text (str): The comment text possibly containing ticket references.
+
+    Returns:
+        str: HTML-safe text with ticket references converted to links.
+    """
     if text == '':
         return text
 

@@ -1,11 +1,34 @@
 # -*- coding: utf-8 -*-
+
+"""
+test_ticket_lookup.py
+
+This module tests public ticket lookup functionality in the Django Helpdesk app.
+It focuses on how users (typically ticket submitters) can access their tickets via:
+
+- Direct database ID lookup
+- Public view URL (usually emailed to submitters)
+- Old links remaining functional even if the ticket's queue changes
+
+These tests ensure robust public access behavior independent of the knowledge base setting.
+"""
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from helpdesk.models import Ticket, Queue
 
 
 class TestKBDisabled(TestCase):
+    """
+    Test case for ticket lookup behaviors when knowledge base (KB) is disabled or unused.
+
+    Validates public access via ID and URL, and link integrity when ticket queues change.
+    """
     def setUp(self):
+        """
+        Set up a ticket and a queue for testing.
+        Creates one ticket in a queue that simulates a typical helpdesk submission.
+        """
         q = Queue(title='Q1', slug='q1')
         q.save()
         t = Ticket(title='Test Ticket', submitter_email='test@domain.com')
@@ -14,13 +37,18 @@ class TestKBDisabled(TestCase):
         self.ticket = t
 
     def test_ticket_by_id(self):
-        """Can a ticket be looked up by its ID"""
+        """
+        Test if the ticket can be retrieved using its ID directly from the database.
+        """
         # get the ticket from models
         t = Ticket.objects.get(id=self.ticket.id)
         self.assertEqual(t.title, self.ticket.title)
 
     def test_ticket_by_link(self):
-        """Can a ticket be looked up by its link from (eg) an email"""
+        """
+        Test if the ticket can be accessed via the public view link.
+        Simulates a user following a link received in an email.
+        """
         # Instead of using the ticket_for_url link,
         # we will exercise 'reverse' to lookup/build the URL
         # from the ticket info we have
@@ -31,6 +59,11 @@ class TestKBDisabled(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_ticket_with_changed_queue(self):
+        """
+        Test if the ticket remains accessible via the original public link
+        even after its queue is changed. This checks for backward compatibility
+        of emailed links when internal routing changes.
+        """
         # Make a ticket (already done in setup() )
         # Now make another queue
         q2 = Queue(title='Q2', slug='q2')

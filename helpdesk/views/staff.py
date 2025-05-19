@@ -60,10 +60,18 @@ superuser_required = user_passes_test(
 
 
 def _get_user_queues(user):
-    """Return the list of Queues the user can access.
+    """
+    Return the list of Queues the given user can access.
 
-    :param user: The User (the class should have the has_perm method)
-    :return: A Python list of Queues
+    This function checks for `HELPDESK_ENABLE_PER_QUEUE_STAFF_PERMISSION` in settings.
+    If enabled, it filters queues based on the user's assigned permissions unless they are a superuser.
+
+    Args:
+        user (User): A Django User object.
+    param user: 
+        The User (the class should have the has_perm method)
+    Returns:
+        QuerySet: A queryset of Queue objects the user is permitted to access.
     """
     all_queues = Queue.objects.all()
     limit_queues_by_user = \
@@ -173,6 +181,21 @@ dashboard = staff_member_required(dashboard)
 
 
 def delete_ticket(request, ticket_id):
+    """
+    Delete a ticket after confirmation.
+
+    This view ensures that the requesting user has access to the ticket's queue.
+
+    Args:
+        request (HttpRequest): The incoming request.
+        ticket_id (int): The ID of the ticket to be deleted.
+
+    Returns:
+        HttpResponse: Redirects to homepage or confirmation page.
+
+    Raises:
+        PermissionDenied: If user is unauthorized to delete the ticket.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
         raise PermissionDenied()
@@ -188,7 +211,21 @@ delete_ticket = staff_member_required(delete_ticket)
 
 
 def followup_edit(request, ticket_id, followup_id):
-    """Edit followup options with an ability to change the ticket."""
+    """
+    Allows staff to edit a follow-up on a ticket.
+
+    On GET:
+        Displays a pre-filled form.
+    On POST:
+        Saves updated follow-up and links old attachments to new record.
+
+    Args:
+        request (HttpRequest)
+        ticket_id (int)
+        followup_id (int)
+
+    Returns:
+        HttpResponse: Renders form or redirects to ticket view."""
     followup = get_object_or_404(FollowUp, id=followup_id)
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
@@ -238,7 +275,20 @@ followup_edit = staff_member_required(followup_edit)
 
 
 def followup_delete(request, ticket_id, followup_id):
-    """followup delete for superuser"""
+    """
+    Allows superusers to delete a follow-up.
+
+    Args:
+        request (HttpRequest)
+        ticket_id (int)
+        followup_id (int)
+
+    Returns:
+        HttpResponse: Redirects to ticket view.
+
+    Notes:
+        Only superusers can perform this action.
+    """
 
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not request.user.is_superuser:
@@ -251,6 +301,19 @@ followup_delete = staff_member_required(followup_delete)
 
 
 def view_ticket(request, ticket_id):
+    """
+    View details of a ticket and perform actions like:
+        - Take ownership
+        - Subscribe to updates
+        - Close resolved tickets
+
+    Args:
+        request (HttpRequest)
+        ticket_id (int)
+
+    Returns:
+        HttpResponse: Renders ticket detail page.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
         raise PermissionDenied()
@@ -320,7 +383,15 @@ view_ticket = staff_member_required(view_ticket)
 
 
 def return_ticketccstring_and_show_subscribe(user, ticket):
-    """used in view_ticket() and followup_edit()"""
+    """
+    Builds a string of CC'd users and checks if the user can subscribe.
+
+    Args:
+        user (User): The current logged-in user.
+        ticket (Ticket): Ticket object.
+
+    Returns:
+        tuple: (ticketcc_string (str), show_subscribe (bool))"""
     # create the ticketcc_string and check whether current user is already
     # subscribed
     username = user.get_username().upper()
@@ -354,7 +425,16 @@ def return_ticketccstring_and_show_subscribe(user, ticket):
 
 
 def subscribe_staff_member_to_ticket(ticket, user):
-    """used in view_ticket() and update_ticket()"""
+    """
+    Subscribes a staff user to a ticket's updates.
+
+    Args:
+        ticket (Ticket)
+        user (User)
+
+    Returns:
+        None
+    """
     ticketcc = TicketCC(
         ticket=ticket,
         user=user,
@@ -365,6 +445,22 @@ def subscribe_staff_member_to_ticket(ticket, user):
 
 
 def update_ticket(request, ticket_id, public=False):
+    """
+    Update a ticket with new data such as status, assignment, comment, and attachments.
+
+    This view processes POST requests containing updates for a specific ticket.
+    It handles permission checks, form parsing, status changes, email notifications,
+    attachment saving, and audit logging via follow-ups.
+
+    Parameters:
+    - request: The HTTP request containing update data.
+    - ticket_id: The ID of the ticket to update.
+    - public (bool): Indicates whether the update is public or internal.
+
+    Returns:
+    - HttpResponseRedirect to the updated ticket's detail view.
+    """
+
     if not (public or (
             request.user.is_authenticated() and
             request.user.is_active and (
@@ -636,7 +732,18 @@ def update_ticket(request, ticket_id, public=False):
 
 
 def return_to_ticket(user, helpdesk_settings, ticket):
-    """Helper function for update_ticket"""
+    """
+    Redirect the user to the appropriate view of the ticket based on their role.
+
+    Parameters:
+    - user: The currently logged-in user.
+    - helpdesk_settings: Settings object containing application configurations.
+    - ticket: The ticket object to redirect to.
+
+    Returns:
+    - HttpResponseRedirect to either the staff or public ticket view.
+    """
+
 
     if user.is_staff or helpdesk_settings.HELPDESK_ALLOW_NON_STAFF_TICKET_UPDATE:
         return HttpResponseRedirect(ticket.get_absolute_url())
@@ -645,6 +752,20 @@ def return_to_ticket(user, helpdesk_settings, ticket):
 
 
 def mass_update(request):
+    """
+    Perform a bulk update on a list of tickets based on a selected action.
+
+    This view handles multiple actions like assign, unassign, close, and delete
+    on selected tickets. It ensures proper permission checks and sends appropriate
+    email notifications.
+
+    Parameters:
+    - request: The HTTP POST request containing ticket IDs and action.
+
+    Returns:
+    - HttpResponseRedirect to the ticket list view.
+    """
+
     tickets = request.POST.getlist('ticket_id')
     action = request.POST.get('action', None)
     if not (tickets and action):
@@ -761,6 +882,20 @@ mass_update = staff_member_required(mass_update)
 
 
 def ticket_list(request):
+    """
+    Display a paginated list of tickets accessible to the requesting user.
+
+    Retrieves tickets filtered by queues the user has permission to view.
+    Supports filtering by status, assigned user, creation dates, keyword searches,
+    sorting, and saved queries. Handles redirection for direct ticket number searches.
+    Also shows a search notice for SQLite users.
+
+    Parameters:
+    - request: The HTTP GET request containing query parameters for filtering, sorting, and pagination.
+
+    Returns:
+    - Rendered HTML response displaying the ticket list page with applied filters and pagination.
+    """
     context = {}
 
     user_queues = _get_user_queues(request.user)
@@ -958,6 +1093,20 @@ ticket_list = staff_member_required(ticket_list)
 
 
 def edit_ticket(request, ticket_id):
+    """
+    Provide a form to edit details of an existing ticket and process updates.
+
+    Validates that the user has access to the ticket’s queue before allowing edits.
+    Handles form display on GET and form submission on POST, saving changes if valid.
+
+    Parameters:
+    - request: The HTTP request (GET or POST).
+    - ticket_id: The ID of the ticket to be edited.
+
+    Returns:
+    - Rendered form page on GET or invalid POST.
+    - Redirect to ticket detail page upon successful update.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
         raise PermissionDenied()
@@ -975,6 +1124,20 @@ edit_ticket = staff_member_required(edit_ticket)
 
 
 def create_ticket(request):
+    """
+    Display a form to create a new ticket and process its submission.
+
+    The list of assignable users depends on configuration settings.
+    Supports pre-filling fields from user settings and GET parameters.
+    Optionally hides the assigned user field based on configuration.
+
+    Parameters:
+    - request: The HTTP request (GET or POST).
+
+    Returns:
+    - Rendered form page on GET or invalid POST.
+    - Redirect to ticket detail page or dashboard upon successful creation.
+    """
     if helpdesk_settings.HELPDESK_STAFF_ONLY_TICKET_OWNERS:
         assignable_users = User.objects.filter(is_active=True, is_staff=True).order_by(User.USERNAME_FIELD)
     else:
@@ -1012,6 +1175,19 @@ create_ticket = staff_member_required(create_ticket)
 
 
 def raw_details(request, type):
+    """
+    Return a plain-text representation of a specific object type.
+
+    Currently supports only the 'preset' type, returning the body text of a PreSetReply identified by ID.
+
+    Parameters:
+    - request: The HTTP GET request containing the 'id' of the object.
+    - type: The type of object requested (only 'preset' supported).
+
+    Returns:
+    - HttpResponse with plain text content of the requested object.
+    - Raises Http404 if the object or type is invalid.
+    """
     # TODO: This currently only supports spewing out 'PreSetReply' objects,
     # in the future it needs to be expanded to include other items. All it
     # does is return a plain-text representation of an object.
@@ -1031,6 +1207,20 @@ raw_details = staff_member_required(raw_details)
 
 
 def hold_ticket(request, ticket_id, unhold=False):
+    """
+    Place a ticket on hold or remove it from hold status, logging the action.
+
+    Checks user permission on the ticket’s queue.
+    Creates a public FollowUp note recording the hold/unhold action with timestamp.
+
+    Parameters:
+    - request: The HTTP request.
+    - ticket_id: The ID of the ticket to modify.
+    - unhold: Boolean flag to indicate whether to remove the hold.
+
+    Returns:
+    - Redirect to the ticket’s detail page.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
         raise PermissionDenied()
@@ -1058,16 +1248,54 @@ hold_ticket = staff_member_required(hold_ticket)
 
 
 def unhold_ticket(request, ticket_id):
+    """
+    Remove the hold status from a ticket.
+
+    This is a wrapper around hold_ticket with unhold=True.
+
+    Parameters:
+    - request: The HTTP request.
+    - ticket_id: The ID of the ticket to unhold.
+
+    Returns:
+    - Redirect to the ticket’s detail page.
+    """
     return hold_ticket(request, ticket_id, unhold=True)
 unhold_ticket = staff_member_required(unhold_ticket)
 
 
 def rss_list(request):
+    """
+    Render an RSS feed list page showing all queues.
+
+    Provides a simple listing of all queues for RSS subscription purposes.
+
+    Parameters:
+    - request: The HTTP request.
+
+    Returns:
+    - Rendered HTML page displaying all queues.
+    """
+
     return render(request, 'helpdesk/rss_list.html', {'queues': Queue.objects.all()})
 rss_list = staff_member_required(rss_list)
 
 
 def report_index(request):
+    """
+    Display the report index page with the total number of tickets and optionally a saved query.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered 'report_index.html' template with context:
+            - number_tickets: Total count of Ticket objects.
+            - saved_query: ID of saved query if provided via GET parameters.
+
+    Decorators:
+        staff_member_required: Restricts access to staff users.
+    """
     number_tickets = Ticket.objects.all().count()
     saved_query = request.GET.get('saved_query', None)
     return render(request, 'helpdesk/report_index.html', {
@@ -1078,6 +1306,25 @@ report_index = staff_member_required(report_index)
 
 
 def run_report(request, report):
+    """
+    Run a specified report on tickets, optionally filtered by a saved query.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        report (str): Identifier string for the report to generate.
+
+    Returns:
+        HttpResponse: Renders 'report_output.html' with report data or redirects
+                      to report index if no tickets or invalid report specified.
+
+    Raises:
+        PermissionDenied: If user lacks access to queues.
+
+    Notes:
+        - Uses Django ORM to query Ticket objects.
+        - Applies saved query filtering if provided.
+        - Generates summary tables for display in chart/table formats.
+    """
     if Ticket.objects.all().count() == 0 or report not in (
             'queuemonth', 'usermonth', 'queuestatus', 'queuepriority', 'userstatus',
             'userpriority', 'userqueue', 'daysuntilticketclosedbymonth'):
@@ -1257,6 +1504,20 @@ run_report = staff_member_required(run_report)
 
 
 def save_query(request):
+    """
+    Save a new saved search query for tickets.
+
+    Args:
+        request (HttpRequest): The HTTP POST request containing 'title', 'shared', and 'query_encoded'.
+
+    Returns:
+        HttpResponseRedirect: Redirect to the ticket list with the saved query ID as a GET parameter.
+
+    Notes:
+        - Only accessible by staff members.
+        - 'shared' flag indicates if query is visible to others.
+        - Redirects to ticket list if 'title' or 'query_encoded' missing.
+    """
     title = request.POST.get('title', None)
     shared = request.POST.get('shared', False)
     if shared == 'on': # django only translates '1', 'true', 't' into True
@@ -1274,6 +1535,23 @@ save_query = staff_member_required(save_query)
 
 
 def delete_saved_query(request, id):
+    """
+    Delete a saved search query belonging to the requesting user.
+
+    Args:
+        request (HttpRequest): The HTTP request.
+        id (int): The primary key of the SavedSearch to delete.
+
+    Returns:
+        HttpResponseRedirect: Redirects to ticket list after deletion.
+        HttpResponse: Renders a confirmation page if request method is GET.
+
+    Raises:
+        Http404: If no SavedSearch exists with given id and user.
+
+    Notes:
+        - Only accessible by staff members.
+    """
     query = get_object_or_404(SavedSearch, id=id, user=request.user)
 
     if request.method == 'POST':
@@ -1285,6 +1563,20 @@ delete_saved_query = staff_member_required(delete_saved_query)
 
 
 def user_settings(request):
+    """
+    View and update user-specific settings for the helpdesk.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered 'user_settings.html' with the form.
+
+    Notes:
+        - Loads UserSettingsForm with existing settings on GET.
+        - Saves updated settings on valid POST.
+        - Access restricted to staff members.
+    """
     s = request.user.usersettings
     if request.POST:
         form = UserSettingsForm(request.POST)
@@ -1299,6 +1591,18 @@ user_settings = staff_member_required(user_settings)
 
 
 def email_ignore(request):
+    """
+    Display the list of ignored email addresses.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered 'email_ignore_list.html' template with all IgnoreEmail objects.
+
+    Notes:
+        - Access restricted to superusers.
+    """
     return render(request, 'helpdesk/email_ignore_list.html', {
         'ignore_list': IgnoreEmail.objects.all(),
     })
@@ -1306,6 +1610,20 @@ email_ignore = superuser_required(email_ignore)
 
 
 def email_ignore_add(request):
+    """
+    Add a new email address to the ignore list.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered form template on GET or invalid POST.
+                      Redirects to ignore list on successful POST.
+
+    Notes:
+        - Uses EmailIgnoreForm to validate input.
+        - Access restricted to superusers.
+    """
     if request.method == 'POST':
         form = EmailIgnoreForm(request.POST)
         if form.is_valid():
@@ -1319,6 +1637,23 @@ email_ignore_add = superuser_required(email_ignore_add)
 
 
 def email_ignore_del(request, id):
+    """
+    Delete an email address from the ignore list.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        id (int): The primary key of the IgnoreEmail to delete.
+
+    Returns:
+        HttpResponseRedirect: Redirects to ignore list after deletion.
+        HttpResponse: Renders a confirmation page if request method is GET.
+
+    Raises:
+        Http404: If no IgnoreEmail exists with given id.
+
+    Notes:
+        - Access restricted to superusers.
+    """
     ignore = get_object_or_404(IgnoreEmail, id=id)
     if request.method == 'POST':
         ignore.delete()
@@ -1329,6 +1664,7 @@ email_ignore_del = superuser_required(email_ignore_del)
 
 
 def ticket_cc(request, ticket_id):
+    """Display the list of CC'd users/emails for a specific ticket."""
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
         raise PermissionDenied()
@@ -1342,6 +1678,7 @@ ticket_cc = staff_member_required(ticket_cc)
 
 
 def ticket_cc_add(request, ticket_id):
+    """Add a CC recipient to a specific ticket."""
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
         raise PermissionDenied()
@@ -1364,6 +1701,7 @@ ticket_cc_add = staff_member_required(ticket_cc_add)
 
 
 def ticket_cc_del(request, ticket_id, cc_id):
+    """View to delete a TicketCC entry related to a ticket."""
     cc = get_object_or_404(TicketCC, ticket__id=ticket_id, id=cc_id)
 
     if request.method == 'POST':
@@ -1375,6 +1713,18 @@ ticket_cc_del = staff_member_required(ticket_cc_del)
 
 
 def ticket_dependency_add(request, ticket_id):
+    """Add a dependency to a ticket.
+
+    Args:
+        request: HttpRequest object.
+        ticket_id: ID of the ticket to add dependency to.
+
+    Raises:
+        PermissionDenied if user has no access to the ticket's queue.
+
+    Returns:
+        On GET, renders a form to add dependency.
+        On valid POST, adds dependency and redirects to ticket view."""
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
         raise PermissionDenied()
@@ -1396,6 +1746,7 @@ ticket_dependency_add = staff_member_required(ticket_dependency_add)
 
 
 def ticket_dependency_del(request, ticket_id, dependency_id):
+    """Delete a ticket dependency."""
     dependency = get_object_or_404(TicketDependency, ticket__id=ticket_id, id=dependency_id)
     if request.method == 'POST':
         dependency.delete()
@@ -1405,6 +1756,7 @@ ticket_dependency_del = staff_member_required(ticket_dependency_del)
 
 
 def attachment_del(request, ticket_id, attachment_id):
+    """Delete an attachment from a ticket."""
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
         raise PermissionDenied()
@@ -1415,6 +1767,7 @@ attachment_del = staff_member_required(attachment_del)
 
 
 def calc_average_nbr_days_until_ticket_resolved(Tickets):
+    """Calculate the average number of days between ticket creation and last modification (resolved)."""
     nbr_closed_tickets = len(Tickets)
     days_per_ticket = 0
     days_each_ticket = list()
@@ -1434,6 +1787,8 @@ def calc_average_nbr_days_until_ticket_resolved(Tickets):
 
 
 def calc_basic_ticket_stats(Tickets):
+    """Compute basic statistics for tickets such as counts of open tickets by age,
+    and average resolution times."""
     # all not closed tickets (open, reopened, resolved,) - independent of user
     all_open_tickets = Tickets.exclude(status=Ticket.CLOSED_STATUS)
     today = datetime.today()
@@ -1486,6 +1841,7 @@ def calc_basic_ticket_stats(Tickets):
 
 
 def get_color_for_nbr_days(nbr_days):
+    """Return a color string("green", "orange or "red") based on the number of days."""
     if nbr_days < 5:
         color_string = 'green'
     elif nbr_days < 10:
@@ -1497,13 +1853,16 @@ def get_color_for_nbr_days(nbr_days):
 
 
 def days_since_created(today, ticket):
+    """Calculate the number of days since the ticket was created."""
     return (today - ticket.created).days
 
 
 def date_rel_to_today(today, offset):
+    """Calculate the date relative to today by subtracting an offset in days."""
     return today - timedelta(days = offset)
 
 
 def sort_string(begin, end):
+    """Construct a query string for sorting and filtering tickets by date and status."""
     return 'sort=created&date_from=%s&date_to=%s&status=%s&status=%s&status=%s' % (
         begin, end, Ticket.OPEN_STATUS, Ticket.REOPENED_STATUS, Ticket.RESOLVED_STATUS)

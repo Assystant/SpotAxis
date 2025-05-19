@@ -7,7 +7,7 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
+    """Migration class that introduces additional fields and modifies existing fields in the `Candidate` model."""
     dependencies = [
         ('candidates', '0010_curriculum_filecontent'),
     ]

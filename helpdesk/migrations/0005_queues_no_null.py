@@ -5,6 +5,29 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to update ManyToManyField definitions on several models related to queues.
+
+    This migration modifies the 'queues' field in the following models: 
+    - EscalationExclusion
+    - IgnoreEmail
+    - PresetReply
+
+    Each altered field now includes a help text explaining that leaving the field blank
+    means the entry applies to all queues, while selecting specific queues limits
+    the effect to those queues only.
+
+    Attributes:
+        dependencies (list): List of migration dependencies that must be applied before this migration.
+        operations (list): List of migration operations altering fields in the specified models.
+
+    Operations:
+        AlterField for 'queues' on:
+            - EscalationExclusion: ManyToManyField to 'Queue' with a descriptive help_text.
+            - IgnoreEmail: ManyToManyField to 'Queue' with a descriptive help_text.
+            - PresetReply: ManyToManyField to 'Queue' with a descriptive help_text.
+    """
+
 
     dependencies = [
         ('helpdesk', '0004_add_per_queue_staff_membership'),

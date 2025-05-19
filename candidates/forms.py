@@ -1,3 +1,5 @@
+"""This defines Django ModelForms and formsets for handling user expertise and academic qualifications."""
+
 # -*- coding: utf-8 -*-
 
 from django.db.models import Q
@@ -29,6 +31,7 @@ def get_initial_date():
 
 
 class CandidateForm(forms.ModelForm):
+    """A form to capture and validate general candidate profile information including name, birthday, gender, marital status, and photo."""
     countries = Country.objects.filter(~Q(continent='AF') & ~Q(continent='AN') & ~Q(continent='AS') & ~Q(continent='OC'))
     countries = Country.objects.all().order_by('name')
     # states = State.objects.filter(country=initial_country)
@@ -108,6 +111,7 @@ class CandidateForm(forms.ModelForm):
     public_photo = forms.ImageField(widget=forms.FileInput(attrs={'class':"form-control text-center", 'accept':"image/*"}), required=False)
 
     def __init__(self, *args, **kwargs):
+        """Initializes the form. If `isPublic` is passed, `public_email` is set as required."""
         # state_selected = kwargs.pop('state_selected', None)
         try:
             public = kwargs.pop('isPublic')
@@ -121,6 +125,12 @@ class CandidateForm(forms.ModelForm):
         # self.fields['municipal'].choices = get_municipals(state_selected)
 
     def clean_public_photo(self):
+        """
+        Validates the uploaded image:
+        - Only accepts jpg/jpeg/png/mpo formats.
+        - Max file size: 1MB.
+        Returns the image if valid; otherwise raises a ValidationError.
+        """
         default_photo = None
         from PIL import Image
         image = self.cleaned_data.get('public_photo', None)
@@ -181,11 +191,13 @@ class CandidateForm(forms.ModelForm):
  
 
     class Meta:
+        """Metadata for the CandidateForm."""
         model = Candidate
         fields =('public_photo','maritalStatus','gender','birthday','last_name','public_email','first_name')
         # exclude = ('user', 'country', 'objective', 'courses', 'photo','')
 
 class CandidateContactForm(forms.ModelForm):
+    """A form to capture and validate a candidate's contact details and social media links."""
     countries = Country.objects.all().order_by('name')
     initial_year = (date.today() - relativedelta(years=74)).year
     end_year = (date.today() - relativedelta(years=18)).year
@@ -269,6 +281,7 @@ class CandidateContactForm(forms.ModelForm):
         required=False
     )
     def clean_linkedin(self):
+        """Validates LinkedIn URL. Must contain 'linkedin.com' and be a valid length."""
         linkedin_error = _(u'Enter a valid Linkedin page.')
         if not self.cleaned_data.get('linkedin'):
             return None
@@ -280,6 +293,7 @@ class CandidateContactForm(forms.ModelForm):
         return linkedin
 
     def clean_facebook(self):
+        """Validates Facebook URL. Must contain 'facebook.com' and be a valid length."""
         facebook_error = _(u'Enter a valid Facebook page.')
         if not self.cleaned_data.get('facebook'):
             return None
@@ -291,6 +305,7 @@ class CandidateContactForm(forms.ModelForm):
         return facebook
 
     def clean_twitter(self):
+        """Validates Twitter handle. Must start with '@' if it contains '@'."""
         twitter_error = _(u'Enter a valid Twitter user')
         if not self.cleaned_data.get('twitter'):
             return None
@@ -305,6 +320,7 @@ class CandidateContactForm(forms.ModelForm):
         return twitter
 
     def clean_google(self):
+        """Validates Google+ URL."""
         google_error = _(u'Enter a vlaid Google+ page')
         if not self.cleaned_data.get('google'):
             return None
@@ -320,6 +336,21 @@ class CandidateContactForm(forms.ModelForm):
         fields = ('nationality', 'state', 'city', 'phone', 'cellphone', 'linkedin', 'facebook', 'twitter', 'google')
 
 class ObjectiveForm(forms.ModelForm):
+    """
+    A form for collecting the candidate's professional objectives and skills.
+
+    Fields:
+        - objective: A required text area for entering professional objectives (30–300 characters).
+        - skills: A single-line text input for listing skills.
+
+    Widgets:
+        - Textarea for `objective` with Bootstrap form styling and placeholder.
+        - TextInput for `skills` with styling and placeholder.
+
+    Uses:
+        - The Candidate model.
+        - Fields: 'objective', 'skills'.
+    """
     objective = forms.CharField(
         widget=forms.Textarea(attrs={'placeholder': _(u'Enter your professional objectives'),
                                       'class': "form-control"}),
@@ -340,6 +371,7 @@ class ObjectiveForm(forms.ModelForm):
 
 
 class InterestsForm(forms.ModelForm):
+    """A form for capturing the candidate's interests using a rich text editor."""
     interests = forms.CharField(
         widget=CKEditorWidget(attrs={'placeholder':_(u'Interests'),
                                         'class': 'form-control'}),
@@ -352,6 +384,7 @@ class InterestsForm(forms.ModelForm):
 
 
 class HobbiesForm(forms.ModelForm):
+    """A form for recording the candidate's hobbies using a rich text editor."""
     hobbies = forms.CharField(
         widget = CKEditorWidget(attrs={'placeholder':_(u'Hobbies'),
                                         'class': 'form-control'}),
@@ -364,6 +397,7 @@ class HobbiesForm(forms.ModelForm):
 
 
 class ExtraCurricularsForm(forms.ModelForm):
+    """A form for submitting extra-curricular activities of the candidate."""
     extra_curriculars = forms.CharField(
         widget = CKEditorWidget(attrs={'placeholder':_(u'Extra Curriculars'),
                                         'class': 'form-control'}),
@@ -378,6 +412,7 @@ class ExtraCurricularsForm(forms.ModelForm):
 
 
 class OthersForm(forms.ModelForm):
+    """A form for capturing any other additional information from the candidate."""
     others = forms.CharField(
         widget=CKEditorWidget(attrs={'placeholder':_(u'Others'),
                                         'class': 'form-control'}),
@@ -403,7 +438,7 @@ class OthersForm(forms.ModelForm):
 
 
 class ExpertiseForm(forms.ModelForm):
-    """ Work experience of a candidate """
+    """ Django ModelForm to capture a candidate's work experience details. """
     company = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': _(u'Name of the organisation'),
                                       'class': "form-control"}),
@@ -508,6 +543,11 @@ class ExpertiseForm(forms.ModelForm):
                 self.fields['end_date'].required = False
 
     def clean_industry(self):
+        """Validates the 'industry' field by checking if the selected value corresponds
+        to a valid Company_Industry object.
+
+        Returns:
+        Company_Industry: The valid industry instance."""
         invalid_industry = _(u'The industry you selected is invalid')
         try:
             industry_id = int(self.cleaned_data.get('industry'))
@@ -548,6 +588,16 @@ class ExpertiseForm(forms.ModelForm):
     #     return area
 
     def clean_start_date(self):
+        """
+        Validates the 'start_date' field to ensure that it is before the end date,
+        if an end date is provided.
+
+        Returns:
+            date: The validated start date.
+
+        Raises:
+            ValidationError: If start date is after or equal to end date.
+        """
         import datetime
         start_date = self.cleaned_data.get('start_date')
         try:
@@ -571,6 +621,7 @@ class ExpertiseForm(forms.ModelForm):
 
 
 class AcademicForm(forms.ModelForm):
+    """Django ModelForm to collect a candidate's academic background."""
     degree = forms.ChoiceField(
         choices=get_degrees(),
         required=True,
@@ -658,6 +709,7 @@ class AcademicForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        """Initializes the AcademicForm with dynamic field requirements based on the selected degree and status."""
         update = False
         # area_selected = kwargs.pop('area_selected', None)
         try:
@@ -706,6 +758,7 @@ class AcademicForm(forms.ModelForm):
             # self.fields['career'].choices = get_academic_careers(area_selected)
 
     def clean_degree(self):
+        """Validates the 'degree' field to ensure it corresponds to an existing Degree."""
         invalid_degree = _(u'Level of Study is Invalid')
         try:
             degree_id = int(self.cleaned_data.get('degree'))
@@ -767,6 +820,20 @@ class AcademicForm(forms.ModelForm):
     #     return other
 
     def clean_start_date(self):
+        """
+        Cleans and validates the 'start_date' field of the Academic form.
+        Ensures that the start date is not greater than or equal to the end date 
+        based on the current status. If the status is not 'progress' or if the 
+        end date exists while no status is defined, the start and end dates are 
+        validated accordingly.
+
+        Returns:
+            datetime.date: The cleaned start date if valid.
+
+        Raises:
+            forms.ValidationError: If the start date is equal to or greater than the end date.
+
+        """
         start_date = self.cleaned_data.get('start_date')
         status = self.cleaned_data.get('status')
         validate = False
@@ -791,6 +858,14 @@ class AcademicForm(forms.ModelForm):
         return start_date
 
     def clean_end_date(self):
+        """
+        Cleans and validates the 'end_date' field of the Academic form.
+
+        Sets the end_date to None if the current status has the codename 'progress'.
+
+        Returns:
+            datetime.date | None: The cleaned end date if applicable.
+        """
         end_date = self.cleaned_data.get('end_date')
         status = self.cleaned_data.get('status')
         if status and status.codename == 'progress':
@@ -803,6 +878,7 @@ class AcademicForm(forms.ModelForm):
 
 
 class CvLanguageForm(forms.ModelForm):
+    """Form for selecting and submitting known languages and associated skills like read, write, and speak."""
     language = forms.ModelChoiceField(
         queryset=Language.objects.all(),
         empty_label=_(u'Select')+'...',
@@ -837,6 +913,7 @@ class CvLanguageForm(forms.ModelForm):
         exclude = ('candidate',)
 
 class TrainingForm(forms.ModelForm):
+    """Form for submitting training details completed by the candidate."""
     name = forms.CharField(
         required=True,
         min_length=2,
@@ -859,6 +936,7 @@ class TrainingForm(forms.ModelForm):
         fields = ('name','description')
 
 class CertificateForm(forms.ModelForm):
+    """Form for submitting certificate details completed by the candidate."""
     name = forms.CharField(
         required=True,
         min_length=4,
@@ -881,6 +959,7 @@ class CertificateForm(forms.ModelForm):
         fields = ('name','description')
 
 class ProjectForm(forms.ModelForm):
+    """Form for submitting details of projects completed by the candidate."""
     name = forms.CharField(
         required=True,
         min_length=4,
@@ -903,6 +982,7 @@ class ProjectForm(forms.ModelForm):
         fields = ('name','description')
     
 class cv_FileForm(forms.ModelForm):
+    """Form for uploading a resume or CV file."""
     max_megas = 5
     max_files = 1
     file = forms.FileField(
@@ -918,12 +998,14 @@ class cv_FileForm(forms.ModelForm):
     )
 
     def validate_number_files(self, files):
+        """Custom validation to limit the number of uploaded files."""
         if files > self.max_files:
             msg = _(u'You can only upload upto %s files') % self.max_files
             self.add_error('file', msg)
         pass
 
     def clean_file(self):
+        """Validate the uploaded file's size, extension, and sanitize filename."""
         file = self.cleaned_data['file']
 
         if file:
@@ -949,6 +1031,7 @@ class cv_FileForm(forms.ModelForm):
 
 
 class CandidateMiniForm(forms.ModelForm):
+    """Form for capturing candidate personal details including contact information, nationality, and profile photo."""
     # countries = Country.objects.filter(~Q(continent='AF') & ~Q(continent='AN') & ~Q(continent='AS') & ~Q(continent='OC'))
     countries = Country.objects.all().order_by('name')
     # states = State.objects.filter(country=initial_country)
@@ -1023,6 +1106,7 @@ class CandidateMiniForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        """Initialize form, setting required fields and pre-filling from user instance if available."""
         # state_selected = kwargs.pop('state_selected', None)
         try:
             public = kwargs.pop('isPublic')
@@ -1043,6 +1127,7 @@ class CandidateMiniForm(forms.ModelForm):
         # self.fields['municipal'].choices = get_municipals(state_selected)
 
     def clean_public_photo(self):
+        """Validate the uploaded photo's format and size."""
         default_photo = None
         from PIL import Image
         image = self.cleaned_data.get('public_photo', None)
@@ -1071,6 +1156,7 @@ class CandidateMiniForm(forms.ModelForm):
         return image
 
     def clean_public_email(self):
+        """Return the public_email field value or the user's email if already set."""
         if self.instance.user:
             return ''
         return self.cleaned_data.get('public_email','')
@@ -1081,8 +1167,7 @@ class CandidateMiniForm(forms.ModelForm):
         # exclude = ('user', 'country', 'objective', 'courses', 'photo','')
 
 class ExpertiseMiniForm(forms.ModelForm):
-    
-    """ Work experience of a candidate """
+    """Form for entering the candidate's previous work experience."""
     company = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': _(u'Name of the organisation'),
                                       'class': "form-control"}),
@@ -1120,6 +1205,8 @@ class ExpertiseMiniForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        """Initialize the form and dynamically set the 'employment_end_date' field 
+        as disabled if 'present' is True."""
         update = False
         present = kwargs.pop('present', None)
         try:
@@ -1145,6 +1232,19 @@ class ExpertiseMiniForm(forms.ModelForm):
             # self.fields['employment_city'].initial = instance.city
 
     def add_prefix(self, field_name):
+        """
+        Override the default form field prefix mapping.
+
+        Maps simplified field names ('start_date', 'end_date', etc.) to the actual
+        model field names used in the form ('employment_start_date', 'employment_end_date').
+
+        Args:
+            field_name (str): The original field name.
+
+        Returns:
+            str: The mapped field name if in mapping, else the original field name.
+        """
+
         FIELD_NAME_MAPPING = {
             'start_date': 'employment_start_date',
             'end_date': 'employment_end_date'
@@ -1154,6 +1254,10 @@ class ExpertiseMiniForm(forms.ModelForm):
         return super(ExpertiseMiniForm, self).add_prefix(field_name)
 
     def clean_employment_start_date(self):
+        """Validate the employment start date.
+
+        Ensures that if the employment is not currently ongoing (present=False), the
+        start date must be less than and not equal to the end date."""
         import datetime
         start_date = self.cleaned_data.get('employment_start_date')
         try:
@@ -1177,7 +1281,7 @@ class ExpertiseMiniForm(forms.ModelForm):
         fields = ('company', 'employment', 'present', 'start_date', 'end_date')
 
 class AcademicMiniForm(forms.ModelForm):
-
+    """Form to handle academic qualification input with validation and dynamic behavior."""
     course_name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': _(u'Name of the Course'),
                                       'class': "form-control"}),
@@ -1242,6 +1346,7 @@ class AcademicMiniForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        """Initialize the form."""
         update = False
         # area_selected = kwargs.pop('area_selected', None)
         try:
@@ -1274,6 +1379,15 @@ class AcademicMiniForm(forms.ModelForm):
             self.fields['academic_city'].initial = instance.city
 
     def add_prefix(self, field_name):
+        """
+        Map simplified field names to actual form field names for prefixing.
+
+        Args:
+            field_name (str): Original field name.
+
+        Returns:
+            str: Mapped field name based on FIELD_NAME_MAPPING dictionary.
+        """
         FIELD_NAME_MAPPING = {
             'start_date': 'academic_start_date',
             'end_date': 'academic_end_date',
@@ -1286,6 +1400,18 @@ class AcademicMiniForm(forms.ModelForm):
         return super(AcademicMiniForm, self).add_prefix(field_name)
 
     def clean_academic_start_date(self):
+        """
+        Validate the academic start date.
+
+        Ensures that if the status is not 'progress' or if there is an end date,
+        the start date must be less than and not equal to the end date.
+
+        Returns:
+            date: Cleaned academic start date.
+
+        Raises:
+            forms.ValidationError: If start date is greater than or equal to end date.
+        """
         start_date = self.cleaned_data.get('academic_start_date')
         status = self.cleaned_data.get('status')
         validate = False
@@ -1310,6 +1436,14 @@ class AcademicMiniForm(forms.ModelForm):
         return start_date
 
     def clean_academic_end_date(self):
+        """
+        Clean the academic end date.
+
+        If the status is 'progress', the end date is set to None.
+
+        Returns:
+            date or None: Cleaned academic end date.
+        """
         end_date = self.cleaned_data.get('academic_end_date')
         status = self.cleaned_data.get('status')
         if status and status.codename == 'progress':
@@ -1317,6 +1451,13 @@ class AcademicMiniForm(forms.ModelForm):
         return end_date
 
     class Meta:
+        """
+        Meta class specifying the model and fields for the AcademicMiniForm.
+
+        Attributes:
+            model (Model): The Academic model to be used.
+            fields (tuple): Fields included in the form.
+        """
         model = Academic
         # exclude = ('candidate', 'present')
         fields = ('course_name', 'status', 'school', 'country', 'state', 'city', 'start_date', 'end_date')

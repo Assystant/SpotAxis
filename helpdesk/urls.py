@@ -6,7 +6,21 @@ django-helpdesk - A Django powered ticket tracker for small enterprise.
 urls.py - Mapping of URL's to our various views. Note we always used NAMED
           views for simplicity in linking later on.
 """
+"""
+URL routing for django-helpdesk.
 
+Maps URL patterns to views for ticket management, public ticket submission,
+RSS feeds, API access, knowledge base, and user authentication.
+
+Uses named URL patterns for consistency and easier reverse lookup.
+
+Main route categories:
+- Staff views (ticket CRUD, reports, settings)
+- Public views (submit/view ticket)
+- RSS feeds (open/unassigned tickets, activity)
+- API endpoints
+- Optional knowledge base (if enabled)
+"""
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
@@ -17,9 +31,23 @@ from helpdesk.views import feeds, staff, public, api, kb
 
 
 class DirectTemplateView(TemplateView):
+    """
+    Custom TemplateView that allows passing static or dynamic context data.
+
+    If a context value is callable, it gets evaluated before rendering.
+
+    Inherits:
+        - django.views.generic.TemplateView
+    """
     extra_context = None
 
     def get_context_data(self, **kwargs):
+        """
+        Adds extra_context (if provided) to the default context.
+
+        Returns:
+            dict: Template context for rendering the view
+        """
         context = super(self.__class__, self).get_context_data(**kwargs)
         if self.extra_context is not None:
             for key, value in self.extra_context.items():
@@ -178,6 +206,7 @@ urlpatterns += [
         login_required(feeds.RecentFollowUps()),
         name='helpdesk_rss_activity'),
 ]
+
 
 
 urlpatterns += [

@@ -6,6 +6,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration class that handles the addition of the 'interests' field to the
+    'Candidate' model in the 'candidates' app.
+
+    Attributes:
+        dependencies (list): A list containing the previous migration to preserve order.
+        operations (list): A list of operations defining the schema change. In this case,
+                           it adds a `TextField` named 'interests' with a max length of 300,
+                           and marked as optional.
+
+    Inherits:
+        django.db.migrations.Migration
+    """
 
     dependencies = [
         ('candidates', '0004_candidate_public_photo'),

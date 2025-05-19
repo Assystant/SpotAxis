@@ -33,7 +33,22 @@ User = get_user_model()
 
 class CustomFieldMixin(object):
     """
-    Mixin that provides a method to turn CustomFields into an actual field
+    Mixin to dynamically add custom ticket fields to a form instance.
+
+    This mixin maps each `CustomField` from the database to the appropriate
+    Django form field type. The generated field is added to `self.fields`.
+
+    Supports types like:
+    - varchar -> CharField
+    - text -> CharField with Textarea
+    - integer -> IntegerField
+    - list -> ChoiceField with optional empty selection
+    - boolean, date, datetime, time, decimal, email, url, IP address, slug, etc.
+
+    Used in:
+        - TicketForm
+        - PublicTicketForm
+        - EditTicketForm
     """
     def customfield_to_field(self, field, instanceargs):
         if field.data_type == 'varchar':
@@ -76,13 +91,35 @@ class CustomFieldMixin(object):
 
 
 class EditTicketForm(CustomFieldMixin, forms.ModelForm):
+    """
+    A form for editing an existing ticket, excluding fields that are managed
+    automatically (e.g. creation/modification dates, status, resolution, etc.).
+
+    This form also dynamically includes any `CustomField` entries using the
+    `CustomFieldMixin`.
+
+    Inherits from:
+        - CustomFieldMixin: Adds custom ticket fields
+        - forms.ModelForm: Standard Django model form
+
+    Uses:
+        - CustomField: to fetch user-defined fields
+        - TicketCustomFieldValue: to populate custom field values per ticket
+    """
     class Meta:
         model = Ticket
         exclude = ('created', 'modified', 'status', 'on_hold', 'resolution', 'last_escalation', 'assigned_to')
 
     def __init__(self, *args, **kwargs):
         """
-        Add any custom fields that are defined to the form
+        Initializes the form with custom fields based on `CustomField` records.
+
+        For each custom field, the current value (if set) is fetched from
+        `TicketCustomFieldValue` and used as the initial value.
+
+        Modules Used:
+            - CustomField: to fetch all custom field definitions
+            - TicketCustomFieldValue: to fetch existing values for the current ticket
         """
         super(EditTicketForm, self).__init__(*args, **kwargs)
 
@@ -102,7 +139,19 @@ class EditTicketForm(CustomFieldMixin, forms.ModelForm):
             self.customfield_to_field(field, instanceargs)
 
     def save(self, *args, **kwargs):
+        """
+        Saves the form and updates any `TicketCustomFieldValue` entries
+        for the custom fields.
 
+        First processes all cleaned data that starts with 'custom_' prefix,
+        retrieves or creates the appropriate `TicketCustomFieldValue`, and
+        updates its value before saving the base ticket.
+
+        Modules Used:
+            - CustomField: to resolve custom field by name
+            - TicketCustomFieldValue: to update per-ticket field values
+            - ObjectDoesNotExist: to catch missing value cases
+        """
         for field, value in self.cleaned_data.items():
             if field.startswith('custom_'):
                 field_name = field.replace('custom_', '', 1)
@@ -118,17 +167,54 @@ class EditTicketForm(CustomFieldMixin, forms.ModelForm):
 
 
 class EditFollowUpForm(forms.ModelForm):
+    """
+    A form for editing or creating a follow-up on an existing ticket.
+
+    This form excludes automatic fields such as the creation date and user,
+    and filters the ticket selection to only tickets that are still open
+    or reopened.
+
+    Inherits from:
+        - forms.ModelForm: Standard Django model form
+
+    Uses:
+        - FollowUp: the model being edited
+        - Ticket: used to filter open/reopened tickets in the queryset
+    """
     class Meta:
         model = FollowUp
         exclude = ('date', 'user',)
 
     def __init__(self, *args, **kwargs):
-        """Filter not openned tickets here."""
+        """
+        Filters the 'ticket' field queryset to include only tickets that
+        are currently in an open or reopened state.
+
+        This ensures that follow-ups are only added to active tickets.
+
+        Modules Used:
+            - Ticket: to filter by status using constants OPEN_STATUS and REOPENED_STATUS
+        """
         super(EditFollowUpForm, self).__init__(*args, **kwargs)
         self.fields["ticket"].queryset = Ticket.objects.filter(status__in=(Ticket.OPEN_STATUS, Ticket.REOPENED_STATUS))
 
 
 class TicketForm(CustomFieldMixin, forms.Form):
+    """
+    A form used for creating a new ticket via the staff interface.
+
+    Allows selection of queue, owner, priority, and due date, and supports
+    file attachments and custom fields.
+
+    Includes:
+    - Dynamically generated fields from `CustomFieldMixin`
+    - Optional file attachment
+    - Automatic email notifications to submitter, assignee, and CC addresses
+
+    Inherits from:
+        - CustomFieldMixin: For custom ticket fields
+        - forms.Form: Base Django form
+    """
     queue = forms.ChoiceField(
         label=_('Category'),
         required=True,
@@ -179,6 +265,11 @@ class TicketForm(CustomFieldMixin, forms.Form):
         )
 
     def clean_due_date(self):
+        """
+        Clean method for due_date field. Placeholder for future extensions,
+        such as Google Calendar sync.
+
+        Currently returns the value unchanged."""
         data = self.cleaned_data['due_date']
         # TODO: add Google calendar update hook
         # if not hasattr(self, 'instance') or self.instance.due_date != new_data:
@@ -193,7 +284,13 @@ class TicketForm(CustomFieldMixin, forms.Form):
 
     def __init__(self, *args, **kwargs):
         """
-        Add any custom fields that are defined to the form
+        Initialize the form and dynamically add any custom fields.
+
+        Custom fields are fetched from the database and converted to actual form
+        fields using `customfield_to_field`.
+
+        Modules Used:
+            - CustomField: defines the custom fields to include
         """
         super(TicketForm, self).__init__(*args, **kwargs)
         for field in CustomField.objects.all():
@@ -333,6 +430,18 @@ class TicketForm(CustomFieldMixin, forms.Form):
 
 
 class PublicTicketForm(CustomFieldMixin, forms.Form):
+    """
+    Form for public users to submit new tickets via the web interface.
+
+    Captures basic info like category, email, issue description, priority,
+    and optional attachment.
+
+    Dynamically includes non-staff-only custom fields.
+
+    Inherits:
+        - CustomFieldMixin
+        - forms.Form
+    """
     queue = forms.ChoiceField(
         label=_('Category'),
         required=True,
@@ -397,7 +506,14 @@ class PublicTicketForm(CustomFieldMixin, forms.Form):
 
     def save(self):
         """
-        Writes and returns a Ticket() object
+        Creates and saves a new Ticket submitted by a public user.
+
+        - Creates a FollowUp
+        - Saves custom field values and attachments
+        - Sends notification emails
+
+        Returns:
+            Ticket: The created ticket object
         """
 
         q = Queue.objects.get(id=int(self.cleaned_data['queue']))
@@ -511,6 +627,15 @@ class PublicTicketForm(CustomFieldMixin, forms.Form):
 
 
 class UserSettingsForm(forms.Form):
+    """
+    Form for managing user-specific preferences in the helpdesk system.
+
+    Allows configuration of:
+    - Dashboard view on login
+    - Email notifications for ticket changes, assignments, and API updates
+    - Ticket pagination preferences
+    - Whether to auto-fill the submitter email field
+    """
     login_view_ticketlist = forms.BooleanField(
         label=_('Show Ticket List on Login?'),
         help_text=_('Display the ticket list upon login? Otherwise, the dashboard is shown.'),
@@ -551,17 +676,32 @@ class UserSettingsForm(forms.Form):
 
 
 class EmailIgnoreForm(forms.ModelForm):
+    """
+    Model form for managing ignored email addresses.
+
+    Used to create or update `IgnoreEmail` entries that filter out unwanted
+    email senders during ticket creation.
+    """
     class Meta:
         model = IgnoreEmail
         exclude = []
 
 
 class TicketCCForm(forms.ModelForm):
+    """
+    Model form to add or edit a CC (carbon copy) follower for a ticket.
+
+    Filters the user queryset to staff-only or all active users based on
+    `HELPDESK_STAFF_ONLY_TICKET_CC` setting.
+    """
     class Meta:
         model = TicketCC
         exclude = ('ticket',)
 
     def __init__(self, *args, **kwargs):
+        """
+        Filters the user dropdown according to staff-only settings.
+        """
         super(TicketCCForm, self).__init__(*args, **kwargs)
         if helpdesk_settings.HELPDESK_STAFF_ONLY_TICKET_CC:
             users = User.objects.filter(is_active=True, is_staff=True).order_by(User.USERNAME_FIELD)
@@ -571,6 +711,14 @@ class TicketCCForm(forms.ModelForm):
 
 
 class TicketDependencyForm(forms.ModelForm):
+    """
+    Model form for creating or editing ticket dependencies.
+
+    Allows defining which ticket must be resolved before another.
+
+    Based on:
+        - `TicketDependency` model
+    """
     class Meta:
         model = TicketDependency
         exclude = ('ticket',)

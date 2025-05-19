@@ -6,6 +6,7 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """Migration class to update model options for `Academic` and `Expertise`."""
 
     dependencies = [
         ('candidates', '0011_auto_20170703_1837'),

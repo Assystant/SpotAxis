@@ -6,7 +6,10 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
+    """
+    Enforces a uniqueness constraint on TicketCustomFieldValue for the combination of 'ticket' and 'field'.
+    This ensures each ticket can only have one value per custom field.
+    """
     dependencies = [
         ('helpdesk', '0012_queue_default_owner'),
     ]

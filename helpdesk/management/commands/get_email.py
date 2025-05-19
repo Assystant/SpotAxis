@@ -49,7 +49,20 @@ STRIPPED_SUBJECT_STRINGS = [
 ]
 
 class Command(BaseCommand):
+    """
+    Django management command class to process email queues.
+
+    This command connects to configured email queues and fetches new messages,
+    processing them into helpdesk tickets or ticket updates.
+
+    Options:
+        --quiet, -q: Suppress verbose output during processing.
+
+    Usage:
+        ./manage.py get_email [--quiet]
+    """
     def __init__(self):
+        """Initialize the command and add custom options."""
         BaseCommand.__init__(self)
 
         self.option_list += (
@@ -64,11 +77,22 @@ class Command(BaseCommand):
            'POP3/IMAP as required, feeding them into the helpdesk.'
 
     def handle(self, *args, **options):
+        """ Entry point for the management command."""
         quiet = options.get('quiet', False)
         process_email(quiet=quiet)
 
 
 def process_email(quiet=False):
+    """
+    Process all configured email queues for new messages.
+
+    Connects to each helpdesk queue that supports email submission and
+    checks for new messages based on the configured polling interval.
+    New messages are processed and converted to tickets or ticket updates.
+
+    Args:
+        quiet (bool): If True, suppress detailed output during processing.
+    """
     for q in Queue.objects.filter(
             email_box_type__isnull=False,
             allow_email_submission=True):
@@ -91,6 +115,19 @@ def process_email(quiet=False):
 
 
 def process_queue(q, quiet=False):
+    """
+    Process a single email queue: connect, fetch, and process messages.
+
+    Handles connection via POP3 or IMAP (with SSL if configured), downloads messages,
+    passes each message to the ticket processing function, and deletes or flags messages.
+
+    Args:
+        q (helpdesk.models.Queue): The queue object to process.
+        quiet (bool): If True, suppress verbose output.
+
+    Raises:
+        ImportError: If socks proxy is configured but PySocks library is missing.
+    """
     if not quiet:
         print("Processing: %s" % q)
 
@@ -183,6 +220,16 @@ def process_queue(q, quiet=False):
 
 
 def decodeUnknown(charset, string):
+    """
+    Decode a byte string using the given charset, or fallback to utf-8/iso8859-1.
+
+    Args:
+        charset (str or None): Character set name or None if unknown.
+        string (bytes): Byte string to decode.
+
+    Returns:
+        unicode: Decoded Unicode string.
+    """
     if not charset:
         try:
             return string.decode('utf-8', 'ignore')
@@ -192,11 +239,39 @@ def decodeUnknown(charset, string):
 
 
 def decode_mail_headers(string):
+    """
+    Decode email headers that may have multiple encodings.
+
+    Args:
+        string (str): Raw email header string.
+
+    Returns:
+        unicode: Decoded Unicode string with all parts joined.
+    """
     decoded = decode_header(string)
     return u' '.join([unicode(msg, charset or 'utf-8') for msg, charset in decoded])
 
 
 def ticket_from_message(message, queue, quiet):
+    """
+    Parse a raw RFC822 email message and create or update a ticket.
+
+    Parses the email subject, sender, body (plain text and HTML), and attachments.
+    Determines if the email is a new ticket or a reply/forward to an existing ticket.
+    Creates or updates Ticket and FollowUp objects accordingly.
+    Sends notification emails based on queue configuration.
+
+    Args:
+        message (str or bytes): Raw RFC822 email message as string or bytes.
+        queue (helpdesk.models.Queue): Queue the email belongs to.
+        quiet (bool): Suppress detailed output if True.
+
+    Returns:
+        helpdesk.models.Ticket or bool:
+            Ticket object if processed successfully,
+            False if the message should be kept in mailbox (ignored),
+            True if ignored and should be deleted.
+    """
     # 'message' must be an RFC822 formatted message.
     msg = message
     message = email.message_from_string(msg)

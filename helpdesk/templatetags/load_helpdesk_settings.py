@@ -10,6 +10,16 @@ from helpdesk import settings as helpdesk_settings_config
 
 
 def load_helpdesk_settings(request):
+    """
+    Custom template filter to expose helpdesk settings in templates.
+
+    Args:
+        request: The HTTP request object (not used directly, just for interface compatibility).
+
+    Returns:
+        module: The helpdesk settings module with all custom configuration attributes.
+        str: An empty string if the import or access fails.
+    """
     try:
         return helpdesk_settings_config
     except Exception as e:

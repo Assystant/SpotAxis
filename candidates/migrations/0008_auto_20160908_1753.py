@@ -7,6 +7,20 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """
+    Migration class to update the `extra_curriculars` field in the `Candidate` model.
+
+    Purpose:
+        - Changes the field type from a standard `TextField` to `RichTextField` to support
+          rich-text content including formatting and media.
+
+    Attributes:
+        dependencies (list): Lists the migration this update depends on, ensuring proper ordering.
+        operations (list): Defines the schema change for the `extra_curriculars` field.
+
+    Inherits:
+        django.db.migrations.Migration
+    """
 
     dependencies = [
         ('candidates', '0007_auto_20160908_1705'),

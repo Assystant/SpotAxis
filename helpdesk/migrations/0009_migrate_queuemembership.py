@@ -8,6 +8,11 @@ from django.utils.translation import ugettext_lazy as _
 
 
 def create_and_assign_permissions(apps, schema_editor):
+    """
+    Create permissions for each Queue and assign them to users based on QueueMembership.
+    Deletes QueueMembership after assignment.
+    """
+
     Permission = apps.get_model('auth', 'Permission')
     ContentType = apps.get_model('contenttypes', 'ContentType')
     # Two steps:
@@ -48,6 +53,7 @@ def create_and_assign_permissions(apps, schema_editor):
 
 
 def revert_queue_membership(apps, schema_editor):
+    """Restore QueueMemberships from user permissions and delete those permissions."""
     Permission = apps.get_model('auth', 'Permission')
     Queue = apps.get_model('helpdesk', 'Queue')
     QueueMembership = apps.get_model('helpdesk', 'QueueMembership')
@@ -67,7 +73,10 @@ def revert_queue_membership(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
+    """
+    Migration to create queue permissions and assign them based on QueueMembership.
+    Supports reversal to restore QueueMemberships.
+    """
     dependencies = [
         ('helpdesk', '0008_extra_for_permissions'),
     ]

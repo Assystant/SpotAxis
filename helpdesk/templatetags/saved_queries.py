@@ -12,6 +12,17 @@ from helpdesk.models import SavedSearch
 
 
 def saved_queries(user):
+    """
+    Retrieves SavedSearch objects filtered by user ownership or shared status.
+
+    Args:
+        user (User): The Django User instance for whom saved queries are fetched.
+
+    Returns:
+        QuerySet: A queryset of SavedSearch objects accessible to the user.
+
+    On error, logs the exception to stderr and returns an empty string.
+    """
     try:
         user_saved_queries = SavedSearch.objects.filter(Q(user=user) | Q(shared__exact=True))
         return user_saved_queries

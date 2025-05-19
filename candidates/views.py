@@ -30,6 +30,17 @@ from TRM.settings import SITE_URL
 from django.db.models import Q
 
 def resume_builder(request):
+    """
+    Render the resume builder page with all required candidate-related forms.
+
+    Supports AJAX requests for partial form submissions.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered resume builder HTML page with forms.
+    """
     subdomain_data = subdomain(request)
     if subdomain_data['active_subdomain']:
         url = SITE_URL + reverse('candidates_resume_builder'),
@@ -72,6 +83,19 @@ def resume_builder(request):
                               context_instance=RequestContext(request))
 
 def resume_builder_templates(request,candidate_id=None):
+    """
+    Render a resume template view for a given candidate by candidate_id.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        candidate_id (int, optional): The ID of the candidate whose resume template is requested.
+
+    Raises:
+        Http404: If the candidate with the given ID does not exist.
+
+    Returns:
+        HttpResponse: Rendered resume template page.
+    """
     try: 
         candidate = Candidate.objects.get(id = candidate_id)  
         referer = request.META['HTTP_REFERER']
@@ -86,6 +110,19 @@ def resume_builder_templates(request,candidate_id=None):
 
     return JsonResponse(context)
 def record_candidate(request):
+    """
+    Handle candidate registration by processing user data form submissions.
+
+    On successful form validation, creates a new user, assigns candidate profile,
+    sends verification email, and redirects to a registration success page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the candidate registration form on GET or invalid POST,
+                      redirects after successful registration.
+    """
     if request.method == 'POST':
         form_user = UserDataForm(data=request.POST,
                                  files=request.FILES,)
@@ -119,6 +156,21 @@ def record_candidate(request):
 
 @login_required
 def edit_curriculum(request, candidate_id=None):
+    """
+    View to edit a candidate's curriculum vitae (CV).
+
+    Allows uploading/removing CV files, updating candidate personal info, photo,
+    and managing academic, expertise, training, certificates, projects, and languages.
+
+    Calculates curriculum completion status and renders the edit CV page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        candidate_id (int, optional): The candidate ID to edit. Defaults to logged-in user.
+
+    Returns:
+        HttpResponse: Rendered edit CV page with forms and candidate data.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # iF THE USER IS LOGGED IN AND HAS NO EMAIL...
         redirect_page = 'common_register_blank_email'
@@ -287,6 +339,17 @@ def edit_curriculum(request, candidate_id=None):
 
 @login_required
 def cv_personal_info(request):
+    """
+    View to display and update candidate's personal information.
+
+    Supports AJAX requests to update and return JSON responses.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse or JsonResponse: Renders personal info form or returns JSON on AJAX POST.
+    """
     candidate = get_object_or_404(Candidate, user=request.user)
     context={}
     context['success'] = False
@@ -323,6 +386,17 @@ def cv_personal_info(request):
 
 @login_required
 def cv_objective(request):
+    """
+    View to display and update candidate's career objective statement.
+
+    Handles POST submissions to save the objective and redirects to CV edit page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the objective form template.
+    """
     candidate = get_object_or_404(Candidate, user=request.user)
     if request.method == 'POST':
         form_objective = ObjectiveForm(instance=candidate, data=request.POST, files=request.FILES)
@@ -354,6 +428,17 @@ def cv_objective(request):
 
 @login_required
 def cv_expertise(request, expertise_id=None):
+    """
+    Handle adding or updating a candidate's expertise (work experience) entry.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        expertise_id (int, optional): ID of the expertise to update. If None, a new expertise is created.
+
+    Returns:
+        HttpResponse or JsonResponse: Returns a rendered form page for GET requests,
+        redirects after successful POST, or returns JSON for AJAX calls.
+    """
     candidate = get_object_or_404(Candidate, user = request.user)
     context={}
     context['success'] = False
@@ -409,6 +494,17 @@ def cv_expertise(request, expertise_id=None):
 
 @login_required
 def cv_academic(request, academic_id=None):
+    """
+    Handle adding or updating a candidate's academic entry.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        academic_id (int, optional): ID of the academic record to update. If None, a new record is created.
+
+    Returns:
+        HttpResponse or JsonResponse: Returns a rendered form page for GET requests,
+        redirects after successful POST, or returns JSON for AJAX calls.
+    """
     candidate = get_object_or_404(Candidate, user=request.user)
     context={}
     context['success'] = False
@@ -462,6 +558,15 @@ def cv_academic(request, academic_id=None):
 
 @login_required
 def cv_language(request):
+    """
+    Handle adding or updating multiple language proficiencies for the candidate via a formset.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the language formset page or redirects after successful POST.
+    """
     candidate = get_object_or_404(Candidate, user = request.user)
     LanguageFormSet = modelformset_factory(CV_Language, max_num=5, extra=5, form=CvLanguageForm, can_delete=True)
     if request.method == 'POST':
@@ -480,6 +585,18 @@ def cv_language(request):
 
 @login_required
 def cv_delete_item(request, expertise_id=None, academic_id=None, software_id=None):
+    """
+    Delete a candidate's expertise, academic, or software record.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        expertise_id (int, optional): ID of the expertise record to delete.
+        academic_id (int, optional): ID of the academic record to delete.
+        software_id (int, optional): ID of the software record to delete.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the curriculum edit page after deletion.
+    """
     candidate = get_object_or_404(Candidate, user = request.user)
     if expertise_id:
         expertise = get_object_or_404(Expertise, id=expertise_id, candidate=candidate)
@@ -494,6 +611,17 @@ def cv_delete_item(request, expertise_id=None, academic_id=None, software_id=Non
 
 
 def curriculum_to_pdf(request, candidate_id, template=None):
+    """
+    Generate and return a PDF of a candidate's full curriculum vitae.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        candidate_id (int): ID of the candidate whose CV will be generated.
+        template (str, optional): Template to use for PDF rendering. Defaults to None.
+
+    Returns:
+        HttpResponse: PDF file response with the candidate's CV.
+    """
     from TRM.settings import MEDIA_URL
 
     candidate = get_object_or_404(Candidate, pk=candidate_id)
@@ -526,6 +654,15 @@ def curriculum_to_pdf(request, candidate_id, template=None):
 
 
 def create_candidates(request):
+    """
+    Automatically generate and create multiple candidate users with random profile data.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponseRedirect: Redirects to a test or confirmation page after bulk creation.
+    """
     mex = Country.objects.get(iso2_code__iexact='IN')
     last_user_id = User.objects.last()
     start_range = last_user_id.pk + 1
@@ -657,6 +794,16 @@ def create_candidates(request):
 
 @login_required
 def vacancies_postulated(request):
+    """
+    Display a candidate's postulated vacancies categorized by active, finalized, and rejected.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the vacancies_postulated page with categorized vacancies.
+    """
+
     candidate = get_object_or_404(Candidate, user=request.user)
     active = False
     finalized = False
@@ -682,6 +829,15 @@ def vacancies_postulated(request):
 
 @login_required
 def vacancies_favorites(request):
+    """
+    Display a candidate's favorite vacancies, removing any that have been applied to.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the vacancies_favorites page with updated favorite vacancies.
+    """
     candidate = get_object_or_404(Candidate, user=request.user)
     candidate_favs = Candidate_Fav.objects.filter(candidate=candidate)
     applications = Postulate.objects.filter(candidate = candidate)

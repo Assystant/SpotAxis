@@ -9,6 +9,20 @@ from helpdesk.settings import DEFAULT_USER_SETTINGS
 
 def picke_settings(data):
     """Pickling as defined at migration's creation time"""
+    """
+    Serialize and encode the given data using pickle and base64.
+
+    This function pickles the provided Python data object using the pickle module
+    and then encodes the pickled byte stream into a base64 string for safe storage.
+
+    The implementation imports pickle with backward compatibility for Python 2 and 3.
+
+    Parameters:
+        data (any): The Python object to be serialized.
+
+    Returns:
+        str: A base64-encoded string of the pickled data.
+    """
     try:
         import pickle
     except ImportError:
@@ -41,6 +55,17 @@ def populate_usersettings(apps, schema_editor):
 noop = lambda *args, **kwargs: None
 
 class Migration(migrations.Migration):
+    """
+    Defines the database migration for populating user settings.
+
+    This migration depends on the initial migration '0001_initial' and runs a data
+    migration operation to create default UserSettings entries for existing users.
+
+    Attributes:
+        dependencies (list): List of migration dependencies that must be applied before this one.
+        operations (list): List of migration operations to be performed, including the
+                        data population function and a no-op reverse migration.
+    """
 
     dependencies = [
         ('helpdesk', '0001_initial'),

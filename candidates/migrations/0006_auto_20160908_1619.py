@@ -6,6 +6,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration class that adds additional descriptive fields to the `Candidate` model
+    in the 'candidates' app.
+
+    New Fields Added:
+        - extra_curriculars (TextField): Optional, max_length=300, stores extracurricular activities.
+        - hobbies (TextField): Optional, max_length=300, stores hobbies.
+        - others (TextField): Optional, max_length=300, stores other additional information.
+
+    Attributes:
+        dependencies (list): Specifies that this migration depends on '0005_candidate_interests'.
+        operations (list): Contains operations to add the three new fields to the database schema.
+
+    Inherits:
+        django.db.migrations.Migration
+    """
 
     dependencies = [
         ('candidates', '0005_candidate_interests'),

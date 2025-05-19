@@ -5,15 +5,29 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
+    """
+    Migration class to apply schema changes to the database using South.
 
+    This migration adds a new BooleanField `empty_selection_list` to the
+    `CustomField` model in the helpdesk app.
+    """
     def forwards(self, orm):
-        
+        """
+        Adds the `empty_selection_list` BooleanField to the `CustomField` model.
+
+        :param orm: Object Relational Mapper for accessing models during migration
+        """
         # Adding field 'CustomField.empty_selection_list'
         db.add_column('helpdesk_customfield', 'empty_selection_list', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
 
 
     def backwards(self, orm):
-        
+        """
+        Removes the `empty_selection_list` field from the `CustomField` model,
+        effectively rolling back the migration.
+
+        :param orm: Object Relational Mapper for accessing models during rollback
+        """
         # Deleting field 'CustomField.empty_selection_list'
         db.delete_column('helpdesk_customfield', 'empty_selection_list')
 

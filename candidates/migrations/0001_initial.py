@@ -12,6 +12,17 @@ import re
 
 
 class Migration(migrations.Migration):
+    """
+    Defines the initial database schema migration for the 'candidates' app.
+
+    This migration creates multiple models related to candidate information, 
+    including education, work experience, skills, languages, and associated entities.
+
+    Attributes:
+        initial (bool): Indicates this is the initial migration for the app.
+        dependencies (list): Lists other migrations and models this migration depends on.
+        operations (list): Defines the database operations to apply in this migration.
+    """
 
     initial = True
 

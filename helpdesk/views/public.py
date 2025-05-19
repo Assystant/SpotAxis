@@ -19,6 +19,15 @@ from helpdesk.models import Ticket, Queue, UserSettings, KBCategory
 
 
 def homepage(request):
+    """
+    Display the public homepage with a ticket submission form.
+
+    - Redirects authenticated staff users to dashboard or ticket list.
+    - Displays a public ticket submission form if allowed.
+    - Initializes the form with submitter's email and selected queue (if any).
+    - Validates form on POST request and creates a new ticket.
+    - Checks for spam using `text_is_spam()` from `helpdesk.lib`.
+    """
     if not request.user.is_authenticated() and helpdesk_settings.HELPDESK_REDIRECT_TO_LOGIN_BY_DEFAULT:
         return HttpResponseRedirect(reverse('login'))
 
@@ -74,6 +83,16 @@ def homepage(request):
 
 
 def view_ticket(request):
+    """
+    Allow users to view a specific ticket by ID and email address.
+
+    - Accepts GET parameters: `ticket` and `email`.
+    - Validates ticket ownership using `submitter_email`.
+    - Staff users are redirected to internal ticket view.
+    - If `close` parameter is present and the ticket is resolved, closes it.
+    - Renders ticket details for public users.
+    - Handles invalid ticket or email with a graceful error message.
+    """
     ticket_req = request.GET.get('ticket', '')
     email = request.GET.get('email', '')
 
@@ -126,6 +145,12 @@ def view_ticket(request):
 
 
 def change_language(request):
+    """
+    Render a language selection page for public users.
+
+    - Reads the optional `return_to` GET parameter to know where to redirect post-selection.
+    - Used for changing display language without authentication.
+    """
     return_to = ''
     if 'return_to' in request.GET:
         return_to = request.GET['return_to']

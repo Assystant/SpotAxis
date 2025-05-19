@@ -19,7 +19,13 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    """create_usersettings command"""
+    """
+    Django management command to create UserSettings for users missing them.
+
+    This command iterates over all users in the system and creates a
+    UserSettings object with default settings for any user that does not
+    already have one.
+    """
 
     help = _('Check for user without django-helpdesk UserSettings '
              'and create settings if required. Uses '
@@ -27,7 +33,16 @@ class Command(BaseCommand):
              'suit your situation.')
 
     def handle(self, *args, **options):
-        """handle command line"""
+        """
+        Command entry point or handle command line
+
+        Iterates through all users and creates default UserSettings for users
+        who don't have any.
+
+        Args:
+            *args: Positional arguments (not used).
+            **options: Command options (not used).
+        """
         for u in User.objects.all():
             UserSettings.objects.get_or_create(user=u,
                                                defaults={'settings': DEFAULT_USER_SETTINGS})

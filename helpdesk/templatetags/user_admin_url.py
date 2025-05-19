@@ -14,6 +14,15 @@ from django.contrib.auth import get_user_model
 
 
 def user_admin_url(action):
+    """
+    Generates the named admin URL pattern for the User model and the given action.
+
+    Args:
+        action (str): The admin action (e.g., 'changelist', 'change', 'add').
+
+    Returns:
+        str: The named URL pattern for the admin view of the User model.
+    """
     user = get_user_model()
     try:
         model_name = user._meta.module_name.lower()

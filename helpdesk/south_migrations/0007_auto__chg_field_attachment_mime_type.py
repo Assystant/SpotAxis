@@ -6,14 +6,21 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
+    """
+    Migration to change the max_length of Attachment.mime_type field.
+
+    Methods:
+        forwards(orm): Apply the migration, increase mime_type max_length to 255.
+        backwards(orm): Revert the migration, reset mime_type max_length to 30.
+    """
 
     def forwards(self, orm):
-
+        """Alter mime_type field to max_length=255."""
         # Changing field 'Attachment.mime_type'
         db.alter_column('helpdesk_attachment', 'mime_type', self.gf('django.db.models.fields.CharField')(max_length=255))
 
     def backwards(self, orm):
-
+        """Revert mime_type field to max_length=30."""
         # Changing field 'Attachment.mime_type'
         db.alter_column('helpdesk_attachment', 'mime_type', self.gf('django.db.models.fields.CharField')(max_length=30))
 

@@ -1,7 +1,26 @@
 """
-Default settings for django-helpdesk.
+helpdesk.settings - Default configuration for django-helpdesk.
 
+Version: 0.2.0  
+Maintainer: Jutda (c) 2008 
+
+This module provides default values for all configurable settings used
+throughout the django-helpdesk application. These values control behavior
+related to ticket handling, UI features, permission restrictions, and email
+integration.
+
+Many of these settings can be overridden in your project's main settings.py
+by defining the corresponding `HELPDESK_*` variable.
+
+Sections:
+- DEFAULT_USER_SETTINGS: Default per-user preferences
+- General UI options
+- Public-facing page options
+- Ticket update and ownership controls
+- Staff view controls
+- Email handling
 """
+
 
 from django.conf import settings
 

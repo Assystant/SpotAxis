@@ -45,7 +45,7 @@ hyperlink==17.3.1
 idna==2.1
 incremental==17.5.0
 ipaddress==1.0.17
-ipgetter==0.6
+#ipgetter==0.6
 libxml2-python==2.9.3
 lxml==3.6.4
 mammoth==1.2.2
