@@ -226,4 +226,4 @@ pip-log.txt
 /TRM/media/*
 environment.py
 filecontent.txt
-.vscode
+.vscodevenv/ 
