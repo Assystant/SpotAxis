@@ -96,7 +96,7 @@ python-linkedin==4.1
 python-openid==2.2.5
 pytz==2024.2
 regex==2024.11.6
-reportlab==4.2.5
+reportlab==4.4.1
 requests==2.32.3
 requests-oauthlib==0.6.2
 roman==2.0.0
