@@ -1,20 +1,6 @@
-"""
-Form classes for the common app.
-
-This module provides form classes for handling various types of data input including:
-- User registration and profile management
-- File uploads
-- Contact forms
-- Address management
-- Password management
-- Email management
-- Social authentication
-
-Each form includes validation logic and custom widgets where appropriate.
-"""
-
 # -*- coding: utf-8 -*-
-import ipgetter
+from __future__ import absolute_import
+import ipgetter2
 import uuid
 import socket
 from django import forms
@@ -36,10 +22,8 @@ from upload_logos.widgets import AjaxClearableFileInput
 
 def get_initial_country():
     """
-    Get the default country for form initialization.
-    
-    Returns:
-        Country: The default country object (usually Mexico)
+    Retrieves the initial country object for India (ISO code 'IN').
+    Returns None if the country is not found.
     """
     try:
         initial_country = Country.objects.get(iso2_code__exact='IN')
@@ -53,25 +37,12 @@ def get_initial_country():
 # ------------------------------------------------- #
 class UserPhotoForm(forms.ModelForm):
     """
-    Form for handling user profile photo uploads.
-    
-    Provides validation and processing for user photo uploads including:
-    - File type validation
-    - Size restrictions
-    - Image processing
+    Form for handling user photo uploads with validation for image format and size.
+    Validates that uploaded images are in JPG/JPEG/PNG format and under 1MB.
     """
     photo = forms.ImageField(widget=forms.FileInput(attrs={'class':"form-control text-center"}), required=False)
 
     def clean_photo(self):
-        """
-        Validate and process the uploaded photo.
-        
-        Returns:
-            ImageField: The cleaned and processed photo file
-            
-        Raises:
-            ValidationError: If the photo doesn't meet requirements
-        """
         default_photo = PHOTO_USER_DEFAULT
         from PIL import Image
         image = self.cleaned_data.get('photo', None)
@@ -89,11 +60,11 @@ class UserPhotoForm(forms.ModelForm):
             # print img.format
             # print img.format.lower()
             if img.format.lower() not in ['jpeg', 'pjpeg', 'png', 'jpg', 'mpo']:
-                raise forms.ValidationError(_(u'You can only use images with extensions JPG, JPEG or PNG'))
+                raise forms.ValidationError(_('You can only use images with extensions JPG, JPEG or PNG'))
 
             #validate file size
             if len(image) > (1 * 1024 * 1024):
-                raise forms.ValidationError(_(u'The image selected is too large (Max 1MB)'))
+                raise forms.ValidationError(_('The image selected is too large (Max 1MB)'))
         else:
             return default_photo
         return image
@@ -105,12 +76,9 @@ class UserPhotoForm(forms.ModelForm):
 
 class SubdomainForm(forms.ModelForm):
     """
-    Form for managing subdomains.
-    
-    Handles creation and validation of subdomain entries including:
-    - Domain name validation
-    - Uniqueness checks
-    - Format restrictions
+    Form for handling subdomain registration and validation.
+    Validates that the subdomain is unique, not using spotaxis.com domain,
+    and points to the correct IP address.
     """
     cname = forms.CharField(
         widget = forms.TextInput(attrs={'placeholder':'career.yourdomain.com',
@@ -133,7 +101,7 @@ class SubdomainForm(forms.ModelForm):
             if domains[::-1][1] == 'spotaxis' and domains[::-1][0] == 'com':
                 raise forms.ValidationError("Whoa! You can't use our own domain for your website.")
             ip = socket.gethostbyname(cname)
-            if ipgetter.myip() == ip:
+            if ipgetter2.myip() == ip:
                 return cname
             else:
                 raise forms.ValidationError('It looks like this subdomain does not point to us. Please add the CNAME setting to your DNS before proceeding.')
@@ -144,37 +112,29 @@ class SubdomainForm(forms.ModelForm):
 
 class UserDataForm(forms.ModelForm):
     """
-    Form for managing user profile data.
-    
-    Handles user registration and profile updates including:
-    - Username validation
-    - Email verification
-    - Password management
-    - Personal information
-    
-    Attributes:
-        email_repeat_msg (str): Message for email confirmation field
-        password_repeat_msg (str): Message for password confirmation field
+    Form for user registration and data collection.
+    Handles user registration with email verification, password confirmation,
+    and basic user information collection including name, email, and phone.
     """
-    email_repeat_msg = _(u'Confirm your email')
-    password_repeat_msg = _(u'* Confirm your Password')
+    email_repeat_msg = _('Confirm your email')
+    password_repeat_msg = _('* Confirm your Password')
     username = forms.RegexField(
-        label=_(u"Name of User"),
+        label=_("Name of User"),
         max_length=30,
-        widget=forms.TextInput(attrs={'placeholder': _(u'* Username'),
+        widget=forms.TextInput(attrs={'placeholder': _('* Username'),
                                       'class': "form-control s-form-v4__input"}),
         regex=r'^[\w.-]+$',
         error_messages={
-            'invalid': _(u"Only letters, numbers and the following characters are allowed . - _"),
-            'required': _(u"Enter a username")
+            'invalid': _("Only letters, numbers and the following characters are allowed . - _"),
+            'required': _("Enter a username")
         }
     )
 
     email = forms.EmailField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'* Email'),
+        widget=forms.TextInput(attrs={'placeholder': _('* Email'),
                                       'class': "form-control s-form-v4__input"}),
         max_length=75,
-        error_messages={'required': _(u"Enter your Email")},
+        error_messages={'required': _("Enter your Email")},
         label="Contact Email"
     )
 
@@ -187,11 +147,11 @@ class UserDataForm(forms.ModelForm):
     )
 
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': _(u'* Password'),
+        widget=forms.PasswordInput(attrs={'placeholder': _('* Password'),
                                           'class': "form-control s-form-v4__input"}),
         max_length=128,
-        error_messages={'required': _(u"ENter your Password")},
-        label=_(u"Password")
+        error_messages={'required': _("ENter your Password")},
+        label=_("Password")
     )
 
     password_repeat = forms.CharField(
@@ -203,29 +163,29 @@ class UserDataForm(forms.ModelForm):
     )
 
     first_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'* First Name'),
+        widget=forms.TextInput(attrs={'placeholder': _('* First Name'),
                                       'class': "form-control s-form-v4__input"}),
         max_length=30,
-        error_messages={'required': _(u"Enter your Name")},
-        label=_(u"Name")
+        error_messages={'required': _("Enter your Name")},
+        label=_("Name")
     )
 
     last_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'* Last Name'),
+        widget=forms.TextInput(attrs={'placeholder': _('* Last Name'),
                                       'class': "form-control s-form-v4__input"}),
         max_length=30,
-        error_messages={'required': _(u"Enter your Last Name")},
-        label=_(u"Surname")
+        error_messages={'required': _("Enter your Last Name")},
+        label=_("Surname")
     )
 
     cellphone = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Phone'),
+        widget=forms.TextInput(attrs={'placeholder': _('Phone'),
                                       'class': "form-control s-form-v4__input"}),
         max_length=30,
         min_length=5,
         required=False,
-        error_messages={'required': _(u"Enter your Phone")},
-        label=_(u"Phone")
+        error_messages={'required': _("Enter your Phone")},
+        label=_("Phone")
     )
 
     # photo = forms.ImageField(widget=AjaxClearableFileInput(), required=False)
@@ -269,7 +229,7 @@ class UserDataForm(forms.ModelForm):
             username = self.cleaned_data['username']
             if User.objects.filter(username__iexact=username):
                 raise forms.ValidationError(
-                    _(u"Username already exists. Please try again."))
+                    _("Username already exists. Please try again."))
 
         return username
 
@@ -283,7 +243,7 @@ class UserDataForm(forms.ModelForm):
         
         if emails > 0:
             raise forms.ValidationError(
-                _(u'This email is already registered. Please try a new one.'))
+                _('This email is already registered. Please try a new one.'))
         else:
            emails = EmailVerification.objects.filter(new_email__iexact=new_email, is_expired=False)
            for email in emails:
@@ -298,7 +258,7 @@ class UserDataForm(forms.ModelForm):
                 if self.cleaned_data['email'] != self.cleaned_data['email_repeat']:
                     from django.forms.util import ErrorList
                     self._errors['email'] = ErrorList()
-                    self._errors['email'].append(_(u'Email addresses do not match'))
+                    self._errors['email'].append(_('Email addresses do not match'))
                     # raise forms.ValidationError(_(u'Email addresses do not match.'))
 
         if registration_settings.DOUBLE_CHECK_PASSWORD:
@@ -306,7 +266,7 @@ class UserDataForm(forms.ModelForm):
                 if self.cleaned_data['password'] != self.cleaned_data['password_repeat']:
                     from django.forms.utils import ErrorList
                     self._errors['password'] = ErrorList()
-                    self._errors['password'].append(_(u'The passwords do not match'))
+                    self._errors['password'].append(_('The passwords do not match'))
                     # raise forms.ValidationError(_(u'The passwords do not match.'))
 
         return self.cleaned_data
@@ -356,47 +316,42 @@ class UserDataForm(forms.ModelForm):
 # --------------------------------------------- #
 class BasicUserDataForm(forms.ModelForm):
     """
-    Form for basic user information updates.
-    
-    A simplified version of UserDataForm for basic profile updates including:
-    - Name
-    - Email
-    - Phone numbers
-    
-    Does not include password or username management.
+    Form for updating basic user information.
+    Handles updates to user's name, email, and phone number with optional
+    email change functionality based on settings.
     """
     first_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Enter your name'),
+        widget=forms.TextInput(attrs={'placeholder': _('Enter your name'),
                                       'class': 'form-control'}),
         max_length=30,
         required=True,
-        error_messages={'required': _(u"Enter your name")},
-        label=_(u"Name(s)")
+        error_messages={'required': _("Enter your name")},
+        label=_("Name(s)")
     )
 
     last_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Enter your Surname'),
+        widget=forms.TextInput(attrs={'placeholder': _('Enter your Surname'),
                                       'class': 'form-control'}),
         max_length=30,
         required=True,
-        error_messages={'required': _(u"Enter your Surname")},
-        label=_(u"Surname")
+        error_messages={'required': _("Enter your Surname")},
+        label=_("Surname")
     )
 
     cellphone = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Phone'),
+        widget=forms.TextInput(attrs={'placeholder': _('Phone'),
                                       'class': "form-control"}),
         max_length=30,
         min_length=5,
         required = False,
-        label=_(u"Phone")
+        label=_("Phone")
     )
 
     email = forms.EmailField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Email'),
+        widget=forms.TextInput(attrs={'placeholder': _('Email'),
                                       'class': 'form-control'}),
         max_length=75,
-        error_messages={'required': _(u"Enter your Email")},
+        error_messages={'required': _("Enter your Email")},
         label="E-mail"
     )
 
@@ -445,23 +400,20 @@ class BasicUserDataForm(forms.ModelForm):
 # ------------------------------------ #
 class ChangeEmailForm(forms.Form):
     """
-    Form for handling email address changes.
-    
-    Provides:
-    - New email validation
-    - Verification process initiation
-    - Email format checking
+    Form for handling email change requests.
+    Validates new email uniqueness and sends verification email
+    to the new address for confirmation.
     """
     new_email = forms.EmailField(
         label=_('New Email'),
         widget=forms.TextInput(
             attrs={'class': 'form-control',
-                   'placeholder': _(u'Enter a new Email')
+                   'placeholder': _('Enter a new Email')
             }
         ),
         max_length=225,
         required=True,
-        error_messages={'required': _(u'Enter a new Email')}
+        error_messages={'required': _('Enter a new Email')}
     )
 
     def clean_new_email(self):
@@ -504,18 +456,17 @@ class ChangeEmailForm(forms.Form):
 
 class RegisterEmailForm(forms.ModelForm):
     """
-    Form for initial email registration.
-    
-    Used when a user needs to register an email address for the first time,
-    typically after social authentication.
+    Form for email-only registration.
+    Validates email uniqueness and handles registration
+    for users who don't have a registered email.
     """
     # Form for email registration, when the user does not have any registered
     email = forms.EmailField(
-        label=_(u'Email'),
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _(u'ENter your Email')}),
+        label=_('Email'),
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('ENter your Email')}),
         max_length=75,
         required=True,
-        error_messages={'required': _(u'ENter your Email')}
+        error_messages={'required': _('ENter your Email')}
     )
 
     def clean_email(self):
@@ -524,7 +475,7 @@ class RegisterEmailForm(forms.ModelForm):
         verification_emails = EmailVerification.objects.filter(new_email__iexact=email, is_expired=False).count()
         if user_emails + verification_emails > 0:
             raise forms.ValidationError(_(
-                u'This email already exists. Please try a new one.'))
+                'This email already exists. Please try a new one.'))
         return email
 
     class Meta:
@@ -537,34 +488,30 @@ class RegisterEmailForm(forms.ModelForm):
 # --------------------------------------- #
 class ChangePasswordForm(forms.Form):
     """
-    Form for password changes.
-    
-    Handles:
-    - Current password verification
-    - New password validation
-    - Password confirmation
-    - Password strength requirements
+    Form for handling password changes.
+    Validates current password and ensures new password confirmation matches.
+    Includes security checks and password update functionality.
     """
-    actual_password_lbl = _(u'Actual Password')
-    new_password_lbl = _(u'password new')
-    confirm_new_password_lbl = _(u'Confirm new password')
+    actual_password_lbl = _('Actual Password')
+    new_password_lbl = _('password new')
+    confirm_new_password_lbl = _('Confirm new password')
     old_password = forms.CharField(label=actual_password_lbl,
                                    widget=forms.PasswordInput(
                                        attrs={'class': "form-control", 'placeholder': 'Current Password'}
                                    ),
-                                   error_messages={'required': _(u'Please enter your current password')},
+                                   error_messages={'required': _('Please enter your current password')},
     )
     new_password1 = forms.CharField(label=new_password_lbl,
                                     widget=forms.PasswordInput(
                                         attrs={'class': "form-control", 'placeholder': 'New Password'}
                                     ),
-                                    error_messages={'required': _(u'Please enter your new password')},
+                                    error_messages={'required': _('Please enter your new password')},
     )
     new_password2 = forms.CharField(label=confirm_new_password_lbl,
                                     widget=forms.PasswordInput(
                                         attrs={'class': "form-control", 'placeholder': 'Confirm New Password'}
                                     ),
-                                    error_messages={'required': _(u'Please confirm your new password')},
+                                    error_messages={'required': _('Please confirm your new password')},
     )
 
     def __init__(self, user, *args, **kwargs):
@@ -577,7 +524,7 @@ class ChangePasswordForm(forms.Form):
         """
         old_password = self.cleaned_data["old_password"]
         if not self.user.check_password(old_password):
-            raise forms.ValidationError(_(u'The password is incorrect'))
+            raise forms.ValidationError(_('The password is incorrect'))
         return old_password
 
     def clean_new_password2(self):
@@ -585,7 +532,7 @@ class ChangePasswordForm(forms.Form):
         password2 = self.cleaned_data.get('new_password2')
         if password1 and password2:
             if password1 != password2:
-                raise forms.ValidationError(_(u'The passwords do not match'))
+                raise forms.ValidationError(_('The passwords do not match'))
         return password2
 
     def save(self, commit=True):
@@ -602,9 +549,17 @@ class ChangePasswordForm(forms.Form):
 # Start Form for Address #
 # -------------------------------- #
 def get_states(country=None, search_vacancy=False):
+    """
+    Retrieves a list of states for a given country.
+    Args:
+        country: Country object or ID to get states for
+        search_vacancy: Boolean to determine if this is for vacancy search
+    Returns:
+        List of tuples containing state IDs and names
+    """
     choices = [('0', 'No choices')]
     if country:
-        if type(country) == long or type(country) == int:
+        if type(country) == int or type(country) == int:
             country = Country.objects.get(pk=int(country))
         states = country.state_set.all()
         if states.count() > 0:
@@ -618,9 +573,16 @@ def get_states(country=None, search_vacancy=False):
 
 
 def get_municipals(state=None):
+    """
+    Retrieves a list of municipalities for a given state.
+    Args:
+        state: State object or ID to get municipalities for
+    Returns:
+        List of tuples containing municipal IDs and names
+    """
     choices = [('0', 'Select a state first')]
     if state:
-        if type(state) == long or type(state) == int:
+        if type(state) == int or type(state) == int:
             state = State.objects.get(pk= int(state))
         # municipals = state.municipal_set.all()
         # if municipals.count() > 0:
@@ -632,16 +594,9 @@ def get_municipals(state=None):
 
 class AdressForm(forms.ModelForm):
     """
-    Form for managing address information.
-    
-    Handles:
-    - Country selection
-    - State/province selection
-    - City/municipal selection
-    - Street address
-    - Postal code validation
-    
-    Features dynamic loading of location options based on selected country/state.
+    Form for handling address information.
+    Manages address data including state, city, street, and postal code
+    with dynamic state and municipal selection based on country.
     """
     initial_country = get_initial_country()
     # country = forms.ModelChoiceField(
@@ -655,27 +610,27 @@ class AdressForm(forms.ModelForm):
     state = forms.ChoiceField(
         choices= get_states(initial_country),
         widget=forms.Select(attrs={'class': "form-control"}),
-        label=_(u'State')
+        label=_('State')
     )
     municipal = forms.ChoiceField(
         choices = get_municipals(None),
         widget=forms.Select(attrs={'class': "form-control"}),
-        label = _(u'City:'),
+        label = _('City:'),
         required=False
     )
     street = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u'Street No or Colony'),
+        widget=forms.TextInput(attrs={'placeholder': _('Street No or Colony'),
                                       'class': "form-control"}),
         max_length=200,
-        error_messages={'required': _(u"Enter the address of your company")},
-        label=_(u"Address:"),
+        error_messages={'required': _("Enter the address of your company")},
+        label=_("Address:"),
     )
     postal_code = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': _(u' Postal Code'),
+        widget=forms.TextInput(attrs={'placeholder': _(' Postal Code'),
                                       'class': "form-control"}),
         max_length=5,
-        error_messages={'required': _(u"Enter your Postal Code")},
-        label=_(u"Postal Code:"),
+        error_messages={'required': _("Enter your Postal Code")},
+        label=_("Postal Code:"),
     )
 
     def __init__(self, *args, **kwargs):
@@ -707,7 +662,7 @@ class AdressForm(forms.ModelForm):
     def clean_state(self):
         state_id = int(self.cleaned_data.get('state'))
         if state_id < 0:
-            raise forms.ValidationError(_(u'Select a State'))
+            raise forms.ValidationError(_('Select a State'))
         if state_id == 0:
             return None
         try:
@@ -720,21 +675,21 @@ class AdressForm(forms.ModelForm):
             for state in states:
                 choices.append(state.id)
             if state_id not in choices:
-                raise forms.ValidationError(_(u'Select a state'))
+                raise forms.ValidationError(_('Select a state'))
             state = State.objects.get(pk = state_id)
         except State.DoesNotExist:
-            raise forms.ValidationError(_(u'The state selected is invalid'))
+            raise forms.ValidationError(_('The state selected is invalid'))
         return state
 
     def clean_municipal(self):
         try:
             municipal_id = int(self.cleaned_data.get('municipal'))
         except:
-            raise forms.ValidationError(_(u'The city selected is invalid'))
+            raise forms.ValidationError(_('The city selected is invalid'))
         if municipal_id < 0:
-            raise forms.ValidationError(_(u'Select a City'))
+            raise forms.ValidationError(_('Select a City'))
         if municipal_id == 0:
-            raise forms.ValidationError(_(u'Select a State first'))
+            raise forms.ValidationError(_('Select a State first'))
         try:
             choices = [0]
             try:
@@ -747,10 +702,10 @@ class AdressForm(forms.ModelForm):
             except:
                 return None
             if municipal_id not in choices:
-                raise forms.ValidationError(_(u'Select a city'))
+                raise forms.ValidationError(_('Select a city'))
             municipal = Municipal.objects.get(pk = municipal_id)
         except Municipal.DoesNotExist:
-            raise forms.ValidationError(_(u'The selected city is invalid'))
+            raise forms.ValidationError(_('The selected city is invalid'))
         return municipal
 
     class Meta:
@@ -763,7 +718,12 @@ class AdressForm(forms.ModelForm):
 
 # Reset Password
 class CustomPasswordResetForm(forms.Form):
-    email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _(u'* Email'), 'class': "form-control s-form-v4__input"}))
+    """
+    Form for handling password reset requests.
+    Validates user email, checks authentication method,
+    and sends password reset instructions.
+    """
+    email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _('* Email'), 'class': "form-control s-form-v4__input"}))
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -772,14 +732,14 @@ class CustomPasswordResetForm(forms.Form):
         active_users = User.objects.filter(email__iexact=email, is_active=True)
         for user in active_users:
             if user.logued_by == 'FB':
-                raise forms.ValidationError(_(u'Registration was performed using your Facebook account.'))
+                raise forms.ValidationError(_('Registration was performed using your Facebook account.'))
             elif user.logued_by == 'GO':
-                raise forms.ValidationError(_(u'Registration was performed using your Google Accont'))
+                raise forms.ValidationError(_('Registration was performed using your Google Accont'))
 
         # Check who does not have registered email
         user_emails = User.objects.filter(email__iexact=email).count()
         if user_emails <= 0:
-            raise forms.ValidationError(_(u'The email is not registered n the system. Please enter a different one.'))
+            raise forms.ValidationError(_('The email is not registered n the system. Please enter a different one.'))
 
         return email
 
@@ -814,7 +774,12 @@ class CustomPasswordResetForm(forms.Form):
 
 
 class RecoverUserForm(forms.Form):
-    email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _(u'* Email'), 'class': "form-control s-form-v4__input"}))
+    """
+    Form for handling username recovery requests.
+    Validates user email and authentication method,
+    sends recovery instructions to verified email.
+    """
+    email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _('* Email'), 'class': "form-control s-form-v4__input"}))
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -822,14 +787,14 @@ class RecoverUserForm(forms.Form):
         verification_emails = EmailVerification.objects.filter(
             new_email__iexact=email, is_expired=False).count()
         if user_emails + verification_emails <= 0:
-            raise forms.ValidationError(_(u'This email is not registered in the system. Please enter a different one.'))
+            raise forms.ValidationError(_('This email is not registered in the system. Please enter a different one.'))
         else:
             active_users = User.objects.filter(email__iexact=email, is_active=True)
         for user in active_users:
             if user.logued_by == 'FB':
-                raise forms.ValidationError(_(u'Registration was done with your Facebook account'))
+                raise forms.ValidationError(_('Registration was done with your Facebook account'))
             elif user.logued_by == 'GO':
-                raise forms.ValidationError(_(u'Registration was done with your Google account'))
+                raise forms.ValidationError(_('Registration was done with your Google account'))
 
         return email
 
@@ -868,16 +833,114 @@ class RecoverUserForm(forms.Form):
 ### Contat Form ###
 class ContactForm(forms.Form):
     """
-    Base contact form for user inquiries.
-    
-    A comprehensive contact form implementation that:
-    - Validates input data
-    - Handles email sending
-    - Supports template-based messages
-    - Provides spam protection
-    
-    This form can be subclassed to create specialized contact forms
-    with additional fields or custom behavior.
+    The base contact form class from which all contact form classes
+    should inherit.
+
+    If you don't need any custom functionality, you can simply use
+    this form to provide basic contact functionality; it will collect
+    name, email address and message.
+
+    The ``ContactForm`` view included in this application knows how to
+    work with this form and can handle many types of subclasses as
+    well (see below for a discussion of the important points), so in
+    many cases it will be all that you need. If you'd like to use this
+    form or a subclass of it from one of your own views, just do the
+    following:
+
+    1. When you instantiate the form, pass the current ``HttpRequest``
+       object to the constructor as the keyword argument ``request``;
+       this is used internally by the base implementation, and also
+       made available so that subclasses can add functionality which
+       relies on inspecting the request.
+
+    2. To send the message, call the form's ``save`` method, which
+       accepts the keyword argument ``fail_silently`` and defaults it
+       to ``False``. This argument is passed directly to
+       ``send_mail``, and allows you to suppress or raise exceptions
+       as needed for debugging. The ``save`` method has no return
+       value.
+
+    Other than that, treat it like any other form; validity checks and
+    validated data are handled normally, through the ``is_valid``
+    method and the ``cleaned_data`` dictionary.
+
+
+    Base implementation
+    -------------------
+
+    Under the hood, this form uses a somewhat abstracted interface in
+    order to make it easier to subclass and add functionality. There
+    are several important attributes subclasses may want to look at
+    overriding, all of which will work (in the base implementation) as
+    either plain attributes or as callable methods:
+
+    * ``from_email`` -- used to get the address to use in the
+      ``From:`` header of the message. The base implementation returns
+      the value of the ``DEFAULT_FROM_EMAIL`` setting.
+
+    * ``message`` -- used to get the message body as a string. The
+      base implementation renders a template using the form's
+      ``cleaned_data`` dictionary as context.
+
+    * ``recipient_list`` -- used to generate the list of recipients
+      for the message. The base implementation returns the email
+      addresses specified in the ``MANAGERS`` setting.
+
+    * ``subject`` -- used to generate the subject line for the
+      message. The base implementation returns the string 'Message
+      sent through the web site', with the name of the current
+      ``Site`` prepended.
+
+    * ``template_name`` -- used by the base ``message`` method to
+      determine which template to use for rendering the
+      message. Default is ``contact_form/contact_form_email.txt``.
+
+    Internally, the base implementation ``_get_message_dict`` method
+    collects ``from_email``, ``message``, ``recipient_list`` and
+    ``subject`` into a dictionary, which the ``save`` method then
+    passes directly to ``send_mail`` as keyword arguments.
+
+    Particularly important is the ``message`` attribute, with its base
+    implementation as a method which renders a template; because it
+    passes ``cleaned_data`` as the template context, any additional
+    fields added by a subclass will automatically be available in the
+    template. This means that many useful subclasses can get by with
+    just adding a few fields and possibly overriding
+    ``template_name``.
+
+    Much useful functionality can be achieved in subclasses without
+    having to override much of the above; adding additional validation
+    methods works the same as any other form, and typically only a few
+    items -- ``recipient_list`` and ``subject_line``, for example,
+    need to be overridden to achieve customized behavior.
+
+
+    Other notes for subclassing
+    ---------------------------
+
+    Subclasses which want to inspect the current ``HttpRequest`` to
+    add functionality can access it via the attribute ``request``; the
+    base ``message`` takes advantage of this to use ``RequestContext``
+    when rendering its template. See the ``AkismetContactForm``
+    subclass in this file for an example of using the request to
+    perform additional validation.
+
+    Subclasses which override ``__init__`` need to accept ``*args``
+    and ``**kwargs``, and pass them via ``super`` in order to ensure
+    proper behavior.
+
+    Subclasses should be careful if overriding ``_get_message_dict``,
+    since that method **must** return a dictionary suitable for
+    passing directly to ``send_mail`` (unless ``save`` is overridden
+    as well).
+
+    Overriding ``save`` is relatively safe, though remember that code
+    which uses your form will expect ``save`` to accept the
+    ``fail_silently`` keyword argument. In the base implementation,
+    that argument defaults to ``False``, on the assumption that it's
+    far better to notice errors than to silently not send mail from
+    the contact form.
+
     """
     def __init__(self, data=None, files=None, request=None, *args, **kwargs):
         if request is None:
@@ -886,16 +949,16 @@ class ContactForm(forms.Form):
         self.request = request
 
     name = forms.CharField(max_length=100,
-                           label=_(u'Full Name'),
-                           widget=forms.TextInput(attrs={'placeholder': _(u'* Name'), 'class': "form-control s-form-v3__input"})
+                           label=_('Full Name'),
+                           widget=forms.TextInput(attrs={'placeholder': _('* Name'), 'class': "form-control s-form-v3__input"})
     )
     email = forms.EmailField(max_length=200,
-                             label=_(u'Email'),
-                             widget=forms.TextInput(attrs={'placeholder': _(u'* Email'), 'class': "form-control s-form-v3__input"}),
+                             label=_('Email'),
+                             widget=forms.TextInput(attrs={'placeholder': _('* Email'), 'class': "form-control s-form-v3__input"}),
     )
 
-    body = forms.CharField(widget=forms.Textarea(attrs={'placeholder': _(u'* Your message'), 'class': "form-control s-form-v3__input", 'rows': '5'}),
-                            label=u'Message')
+    body = forms.CharField(widget=forms.Textarea(attrs={'placeholder': _('* Your message'), 'class': "form-control s-form-v3__input", 'rows': '5'}),
+                            label='Message')
 
     from_email = settings.DEFAULT_FROM_EMAIL
 
@@ -993,13 +1056,13 @@ class EarlyAccessForm(ContactForm):
         self.fields['body'].required = False
 
     organization = forms.CharField(max_length=100,
-                           label=_(u'Organization'),
-                           widget=forms.TextInput(attrs={'placeholder': _(u'* Organization'), 'class': "form-control s-form-v3__input"})
+                           label=_('Organization'),
+                           widget=forms.TextInput(attrs={'placeholder': _('* Organization'), 'class': "form-control s-form-v3__input"})
     )
     
     position = forms.CharField(max_length=100,
-                           label=_(u'Position'),
-                           widget=forms.TextInput(attrs={'placeholder': _(u'* Position'), 'class': "form-control s-form-v3__input"})
+                           label=_('Position'),
+                           widget=forms.TextInput(attrs={'placeholder': _('* Position'), 'class': "form-control s-form-v3__input"})
     )
     
     subject_template_name = "mails/early_access_form_subject.txt"
