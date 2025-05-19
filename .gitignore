@@ -227,3 +227,4 @@ pip-log.txt
 environment.py
 filecontent.txt
 .vscodevenv/ 
+venv/ 
