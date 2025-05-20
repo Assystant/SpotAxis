@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 import mammoth
-import docx
+from docx import Document
 from pypdf import PdfReader
 import json
 from datetime import datetime
@@ -40,7 +40,7 @@ def get_file_text(path):
     content = ""
     # try:
     if path.split('.')[-1] == 'docx':
-        doc_file = docx.Document(path)
+        doc_file = Document(path)
         full_text = []
         for para in doc_file.paragraphs:
             full_text.append(para.text)
