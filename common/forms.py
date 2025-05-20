@@ -21,6 +21,10 @@ from TRM.settings import PHOTO_USER_DEFAULT
 from upload_logos.widgets import AjaxClearableFileInput
 
 def get_initial_country():
+    """
+    Retrieves the initial country object for India (ISO code 'IN').
+    Returns None if the country is not found.
+    """
     try:
         initial_country = Country.objects.get(iso2_code__exact='IN')
     except:
@@ -32,6 +36,10 @@ def get_initial_country():
 # Home Registration Form User Data #
 # ------------------------------------------------- #
 class UserPhotoForm(forms.ModelForm):
+    """
+    Form for handling user photo uploads with validation for image format and size.
+    Validates that uploaded images are in JPG/JPEG/PNG format and under 1MB.
+    """
     photo = forms.ImageField(widget=forms.FileInput(attrs={'class':"form-control text-center"}), required=False)
 
     def clean_photo(self):
@@ -67,6 +75,11 @@ class UserPhotoForm(forms.ModelForm):
 
 
 class SubdomainForm(forms.ModelForm):
+    """
+    Form for handling subdomain registration and validation.
+    Validates that the subdomain is unique, not using spotaxis.com domain,
+    and points to the correct IP address.
+    """
     cname = forms.CharField(
         widget = forms.TextInput(attrs={'placeholder':'career.yourdomain.com',
                                         'class':'form-control'
@@ -98,6 +111,11 @@ class SubdomainForm(forms.ModelForm):
         fields = ('cname',)
 
 class UserDataForm(forms.ModelForm):
+    """
+    Form for user registration and data collection.
+    Handles user registration with email verification, password confirmation,
+    and basic user information collection including name, email, and phone.
+    """
     email_repeat_msg = _('Confirm your email')
     password_repeat_msg = _('* Confirm your Password')
     username = forms.RegexField(
@@ -297,6 +315,11 @@ class UserDataForm(forms.ModelForm):
 # Start Form Basics User Data #
 # --------------------------------------------- #
 class BasicUserDataForm(forms.ModelForm):
+    """
+    Form for updating basic user information.
+    Handles updates to user's name, email, and phone number with optional
+    email change functionality based on settings.
+    """
     first_name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': _('Enter your name'),
                                       'class': 'form-control'}),
@@ -376,6 +399,11 @@ class BasicUserDataForm(forms.ModelForm):
 # Start Form for Change of Email #
 # ------------------------------------ #
 class ChangeEmailForm(forms.Form):
+    """
+    Form for handling email change requests.
+    Validates new email uniqueness and sends verification email
+    to the new address for confirmation.
+    """
     new_email = forms.EmailField(
         label=_('New Email'),
         widget=forms.TextInput(
@@ -427,6 +455,11 @@ class ChangeEmailForm(forms.Form):
 
 
 class RegisterEmailForm(forms.ModelForm):
+    """
+    Form for email-only registration.
+    Validates email uniqueness and handles registration
+    for users who don't have a registered email.
+    """
     # Form for email registration, when the user does not have any registered
     email = forms.EmailField(
         label=_('Email'),
@@ -454,6 +487,11 @@ class RegisterEmailForm(forms.ModelForm):
 # Start Form for Change of Password #
 # --------------------------------------- #
 class ChangePasswordForm(forms.Form):
+    """
+    Form for handling password changes.
+    Validates current password and ensures new password confirmation matches.
+    Includes security checks and password update functionality.
+    """
     actual_password_lbl = _('Actual Password')
     new_password_lbl = _('password new')
     confirm_new_password_lbl = _('Confirm new password')
@@ -511,6 +549,14 @@ class ChangePasswordForm(forms.Form):
 # Start Form for Address #
 # -------------------------------- #
 def get_states(country=None, search_vacancy=False):
+    """
+    Retrieves a list of states for a given country.
+    Args:
+        country: Country object or ID to get states for
+        search_vacancy: Boolean to determine if this is for vacancy search
+    Returns:
+        List of tuples containing state IDs and names
+    """
     choices = [('0', 'No choices')]
     if country:
         if type(country) == int or type(country) == int:
@@ -527,6 +573,13 @@ def get_states(country=None, search_vacancy=False):
 
 
 def get_municipals(state=None):
+    """
+    Retrieves a list of municipalities for a given state.
+    Args:
+        state: State object or ID to get municipalities for
+    Returns:
+        List of tuples containing municipal IDs and names
+    """
     choices = [('0', 'Select a state first')]
     if state:
         if type(state) == int or type(state) == int:
@@ -540,6 +593,11 @@ def get_municipals(state=None):
 
 
 class AdressForm(forms.ModelForm):
+    """
+    Form for handling address information.
+    Manages address data including state, city, street, and postal code
+    with dynamic state and municipal selection based on country.
+    """
     initial_country = get_initial_country()
     # country = forms.ModelChoiceField(
     #     queryset=countries(),
@@ -660,6 +718,11 @@ class AdressForm(forms.ModelForm):
 
 # Reset Password
 class CustomPasswordResetForm(forms.Form):
+    """
+    Form for handling password reset requests.
+    Validates user email, checks authentication method,
+    and sends password reset instructions.
+    """
     email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _('* Email'), 'class': "form-control s-form-v4__input"}))
 
     def clean_email(self):
@@ -711,6 +774,11 @@ class CustomPasswordResetForm(forms.Form):
 
 
 class RecoverUserForm(forms.Form):
+    """
+    Form for handling username recovery requests.
+    Validates user email and authentication method,
+    sends recovery instructions to verified email.
+    """
     email = forms.EmailField(label=_("Email"), max_length=254, widget=forms.TextInput(attrs={'placeholder': _('* Email'), 'class': "form-control s-form-v4__input"}))
 
     def clean_email(self):
