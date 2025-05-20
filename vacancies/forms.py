@@ -21,11 +21,32 @@ from vacancies.models import *
 
 
 def diff_month(d1, d2):
+    """
+    Calculates the number of full months between two dates.
+
+    Args:
+        d1 (date): The more recent date.
+        d2 (date): The earlier date.
+
+    Returns:
+        int: The number of months between d1 and d2.
+    """
     return (d1.year - d2.year)*12 + d1.month - d2.month
 
 select_text = _('Select' + '...')
 
 def get_industries(search = False):
+    """
+    Retrieves a list of industry choices for use in forms or filters.
+
+    Args:
+        search (bool): If True, includes an 'All' option instead of the default 
+                       'Select...' prompt. Defaults to False.
+
+    Returns:
+        list of tuple: A list of (value, label) pairs for industries.
+                       Includes a default option followed by all available industries.
+    """
     choices = [('0', _('No applications'))]
     try:
         industries = Industry.objects.all()
@@ -41,6 +62,12 @@ def get_industries(search = False):
     return choices
 
 def get_notice_period():
+    """
+    Returns a predefined list of notice period options.
+
+    Returns:
+        list of tuple: A list of (value, label) pairs representing notice periods.
+    """
     choices = [('0',"Any"),('1',"Immediate"),('2',"1 Week"),('3',"2 Weeks"),('4',"3 Weeks"),('5',"1 Month"),('6',"2 Months"),('7',"3 Months"),('8',"4 Months"),('9',"5 Months"),('10',"6 Months")]
     return choices
 
@@ -69,6 +96,13 @@ def get_notice_period():
 
 
 def get_degrees():
+    """
+    Retrieves a list of available academic degrees.
+
+    Returns:
+        list of list: A list of [id, name] pairs for each degree.
+                      If retrieval fails, returns an empty list.
+    """
     choices = []
     try:
         degrees = Degree.objects.all()
@@ -80,6 +114,13 @@ def get_degrees():
 
 
 def get_employment_types():
+    """
+    Retrieves a list of available employment types.
+
+    Returns:
+        list of list: A list of [id, name] pairs for each employment type.
+                      If retrieval fails, returns an empty list.
+    """
     # choices = [('-1', _('Anyone'))]
     choices = []
     try:
@@ -92,12 +133,60 @@ def get_employment_types():
 
 
 def get_email(email=None):
+    """
+    Returns a list of email choices for form selection.
+
+    Args:
+        email (str, optional): A default email address to include as the first option. Defaults to None.
+
+    Returns:
+        list of tuple: A list containing a tuple of the default email and a choice for "Other".
+    """
     choices = [(False, email), (True, _('Other'))]
     return choices
 
 
 class VacancyForm(forms.ModelForm):
     """ Form creating vacancies """
+    """
+    This form handles the full set of fields required to publish a job vacancy,
+    including job role, description, job type, salary, location, industry,
+    qualifications, and various configurations related to publishing and applications.
+
+    Fields:
+        - employment (CharField): Job role title.
+        - description (CharField): Description of the job role using a rich text editor.
+        - employmentType (ChoiceField): Type of employment (e.g., full-time, part-time).
+        - salaryType (ModelChoiceField): Type of salary.
+        - min_salary / max_salary (CharField): Salary range.
+        - nationality (ModelChoiceField): Required nationality for the position.
+        - state / city (CharField): Location information.
+        - currency (ModelChoiceField): Currency for salary.
+        - gender (ModelChoiceField): Preferred gender, optional.
+        - degree (ModelChoiceField): Minimum required degree, optional.
+        - industry (ModelChoiceField): Related industry.
+        - function (CharField): Department or functional area.
+        - notice_period (ChoiceField): Maximum accepted notice period.
+        - skills (CharField): Required skills, comma-separated.
+        - minEmploymentExperience / maxEmploymentExperience (ModelChoiceField): Experience range.
+        - confidential (BooleanField): Hide company contact details.
+        - data_contact (BooleanField): Include contact details with candidate matches.
+        - questions (BooleanField): Allow candidates to ask questions.
+        - another_email (ChoiceField): Email field or option to use a different one.
+        - email (EmailField): Email to contact.
+        - postulate (BooleanField): Allow applications for this vacancy.
+        - pub_after (BooleanField): Enable future publication date.
+        - pub_date / unpub_date (CharField): Publish and unpublish dates.
+        - min_age / max_age (ChoiceField): Age range for candidates.
+        - hiring_date (DateField): Expected joining date.
+        - vacancies_number (IntegerField): Number of openings.
+        - public_cvs (BooleanField): Allow public CVs for applicants.
+        - ban (BooleanField): Exclude archived candidates.
+        - ban_period (ChoiceField): Duration for which banned candidates stay banned.
+        - ban_all (ChoiceField): Whether to apply ban to all candidates or current.
+        - has_custom_form (BooleanField): Attach a custom form to the vacancy.
+        - form_template (ModelChoiceField): Template to use for custom form.
+    """
     initial_country = get_initial_country()
     countries = Country.objects.filter(~Q(continent='AF') & ~Q(continent='AN') & ~Q(continent='AS') & ~Q(continent='OC'))
     countries = Country.objects.all()
@@ -390,6 +479,20 @@ class VacancyForm(forms.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
+        """
+        Initializes the form with dynamic behavior based on the provided kwargs.
+
+        Keyword Args:
+            industry_selected (int): ID of the selected industry.
+            company_email (str): The company's email address.
+            another_email (bool or str): Whether to require an alternative email.
+            update (bool): Whether this is an update form.
+            company (Company): The company object to check service features.
+            industry (int): Initial value for the industry field.
+            state (str): Initial value for the state field.
+            city (str): Initial value for the city field.
+            nationality (int): Initial value for the nationality field.
+        """
         # state_selected = kwargs.pop('state_selected', None)
         industry_selected = kwargs.pop('industry_selected', None)
         company_email = kwargs.pop('company_email', None)
@@ -442,12 +545,27 @@ class VacancyForm(forms.ModelForm):
             self.fields['form_template'].queryset = company.template_set.all()
 
     def clean_form_template(self):
+        """
+        Validates the custom form template field based on company service settings.
+
+        Returns:
+            form_template instance or None
+        """
 
         if not self.data.get('has_custom_form') or not self.jm_template:
             return None
         return self.cleaned_data.get('form_template')
 
     def clean_maxEmploymentExperience(self):
+        """
+        Validates the maximum experience field ensuring it's greater than minimum experience.
+
+        Raises:
+            ValidationError: If maximum experience is not properly set.
+        
+        Returns:
+            maxExperience instance
+        """
         minExperience = self.cleaned_data.get('minEmploymentExperience',None)
         maxExperience = self.cleaned_data.get('maxEmploymentExperience',None)
 
@@ -464,6 +582,15 @@ class VacancyForm(forms.ModelForm):
 
 
     def clean_employmentType(self):
+        """
+        Validates and returns the selected employment type.
+
+        Raises:
+            ValidationError: If employment type is invalid.
+
+        Returns:
+            Employment_Type instance
+        """
         try:
             employmentType_id = int(self.cleaned_data.get('employmentType'))
             if employmentType_id == -1:
@@ -501,6 +628,15 @@ class VacancyForm(forms.ModelForm):
         #     return industry
 
     def clean_area(self):
+        """
+        Validates the area based on the selected industry.
+
+        Raises:
+            ValidationError: If area is not selected or invalid.
+
+        Returns:
+            Area instance
+        """
         industry = self.cleaned_data.get('industry')
         area_id = int(self.cleaned_data.get('area'))
         error = _('Area invalid')
@@ -524,6 +660,15 @@ class VacancyForm(forms.ModelForm):
         return area
 
     def clean_pub_date(self):
+        """
+        Validates the publication start date for job posting.
+
+        Raises:
+            ValidationError: If the date is not in the future or missing.
+
+        Returns:
+            datetime.date
+        """
         import pdb
         pub_after = self.cleaned_data['pub_after']
         pub_date = date.today()
@@ -544,6 +689,15 @@ class VacancyForm(forms.ModelForm):
                 return None
 
     def clean_unpub_date(self):
+        """
+        Validates the publication end date for job posting.
+
+        Raises:
+            ValidationError: If unpublishing date is not valid.
+
+        Returns:
+            datetime.date
+        """
         pub_after = self.cleaned_data['pub_after']
         unpub_date = date.today() + timedelta(days=29)
         if self.jm_duration and pub_after:
@@ -607,6 +761,15 @@ class VacancyForm(forms.ModelForm):
         #     return municipal
 
     def clean_currency(self):
+        """
+        Validates the currency field if salary type requires it.
+
+        Raises:
+            ValidationError: If required currency is missing.
+
+        Returns:
+            Currency instance or None
+        """
         salaryType = self.cleaned_data.get('salaryType')
         dsalaryType = self.data['salaryType']
         if salaryType and salaryType == '6':
@@ -626,6 +789,15 @@ class VacancyForm(forms.ModelForm):
         return currency        
 
     def clean_min_salary(self):
+        """
+        Validates minimum salary if salary type is fixed.
+
+        Raises:
+            ValidationError: If minimum salary is required and missing.
+
+        Returns:
+            str or None
+        """
         salaryType = self.cleaned_data.get('salaryType')
         #     print(salaryType.codename)
         try:
@@ -656,6 +828,12 @@ class VacancyForm(forms.ModelForm):
         #     return min_salary
 
     def clean_max_salary(self):
+        """
+        Returns the maximum salary value.
+
+        Returns:
+            str or None
+        """
         #     salaryType = self.cleaned_data.get('salaryType')
         #     print(salaryType.codename)
         #     if salaryType and salaryType.codename == 'fixed':
@@ -679,6 +857,15 @@ class VacancyForm(forms.ModelForm):
         return max_salary
 
     def clean_min_age(self):
+        """
+        Validates minimum age ensuring it's within accepted range and not greater than max age.
+
+        Raises:
+            ValidationError: If age is outside the range or inconsistent.
+
+        Returns:
+            int or None
+        """
 
         # try:
         min_age = int(1 if self.cleaned_data.get('min_age') is None else self.cleaned_data.get('min_age'))
@@ -701,6 +888,15 @@ class VacancyForm(forms.ModelForm):
         return self.cleaned_data.get('min_age')
 
     def clean_max_age(self):
+        """
+        Validates maximum age ensuring it's within accepted range and not less than min age.
+
+        Raises:
+            ValidationError: If age is outside the range.
+
+        Returns:
+            int or None
+        """
         # try:
         min_age = int(1 if self.data['min_age'] is None else self.data['min_age'])
         # except:
@@ -720,6 +916,15 @@ class VacancyForm(forms.ModelForm):
         return max_age
 
     def clean_hiring_date(self):
+        """
+        Validates that the hiring date is in the future.
+
+        Raises:
+            ValidationError: If date is in the past or today.
+
+        Returns:
+            datetime.date or None
+        """
         hiring_date = self.cleaned_data.get('hiring_date')
         if hiring_date:
             if hiring_date <= date.today():
@@ -729,6 +934,15 @@ class VacancyForm(forms.ModelForm):
         return hiring_date
 
     def clean_vacancies_number(self):
+        """
+        Validates the number of vacancies is a valid integer.
+
+        Raises:
+            ValidationError: If input is not a valid integer.
+
+        Returns:
+            int
+        """
         try:
             vacancies_number = (None if self.data['vacancies_number'] == '' else int(self.data['vacancies_number']))
         except:
@@ -742,6 +956,12 @@ class VacancyForm(forms.ModelForm):
 
 # Start Search Vacancies Area
 def get_vacancy_pubdates_search():
+    """
+    Returns a list of choices for publication date filtering in vacancy search.
+
+    Returns:
+    list of tuples: Each tuple represents a (value, label) pair for the form dropdown.
+    """
     choices = [('0', 'No applications')]
     vacancy_pubdates = PubDate_Search.objects.all()
     if vacancy_pubdates.count() > 0:
@@ -752,6 +972,25 @@ def get_vacancy_pubdates_search():
 
 
 class BasicSearchVacancyForm(forms.Form):
+    """
+    Form for basic vacancy search by criteria like state, industry, publication date, etc.
+
+    Fields:
+        - state (ChoiceField): Selectable state, validated against the initial country.
+        - industry (ChoiceField): Selectable industry list.
+        - vacancyPubDateSearch (ModelChoiceField): Filter by publication date.
+        - search (CharField): Keywords to filter vacancies.
+        - gender (ModelChoiceField): Candidate's gender.
+        - degree (ModelChoiceField): Candidate's level of education.
+
+    Methods:
+        - __init__: Handles dynamic behavior like selected industry.
+        - clean_state: Validates that selected state exists in the initial country.
+        - clean_industry: Validates selected industry.
+        - clean_vacancyPubDateSearch: Validates publication date.
+        - clean_gender: Validates gender.
+        - clean_degree: Validates degree.
+    """
     initial_country = get_initial_country()
 
     countries = Country.objects.filter(~Q(continent='AF') & ~Q(continent='AN') & ~Q(continent='AS') & ~Q(continent='OC'))
@@ -800,6 +1039,18 @@ class BasicSearchVacancyForm(forms.Form):
     )
 
     def __init__(self, vacancy=None, *args, **kwargs):
+    """
+    Initialize the form with optional vacancy and industry_selected parameters.
+
+    Args:
+        vacancy (Vacancy, optional): A Vacancy instance for context (default is None).
+        *args: Variable length argument list for parent form.
+        **kwargs: Keyword arguments; may include 'industry_selected' to preselect an industry.
+
+    Notes:
+        The 'industry_selected' kwarg is popped out and can be used to filter form fields.
+        Calls the superclass initializer with remaining args and kwargs.
+    """
         industry_selected = kwargs.pop('industry_selected', None)
         super(BasicSearchVacancyForm, self).__init__(*args, **kwargs)
 
@@ -807,6 +1058,15 @@ class BasicSearchVacancyForm(forms.Form):
         #     self.fields['area'].choices = get_areas(industry_selected)
 
     def clean_state(self):
+    """
+    Validate the 'state' field to ensure the selected state belongs to the initial country.
+
+    Returns:
+        State instance or None if no state selected.
+
+    Raises:
+        forms.ValidationError: If the selected state is invalid or does not exist.
+    """
         state_id = int(self.data['state'])
         if state_id < 0:
             return None
@@ -827,6 +1087,15 @@ class BasicSearchVacancyForm(forms.Form):
         return state
 
     def clean_industry(self):
+    """
+    Validate the 'industry' field to ensure the selected industry exists in the choices.
+
+    Returns:
+        Industry instance or None if no industry selected.
+
+    Raises:
+        forms.ValidationError: If the selected industry is invalid or does not exist.
+    """
         industry_id = int(self.data['industry'])
         error = ('Industry invalid')
         if industry_id == -1:
@@ -873,6 +1142,15 @@ class BasicSearchVacancyForm(forms.Form):
     #     return area
 
     def clean_vacancyPubDateSearch(self):
+    """
+    Validate the 'vacancyPubDateSearch' field to ensure the selected publication date is valid.
+
+    Returns:
+        PubDate_Search instance or None.
+
+    Raises:
+        forms.ValidationError: If the publication date is not valid.
+    """
         try:
             pubDate = self.cleaned_data.get('vacancyPubDateSearch')
         except PubDate_Search.DoesNotExist:
@@ -880,6 +1158,15 @@ class BasicSearchVacancyForm(forms.Form):
         return pubDate
 
     def clean_gender(self):
+    """
+    Validate the 'gender' field to ensure the selected gender exists.
+
+    Returns:
+        Gender instance or None.
+
+    Raises:
+        forms.ValidationError: If the selected gender is not valid.
+    """
         try:
             gender = self.cleaned_data.get('gender')
         except Gender.DoesNotExist:
@@ -887,6 +1174,15 @@ class BasicSearchVacancyForm(forms.Form):
         return gender
 
     def clean_degree(self):
+    """
+    Validate the 'degree' field to ensure the selected education level exists.
+
+    Returns:
+        Degree instance or None.
+
+    Raises:
+        forms.ValidationError: If the selected degree is not valid.
+    """
         try:
             degree = self.cleaned_data.get('degree')
         except Degree.DoesNotExist:
@@ -895,6 +1191,19 @@ class BasicSearchVacancyForm(forms.Form):
 
 
 class QuestionVacancyForm(forms.ModelForm):
+    """
+    Form for users to submit a question or comment regarding a vacancy.
+
+    Fields:
+        - question (CharField): Textarea input for a user's question (min 20, max 200 chars).
+
+    Methods:
+        - save: Creates a Question instance linked to the vacancy and user.
+
+    Meta:
+        model: Question
+        fields: ('question',)
+    """
     question = forms.CharField(
         widget=forms.Textarea(attrs={'placeholder': _('Enter your question or comment'),
                                      'class': "form-control",
@@ -906,6 +1215,17 @@ class QuestionVacancyForm(forms.ModelForm):
     )
 
     def save(self, vacancy=None, user=None, question=None):
+    """
+    Create and save a new Question instance with the given vacancy, user, and question text.
+
+    Args:
+        vacancy (Vacancy, optional): The Vacancy instance related to the question.
+        user (User, optional): The User instance who asked the question.
+        question (str, optional): The text content of the question.
+
+    Returns:
+        Question: The newly created Question object.
+    """
         Question.objects.create(vacancy=vacancy, user=user, question=question)
 
     class Meta:
@@ -914,6 +1234,21 @@ class QuestionVacancyForm(forms.ModelForm):
 
 
 class VacancyFileForm(forms.ModelForm):
+    """
+    Form for uploading multiple supporting files to a vacancy application.
+
+    Fields:
+        - file (FileField): Allows upload of up to 3 files with specific formats.
+
+    Methods:
+        - validate_number_files(files): Ensures file count does not exceed maximum.
+        - clean_file: Validates size, extension, and sanitizes filename.
+        - save: Saves file instance and associates it with the vacancy and random number.
+
+    Meta:
+        model: Vacancy_Files
+        fields: ['file']
+    """
     max_megas = 5
     max_files = 3
     file = forms.FileField(
@@ -936,12 +1271,34 @@ class VacancyFileForm(forms.ModelForm):
     )
 
     def validate_number_files(self, files):
+    """
+    Validate that the number of uploaded files does not exceed the allowed maximum.
+
+    Args:
+        files (int): The number of files being uploaded.
+
+    Adds a form error if the number of files exceeds the maximum allowed.
+    """
         if files > self.max_files:
             msg = _('You can only upload upto %s files') % self.max_files
             self.add_error('file', msg)
         pass
 
     def clean_file(self):
+    """
+    Clean and validate the uploaded file.
+
+    Checks file size against the maximum allowed size,
+    validates the file extension,
+    and normalizes the filename by removing accents and special characters.
+
+    Returns:
+        File: The cleaned file object if valid, otherwise None.
+
+    Raises:
+        ValidationError: If the file size exceeds the allowed limit or
+                         if the file extension is not supported.
+    """
         file = self.cleaned_data['file']
 
         if file:
@@ -964,6 +1321,17 @@ class VacancyFileForm(forms.ModelForm):
             return None
 
     def save(self, vacancy=None, random_number=None, commit=True):
+    """
+    Save the VacancyFileForm instance with optional vacancy and random number assignments.
+
+    Args:
+        vacancy (Vacancy, optional): The Vacancy instance to associate with the file.
+        random_number (int or str, optional): A random number to assign to the file instance.
+        commit (bool): Whether to commit the save operation immediately.
+
+    Returns:
+        Vacancy_Files: The saved Vacancy_Files model instance.
+    """
         instance = super(VacancyFileForm, self).save(commit=False)
         instance.vacancy = vacancy
         instance.random_number = random_number
@@ -977,6 +1345,22 @@ class VacancyFileForm(forms.ModelForm):
 
 
 class Public_FilesForm(forms.Form):
+    """
+    Public form for job applicants to submit their name, email, brief description, and CV.
+
+    Fields:
+        - full_name (CharField): Applicant's full name.
+        - email (EmailField): Email, checked for existing account or company bans.
+        - description (CharField): Optional candidate introduction (max 500 chars).
+        - file (FileField): Required CV upload (PDF/DOC/DOCX).
+
+    Methods:
+        - __init__: Accepts vacancy ID for use in validation.
+        - validate_number_files(files): Ensures file count within allowed limit.
+        - clean_file: Validates file size, extension, and sanitizes filename.
+        - clean_email: Validates against existing users and ban logic.
+        - save: Raises error; saving is handled externally.
+    """
     max_megas = 5
     max_files = 1
     full_name = forms.CharField(
@@ -1046,16 +1430,46 @@ class Public_FilesForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+    """
+    Initialize the Public_FilesForm.
+
+    Extracts 'v_id' from kwargs to set the vacancy ID associated with the form.
+
+    Args:
+        *args: Variable length argument list.
+        **kwargs: Keyword arguments containing 'v_id' for vacancy ID.
+    """
         self.vacancy_id = kwargs.pop('v_id', None)
         super(Public_FilesForm, self).__init__(*args, **kwargs)
 
     def validate_number_files(self, files):
+    """
+    Validate the number of files uploaded against the maximum allowed.
+
+    Args:
+        files (int): The number of files being uploaded.
+
+    Adds an error to the form if the file count exceeds the maximum allowed.
+    """
         if files > self.max_files:
             msg = _('You can only upload upto %s files') % self.max_files
             self.add_error('file', msg)
         pass
 
     def clean_file(self):
+    """
+    Clean and validate the uploaded file.
+
+    Checks if the file size exceeds the maximum allowed size.
+    Validates the file extension against allowed types (doc, docx, pdf).
+    Normalizes the file name by removing accents and special characters.
+
+    Returns:
+        File: The cleaned file object if valid, otherwise None.
+
+    Raises:
+        ValidationError: If the file size is too large or if the file type is unsupported.
+    """
         file = self.cleaned_data['file']
         if file:
             if file.size > self.max_megas * 1024000:
@@ -1077,6 +1491,18 @@ class Public_FilesForm(forms.Form):
             return None
 
     def clean_email(self):
+    """
+    Validate the email field.
+
+    Checks if an account with the email already exists.
+    Verifies if the email is banned from applying to the company or specific vacancy functions.
+
+    Returns:
+        str: The validated email address.
+
+    Raises:
+        ValidationError: If the email belongs to an existing account or is banned by the company.
+    """
         e_mail = self.cleaned_data['email']
         user = User.objects.filter(email = e_mail)
         if user:
@@ -1102,10 +1528,28 @@ class Public_FilesForm(forms.Form):
     #     fields = ['vacancy','first_name','candidate.public_email','description','file']
 
     def save(self):
+    """
+    Raise an error to prevent saving via this method.
+
+    Raises:
+        ValueError: Always raised to indicate saving is not supported through this form method.
+    """
         raise ValueError()
 
 
 class Public_Files_OnlyForm(forms.Form):
+    """
+    Form for uploading a CV/portfolio file without requiring other applicant details.
+
+    Fields:
+        - file (FileField): Required upload in Word or PDF format.
+
+    Methods:
+        - __init__: Accepts vacancy ID.
+        - validate_number_files(files): Ensures file count does not exceed maximum.
+        - clean_file: Validates file size, extension, and filename sanitization.
+        - save: Raises error; intended to be overridden or handled externally.
+    """
     max_megas = 5
     max_files = 1
     file = forms.FileField(
@@ -1123,16 +1567,46 @@ class Public_Files_OnlyForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+    """
+    Initialize the Public_Files_OnlyForm.
+
+    Extracts 'v_id' from kwargs to set the vacancy ID associated with the form.
+
+    Args:
+        *args: Variable length argument list.
+        **kwargs: Keyword arguments containing 'v_id' for vacancy ID.
+    """
         self.vacancy_id = kwargs.pop('v_id', None)
         super(Public_Files_OnlyForm, self).__init__(*args, **kwargs)
 
     def validate_number_files(self, files):
+    """
+    Validate the number of files uploaded against the maximum allowed.
+
+    Args:
+        files (int): The number of files being uploaded.
+
+    Adds an error to the form if the file count exceeds the maximum allowed.
+    """
         if files > self.max_files:
             msg = _('You can only upload upto %s files') % self.max_files
             self.add_error('file', msg)
         pass
 
     def clean_file(self):
+    """
+    Clean and validate the uploaded file.
+
+    Checks if the file size exceeds the maximum allowed size.
+    Validates the file extension against allowed types (doc, docx, pdf).
+    Normalizes the file name by removing accents and special characters.
+
+    Returns:
+        File: The cleaned file object if valid, otherwise None.
+
+    Raises:
+        ValidationError: If the file size is too large or if the file type is unsupported.
+    """
         file = self.cleaned_data['file']
         if file:
             if file.size > self.max_megas * 1024000:
@@ -1154,5 +1628,11 @@ class Public_Files_OnlyForm(forms.Form):
             return None
 
     def save(self):
+    """
+    Prevent saving of the form instance through this method.
+
+    Raises:
+        ValueError: Always raised to indicate saving is not supported via this form.
+    """
         raise ValueError()
 
