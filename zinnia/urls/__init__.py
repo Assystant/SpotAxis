@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from django.conf.urls import include
 from django.conf.urls import url
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy as _
 
 from zinnia.settings import TRANSLATED_URLS
 

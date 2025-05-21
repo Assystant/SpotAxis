@@ -20,7 +20,7 @@ from django.core.urlresolvers import resolve
 from django.utils import six
 from django.utils import timezone
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 import django_comments as comments
 

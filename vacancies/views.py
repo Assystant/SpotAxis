@@ -24,7 +24,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.timezone import utc
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django_xhtml2pdf.utils import render_to_pdf_response
 from hashids import Hashids

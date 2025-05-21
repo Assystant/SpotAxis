@@ -8,7 +8,7 @@ from django.core import validators
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.fields import CharField
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from hashids import Hashids
 from localflavor.us.models import PhoneNumberField
 from TRM import settings

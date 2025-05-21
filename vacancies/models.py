@@ -11,7 +11,7 @@ from datetime import date, timedelta
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q, Sum
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from TRM import settings
 from utils import get_file_content, get_file_text, tagcloud
 from six.moves import range

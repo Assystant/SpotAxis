@@ -19,7 +19,7 @@ from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_text
 from django.utils.feedgenerator import Atom1Feed
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 import django_comments as comments
 

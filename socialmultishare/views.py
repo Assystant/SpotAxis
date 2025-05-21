@@ -23,7 +23,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404, render
 from django.template import RequestContext
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from .models import socialmultishareoauth as social_oauth
 from django.contrib.auth import get_user
 from vacancies.models import Vacancy

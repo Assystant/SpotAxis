@@ -5,7 +5,7 @@ from __future__ import print_function
 from django import forms
 from django.db.models import Q
 from django.http import Http404
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from localflavor.us.forms import USPhoneNumberField
 from candidates.models import Academic_Area, Academic_Status, get_degrees, Language
 from common.forms import get_states, get_initial_country
