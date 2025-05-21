@@ -36,6 +36,7 @@ urlpatterns = [
 
     # API URLs
     url(r'^api/common/', include('common.api.urls')),
+    url(r'^api/activities/',include('activities.api.urls')),
 
     # Resources
     url(r'resources/comments/', include('django_comments.urls')),
