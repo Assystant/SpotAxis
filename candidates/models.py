@@ -21,7 +21,14 @@ candidate = _('Candidate')
 
 
 def get_initial_date():
-    """ Get date for 1/1 21 years ago """
+    """
+    Get a date object representing January 1st, 21 years ago from today.
+    
+    This is used as a reference initial date, typically for age or experience calculations.
+    
+    Returns:
+        date: A date object for January 1st of the year 21 years before the current year.
+    """
     year = (date.today() - relativedelta(years=21)).year
     initial_date = date(year, 1, 1)
     return initial_date
@@ -36,6 +43,7 @@ PROFILE_SOURCE = (
 )
 
 class Candidate(models.Model):
+    """Model representing a Candidate's profile in the recruitment system."""
     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_('User'), null=True, blank=True, default=None, on_delete=models.CASCADE)
     public_email = models.EmailField(default=None, null=True, blank=True)
     public_photo = models.ImageField(verbose_name=_('Photo'), upload_to='photos/', default=None, blank=True, null=True, max_length=200)
@@ -72,11 +80,14 @@ class Candidate(models.Model):
     profile_source = models.CharField(_('Profile Source'), choices=PROFILE_SOURCE, max_length=2, null=True, blank=True, default=None)
 
     def get_fullname(self):
+        """Get the full name combining first name and last name.
+        If both are empty, return the associated user object."""
         if not self.first_name and not self.last_name:
             return self.user
         return '%s %s' % (self.first_name,self.last_name)
 
     def full_name(self):
+        """Return the full name with leading/trailing whitespace stripped."""
         name=""
         if self.first_name.strip():
             name = name + self.first_name.strip()
@@ -85,6 +96,7 @@ class Candidate(models.Model):
         return name.strip()
 
     def get_address(self):
+        """Constructs a string representing the address from city, state, and nationality."""
         address=""
         if self.city:
             address = self.city + ', '
@@ -97,9 +109,11 @@ class Candidate(models.Model):
         return '%s' % (address)
 
     def __unicode__(self):
-        return '%s %s' % (self.first_name, self.last_name)
+        """Unicode string representation of the candidate."""
+        return u'%s %s' % (self.first_name, self.last_name)
 
     def role(self):
+        """Get a comma-separated string of current employment roles based on expertise marked as present."""
         expertises = self.expertise_set.all()
         current_role=""
         for expertise in expertises:
@@ -109,6 +123,7 @@ class Candidate(models.Model):
         return current_role
 
     def total_experience(self):
+        """Calculate total experience duration from expertise records."""
         expertises = self.expertise_set.all()
         total = timedelta(0)
         for expertise in expertises:
@@ -123,6 +138,7 @@ class Candidate(models.Model):
             return str(round(total.days/365.245,2)) + ' years'
 
     def education(self):
+        """Concatenate all academic course names separated by commas."""
         academics = self.academic_set.all()
         academic_history = ""
         for academic in academics:
@@ -130,7 +146,7 @@ class Candidate(models.Model):
                 academic_history = academic_history + academic.course_name + ', '
         academic_history = academic_history.strip(', ')
         return academic_history
-
+    """The following methods return form instances for editing various parts of Candidate's profile."""
     def get_profile_form(self):
         from candidates.forms import CandidateForm
         return CandidateForm(instance = self)
@@ -193,11 +209,18 @@ class Candidate(models.Model):
         return Academic.objects.filter(Q(candidate__in=profiles) | Q(candidate=self))
 
     def all_expertise_with_conflicts(self):
+        """Retrieve all Expertise entries associated with this candidate or any conflicted profiles."""
         from candidates.models import Expertise
         profiles = self.conflicted_profiles.all()
         return Expertise.objects.filter(Q(candidate__in=profiles) | Q(candidate=self))
 
     def find_conflicts(self):
+        """
+        Find conflicts between this profile and conflicted profiles using external conflict management.
+
+        Returns:
+            dict: Dictionary containing conflicts categorized by keys such as 'education' and 'experience'.
+        """
         conflicts = {}
         from resume_parser.conflict_management_system import get_conflicts
         conflicted_profiles = self.conflicted_profiles.all()
@@ -393,6 +416,7 @@ class Academic(models.Model):
             # return academic_name
 
     def period(self):
+        """Returns a string representation of the education period."""
         result = ""
         if self.start_date:
             result = str(self.start_date)
@@ -407,6 +431,7 @@ class Academic(models.Model):
         return result
 
     def course_title(self):
+        """Returns the title of the course including area of study if available."""
         title=""
         if self.course_name:
             title = self.course_name
@@ -419,10 +444,12 @@ class Academic(models.Model):
         return title
 
     def get_form(self):
+        """Imports and returns an instance of the AcademicForm initialized with this model instance."""
         from candidates.forms import AcademicForm
         return AcademicForm(instance=self)
 
     def __unicode__(self):
+        """Returns a string representation of the Academic object."""
         return self.course_name
         # academic_name = ''
         # if self.degree:
@@ -446,8 +473,15 @@ class Academic(models.Model):
 ## Start of Section Languages ##
 
 class Language(models.Model):
-    """ Catalogue of Languages """
-    name = models.CharField(verbose_name=_('Language'), max_length=20, blank=True, null=True, default=True)
+    """
+    Model representing a language catalog.
+
+    Attributes:
+        name (str): Name of the language.
+        codename (str): Short code identifier for the language.
+        order (int): Order to sort languages by, default is 100.
+    """
+    name = models.CharField(verbose_name=_(u'Language'), max_length=20, blank=True, null=True, default=True)
     codename = models.CharField(max_length=10, blank=True, null=True, default=None)
     order = models.PositiveSmallIntegerField(null=True, blank=True, default=100)
 
@@ -461,8 +495,14 @@ class Language(models.Model):
 
 
 class Language_Level(models.Model):
-    """ Language level management (Basic, Medium, Advanced, Native) """
-    name = models.CharField(verbose_name=_('Level'), max_length=15, blank=True, null=True, default=True)
+    """
+    Model representing language proficiency levels.
+
+    Attributes:
+        name (str): The name of the proficiency level (e.g., Basic, Medium,Advanced).
+        codename (str): A short identifier for the proficiency level.
+    """
+    name = models.CharField(verbose_name=_(u'Level'), max_length=15, blank=True, null=True, default=True)
     codename = models.CharField(max_length=15, blank=True, null=True, default=True)
 
     def __unicode__(self):
@@ -483,10 +523,20 @@ class CV_Language(models.Model):
     speak = models.BooleanField(verbose_name=_('Can Speak?'), default=False)
 
     def get_form(self):
+        """Imports and returns a CvLanguageForm instance initialized with this CV_Language instance."""
         from candidates.forms import CvLanguageForm
         return CvLanguageForm(instance=self)
 
     def level(self):
+        """
+        Returns a string describing the candidate's language skills.
+
+        Concatenates "Read", "Write", and/or "Speak" based on the boolean fields.
+
+        Returns:
+            str: Comma-separated list of language skills the candidate possesses.
+                Returns an empty string if no skills are marked.
+        """
         lvl = ""
         # count=0
         if self.read:
@@ -506,6 +556,7 @@ class CV_Language(models.Model):
         #     return "Not Mentioned"
 
     def __unicode__(self):
+        """ Returns the string representation of the language."""
         return '%s' % self.language
 
     class Meta:
@@ -520,6 +571,14 @@ class CV_Language(models.Model):
 ## Start of Section Training ##
 
 class Training(models.Model):
+    """
+    Model representing a training record associated with a candidate.
+
+    Attributes:
+        candidate (Candidate): Candidate related to this training.
+        name (str): Name of the training program.
+        description (str): Detailed description of the training.
+    """
     candidate = models.ForeignKey(Candidate,verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.CASCADE)
     name = models.CharField(_('Name'), max_length=50)
     description = models.TextField()
@@ -540,6 +599,14 @@ class Training(models.Model):
 ## Start of Section Certificate ##
 
 class Certificate(models.Model):
+    """
+    Model representing a certificate associated with a candidate.
+
+    Attributes:
+        candidate (Candidate): Candidate who earned the certificate.
+        name (str): Name of the certificate.
+        description (str): Description or details about the certificate.
+    """
     candidate = models.ForeignKey(Candidate,verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     name = models.CharField(_('Name'), max_length=50)
     description = models.TextField()
@@ -560,6 +627,14 @@ class Certificate(models.Model):
 ## Start of Section Project ##
 
 class Project(models.Model):
+    """
+    Model representing a project associated with a candidate.
+
+    Attributes:
+        candidate (Candidate): Candidate owning this project.
+        name (str): Name of the project.
+        description (str): Detailed description of the project.
+    """
     candidate = models.ForeignKey(Candidate,verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.CASCADE)
     name = models.CharField(_('Name'), max_length=50)
     description = models.TextField()
@@ -610,6 +685,7 @@ class Curriculum(models.Model):
         return cv_FileForm(instance = self)
 
     def save(self, *args, **kw):
+        """Custom save method that updates file content and converts the uploaded CV to PDF."""
         print('saving')
         updatecontent = False
         if self.pk is not None:
@@ -643,6 +719,7 @@ class Curriculum(models.Model):
 
 
     def set_advance(self):
+        """Calculates and sets the 'advance' field representing the percentage completion of the curriculum sections."""
         percent = 0
         if self.personal_info:
             percent += 20
@@ -668,20 +745,25 @@ class Curriculum(models.Model):
         self.advance = percent
 
     def filename(self):
+        """ Returns the base name (filename only) of the uploaded CV file."""
         return os.path.basename(self.file.name)
 
     def ext(self):
+        """Returns the file extension of the uploaded CV file in lowercase."""
         ext = os.path.splitext(self.file.name)[1]
         ext = ext[1:].lower()
         return ext
 
     def file_content(self):
+        """Reads and returns the full content of the uploaded CV file."""
         return get_file_content(self.file.path)
 
     def file_text(self):
+        """Reads and returns the extracted text from the uploaded CV file."""
         return get_file_text(self.file.path)
 
     def __unicode__(self):
+        """ Returns a string representation of the curriculum showing candidate's name and ID."""
         return '%s %s - Id: %s' % (self.candidate.first_name, self.candidate.last_name, str(self.candidate.id))
 
     class Meta:
