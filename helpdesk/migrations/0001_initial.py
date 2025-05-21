@@ -1,3 +1,16 @@
+"""
+This contains Django ORM model definitions for a Helpdesk ticketing system.
+
+It defines entities such as Tickets, Queues, FollowUps, Attachments, PreSetReplies,
+Saved Searches, User Settings, Email Templates, Escalations, and Ticket Dependencies.
+
+These models represent core business logic for ticket management, user customization,
+email handling, ticket workflows, and integrations.
+
+Each class includes descriptive field metadata, relationships, and ordering rules
+to facilitate robust helpdesk operations.
+"""
+
 # -*- coding: utf-8 -*-
 
 
@@ -9,7 +22,14 @@ import helpdesk.models
 
 
 class Migration(migrations.Migration):
+    """
+    Represents a pre-defined reply message that can be quickly inserted into ticket responses.
 
+    Attributes:
+        name (str): Internal name to assist users in selecting a reply. Not shown to the ticket submitter.
+        body (str): The body text of the reply. Supports context variables like {{ ticket }}, {{ queue }}, and {{ user }}.
+        queues (ManyToManyField): Optional restriction to which Queues this reply applies.
+    """
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]

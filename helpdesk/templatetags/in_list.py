@@ -20,6 +20,16 @@ from django import template
 
 
 def in_list(value, arg):
+    """
+    Check if the given value is present in the provided list (arg).
+
+    Args:
+        value: The item to check for.
+        arg: The list to search within. Defaults to an empty list if None.
+
+    Returns:
+        bool: True if value is in arg, else False.
+    """
     return value in (arg or [])
 
 register = template.Library()

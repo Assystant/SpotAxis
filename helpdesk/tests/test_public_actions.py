@@ -7,10 +7,11 @@ from django.core.urlresolvers import reverse
 
 class PublicActionsTestCase(TestCase):
     """
-    Tests for public actions:
-    - View a ticket
-    - Add a followup
-    - Close resolved case
+    TestCase class to validate public ticket actions in the helpdesk system.
+
+    This test suite ensures that users can:
+    - View their ticket via a public interface using email and ticket ID
+    - Close a ticket that is already marked as resolved
     """
     def setUp(self):
         """
@@ -29,6 +30,14 @@ class PublicActionsTestCase(TestCase):
         self.client = Client()
 
     def test_public_view_ticket(self):
+        """
+        Test whether a user can view a ticket using the public interface.
+
+        Simulates a GET request with correct ticket ID and submitter email.
+        Asserts that:
+        - Response status code is 200 (OK)
+        - The 'public_view_form.html' template is not rendered (implying successful ticket load)
+        """
         response = self.client.get('%s?ticket=%s&email=%s' % (
             reverse('helpdesk_public_view'),
             self.ticket.ticket_for_url,
@@ -37,6 +46,21 @@ class PublicActionsTestCase(TestCase):
         self.assertTemplateNotUsed(response, 'helpdesk/public_view_form.html')
 
     def test_public_close(self):
+        """
+        Test that a user can close a resolved ticket through the public interface.
+
+        Steps:
+        - Sets the ticket status to RESOLVED and adds a resolution note.
+        - Makes a GET request with the 'close' parameter.
+        - Asserts:
+            - Response redirects (302)
+            - Status changes to CLOSED
+            - Resolution message is preserved
+            - A new follow-up is added
+
+        Restores:
+        - Original status and resolution to avoid side effects on other tests.
+        """
         old_status = self.ticket.status
         old_resolution = self.ticket.resolution
         resolution_text = 'Resolved by test script'

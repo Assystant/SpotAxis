@@ -1,3 +1,19 @@
+
+"""
+Migration module for adding or removing the 'tags' field to the 'Ticket' model.
+
+This migration conditionally adds a 'tags' field to the 'helpdesk_ticket' table if the
+`HAS_TAG_SUPPORT` setting is True. The field uses the tagging.fields.TagField type.
+On reverse migration, it removes the 'tags' field if present.
+
+Imports:
+- datetime: for handling date and time.
+- south.db.db: database operations for migration.
+- south.v2.SchemaMigration: base class for schema migration.
+- django.db.models: Django ORM models.
+- helpdesk.settings.HAS_TAG_SUPPORT: flag indicating if tagging support is enabled.
+"""
+
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import datetime
@@ -8,8 +24,27 @@ from helpdesk.settings import HAS_TAG_SUPPORT
 
 
 class Migration(SchemaMigration):
+    """
+    Migration class to apply or reverse changes to the database schema.
 
+    Methods:
+    forwards(orm)
+        Adds the 'tags' field to the 'Ticket' model if tagging support is enabled.
+    backwards(orm)
+        Removes the 'tags' field from the 'Ticket' model if tagging support is enabled.
+    """
     def forwards(self, orm):
+        """
+        Apply the migration: add 'tags' field to 'helpdesk_ticket' table.
+
+        Parameters:
+        orm : object
+            The ORM mapping for database models during migration.
+
+        Behavior:
+        Checks if tagging support is enabled via HAS_TAG_SUPPORT.
+        If True, adds a 'tags' field (TagField) with a default empty string to the Ticket model.
+        """
         # Adding field 'Ticket.tags' if HAS_TAG_SUPPORT is True
         if HAS_TAG_SUPPORT:
             db.add_column('helpdesk_ticket', 'tags',
@@ -17,6 +52,17 @@ class Migration(SchemaMigration):
                           keep_default=False)
 
     def backwards(self, orm):
+        """
+        Revert the migration: remove 'tags' field from 'helpdesk_ticket' table.
+
+        Parameters:
+        orm : object
+            The ORM mapping for database models during migration.
+
+        Behavior:
+        Checks if tagging support is enabled via HAS_TAG_SUPPORT.
+        If True, deletes the 'tags' field from the Ticket model.
+        """
         # Deleting field 'Ticket.tags'
         if HAS_TAG_SUPPORT:
             db.delete_column('helpdesk_ticket', 'tags')

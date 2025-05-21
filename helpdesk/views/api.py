@@ -85,6 +85,20 @@ def api(request, method):
 
 
 def api_return(status, text='', json=False):
+    """
+    Returns a standardized HTTP response for API calls.
+
+    Depending on the status, this can return either a plain text or JSON response.
+    Also handles error messages like 'Resource Not Found' or 'Invalid method'.
+
+    Parameters:
+        status (int): HTTP status code like 200, 400, 403, etc.
+        text (str): Response body (text or JSON string)
+        json (bool): Whether to set the content type to application/json
+
+    If `status` is 405 (bad method), sets the HTTP Allow header to POST.
+    """
+
     content_type = 'text/plain'
     if status == STATUS_OK and json:
         content_type = 'text/json'
@@ -110,10 +124,28 @@ def api_return(status, text='', json=False):
 
 
 class API:
+    """
+    The API class provides the actual business logic for the supported API methods.
+
+    Each API method is exposed as a method prefixed with `api_public_` and is invoked
+    based on the `method` string passed to the `api()` dispatcher.
+
+    All methods require POST data and a valid authenticated user.
+    """
     def __init__(self, request):
         self.request = request
 
     def api_public_create_ticket(self):
+        """
+        Creates a new ticket from POSTed data using the `TicketForm`.
+
+        The queue and assigned_to fields are dynamically populated from the DB.
+        If the form is valid, a ticket is saved and the ID is returned.
+
+        Returns:
+            200 OK with ticket ID, or
+            400 Error with form validation messages
+        """
         form = TicketForm(self.request.POST)
         form.fields['queue'].choices = [[q.id, q.title] for q in Queue.objects.all()]
         form.fields['assigned_to'].choices = [[u.id, u.get_username()] for u in User.objects.filter(is_active=True)]
@@ -125,12 +157,31 @@ class API:
             return api_return(STATUS_ERROR, text=form.errors.as_text())
 
     def api_public_list_queues(self):
+        """
+        Returns a list of all queues in the system.
+
+        Used to populate selection options when creating a ticket via the API.
+
+        Returns:
+            200 OK with a JSON list of queues, each with 'id' and 'title'
+        """
+
         return api_return(STATUS_OK, simplejson.dumps([
             {"id": "%s" % q.id, "title": "%s" % q.title}
             for q in Queue.objects.all()
         ]), json=True)
 
     def api_public_find_user(self):
+        """
+        Finds and returns the ID of a user given a username.
+
+        Used to assign ownership of a ticket programmatically.
+
+        Returns:
+            200 OK with user ID, or
+            400 Error if username is invalid or not found
+        """
+
         username = self.request.POST.get('username', False)
 
         try:
@@ -141,6 +192,16 @@ class API:
             return api_return(STATUS_ERROR, "Invalid username provided")
 
     def api_public_delete_ticket(self):
+        """
+        Deletes a ticket given its ID, only if 'confirm' is provided in the POST.
+
+        This acts as a safeguard to prevent accidental deletions.
+
+        Returns:
+            200 OK on successful deletion, or
+            400 Error if ticket ID is invalid or confirmation is missing
+        """
+
         if not self.request.POST.get('confirm', False):
             return api_return(STATUS_ERROR, "No confirmation provided")
 
@@ -154,6 +215,14 @@ class API:
         return api_return(STATUS_OK)
 
     def api_public_hold_ticket(self):
+        """
+        Marks the ticket as on hold, which prevents automatic escalation.
+
+        Returns:
+            200 OK if the ticket is updated, or
+            400 Error if the ticket ID is invalid
+        """
+
         try:
             ticket = Ticket.objects.get(id=self.request.POST.get('ticket', False))
         except Ticket.DoesNotExist:
@@ -165,6 +234,14 @@ class API:
         return api_return(STATUS_OK)
 
     def api_public_unhold_ticket(self):
+        """
+        Removes the 'on hold' status from a ticket.
+
+        Returns:
+            200 OK if the ticket is updated, or
+            400 Error if the ticket ID is invalid
+        """
+
         try:
             ticket = Ticket.objects.get(id=self.request.POST.get('ticket', False))
         except Ticket.DoesNotExist:
@@ -176,6 +253,17 @@ class API:
         return api_return(STATUS_OK)
 
     def api_public_add_followup(self):
+        """
+        Adds a follow-up message to a ticket, either public or private.
+
+        If public, it sends email notifications to the submitter, CC list, and assignee.
+        Only accepts 'y' or 'n' for the public field.
+
+        Returns:
+            200 OK if the follow-up is added, or
+            400 Error for invalid ticket ID, blank message, or invalid public flag
+        """
+
         try:
             ticket = Ticket.objects.get(id=self.request.POST.get('ticket', False))
         except Ticket.DoesNotExist:
@@ -260,6 +348,17 @@ class API:
         return api_return(STATUS_OK)
 
     def api_public_resolve(self):
+        """
+        Resolves a ticket by setting its status to RESOLVED and saving a resolution comment.
+
+        Sends notifications to all relevant parties (submitter, CC, assignee, etc.)
+        based on their preferences and system settings.
+
+        Returns:
+            200 OK if the ticket is resolved, or
+            400 Error if the ticket ID or resolution is missing
+        """
+
         try:
             ticket = Ticket.objects.get(id=self.request.POST.get('ticket', False))
         except Ticket.DoesNotExist:
