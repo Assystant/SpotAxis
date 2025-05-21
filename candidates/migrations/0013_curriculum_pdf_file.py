@@ -8,6 +8,7 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """Migration class that adds the `pdf_file` field to the `Curriculum` model."""
 
     dependencies = [
         ('candidates', '0012_auto_20170822_1523'),
