@@ -7,6 +7,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration class that applies schema modifications to the 'cv_language' model
+    within the 'candidates' app.
+
+    Attributes:
+        dependencies (list): Migrations that must be applied before this one.
+        operations (list): A list of schema-altering operations including:
+            - Altering model options for ordering and verbose names.
+            - Removing the 'level' field.
+            - Adding 'read', 'speak', and 'write' Boolean fields with default False values.
+
+    Inherits from Django's migrations.Migration class.
+    """
 
     dependencies = [
         ('candidates', '0002_auto_20160824_1247'),
