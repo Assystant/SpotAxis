@@ -63,6 +63,18 @@ class MXRFCField_Custom(RegexField, CharField):
     More info about this:
         http://es.wikipedia.org/wiki/Registro_Federal_de_Contribuyentes_(M%C3%A9xico)
     """
+    """
+    A Django form field for validating Mexican RFCs (Registro Federal de Contribuyentes),
+    supporting both individuals (Persona física) and legal entities (Persona moral).
+
+    The field ensures:
+    - Correct formatting based on official RFC structure.
+    - Avoidance of prohibited/inconvenient words.
+    - Optional checksum validation if the homoclave is present.
+
+    Attributes:
+        default_error_messages (dict): Custom error messages for validation failures.
+    """
     default_error_messages = {
         'invalid': _('Ingrese un RFC válido'),
         'invalid_checksum': _('Suma de verificación inválida'),
@@ -70,12 +82,30 @@ class MXRFCField_Custom(RegexField, CharField):
     }
 
     def __init__(self, min_length=9, max_length=13, *args, **kwargs):
+        """Initializes the MXRFCField_Custom with a regex pattern to match valid RFC formats."""
         rfc_re = re.compile(r'^([A-Z&Ññ]{3}|[A-Z][AEIOU][A-Z]{2})%s([A-Z0-9]{2}[0-9A])?$' % DATE_RE,
                             re.IGNORECASE)
         super(MXRFCField_Custom, self).__init__(rfc_re, min_length=min_length,
                                          max_length=max_length, *args, **kwargs)
 
     def clean(self, value):
+        """
+        Performs final validation and cleanup on the input RFC value.
+
+        Steps:
+        - Converts value to uppercase.
+        - Checks for valid homoclave and validates checksum if present.
+        - Rejects RFCs with blacklisted words.
+
+        Args:
+            value (str): Input value from form field.
+
+        Returns:
+            str: Cleaned RFC value.
+
+        Raises:
+            ValidationError: If checksum is invalid or blacklisted words are found.
+        """
         value = super(MXRFCField_Custom, self).clean(value)
         if value in EMPTY_VALUES:
             return ''
@@ -118,5 +148,9 @@ class MXRFCField_Custom(RegexField, CharField):
         return six.text_type(checksum)
 
     def _has_inconvenient_word(self, rfc):
+        """
+        Checks whether the first four characters of the RFC form a prohibited word
+        as defined by the SAT (Mexican tax authority).
+        """
         first_four = rfc[:4]
         return first_four in RFC_INCONVENIENT_WORDS

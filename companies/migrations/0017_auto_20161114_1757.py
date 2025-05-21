@@ -8,7 +8,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to alter the 'description' field of the 'Company' model.
 
+    Changes made:
+    - Updated the 'description' field to use CKEditor's RichTextField.
+    - The field allows blank and null values and has a default of None.
+    - The verbose name for this field is set to 'Short Description'.
+
+    Dependency:
+    - Depends on the previous migration '0016_auto_20161105_1039' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0016_auto_20161105_1039'),
     ]

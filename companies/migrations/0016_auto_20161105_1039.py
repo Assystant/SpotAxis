@@ -8,7 +8,21 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to update the 'Wallet' model by removing some fields and adding new ones.
 
+    Operations performed:
+    - Removed the 'adds' field from the 'Wallet' model.
+    - Removed the 'redeems' field from the 'Wallet' model.
+    - Added a 'currency' ForeignKey field referencing the 'Currency' model from the 'common' app. 
+      This field is optional (can be null or blank) and uses CASCADE deletion.
+    - Added a 'last_updated' DateTimeField to track the last modification time of the wallet. 
+      This field auto-updates on each save and allows null values.
+
+    Dependencies:
+    - Depends on migration '0004_auto_20160908_2311' from 'common' app.
+    - Depends on migration '0015_auto_20161008_2222' from 'companies' app.
+    """
     dependencies = [
         ('common', '0004_auto_20160908_2311'),
         ('companies', '0015_auto_20161008_2222'),

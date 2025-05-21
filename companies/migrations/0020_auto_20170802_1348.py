@@ -7,7 +7,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to alter 'above_jobs' and 'below_jobs' fields in the 'Company' model.
 
+    Changes made:
+    - Modified 'above_jobs' field to allow blank values and null values.
+    - Set default value of 'above_jobs' to an empty byte string.
+    - Modified 'below_jobs' field to allow blank values and null values.
+    - Set default value of 'below_jobs' to an empty byte string.
+
+    Dependency:
+    - Depends on the previous migration '0019_auto_20170621_1244' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0019_auto_20170621_1244'),
     ]

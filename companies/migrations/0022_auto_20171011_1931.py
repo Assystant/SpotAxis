@@ -8,7 +8,19 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to alter the 'company' field in the 'ExternalReferal' model.
 
+    Changes:
+    - Allows the 'company' ForeignKey field to be nullable (null=True).
+    - Allows the 'company' field to be blank in forms (blank=True).
+    - Sets the default value of 'company' field to None.
+
+    The 'company' field still has a CASCADE delete behavior, linking to the 'Company' model.
+
+    Dependencies:
+    - Depends on migration '0021_externalreferal' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0021_externalreferal'),
     ]

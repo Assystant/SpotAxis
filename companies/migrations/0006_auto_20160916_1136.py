@@ -7,7 +7,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to alter the 'logo' field of the 'Company' model.
 
+    Changes the default logo image file from 
+    'logos_TRM/logo_TRM_company_default.jpg' to 
+    'logos_TRM/logo_TRM_company_default.png'.
+
+    Field attributes:
+        - blank=True
+        - null=True
+        - max_length=200
+        - upload_to='companies/logos/'
+
+    Dependencies:
+        - Depends on migration '0005_auto_20160908_2305' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0005_auto_20160908_2305'),
     ]

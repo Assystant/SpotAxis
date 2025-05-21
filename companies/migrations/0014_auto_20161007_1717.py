@@ -8,7 +8,26 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to create a new 'Ban' model and add a 'ban_list' field to the 'Company' model.
 
+    Operations performed:
+    - Created 'Ban' model with fields:
+        * id: Auto-incrementing primary key.
+        * email: EmailField to store banned email addresses (optional).
+        * duration: PositiveIntegerField indicating the duration of the ban (optional).
+        * add_date: DateTimeField recording when the ban was added (auto set on creation).
+        * ban_function: TextField for additional ban-related information or function description.
+        * company: ForeignKey to 'Company', linking each ban to a specific company (optional).
+    - Added 'ban_list' field to the 'Company' model as a TextField (default None), 
+      presumably to store a serialized list or details of bans related to the company.
+
+    Model options:
+    - 'Ban' model is configured with verbose names 'Ban' and 'Bans'.
+
+    Dependencies:
+    - Depends on migration '0013_auto_20160928_1158' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0013_auto_20160928_1158'),
     ]

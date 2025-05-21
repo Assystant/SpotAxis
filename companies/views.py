@@ -1,4 +1,3 @@
-
 from __future__ import absolute_import
 from __future__ import print_function
 import decimal
@@ -47,6 +46,41 @@ subdomain_hash = Hashids(salt='TRM Subdomain',min_length=4)
 invite_hash = Hashids(salt='Invitation',min_length=7)
 
 def record_recruiter(request, token=None):
+    """
+    Handle the registration of a recruiter user.
+
+    This view processes both GET and POST requests to register a new recruiter.
+    It supports optional invitation tokens to associate the recruiter with an existing company.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        token (str, optional): Invitation token to link the recruiter with an inviter company. Defaults to None.
+
+    Returns:
+        HttpResponse: Redirects to appropriate pages on success or re-renders the registration form with errors.
+                      Responds with JSON if the request is AJAX.
+                      
+    Raises:
+        Http404: If the user is already authenticated or an error occurs during user creation.
+    
+    Behavior:
+        - Redirects authenticated users with 404 error.
+        - On GET request:
+            - Saves 'price_slab' in session if present in query params and redirects.
+            - Displays registration form.
+        - On POST request:
+            - Validates submitted user data form.
+            - Creates new user and associates recruiter profile.
+            - Processes invitation token if present:
+                - Links new recruiter to inviter's company.
+                - Marks user active.
+                - Deletes invitations.
+                - Sends welcome notification.
+            - Sends verification email if no token.
+            - Automatically logs user in if configured.
+            - Redirects to configured registration redirect URL.
+            - Returns JSON responses for AJAX requests.
+    """
     context = {}
     context['success'] = False
     if request.user.is_authenticated():
@@ -143,6 +177,42 @@ def record_recruiter(request, token=None):
 
 @login_required
 def record_company(request):
+    """
+    Handle the registration of a new company by a logged-in recruiter.
+
+    This view allows an authenticated recruiter to create and register a new company profile.
+    If the recruiter is already associated with one or more companies, they are redirected 
+    to the company profile page.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing POST data for company registration.
+
+    Returns:
+        HttpResponse: 
+            - Redirects to the company profile page if the recruiter already has companies.
+            - Redirects to the newly created company's URL upon successful creation.
+            - Re-renders the company registration form with errors on validation failure.
+
+    Raises:
+        Http404: If the logged-in user is not an active recruiter or if an error occurs during company creation.
+
+    Behavior:
+        - Ensures the user is authenticated and is an active recruiter.
+        - Processes POST data for company registration.
+        - Validates and saves the company form.
+        - Creates a unique subdomain for the company based on the company name and ID.
+        - Applies a default site template and renders associated job-related HTML snippets.
+        - Assigns available signup discounts to the new company.
+        - Links the recruiter with the new company and sets default membership.
+        - Initializes wallet, subscription with a default price slab, and candidate stages for the company.
+        - Sets a session flag for first-time company registration.
+        - Handles exceptions by deleting the newly created company and raising Http404.
+        - On GET requests, renders an empty company registration form.
+
+    Notes:
+        - Some address and area-related form processing is commented out and not currently used.
+        - Discount usage, wallet, and subscription models are linked to the new company on creation.
+    """
     try:
         recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
     except:
@@ -249,6 +319,23 @@ def record_company(request):
 
 @login_required
 def edit_company(request):
+    """
+    Handles the editing of a company's profile by an authenticated user.
+
+    Checks if the user has an email, loads the company and address associated with
+    the user, processes submitted forms for user data, company info, and address,
+    validates and saves updates, and generates appropriate success or error messages.
+
+    Redirects users without email to a registration completion page.
+
+    Supports updating company subdomain slug and notifying admins about profile changes.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the company edit form or redirects upon success.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
@@ -328,6 +415,20 @@ def edit_company(request):
 
 @login_required
 def recruiter_profile(request):
+    """
+    Displays and processes the recruiter's personal profile page.
+
+    Allows updating basic user data and profile photo, with support for AJAX
+    requests for asynchronous profile updates.
+
+    Redirects users without email to a registration completion page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the recruiter profile page or returns JSON response for AJAX.
+    """
     context={}
     context['success'] = False
     if request.user.is_authenticated() and not request.user.email:
@@ -379,6 +480,23 @@ def recruiter_profile(request):
 
 @login_required
 def company_profile(request):
+    """
+    Displays and manages the company profile page accessible to recruiters.
+
+    Loads the company by subdomain and the recruiter's association, presents forms
+    for company data and logo updates, processes POST submissions with validation,
+    and handles AJAX responses with success or error messages.
+
+    Also loads related vacancies and vacancy stages for display.
+
+    Redirects users without email to a registration completion page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the company profile page or returns JSON response for AJAX.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
@@ -453,6 +571,24 @@ def company_profile(request):
 
 @login_required
 def site_management(request, setting=None):
+    """
+    Manages company site settings such as template, subdomain, and embed configurations.
+
+    Only accessible to admin recruiters. Loads the recruiter's company and appropriate
+    forms based on the selected setting. Handles POST requests to update settings.
+
+    Redirects users without email to a registration completion page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        setting (str, optional): The specific site setting to manage ('template', 'subdomain', 'embed').
+
+    Raises:
+        Http404: If recruiter is not admin or setting is invalid.
+
+    Returns:
+        HttpResponse: Renders the site management page with appropriate context.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
@@ -506,6 +642,20 @@ def site_management(request, setting=None):
 
 @login_required
 def team_space(request):
+    """
+    Displays and manages the company team space for inviting new members and viewing current members.
+
+    Allows sending invitations to new recruiters with token generation and email notifications.
+    Only accessible if the company has the team addition service enabled.
+
+    Redirects users without email to a registration completion page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the company team space page with member and invitation forms.
+    """
     if request.user.is_authenticated() and not request.user.email:
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -545,6 +695,23 @@ def team_space(request):
 
 @login_required
 def finalize_vacancy(request, vacancy_id, message=None):
+    """
+    Finalizes (closes) a vacancy posting for the user's company with a reason message.
+
+    Updates the vacancy status to closed, sets the end date, records a reason based on the message code,
+    unpublishes the vacancy if not expired, and notifies subscribers about the closure.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int): The ID of the vacancy to finalize.
+        message (str, optional): A code representing the closure reason ('1', '2', '3').
+
+    Raises:
+        Http404: If vacancy not found or invalid message.
+
+    Returns:
+        HttpResponse: Redirects to the subindex page with a success message.
+    """
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id, company=request.user.recruiter.company.all()[0])
     vacancy.status = Vacancy_Status.objects.get(codename__exact='closed')  # Finalised
     vacancy.end_date = date.today()
@@ -577,6 +744,19 @@ def finalize_vacancy(request, vacancy_id, message=None):
 
 @login_required
 def remove_vacancy(request, vacancy_id):
+    """
+    Removes (closes) a vacancy posting for the user's company.
+
+    Sets the vacancy status to closed, updates the end date, unpublishes the vacancy if needed,
+    and displays a success message.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int): The ID of the vacancy to remove.
+
+    Returns:
+        HttpResponse: Redirects to the vacancy listing page filtered by closed status.
+    """
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id, company=request.user.company.pk)
     vacancy.status = Vacancy_Status.objects.get(codename__exact='closed')  # Removed
     vacancy.end_date = date.today()
@@ -588,6 +768,25 @@ def remove_vacancy(request, vacancy_id):
 
 @login_required
 def publish_vacancy(request, vacancy_id):
+    """
+    Publishes a vacancy for the user's company with optional publish period.
+
+    Allows setting a publish start and end date if the company service 'JM_DURATION' is enabled.
+    If the start date is today or earlier, the vacancy is published immediately and editing time
+    is extended by 5 days. Otherwise, the vacancy is scheduled for future publication.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int): The ID of the vacancy to publish.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the list of open vacancies.
+
+    Side Effects:
+        Updates the vacancy's publish status, publish and unpublish dates,
+        and editing window.
+        Adds success or error messages for the user.
+    """
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id, company=request.user.company.pk)
     # 5 more days are assigned to edit the vacancy
     publish_period = None
@@ -622,6 +821,21 @@ def publish_vacancy(request, vacancy_id):
 
 @login_required
 def unpublish_vacancy(request, vacancy_id):
+    """
+    Unpublishes a vacancy for the user's company.
+
+    Marks the vacancy as unpublished and resets any scheduled future publication.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int): The ID of the vacancy to unpublish.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the list of open vacancies.
+
+    Side Effects:
+        Updates vacancy publish status and adds a success message.
+    """
     try:
         company = request.user.recruiter.company.all()[0]
     except:
@@ -636,7 +850,21 @@ def unpublish_vacancy(request, vacancy_id):
 
 @login_required
 def applications_for_vacancy(request, vacancy_id):
-    """ Displays a list of cvs who have applied for the vacancy """
+    """
+    Displays a list of candidates who have applied for a specific vacancy.
+
+    Allows discarding selected candidates from the application list via POST.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int): The ID of the vacancy.
+
+    Returns:
+        HttpResponse: Renders the vacancy applications page with candidate data.
+
+    Side Effects:
+        Updates application discard status and vacancy application count.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
@@ -674,7 +902,19 @@ def applications_for_vacancy(request, vacancy_id):
 
 @login_required
 def discard_candidate(request, vacancy_id, candidate_id):
-    """ Discards a candidate for a vacancy """
+    """
+    Discards a candidate from a specific vacancy's application list.
+
+    Marks the candidate's postulate as discarded and decreases the vacancy's application count.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int): The ID of the vacancy.
+        candidate_id (int): The ID of the candidate to discard.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the vacancy's application list.
+    """
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id, user=request.user)
     candidate = get_object_or_404(Candidate, pk=candidate_id)
     postulate = get_object_or_404(Postulate, vacancy=vacancy, candidate=candidate)
@@ -686,6 +926,26 @@ def discard_candidate(request, vacancy_id, candidate_id):
 
 @login_required
 def curriculum_detail(request, candidate_id=None, vacancy_id=None):
+    """
+    Displays detailed curriculum (CV) information of a candidate for a vacancy.
+
+    Marks the application as seen if not already and sends a notification email to the candidate.
+    Displays academic, expertise, language, training, certificate, and project details related to the candidate.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        candidate_id (int): The ID of the candidate.
+        vacancy_id (int): The ID of the vacancy for context.
+
+    Returns:
+        HttpResponse: Renders the detailed curriculum page with candidate and application data.
+
+    Raises:
+        Http404: If the recruiter or vacancy is not found or candidate data is missing.
+
+    Side Effects:
+        Updates postulate seen status and sends an email notification.
+    """
     candidate = get_object_or_404(Candidate, pk=candidate_id)
     expertises = Expertise.objects.filter(candidate=candidate)
     academics = Academic.objects.filter(candidate=candidate)
@@ -811,7 +1071,24 @@ def curriculum_detail(request, candidate_id=None, vacancy_id=None):
 
 # @login_required
 def vacancies_summary(request, vacancy_status_name=None): 
-    """ Show the summary of a Company's vacancies """
+    """
+    Shows a summary of a company's vacancies filtered by status.
+
+    Handles user authentication and recruiter/company context.
+    Provides vacancy listings based on status (e.g., open, closed) and company.
+    Manages session-based temporary file cleanup for vacancy uploads.
+    Handles POST requests for public applications and team invitations (if enabled).
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_status_name (str, optional): Vacancy status codename to filter vacancies.
+
+    Returns:
+        HttpResponse: Renders the vacancies summary page with vacancy and status information.
+
+    Raises:
+        Http404: If company, recruiter, or vacancy status is invalid or missing.
+    """
     # raise ValueError()
     if request.user.is_authenticated() and not request.user.email:
         # If the user is registered and has no email...
@@ -992,6 +1269,23 @@ def vacancies_summary(request, vacancy_status_name=None):
                             },context_instance=RequestContext(request))
 
 def upload_vacancy_file(request):
+    """
+    Handle AJAX POST request to upload vacancy-related files.
+
+    Validates and saves uploaded files linked to a vacancy or a temporary session identifier.
+    Returns JSON response with serialized file data on success or error details on failure.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing POST data and FILES.
+
+    Returns:
+        HttpResponse: JSON response containing serialized file info on success,
+                      or error messages with status 400 on failure.
+
+    Raises:
+        Http404: If vacancy is not found or other lookups fail.
+        Exception: Generic catch-all to log traceback and return error response.
+    """
     # FUNCION AJAX
     # Function to upload a file sent by AJAX, validate the form,
     # if the form has errors, returns to fail method section $('#id_file').fileupload
@@ -1039,6 +1333,23 @@ def upload_vacancy_file(request):
 
 @login_required
 def delete_vacancy_file(request):
+    """
+    Handle AJAX POST request to delete a vacancy file in real-time.
+
+    Deletes the Vacancy_Files object identified by 'id' in POST data.
+    Returns a JSON response indicating success or failure.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing POST data.
+
+    Returns:
+        HttpResponse: JSON response with True on success,
+                      or error message with status 400 on failure.
+
+    Raises:
+        Vacancy_Files.DoesNotExist: If the file with the given ID does not exist.
+        Exception: Generic catch-all to log traceback and return error response.
+    """
     # FUNCION AJAX
     # Function to delete a file in realtime with AJAX to create/modify vacancy
     try:
@@ -1055,6 +1366,33 @@ def delete_vacancy_file(request):
 
 @login_required
 def add_update_vacancy(request, vacancy_id=False):
+    """
+    Create or update a vacancy based on the provided form data and files.
+
+    - Checks user authentication and permissions.
+    - Handles vacancy creation or update, including file management linked via a random session number.
+    - Supports vacancy scheduling, publishing, and status updates.
+    - Manages vacancy stages and notifications.
+    - Moves uploaded files from temporary session storage to vacancy folder on save.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing POST data and FILES.
+        vacancy_id (int or bool): Optional vacancy primary key for updating an existing vacancy.
+
+    Returns:
+        HttpResponse or HttpResponseRedirect: Renders form page on GET or validation errors,
+                                              redirects or returns error on success or failure.
+
+    Raises:
+        Http404: If the user is unauthorized, vacancy not found, or company lacks necessary service.
+        Exception: Logs traceback and returns a server error response if an unhandled exception occurs.
+
+    Notes:
+        - The random_number session key helps temporarily store uploaded files before vacancy creation.
+        - VacancyFileForm is used to validate and save files.
+        - VacancyForm handles vacancy data, including scheduling and publication logic.
+        - Notifications and activity posts are sent on new vacancy creation or updates.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
@@ -1370,6 +1708,26 @@ def add_update_vacancy(request, vacancy_id=False):
 
 @login_required
 def add_update_vacancy_hiring_process(request, vacancy_id = None):
+    """
+    View to display and manage the hiring process stages for a specific vacancy.
+
+    Checks user authentication and email presence, active subdomain,
+    recruiter permissions, company services, and vacancy status.
+
+    Retrieves all vacancy stages and remaining stages available for the vacancy's company.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int, optional): Primary key of the vacancy. Defaults to None.
+
+    Returns:
+        HttpResponse: Rendered template 'vacancies/add_update_vacancy_hiring_process.html' with context data.
+
+    Raises:
+        Http404: If subdomain is inactive, recruiter lacks manager role,
+                company lacks 'JP_POST' service, vacancy not found,
+                or vacancy is removed.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
@@ -1408,6 +1766,26 @@ def add_update_vacancy_hiring_process(request, vacancy_id = None):
 
 @login_required
 def add_update_vacancy_talent_sourcing(request, vacancy_id = None):
+    """
+    View to display and manage talent sourcing details for a specific vacancy.
+
+    Checks user authentication and email presence, active subdomain,
+    recruiter permissions, company services, and vacancy status.
+
+    Retrieves external referers linked to the company for talent sourcing.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int, optional): Primary key of the vacancy. Defaults to None.
+
+    Returns:
+        HttpResponse: Rendered template 'vacancies/add_update_vacancy_talent_sourcing.html' with context data.
+
+    Raises:
+        Http404: If subdomain is inactive, recruiter lacks manager role,
+                company lacks 'JP_POST' service, vacancy not found,
+                or vacancy is removed.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
@@ -1448,6 +1826,22 @@ def add_update_vacancy_talent_sourcing(request, vacancy_id = None):
 
 @login_required
 def company_recommendations(request):
+    """
+    View to list recommendations received by the company of the logged-in user.
+
+    Checks user authentication and email presence.
+
+    Retrieves recommendations directed to the user's company.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered template 'recommendations.html' with company and recommendations context.
+
+    Raises:
+        Http404: If company associated with the user is not found.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
@@ -1461,6 +1855,19 @@ def company_recommendations(request):
 
 @login_required
 def first_search_curricula(request):
+    """
+    Initializes the search sessions for curricula and vacancies to default empty or initial values.
+
+    Clears all search filters and sets initial pagination and filter session variables.
+
+    Redirects user to the 'companies_search_curricula' page to perform the first search.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponseRedirect: Redirect response to 'companies_search_curricula'.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
@@ -1502,6 +1909,22 @@ def first_search_curricula(request):
 
 @login_required
 def search_curricula(request):
+    """
+    Processes and filters candidates' curricula based on various search filters submitted via form or stored in session.
+
+    Supports filtering by candidate demographics, academic qualifications, languages, and pagination of results.
+
+    Handles initial load, new search POST requests, and pagination via GET parameters.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered template 'search_curricula.html' with filtered curricula and pagination data.
+
+    Raises:
+        None explicitly, but handles invalid page numbers with paginator exceptions.
+    """
     """  Vista search depending on curricula filters the user selects """
     if request.user.is_authenticated() and not request.user.email:
         # If user is logged in and has no email...
@@ -1776,6 +2199,19 @@ def search_curricula(request):
 
 @login_required
 def company_wallet(request):
+    """
+    Display the wallet information for the company associated with the logged-in user.
+
+    Retrieves the Company instance linked to the authenticated user, fetches the related Wallet,
+    and lists all Wallet_Movements for the company. Passes this data to the 'company_wallet.html'
+    template for rendering.
+
+    Returns:
+        HttpResponse: Rendered template with company wallet details and wallet movements.
+
+    Raises:
+        Http404: If the Company associated with the user does not exist.
+    """
     company = get_object_or_404(Company, user=request.user)
     company_wallet = Wallet.objects.get(company=company)
     wallet_movements = Wallet_Movements.objects.filter(company=company)
@@ -1790,6 +2226,20 @@ def company_wallet(request):
 
 @xframe_options_exempt
 def widget_jobs(request):
+    """
+    Render a widget displaying the job vacancies for the company corresponding to the subdomain.
+
+    Allows anonymous access and exempts the view from clickjacking protection. Determines the active
+    subdomain and verifies its validity. If the user is authenticated and a recruiter, attempts to fetch
+    the recruiter profile. Filters vacancies by company and vacancy status, supporting a 'preview' mode.
+
+    Returns:
+        HttpResponse: Rendered widget showing vacancies, statuses, and company information.
+
+    Raises:
+        Http404: If the subdomain is inactive, company not found, or invalid vacancy status requested.
+        Redirect: Redirects to company record creation if recruiter profile is missing.
+    """
     vacancy_status_name=None
     subdomain_data = subdomain(request)
     if not subdomain_data['active_subdomain']:
@@ -1833,6 +2283,20 @@ def widget_jobs(request):
 
 @login_required
 def billing(request):
+    """
+    Manage the billing page for recruiter users, handling subscription plans and payments.
+
+    Only accessible to authenticated users with recruiter codename and admin privileges. Fetches the
+    company subscription and current pricing slab, calculates payment amounts, user limits, and renewal
+    costs. Supports POST requests for plan changes and session-based plan updates. Displays appropriate
+    messages for exceeding user limits and payment requirements.
+
+    Returns:
+        HttpResponse: Rendered billing page with subscription details, amount to pay, and user warnings.
+
+    Raises:
+        Http404: If the user is unauthorized or the company subscription cannot be retrieved.
+    """
     if not request.user.profile.codename == 'recruiter'  or not request.user.recruiter.is_admin():
         raise Http404
     recruiter = request.user.recruiter
@@ -1987,6 +2451,19 @@ def billing(request):
 
 @login_required
 def template_editor(request):
+    """
+    Provide an interface for recruiters (managers) to edit the company's career site template.
+
+    Checks that the user is a recruiter with manager privileges and that the request originates from
+    an active subdomain host. Verifies that the company is associated with the user and that the
+    specified template exists. Redirects with an error message if template is missing.
+
+    Returns:
+        HttpResponse: Rendered site editor page for the company's job template.
+
+    Raises:
+        Http404: If the user lacks permissions, the subdomain is inactive, or the template does not exist.
+    """
     if not request.user.profile.codename == 'recruiter'  or not request.user.recruiter.is_manager():
         raise Http404
     subdomain_data = subdomain(request)
@@ -2007,6 +2484,22 @@ def template_editor(request):
 
 @login_required
 def site_template_preview(request, template_id = None):
+    """
+    Preview the company's career site template for recruiters with manager privileges.
+
+    Validates the user's permissions and active subdomain. Loads the specified template by ID or
+    defaults to the company's current template. If the template is not found, redirects with an error.
+    Passes vacancy data and template sections to the root template for rendering the preview.
+
+    Args:
+        template_id (int, optional): The ID of the template to preview. Defaults to None.
+
+    Returns:
+        HttpResponse: Rendered preview of the company's career site template.
+
+    Raises:
+        Http404: If user lacks permissions, subdomain is inactive, or template is invalid/missing.
+    """
     if not request.user.profile.codename == 'recruiter'  or not request.user.recruiter.is_manager():
         raise Http404
     subdomain_data = subdomain(request)
@@ -2050,6 +2543,19 @@ def site_template_preview(request, template_id = None):
 
 @login_required
 def get_site_template(request):
+    """
+    Retrieve and render the current career site template for editing by authorized recruiters.
+
+    Ensures the user has manager privileges and that the subdomain and company association are valid.
+    Confirms the existence of the company's site template and raises 404 if missing. Renders the root
+    template including all job listing sub-templates and stylesheet for editing purposes.
+
+    Returns:
+        HttpResponse: Rendered company job site template with editing context.
+
+    Raises:
+        Http404: If user lacks permissions, subdomain inactive, or template does not exist.
+    """
     if not request.user.profile.codename == 'recruiter'  or not request.user.recruiter.is_manager():
         raise Http404
     subdomain_data = subdomain(request)

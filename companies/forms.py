@@ -23,6 +23,13 @@ initial_country = get_initial_country()
 
 
 def get_company_industries():
+    """
+    Retrieves a list of company industries formatted as choices for form fields.
+    
+    Returns:
+        list of tuples: Each tuple contains (industry_id, industry_name).
+        Defaults to [('0', 'No options')] if no industries found or on error.
+    """
     choices = [('0', 'No options')]
     try:
         industries = Company_Industry.objects.all()
@@ -47,12 +54,33 @@ def get_company_industries():
 #                 choices.append([area.id, area.name])
 #     return choices
 class CompanyLogoForm(forms.ModelForm):
+    """
+    Form to handle the upload and validation of a company logo image.
+
+    Inherits from:
+        forms.ModelForm: Django form for model-based input handling.
+
+    Attributes:
+        default_logo (str): Default logo path from settings.
+        logo (ImageField): Image upload field with validation for format and size.
+
+    Methods:
+        __init__(self, *args, **kwargs): Initializes the form.
+        clean_logo(self): Validates that the uploaded image is of an accepted type and within size limits.
+
+    Imported Modules:
+        - `forms.ModelForm` from `django`: Used to build a model-based form.
+        - `Image` from `PIL`: Used to inspect and validate uploaded image formats.
+        - `LOGO_COMPANY_DEFAULT` from settings: Provides a fallback default logo.
+    """
     default_logo = LOGO_COMPANY_DEFAULT
 
     logo = forms.ImageField(widget=forms.FileInput(attrs={'class': "form-control text-center", "accept": "image/*"}), required=True)
 
     def __init__(self, *args, **kwargs):
-        
+        """
+        Initialize the CompanyLogoForm with given arguments and keyword arguments.
+        """
         super(CompanyLogoForm, self).__init__(*args, **kwargs)
 
     class Meta:
@@ -60,6 +88,14 @@ class CompanyLogoForm(forms.ModelForm):
         fields = ('logo',)
 
     def clean_logo(self):
+        """
+        Validate the uploaded logo image format and file size.
+
+        Raises:
+            ValidationError: If the image is not JPEG/PNG or exceeds 5MB.
+        Returns:
+            ImageField: The validated image field.
+        """
         from PIL import Image
         image = self.cleaned_data.get('logo', None)
         if image:
@@ -76,6 +112,25 @@ class CompanyLogoForm(forms.ModelForm):
 
 
 class CompanyForm(forms.ModelForm):
+    """
+    Form to collect and validate detailed company profile information.
+
+    Inherits from:
+        forms.ModelForm: Django model form base class.
+
+    Attributes:
+        default_logo (str): Default logo path.
+        countries (QuerySet): Country options.
+        industries (QuerySet): Industry options.
+
+    Imported Modules:
+        - `forms` from `django`: Base form class and fields.
+        - `USPhoneNumberField` from `localflavor.us.forms`: Validates US phone numbers.
+        - `CKEditorWidget` from `ckeditor.widgets`: Used for rich text editing.
+        - `Image` from `PIL`: Used for image format checking.
+        - `LOGO_COMPANY_DEFAULT`: Default logo fallback.
+        - `get_initial_country()`: Initializes default nationality.
+    """
     default_logo = LOGO_COMPANY_DEFAULT
     # countries = Country.objects.filter(~Q(continent='AF') & ~Q(continent='AN') & ~Q(continent='AS') & ~Q(continent='OC'))
     countries = Country.objects.all()
@@ -231,6 +286,10 @@ class CompanyForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        """
+        Initialize the CompanyForm with dynamic country and industry fields,
+        and configure the default nationality if provided.
+        """
         change_profile = False
         area_selected = kwargs.pop('area_selected', None)
         industry_selected = kwargs.pop('industry_selected', None)
@@ -301,6 +360,14 @@ class CompanyForm(forms.ModelForm):
     #     return self.cleaned_data['rfc']
 
     def clean_facebook(self):
+        """
+        Validate that the Facebook URL is well-formed and not excessively long.
+
+        Raises:
+            ValidationError: If URL length exceeds 100 characters.
+        Returns:
+            str: Cleaned Facebook URL.
+        """
         facebook_error = _('Enter a valid Facebook page')
         if not self.cleaned_data.get('facebook'):
             return None
@@ -312,6 +379,14 @@ class CompanyForm(forms.ModelForm):
         return facebook
 
     def clean_twitter(self):
+        """
+        Validate the format of the Twitter handle.
+
+        Raises:
+            ValidationError: If the handle does not start with '@' or is too short.
+        Returns:
+            str: Cleaned Twitter handle.
+        """
         twitter_error = _('Enter a valid Twitter user')
         if not self.cleaned_data.get('twitter'):
             return None
@@ -325,6 +400,14 @@ class CompanyForm(forms.ModelForm):
         return twitter
 
     def clean_logo(self):
+        """
+        Validate the uploaded logo's image type and size.
+
+        Raises:
+            ValidationError: If the file is not JPEG/PNG or exceeds 5MB.
+        Returns:
+            ImageField: Validated image file.
+        """
         from PIL import Image
         image = self.cleaned_data.get('logo', None)
         if image:
@@ -339,6 +422,15 @@ class CompanyForm(forms.ModelForm):
         return image
 
     def clean_to_company(self):
+        """
+        Validates the 'to_company' field by checking if the corresponding user and company exist.
+        
+        Returns:
+            Company instance if validation succeeds.
+            
+        Raises:
+            forms.ValidationError: If the username is invalid or no company is found.
+        """
         to_company_user = self.cleaned_data['to_company']
         if to_company_user:
             try:
@@ -357,11 +449,30 @@ class CompanyForm(forms.ModelForm):
         exclude = ('user', 'address', 'subdomain', 'site_template', 'above_jobs', 'below_jobs')
 
 class MemberInviteForm(forms.ModelForm):
+    """
+    Form for inviting new team members to the platform by email.
+
+    Attributes:
+        email (EmailField): Email input field with bootstrap styling and placeholder text.
+
+    Meta:
+        model: RecruiterInvitation
+        fields: ('email',)
+    """
     email = forms.EmailField(widget=forms.TextInput(attrs={'class': "form-control no-br", 'placeholder': "Email"}), required=True)
     def __init__(self, *args, **kwargs):
+        """
+        Initializes the MemberInviteForm using parent constructor.
+        """
         super(MemberInviteForm, self).__init__(*args, **kwargs)
 
     def clean_email(self):
+        """
+        Validates that the email does not already belong to an existing user.
+
+        Raises:
+            ValidationError: If a user with the same email already exists.
+        """
         email = self.cleaned_data.get('email',None)
         if email:
             users = User.objects.filter(email = email)
@@ -388,6 +499,12 @@ class MemberInviteForm(forms.ModelForm):
 
 
 def get_academic_status():
+    """
+    Helper function to get a list of academic status choices.
+
+    Returns:
+        list: List of tuples in the format (status_id, status_name).
+    """
     choices = []
     try:
         status = Academic_Status.objects.all()
@@ -416,6 +533,9 @@ def get_academic_status():
 
 class SearchCvForm(forms.Form):
     """ Formulario para busqueda de Curricula """
+    """
+    Form used for filtering/searching candidate CVs based on various academic and demographic criteria.
+    """
     degree = forms.MultipleChoiceField(
         choices=get_degrees(select=False),
         required=False,
@@ -509,6 +629,9 @@ class SearchCvForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        """
+        Initializes SearchCvForm and optionally sets career/municipal field choices based on selected area/state.
+        """
         area_selected = kwargs.pop('area_selected', None)
         state_selected = kwargs.pop('state_selected', None)
         super(SearchCvForm, self).__init__(*args, **kwargs)
@@ -518,6 +641,15 @@ class SearchCvForm(forms.Form):
             self.fields['municipal'].choices = get_municipals(state_selected)
 
     def clean_degree(self):
+        """
+        Validates the selected degrees by checking their existence in the database.
+
+        Raises:
+            ValidationError: If a selected degree ID does not exist.
+
+        Returns:
+            list: Degree model instances.
+        """
         invalid_degree = _('Level of Study is invalid')
         degrees = None
         try:
@@ -532,6 +664,15 @@ class SearchCvForm(forms.Form):
         return degrees
 
     def clean_status(self):
+        """
+        Validates the selected academic statuses.
+
+        Raises:
+            ValidationError: If a selected status ID does not exist.
+
+        Returns:
+            list: Academic_Status model instances.
+        """
         invalid_status = _('Status is invalid')
         status = None
         try:
@@ -593,6 +734,15 @@ class SearchCvForm(forms.Form):
         return careers
 
     def clean_min_age(self):
+        """
+        Validates that min age is within 18-65 and less than max age.
+
+        Raises:
+            ValidationError: If constraints are violated.
+
+        Returns:
+            int: Validated minimum age.
+        """
         min_age = int(self.cleaned_data.get('min_age'))
         max_age = int(self.data['max_age'])
         if min_age < 18 or min_age > 65:
@@ -602,6 +752,15 @@ class SearchCvForm(forms.Form):
         return min_age
 
     def clean_max_age(self):
+        """
+        Validates that max age is within 18-65.
+
+        Raises:
+            ValidationError: If constraints are violated.
+
+        Returns:
+            int: Validated maximum age.
+        """
         max_age = int(self.cleaned_data.get('max_age'))
         if max_age < 18 or max_age > 65:
                 raise forms.ValidationError(_('Choose an age within the range of 18 to 65 years'))

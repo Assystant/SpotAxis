@@ -8,7 +8,22 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to create the 'ExternalReferal' model.
 
+    Model fields:
+    - id: Auto-incrementing primary key.
+    - name: CharField with max length 50, default empty string.
+    - active: BooleanField indicating if the referral is active, defaults to True.
+    - company: ForeignKey to the 'Company' model with cascade delete behavior.
+
+    Model options:
+    - verbose_name set to 'External Referal'.
+    - verbose_name_plural set to 'External Referals'.
+
+    Dependencies:
+    - Depends on migration '0020_auto_20170802_1348' from the 'companies' app.
+    """
     dependencies = [
         ('companies', '0020_auto_20170802_1348'),
     ]

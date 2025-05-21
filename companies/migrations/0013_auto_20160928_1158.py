@@ -7,7 +7,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to remove management permission fields from the RecruiterInvitation model 
+    and add a new 'membership' field.
 
+    This migration performs the following operations on the RecruiterInvitation model:
+        - Removes the Boolean fields:
+            * application_process_management
+            * job_management
+            * site_management
+            * team_management
+        - Adds a new field 'membership' of type PositiveSmallIntegerField with a default value of 1.
+
+    The 'membership' field likely represents different membership levels or tiers for invited recruiters.
+
+    Dependencies:
+        - Depends on migration '0012_auto_20160928_1104' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0012_auto_20160928_1104'),
     ]

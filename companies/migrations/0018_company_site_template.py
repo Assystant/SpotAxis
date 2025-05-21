@@ -7,7 +7,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to add the 'site_template' field to the 'Company' model.
 
+    Changes made:
+    - Added a new field 'site_template' as a PositiveIntegerField.
+    - This field allows blank values and defaults to 1.
+
+    Dependency:
+    - Depends on the previous migration '0017_auto_20161114_1757' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0017_auto_20161114_1757'),
     ]

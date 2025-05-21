@@ -7,7 +7,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to add the 'no_of_employees' field to the 'Company' model.
 
+    The new field represents the number of employees in a company.
+
+    Field details:
+    - no_of_employees: IntegerField, optional (nullable), with a verbose name
+      'No of Employees'.
+
+    Dependencies:
+        - Applies after the '0003_stage' migration in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0003_stage'),
     ]

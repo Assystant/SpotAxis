@@ -7,7 +7,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to update model options for the Recruiter model.
 
+    This migration sets custom permissions for the Recruiter model, 
+    including team management, site management, job management, 
+    and application process management. It also defines the verbose 
+    names for the model.
+
+    Dependencies:
+        - Depends on migration '0008_auto_20160920_1229' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0008_auto_20160920_1229'),
     ]

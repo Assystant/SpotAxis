@@ -7,7 +7,16 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to update the model options for the 'Recruiter' model.
 
+    Changes the verbose names to:
+        - verbose_name: 'Recruiter'
+        - verbose_name_plural: 'Recruiters'
+
+    Dependencies:
+        - This migration depends on '0004_company_no_of_employees' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0004_company_no_of_employees'),
     ]

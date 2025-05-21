@@ -7,7 +7,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to add 'above_jobs' and 'below_jobs' fields to the 'Company' model.
 
+    Changes made:
+    - Added 'above_jobs' field as a TextField with no default (empty string set as default).
+    - Added 'below_jobs' field as a TextField with no default (empty string set as default).
+    - Both fields are intended to store text content related to job postings or job display customization.
+
+    Dependency:
+    - Depends on the previous migration '0018_company_site_template' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0018_company_site_template'),
     ]

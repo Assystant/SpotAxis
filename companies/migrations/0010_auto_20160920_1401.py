@@ -7,7 +7,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to update the Recruiter model's options and add new Boolean fields.
 
+    This migration performs the following operations:
+    - Sets the verbose_name and verbose_name_plural options for the Recruiter model.
+    - Adds four Boolean fields to the Recruiter model to represent different management permissions:
+        * team_management
+        * site_management
+        * job_management
+        * application_process_management
+
+    Each added field defaults to False.
+
+    Dependencies:
+        - Depends on migration '0009_auto_20160920_1348' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0009_auto_20160920_1348'),
     ]

@@ -7,7 +7,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to add a new field 'referal_type' to the 'ExternalReferal' model.
 
+    Field details:
+    - Name: referal_type
+    - Type: CharField
+    - Choices: 
+        ('JB', 'Job Board')
+        ('ER', 'External Referer')
+    - Default: 'JB'
+    - Max length: 2
+    - This field is required (no null or blank).
+
+    Dependencies:
+    - Depends on migration '0022_auto_20171011_1931' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0022_auto_20171011_1931'),
     ]

@@ -7,7 +7,15 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to rename a field in the RecruiterInvitation model.
 
+    This migration renames the field 'invitation_token' to 'token' 
+    in the 'recruiterinvitation' model to simplify the field name.
+
+    Dependencies:
+        - Applies after the migration '0007_recruiterinvitation' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0007_recruiterinvitation'),
     ]

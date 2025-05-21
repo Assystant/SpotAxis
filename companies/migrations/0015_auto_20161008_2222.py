@@ -7,7 +7,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to alter the 'ban_list' field in the 'Company' model.
 
+    Changes made:
+    - Modified 'ban_list' field to allow blank values and null values.
+    - Set default value of 'ban_list' to None.
+    - Field remains a TextField.
+
+    This update makes the 'ban_list' field optional, enabling companies 
+    to have no ban list without causing validation errors.
+
+    Dependencies:
+    - Depends on migration '0014_auto_20161007_1717' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0014_auto_20161007_1717'),
     ]

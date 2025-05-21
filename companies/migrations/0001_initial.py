@@ -12,6 +12,25 @@ import re
 
 
 class Migration(migrations.Migration):
+    """
+    Handles the initial migration for the 'companies' app database schema.
+
+    This migration creates the core models for managing company-related data:
+    - Company
+    - Company_Industry
+    - Recommendation_Status
+    - Recommendations
+    - Recruiter
+    - Wallet
+
+    It also sets up the necessary fields, foreign keys, and relationships between
+    these models and related models such as users and addresses.
+
+    Attributes:
+        initial (bool): Marks this migration as the initial one for the app.
+        dependencies (list): List of migration dependencies including common app and user model.
+        operations (list): List of migration operations such as model creations and field additions.
+    """
 
     initial = True
 

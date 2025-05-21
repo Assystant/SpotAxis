@@ -9,6 +9,27 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to create the RecruiterInvitation model.
+
+    This model stores invitations sent to potential recruiters,
+    including their email, a unique invitation token, and the user
+    who sent the invitation.
+
+    Fields:
+        - id: Auto-generated primary key.
+        - email: Email address of the invitee (optional).
+        - invitation_token: Unique token for invitation validation (optional).
+        - invited_by: ForeignKey to the user who sent the invitation (optional, cascade delete).
+
+    Model options:
+        - verbose_name: 'Recruiter Invitation'
+        - verbose_name_plural: 'Recruiter Invitations'
+
+    Dependencies:
+        - Depends on the swappable AUTH_USER_MODEL.
+        - Depends on migration '0006_auto_20160916_1136' in the 'companies' app.
+    """
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

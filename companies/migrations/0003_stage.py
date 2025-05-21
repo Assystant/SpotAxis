@@ -8,7 +8,24 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to create the 'Stage' model in the 'companies' app.
 
+    The 'Stage' model represents different stages associated with a company.
+
+    Fields created:
+    - id: Auto-incrementing primary key.
+    - name: Optional CharField for the name of the stage (max length 50).
+    - company: Optional ForeignKey linking the stage to a 'Company' instance, 
+      with SET_NULL on deletion.
+
+    Model options:
+    - ordering by 'name'
+    - verbose_name set to 'Stages'
+
+    Dependencies:
+        - 'companies' migration '0002_auto_20160814_1355'
+    """
     dependencies = [
         ('companies', '0002_auto_20160814_1355'),
     ]

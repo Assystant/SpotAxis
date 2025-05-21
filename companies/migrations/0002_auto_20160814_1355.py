@@ -8,6 +8,21 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to update the 'Company' model by removing the 'address' field
+    and adding new location-related fields: 'city', 'state', and 'nationality'.
+
+    Changes applied in this migration:
+    - Removes the OneToOneField 'address' from 'Company'.
+    - Adds a new CharField 'city' to store the company's city.
+    - Adds a new CharField 'state' to store the company's state.
+    - Adds a ForeignKey 'nationality' linking to the 'Country' model,
+      representing the company's nationality.
+
+    Dependencies:
+        - Initial migration of 'common' app (0001_initial)
+        - Initial migration of 'companies' app (0001_initial)
+    """
 
     dependencies = [
         ('common', '0001_initial'),

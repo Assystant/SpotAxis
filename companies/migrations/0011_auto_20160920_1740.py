@@ -7,7 +7,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to add management permission fields to the RecruiterInvitation model.
 
+    This migration adds the following Boolean fields to the RecruiterInvitation model, 
+    each defaulting to False:
+        - team_management
+        - site_management
+        - job_management
+        - application_process_management
+
+    These fields represent the permissions assigned to the invited recruiters.
+
+    Dependencies:
+        - Depends on migration '0010_auto_20160920_1401' in the 'companies' app.
+    """
     dependencies = [
         ('companies', '0010_auto_20160920_1401'),
     ]
