@@ -14,7 +14,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.conf import settings
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _, gettext 
 from django.utils.encoding import python_2_unicode_compatible
 
 try:
@@ -695,11 +695,11 @@ class TicketChange(models.Model):
     def __str__(self):
         out = '%s ' % self.field
         if not self.new_value:
-            out += ugettext('removed')
+            out += gettext('removed')
         elif not self.old_value:
-            out += ugettext('set to %s') % self.new_value
+            out += gettext('set to %s') % self.new_value
         else:
-            out += ugettext('changed from "%(old_value)s" to "%(new_value)s"') % {
+            out += gettext('changed from "%(old_value)s" to "%(new_value)s"') % {
                 'old_value': self.old_value,
                 'new_value': self.new_value
                 }

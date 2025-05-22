@@ -12,7 +12,7 @@ def i18n_url(url, translate=TRANSLATED_URLS):
     Translate or not an URL part.
     """
     if translate:
-        return gettext_lazy(url)
+        return gettext_lazy as _(url)
     return url
 
 _ = i18n_url
