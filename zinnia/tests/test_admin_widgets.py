@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 
 from zinnia.admin.widgets import MPTTFilteredSelectMultiple
 from zinnia.admin.widgets import MiniTextarea

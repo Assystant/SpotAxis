@@ -14,8 +14,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _, ugettext
-from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import gettext_lazy as _, gettext
+from six import python_2_unicode_compatible
+from django.urls import reverse
 
 try:
     from django.utils import timezone
@@ -496,7 +497,7 @@ class Ticket(models.Model):
         a URL to the submitter of a ticket.
         """
         from django.contrib.sites.models import Site
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         try:
             site = Site.objects.get_current()
         except:
@@ -515,7 +516,7 @@ class Ticket(models.Model):
         a staff member (in emails etc)
         """
         from django.contrib.sites.models import Site
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         try:
             site = Site.objects.get_current()
         except:
@@ -548,8 +549,7 @@ class Ticket(models.Model):
         return '%s %s' % (self.id, self.title)
 
     def get_absolute_url(self):
-        return 'helpdesk_view', (self.id,)
-    get_absolute_url = models.permalink(get_absolute_url)
+        return reverse('helpdesk_view', args=[self.id])
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -695,11 +695,11 @@ class TicketChange(models.Model):
     def __str__(self):
         out = '%s ' % self.field
         if not self.new_value:
-            out += ugettext('removed')
+            out += gettext('removed')
         elif not self.old_value:
-            out += ugettext('set to %s') % self.new_value
+            out += gettext('set to %s') % self.new_value
         else:
-            out += ugettext('changed from "%(old_value)s" to "%(new_value)s"') % {
+            out += gettext('changed from "%(old_value)s" to "%(new_value)s"') % {
                 'old_value': self.old_value,
                 'new_value': self.new_value
                 }
@@ -946,8 +946,7 @@ class KBCategory(models.Model):
         verbose_name_plural = _('Knowledge base categories')
 
     def get_absolute_url(self):
-        return 'helpdesk_kb_category', (), {'slug': self.slug}
-    get_absolute_url = models.permalink(get_absolute_url)
+        return reverse('helpdesk_kb_category', kwargs={'slug': self.slug})
 
 
 @python_2_unicode_compatible
@@ -1014,8 +1013,7 @@ class KBItem(models.Model):
         verbose_name_plural = _('Knowledge base items')
 
     def get_absolute_url(self):
-        return 'helpdesk_kb_item', (self.id,)
-    get_absolute_url = models.permalink(get_absolute_url)
+        return reverse('helpdesk_kb_item', args=[self.id])
 
 
 @python_2_unicode_compatible
@@ -1075,7 +1073,7 @@ class UserSettings(models.Model):
     We should always refer to user.usersettings.settings['setting_name'].
     """
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
 
     settings_pickled = models.TextField(
         _('Settings Dictionary'),

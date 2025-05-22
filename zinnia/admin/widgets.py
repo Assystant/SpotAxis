@@ -6,7 +6,7 @@ from django.contrib.admin import widgets
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.forms import Media
 from django.utils import six
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import escape
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe

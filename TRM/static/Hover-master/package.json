@@ -19,6 +19,7 @@
     "grunt-version": "^0.3.0"
   },
   "dependencies": {
+    "hover.css": "file:",
     "load-grunt-tasks": "~0.2.0"
   }
 }

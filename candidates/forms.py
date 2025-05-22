@@ -4,16 +4,16 @@
 
 from __future__ import absolute_import
 from django.db.models import Q
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django import forms
-from localflavor.us.forms import USPhoneNumberField
+from phonenumber_field.modelfields import PhoneNumberField
 from common.forms import get_states, get_municipals, get_initial_country
 from candidates.models import *
 from companies.forms import get_company_industries#, get_company_areas
 from common.fields import SingleFileField, MultiFileField
 import unicodedata
 from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from ckeditor.widgets import CKEditorWidget
 
 

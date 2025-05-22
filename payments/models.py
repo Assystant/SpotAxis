@@ -6,7 +6,7 @@ from companies.models import Company
 from django.db import models
 from django.db.models.expressions import Value
 from django.db.models.fields import BooleanField
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from TRM import settings
 class Active(models.Manager):
     use_for_related_fields = True
@@ -120,7 +120,7 @@ class PriceSlab(models.Model):
         return False
 
 class Subscription(models.Model):
-    company = models.OneToOneField(Company, null=True, blank=True, default=None)
+    company = models.OneToOneField(Company, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     expiry = models.DateTimeField(null=True, blank=True, default=None)
     added_users = models.PositiveIntegerField(null=True, blank=True, default=0)
     price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None,on_delete=models.SET_NULL)

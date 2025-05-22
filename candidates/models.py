@@ -8,7 +8,7 @@ from datetime import date, timedelta, datetime
 from django.db import models
 from django.db.models import Q
 from common.models import Gender, Marital_Status, Country, State, Municipal, Degree, Address
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from dateutil.relativedelta import relativedelta
 from companies.models import *
 from django.conf import settings

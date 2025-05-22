@@ -18,7 +18,7 @@ from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.template.loader import select_template
 from django.utils import timezone
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 

@@ -6,7 +6,7 @@ from __future__ import absolute_import
 import warnings
 
 from django.utils.encoding import force_bytes
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import linebreaks
 
 from zinnia.settings import MARKDOWN_EXTENSIONS

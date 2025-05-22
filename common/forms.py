@@ -11,7 +11,7 @@ from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from common.models import User, AccountVerification, Address, Country, State, Municipal, EmailVerification, send_TRM_email, Subdomain
 from common import registration_settings
 from django.template import loader

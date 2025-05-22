@@ -9,7 +9,7 @@ from companies.models import Recruiter
 from activities.utils import post_org_notification
 from TRM.settings import ROOT_DOMAIN, protocol
 from payments.models import Subscription, Transactions, PriceSlab
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 def SubscriptionCronJob():
     print((str(datetime.now()) + ' --> Subscription Cron start'))
     try:
