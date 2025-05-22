@@ -223,7 +223,7 @@ If your PR fails any of these checks, it **cannot be merged** until fixed.
 | Feature branch created from `develop` | ✅ |
 | Branch name includes issue number | ✅ |
 | `pre-commit` installed and passing | ✅ |
-| Branch rebased with latest `main` | ✅ |
+| Branch rebased with latest `develop` | ✅ |
 | PR linked to GitHub issue | ✅ |
 | Small commits for better traceability | ✅ |
 | All reviewer comments addressed | ✅ |
