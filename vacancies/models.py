@@ -952,21 +952,21 @@ class VacancyStage(models.Model):
     criteria = models.TextField(default=None, null=True, blank=True)
 
     def __unicode__(self):
-    """
-    Returns the string representation of the VacancyStage.
+        """
+        Returns the string representation of the VacancyStage.
 
-    Returns:
-        str: The name of the linked Stage.
-    """
+        Returns:
+            str: The name of the linked Stage.
+        """
         return self.stage.name
 
     def isLocked(self):
-    """
-    Checks if the VacancyStage is locked either by the locked flag or postulant activity.
+        """
+        Checks if the VacancyStage is locked either by the locked flag or postulant activity.
 
-    Returns:
-        bool: True if locked, False otherwise.
-    """
+        Returns:
+            bool: True if locked, False otherwise.
+        """
 
         if self.locked:
             return True
@@ -985,65 +985,65 @@ class VacancyStage(models.Model):
             return False
 
     def criteria_as_list(self):
-    """
-    Converts the criteria text into a list of criteria strings.
+        """
+        Converts the criteria text into a list of criteria strings.
 
-    Returns:
-        list[str] or None: List of criteria split by ';;' or None if criteria is empty.
-    """
+        Returns:
+            list[str] or None: List of criteria split by ';;' or None if criteria is empty.
+        """
         if self.criteria:
             return [criterion for criterion in self.criteria.split(';;')]
         else:
             return None
 
     def non_members(self):
-    """
-    Fetches active recruiters of the vacancy's company not assigned to this stage.
+        """
+        Fetches active recruiters of the vacancy's company not assigned to this stage.
 
-    Returns:
-        QuerySet: Recruiters not assigned to this VacancyStage.
-    """
+        Returns:
+            QuerySet: Recruiters not assigned to this VacancyStage.
+        """
 
         employers = self.vacancy.company.recruiter_set.all().filter(user__is_active=True).exclude(id__in=[r.id for r in self.recruiters.all()])
         return employers
 
     def members(self):
-    """
-    Fetches active recruiters of the vacancy's company assigned to this stage.
+        """
+        Fetches active recruiters of the vacancy's company assigned to this stage.
 
-    Returns:
-        QuerySet: Recruiters assigned to this VacancyStage.
-    """
+        Returns:
+            QuerySet: Recruiters assigned to this VacancyStage.
+        """
         employers = self.vacancy.company.recruiter_set.all().filter(user__is_active=True, id__in=[r.id for r in self.recruiters.all()])
         return employers
 
     def active_count(self):
-    """
-    Counts active postulants (non-discarded) associated with this stage.
+        """
+        Counts active postulants (non-discarded) associated with this stage.
 
-    Returns:
-        int: Number of active postulants.
-    """
+        Returns:
+            int: Number of active postulants.
+        """
         # return self.postulate_set.all().filter(discard=False).count() + self.public_postulate_set.all().filter(discard=False).count()
         return self.postulate_set.all().filter(discard=False).count()
 
     def fellow_recruiters(self):
-    """
-    Returns recruiters who are either assigned to this stage or have membership level >= 2.
+        """
+        Returns recruiters who are either assigned to this stage or have membership level >= 2.
 
-    Returns:
-        QuerySet: Relevant recruiters.
-    """
+        Returns:
+            QuerySet: Relevant recruiters.
+        """
 
         return self.vacancy.company.recruiter_set.all().filter(user__is_active=True).filter(Q(id__in=[r.id for r in self.recruiters.all()])|Q(membership__gte=2))
 
     def get_absolute_url(self):
-    """
-    Constructs and returns the absolute URL to the vacancy stage details.
+        """
+        Constructs and returns the absolute URL to the vacancy stage details.
 
-    Returns:
-        str: Absolute URL string.
-    """
+        Returns:
+            str: Absolute URL string.
+        """
         if self.vacancy.company.subdomain.cname:
             url = self.vacancy.company.subdomain.cname
         else:
@@ -1106,13 +1106,13 @@ class VacancyTags(models.Model):
 
 class Medium(models.Model):
     """Model definition for Medium. Defines the external referral domain."""
-"""
-Attributes:
-    name (CharField): Name of the medium/referral source.
+    """
+    Attributes:
+        name (CharField): Name of the medium/referral source.
 
-Methods:
-    __unicode__():
-        Returns the name of the medium as string representation.
+    Methods:
+        __unicode__():
+            Returns the name of the medium as string representation.
 """
 
     name = models.CharField(max_length=100)
@@ -1440,7 +1440,7 @@ class Comment(models.Model):
             return "%s - %s" % (str(self.stage),self.stagesection())
 
     def get_scores(self):
-         """
+        """
         Retrieves all Postulate_Score instances associated with this comment's postulate stage and recruiter.
 
         Returns:
