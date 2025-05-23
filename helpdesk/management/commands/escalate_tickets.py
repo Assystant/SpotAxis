@@ -30,6 +30,16 @@ from helpdesk.lib import send_templated_mail, safe_template_context
 
 
 class Command(BaseCommand):
+    """
+    Django management command to escalate tickets in specified queues.
+
+    Options:
+        --queues: Comma-separated list of queue slugs to include (default is all).
+        --verboseescalation: Enables verbose output during escalation process.
+
+    The command filters tickets based on status, on_hold, priority, and last escalation date,
+    and escalates them by lowering their priority number and notifying relevant parties.
+    """
     def __init__(self):
         BaseCommand.__init__(self)
 
@@ -45,6 +55,11 @@ class Command(BaseCommand):
             )
 
     def handle(self, *args, **options):
+        """
+        Entry point for the management command.
+
+        Parses options, validates queues, and calls the escalate_tickets function.
+        """
         verbose = False
         queue_slugs = None
         queues = []
@@ -67,7 +82,23 @@ class Command(BaseCommand):
 
 
 def escalate_tickets(queues, verbose):
-    """ Only include queues with escalation configured """
+    """
+    Escalate tickets for the given queues based on queue escalation settings.
+
+    Args:
+        queues (list of str): List of queue slugs to process. If empty, all queues
+                              with escalation configured are processed.
+        verbose (bool): If True, prints detailed processing information.
+
+    The function:
+      - Computes the number of working days since the last escalation,
+        accounting for EscalationExclusion days.
+      - Finds tickets that are open or reopened, not on hold, and whose last escalation
+        or creation date is older than the required escalation date.
+      - Lowers their priority by 1 (higher priority).
+      - Sends notification emails to the submitter, queue CC, and assigned user.
+      - Adds a public FollowUp note and a TicketChange record for the priority update.
+    """
     queryset = Queue.objects.filter(escalate_days__isnull=False).exclude(escalate_days=0)
     if queues:
         queryset = queryset.filter(slug__in=queues)

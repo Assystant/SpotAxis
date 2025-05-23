@@ -6,7 +6,7 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
+    """Migration to add a new 'permission_name' field to the Queue model."""
     dependencies = [
         ('helpdesk', '0007_max_length_by_integer'),
     ]
