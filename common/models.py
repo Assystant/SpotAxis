@@ -18,7 +18,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.contrib.sites.models import Site
 from django.template import loader
 from TRM.settings import logo_email, SITE_URL, PHOTO_USER_DEFAULT, NOTIFICATION_EMAILS, MEDIA_URL, SITE_SUFFIX, DEFAULT_FROM_EMAIL, ADMINS
-from localflavor.us.models import PhoneNumberField
+from phonenumber_field.modelfields import PhoneNumberField
 import types
 
 Name = _('Name')
