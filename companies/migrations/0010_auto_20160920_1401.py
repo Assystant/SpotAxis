@@ -4,9 +4,20 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
+"""
+Migration to update the Recruiter model by adding Boolean fields for management roles.
+
+This migration:
+- Resets verbose names for the Recruiter model.
+- Adds four Boolean fields representing different management permissions:
+  team_management, site_management, job_management, and application_process_management.
+
+Dependencies:
+    - Depends on migration '0009_auto_20160920_1348' in the 'companies' app.
+"""
 
 class Migration(migrations.Migration):
-
+    """Migration class to alter Recruiter model options and add management role fields."""
     dependencies = [
         ('companies', '0009_auto_20160920_1348'),
     ]

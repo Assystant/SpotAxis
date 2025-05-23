@@ -4,6 +4,15 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
+"""
+Migration to add the 'referal_type' field to the ExternalReferal model.
+
+Details:
+- Adds a CharField named 'referal_type' with a max length of 2.
+- The field has choices: 'JB' (Job Board) and 'ER' (External Referer).
+- The default value is set to 'JB'.
+- This field categorizes the type of external referral source.
+"""
 
 class Migration(migrations.Migration):
 

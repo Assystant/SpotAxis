@@ -6,9 +6,21 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to create the RecruiterInvitation model.
+
+This migration introduces the 'RecruiterInvitation' model used to manage
+invitations sent by existing users to potential recruiters via email.
+The model stores the invitee's email, an invitation token for verification,
+and a reference to the user who sent the invitation.
+
+Dependencies:
+    - Depends on the swappable AUTH_USER_MODEL setting.
+    - Depends on the '0006_auto_20160916_1136' migration in the 'companies' app.
+"""
 
 class Migration(migrations.Migration):
-
+    """Migration class to add the RecruiterInvitation model."""
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('companies', '0006_auto_20160916_1136'),

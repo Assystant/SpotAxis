@@ -5,9 +5,23 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to modify the Wallet model in the companies app.
+
+This migration removes the 'adds' and 'redeems' fields from the Wallet model.
+It also introduces a new ForeignKey field 'currency' to reference the Currency model
+from the common app, and a 'last_updated' DateTimeField to track updates to the wallet.
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Applies changes to the Wallet model:
+    - Removes obsolete fields 'adds' and 'redeems'.
+    - Adds a ForeignKey 'currency' to reference the Currency model, allowing wallets
+      to be associated with a specific currency type.
+    - Adds a 'last_updated' DateTimeField that automatically records the timestamp of 
+      the most recent modification to the wallet entry.
+    """
     dependencies = [
         ('common', '0004_auto_20160908_2311'),
         ('companies', '0015_auto_20161008_2222'),

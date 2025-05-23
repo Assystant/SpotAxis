@@ -4,9 +4,22 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
+"""
+Migration to add the 'site_template' field to the Company model.
+
+This field stores the numeric identifier of the template used to render
+a company's site. It allows the system to support multiple visual layouts
+or themes for company websites.
+"""
 
 class Migration(migrations.Migration):
+    """
+    Adds a new field 'site_template' to the Company model.
 
+    The 'site_template' is a PositiveIntegerField with a default value of 1,
+    representing the default visual template used for rendering a company’s
+    public-facing site. This enables customization of site appearance per company.
+    """
     dependencies = [
         ('companies', '0017_auto_20161114_1757'),
     ]

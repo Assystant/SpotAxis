@@ -4,9 +4,22 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
+"""
+Migration to refactor recruiter permission structure.
+
+This migration:
+- Removes individual Boolean fields from the Recruiter model:
+  - application_process_management
+  - job_management
+  - site_management
+  - team_management
+- Introduces a new 'membership' field (PositiveSmallIntegerField) to centralize recruiter roles.
+  The 'membership' field likely encodes permission levels or recruiter roles numerically.
+"""
 
 class Migration(migrations.Migration):
-
+    """Handles migration of the Recruiter model by consolidating multiple permission flags 
+    into a single membership field."""
     dependencies = [
         ('companies', '0011_auto_20160920_1740'),
     ]

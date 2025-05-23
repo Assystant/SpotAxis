@@ -4,9 +4,24 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
+"""
+Migration to add 'above_jobs' and 'below_jobs' fields to the Company model.
+
+These fields are used to store HTML or plain text content that is displayed
+above and below the job listings on a company's public job page. This allows
+for custom messaging, banners, or instructions to be presented to applicants.
+"""
 
 class Migration(migrations.Migration):
+    """
+    Adds two text fields to the Company model:
+    
+    - 'above_jobs': Content to display above the job listings.
+    - 'below_jobs': Content to display below the job listings.
 
+    These fields enable companies to include additional text or HTML on their job pages,
+    enhancing communication with potential applicants.
+    """
     dependencies = [
         ('companies', '0018_company_site_template'),
     ]

@@ -5,6 +5,16 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to alter the 'company' field in the ExternalReferal model.
+
+Changes made:
+- The 'company' ForeignKey field is now allowed to be blank and null.
+- Default value for 'company' set to None.
+- On delete behavior remains CASCADE.
+
+This allows ExternalReferal instances to optionally not be linked to any Company.
+"""
 
 class Migration(migrations.Migration):
 

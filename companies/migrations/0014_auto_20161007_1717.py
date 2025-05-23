@@ -5,9 +5,18 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to introduce a 'Ban' model for managing banned users within a company context.
+
+This migration:
+- Creates a new 'Ban' model to store information about banned users, including email, ban duration,
+  associated company, and a custom function to define ban behavior.
+- Adds a 'ban_list' text field to the 'Company' model to store serialized or reference information
+  related to bans.
+"""
 
 class Migration(migrations.Migration):
-
+    """Defines the schema changes for introducing the Ban model and updating the Company model."""
     dependencies = [
         ('companies', '0013_auto_20160928_1158'),
     ]

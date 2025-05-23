@@ -4,9 +4,20 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
+"""
+Migration to update the default logo image for the Company model.
+
+This migration modifies the 'logo' field of the 'Company' model to change
+the default image from a .jpg file to a .png file located at
+'logos_TRM/logo_TRM_company_default.png'. This change ensures that new companies
+without a custom logo will use the updated default logo image.
+
+Dependencies:
+    - Depends on the previous migration '0005_auto_20160908_2305' in the 'companies' app.
+"""
 
 class Migration(migrations.Migration):
-
+    """Migration class to alter the 'logo' field in the 'Company' model."""
     dependencies = [
         ('companies', '0005_auto_20160908_2305'),
     ]

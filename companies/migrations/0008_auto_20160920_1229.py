@@ -4,9 +4,18 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
+"""
+Migration to rename the field 'invitation_token' to 'token' in the RecruiterInvitation model.
+
+This migration updates the RecruiterInvitation model by renaming the
+'invitation_token' field to 'token' to simplify the field name and improve clarity.
+
+Dependencies:
+    - Depends on the '0007_recruiterinvitation' migration in the 'companies' app.
+"""
 
 class Migration(migrations.Migration):
-
+    """Migration class to rename a field in RecruiterInvitation model."""
     dependencies = [
         ('companies', '0007_recruiterinvitation'),
     ]

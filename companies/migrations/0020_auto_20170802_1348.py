@@ -4,9 +4,22 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
+"""
+Migration to alter the 'above_jobs' and 'below_jobs' fields in the Company model
+to support optional (nullable) content and to explicitly define their default as empty.
+"""
 
 class Migration(migrations.Migration):
+    """
+    Updates the 'above_jobs' and 'below_jobs' fields of the Company model:
 
+    - Both fields now allow null values (`null=True`), meaning they can be left unset in the database.
+    - Both fields are now explicitly allowed to be blank in forms (`blank=True`), which helps during form validation.
+    - The default value for both fields is set to an empty byte string (`b''`), though this behaves similarly to an empty string.
+
+    These changes enhance the flexibility and robustness of these fields for use cases where 
+    additional content is not always required above or below job listings.
+    """
     dependencies = [
         ('companies', '0019_auto_20170621_1244'),
     ]

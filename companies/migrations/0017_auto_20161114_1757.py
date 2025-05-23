@@ -5,9 +5,21 @@ from __future__ import unicode_literals
 import ckeditor.fields
 from django.db import migrations
 
+"""
+Migration to alter the 'description' field of the Company model.
+
+This change replaces the plain text field with a RichTextField from the ckeditor package,
+enabling rich-text formatting in the company's short description.
+"""
 
 class Migration(migrations.Migration):
+    """
+    Alters the 'description' field in the Company model to use CKEditor's RichTextField.
 
+    This allows company descriptions to include HTML content such as headings, lists,
+    links, and formatted text, improving presentation flexibility in the admin interface
+    and other rich content displays.
+    """
     dependencies = [
         ('companies', '0016_auto_20161105_1039'),
     ]
