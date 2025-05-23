@@ -6,6 +6,15 @@ import os
 from . import pdf2txt 
 
 def extract_font_size_font_family(font_string):
+	 """
+    Extracts the font family and font size from a CSS style string.
+
+    Args:
+        font_string (str): The CSS style string containing font information.
+
+    Returns:
+        tuple: A tuple containing the font family (str) and font size (int).
+    """
 	
 	font_family = ''
 	font_size_integer = 0

@@ -1,3 +1,7 @@
+"""
+This module extracts structured data from resumes, including
+education, skills, work experience, and contact details.
+"""
 from __future__ import absolute_import
 import datefinder
 import json

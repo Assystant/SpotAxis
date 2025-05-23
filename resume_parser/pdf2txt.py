@@ -1,3 +1,7 @@
+"""
+This module provides functionality to convert PDF files to text, HTML,
+XML, or tag formats using the pdfminer library.
+"""
 #!C:\Python27\python.exe
 from __future__ import absolute_import
 import sys
@@ -13,7 +17,14 @@ from pdfminer.image import ImageWriter
 
 # main
 def file_name_case(fname, output_file, output_type):
+    """
+    Converts a PDF file to the specified output format.
 
+    Args:
+        fname (str): The path to the PDF file.
+        output_file (str): The path to the output file.
+    """
+        
     debug = 0
 
     password = ''
@@ -85,8 +96,15 @@ def file_name_case(fname, output_file, output_type):
     return
 
 def file_content_case(file_obj, output_file, output_type):
-    debug = 0
+    """
+    Converts the content of a file to the specified output format.
 
+    Args:
+        file_obj (file): The file object to convert.
+        output_file (str): The path to the output file.
+        output_type (str): The type of output format.
+    """
+    debug = 0
     password = ''
     pagenos = set()
     maxpages = 0
