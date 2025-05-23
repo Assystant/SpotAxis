@@ -8,7 +8,7 @@ from django.conf import settings
 
 from TRM.settings import SUBDOMAIN_URLCONF, ROOT_DOMAIN, SITE_SUFFIX, SUPPORT_URLCONF, BLOG_URLCONF
 from django.db.models import Q
-from django.core.urlresolvers import set_urlconf, reverse, resolve
+from django.urls import set_urlconf, reverse, resolve
 from django.http import Http404, HttpResponseRedirect
 import time
 from common.models import Subdomain

@@ -13,8 +13,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.contrib.syndication.views import Feed
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import NoReverseMatch
-from django.core.urlresolvers import reverse
+from django.urls import NoReverseMatch
+from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_text

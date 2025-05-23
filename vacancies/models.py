@@ -8,7 +8,7 @@ from common.models import Degree, Gender, Employment_Type, Country, Currency
 from companies.models import Company_Industry as Industry, Company, Stage, Recruiter, ExternalReferal
 from customField.models import Template, FieldValue
 from datetime import date, timedelta
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models import Q, Sum
 from django.utils.translation import gettext as _

@@ -5,7 +5,7 @@ import re
 from ckeditor.fields import RichTextField
 from common.models import Address, Subdomain, Country, Currency
 from django.core import validators
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models.fields import CharField
 from django.utils.translation import gettext as _

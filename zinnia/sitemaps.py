@@ -1,7 +1,7 @@
 """Sitemaps for Zinnia"""
 from __future__ import absolute_import
 from django.contrib.sitemaps import Sitemap
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Count
 from django.db.models import Max
 

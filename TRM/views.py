@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import datetime
 from datetime import date
 from django.shortcuts import render_to_response, redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template import RequestContext
 import autodoc
 from django.utils.translation import gettext as _

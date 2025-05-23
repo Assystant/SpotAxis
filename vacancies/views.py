@@ -15,7 +15,7 @@ from datetime import date, timedelta, datetime
 from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse, NoReverseMatch, resolve
+from django.urls import reverse, NoReverseMatch, resolve
 from django.db.models import Count, Q
 from django.http import QueryDict, HttpResponseNotFound, JsonResponse, Http404
 from django.shortcuts import render_to_response, redirect, get_object_or_404, render
