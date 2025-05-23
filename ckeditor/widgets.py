@@ -18,7 +18,25 @@ from django.utils.encoding import force_str
 from django.core.serializers.json import DjangoJSONEncoder
 
 class LazyEncoder(DjangoJSONEncoder):
+    """
+    JSON encoder subclass that serializes Django lazy translation objects.
+
+    This encoder converts instances of django.utils.functional.Promise (used for lazy
+    translation strings) into regular strings for JSON serialization.
+
+    Methods:
+        default(obj): Override the default JSON encoding method to handle Promise instances.
+    """
     def default(self, obj):
+        """
+        Serialize objects to JSON format, converting lazy translation strings to regular strings.
+
+        Args:
+            obj (object): The object to serialize.
+
+        Returns:
+            str or super().default: The serialized JSON string or the result of the parent default method.
+        """
         if isinstance(obj, Promise):
             return force_text(obj)
         return super(LazyEncoder, self).default(obj)
@@ -52,8 +70,16 @@ class CKEditorWidget(forms.Textarea):
     """
     Widget providing CKEditor for Rich Text Editing.
     Supports direct image uploads and embed.
+
+    Django form widget providing CKEditor integration for rich text editing.
     """
     class Media:
+        """
+        Media class to define required JavaScript files for the widget.
+
+        Attributes:
+            js (tuple): Tuple of JavaScript file URLs to include.
+        """
         js = ()
         jquery_url = getattr(settings, 'CKEDITOR_JQUERY_URL', None)
         if jquery_url:
@@ -71,6 +97,7 @@ class CKEditorWidget(forms.Textarea):
                     CKEDITOR_MEDIA_PREFIX = '/media/ckeditor/'")
 
     def __init__(self, config_name='default', extra_plugins=None, external_plugin_resources=None, *args, **kwargs):
+        """Initialize the CKEditor widget."""
         super(CKEditorWidget, self).__init__(*args, **kwargs)
         # Setup config from defaults.
         self.config = DEFAULT_CONFIG.copy()
@@ -105,6 +132,17 @@ class CKEditorWidget(forms.Textarea):
         self.external_plugin_resources = external_plugin_resources or []
 
     def render(self, name, value, attrs={}):
+        """
+        Render the HTML of the widget including CKEditor initialization.
+
+        Args:
+            name (str): Name of the form field.
+            value (str or None): Value of the field (HTML content).
+            attrs (dict, optional): Additional HTML attributes for the widget.
+
+        Returns:
+            SafeString: Marked safe HTML string including textarea and CKEditor setup script.
+        """
         if value is None:
             value = ''
         final_attrs = self.build_attrs(attrs, name=name)
