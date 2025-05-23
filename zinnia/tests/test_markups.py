@@ -1,11 +1,12 @@
 """Test cases for Zinnia's markups"""
+from __future__ import absolute_import
 import sys
 import warnings
 from unittest import skipUnless
 try:
     import builtins
 except ImportError:  # Python 2
-    import __builtin__ as builtins
+    import builtins as builtins
 
 from django.test import TestCase
 
@@ -131,10 +132,10 @@ class HtmlFormatTestCase(TestCase):
 
     def test_html_format_default(self):
         markups.MARKUP_LANGUAGE = None
-        self.assertEquals(html_format(''), '')
-        self.assertEquals(html_format('Content'), '<p>Content</p>')
-        self.assertEquals(html_format('Content</p>'), 'Content</p>')
-        self.assertEquals(html_format('Hello\nworld!'),
+        self.assertEqual(html_format(''), '')
+        self.assertEqual(html_format('Content'), '<p>Content</p>')
+        self.assertEqual(html_format('Content</p>'), 'Content</p>')
+        self.assertEqual(html_format('Hello\nworld!'),
                           '<p>Hello<br />world!</p>')
 
     @skipUnless(is_lib_available('textile'), 'Textile is not available')

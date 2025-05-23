@@ -1,4 +1,5 @@
 """Callable Queryset mixins for Zinnia views"""
+from __future__ import absolute_import
 from django.core.exceptions import ImproperlyConfigured
 
 

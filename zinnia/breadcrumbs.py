@@ -1,4 +1,5 @@
 """Breadcrumb module for Zinnia"""
+from __future__ import absolute_import
 import re
 from datetime import datetime
 from functools import wraps

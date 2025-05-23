@@ -1,6 +1,32 @@
+"""
+Utility functions for managing activities and notifications in the SpotAxis application.
+
+This module provides helper functions for creating and managing activities and notifications
+across the system. It handles the creation of notifications, organizational notifications,
+and various types of activities with their associated message chunks.
+"""
+
+from __future__ import absolute_import
+from __future__ import print_function
 from activities.models import *
 
 def post_notification(user=None, actor = None, action = None, target = None, target_action = None, subject = None, subject_action = None, msg=None, url=None, message_chunks = []):
+	"""
+	Creates a notification for a specific user with optional message chunks.
+	
+	Args:
+		user (User, optional): The user to receive the notification.
+		actor (User, optional): The user who triggered the notification.
+		action (str, optional): The type of action that occurred.
+		target (User, optional): The target user of the action.
+		target_action (str, optional): Action associated with the target.
+		subject (str, optional): The subject of the notification.
+		subject_action (str, optional): Action associated with the subject.
+		msg (str, optional): The main notification message.
+		url (str, optional): URL associated with the notification.
+		message_chunks (list, optional): List of dictionaries containing message chunk data.
+			Each chunk should have 'subject', 'subject_action', and 'action_url' keys.
+	"""
 	notification = Notification.objects.create(user = user , message = msg, action_url = url, actor=actor, action = action, target = target, target_action = target_action, subject = subject, subject_action = subject_action)
 	print(notification)
 	for order,message_chunk in enumerate(message_chunks):
@@ -8,6 +34,27 @@ def post_notification(user=None, actor = None, action = None, target = None, tar
 		notification.message_chunks.add(chunk)
 
 def post_org_notification(user=None,actor=None, msg=None, url=None, action = None, target = None, target_action = None, subject = None, subject_action = None, message_chunks = []):
+	"""
+	Creates notifications for multiple users in an organization.
+	
+	This function handles sending notifications to all members of an organization,
+	excluding the actor who triggered the notification. It can either notify all
+	members of a company or a specific subset of users.
+	
+	Args:
+		user (str|User|QuerySet, optional): 
+			- 'all' or None: Notifies all company members
+			- User or QuerySet: Specific users to notify
+		actor (User): The user who triggered the notification.
+		msg (str, optional): The main notification message.
+		url (str, optional): URL associated with the notification.
+		action (str, optional): The type of action that occurred.
+		target (User, optional): The target user of the action.
+		target_action (str, optional): Action associated with the target.
+		subject (str, optional): The subject of the notification.
+		subject_action (str, optional): Action associated with the subject.
+		message_chunks (list, optional): List of message chunk dictionaries.
+	"""
 	if user == 'all' or user == None:
 		company = actor.recruiter.company.all()[0]
 		users = [r.user for r in company.recruiter_set.all()]
@@ -28,6 +75,34 @@ def post_org_notification(user=None,actor=None, msg=None, url=None, action = Non
 		post_notification(user=member, actor = actor, msg = msg, url = url, target = target, subject = subject, action = action, target_action = target_action, subject_action = subject_action, message_chunks = message_chunks)
 
 def post_activity(actor = None, action = None, message = None, subscribers=[], action_url = "", activity_type = 0, target = None, target_action = None, subject = None, subject_action = None, postulate_id = None, message_chunks=[]):
+	"""
+	Creates and manages activities in the system with associated notifications.
+	
+	This function handles the creation of different types of activities (normal and postulate-related)
+	and manages their subscribers and notifications. It supports two main activity types:
+	- Type 0: Standard activity
+	- Type 1: Postulate-related activity
+	
+	Args:
+		actor (User, optional): The user who performed the activity.
+		action (str, optional): The type of action performed.
+		message (str, optional): The main activity message.
+		subscribers (list, optional): List of users to subscribe to the activity.
+		action_url (str, optional): URL associated with the activity.
+		activity_type (int, optional): Type of activity (0 for standard, 1 for postulate).
+		target (User, optional): The target user of the activity.
+		target_action (str, optional): Action associated with the target.
+		subject (str, optional): The subject of the activity.
+		subject_action (str, optional): Action associated with the subject.
+		postulate_id (int, optional): ID of the associated postulate for type 1 activities.
+		message_chunks (list, optional): List of message chunk dictionaries.
+	
+	Note:
+		For activity_type 1 (postulate-related):
+		- If an activity already exists for the postulate, it adds new subscribers
+		- If no activity exists, it creates a new one with appropriate subscribers
+		- Subscribers include postulate vacancy company recruiters with membership level 3
+	"""
 	try:
 		company = actor.recruiter.company.all()[0]
 	except:

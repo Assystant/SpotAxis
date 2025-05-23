@@ -65,7 +65,7 @@ If you need support implementing this ATS on your server, please reach out to ho
 * PyJWT
 * PyMySQL
 * pyPdf
-* PyPDF2
+* ~PyPDF2~
 * python-dateutil
 * python-openid
 * python-social-auth

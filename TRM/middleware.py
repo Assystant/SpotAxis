@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # from social.apps.django_app.middleware import SocialAuthExceptionMiddleware
+from __future__ import absolute_import
 from django.shortcuts import render
 # from social.exceptions import AuthCanceled
 from django.utils.cache import patch_vary_headers

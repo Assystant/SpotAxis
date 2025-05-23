@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import uuid
 
 from django import forms
@@ -18,5 +19,5 @@ class UploadedFileForm(forms.ModelForm):
         # Eliminates accents and other special characters in file name
         name = ''.join((c for c in unicodedata.normalize('NFD', data.name) if unicodedata.category(c) != 'Mn'))
         # Construct the new name as <unique-hex>-<name>.<ext>
-        data.name = u'%s-%s' % (uuid.uuid4().hex, name)
+        data.name = '%s-%s' % (uuid.uuid4().hex, name)
         return data

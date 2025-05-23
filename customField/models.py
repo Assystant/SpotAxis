@@ -1,5 +1,6 @@
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from companies.models import Company
 from customField.settings import ALLOWED_FORM_FIELDS, TEMPLATE_MANAGER, ALLOWED_FORM_WIDGETS
 from django.db import models
@@ -46,7 +47,7 @@ class FieldType(models.Model):
     """
     
     name = models.CharField(verbose_name="Label", max_length=50, null=True, blank=True)
-    classification = models.ForeignKey(FieldClassification, verbose_name="Classification", null=True, blank=True, default=None)
+    classification = models.ForeignKey(FieldClassification, verbose_name="Classification", null=True, blank=True, default=None,on_delete=models.SET_NULL)
     is_enabled = models.BooleanField(verbose_name="Is Enabled?", blank=True, default=True)
     form_field = models.CharField(verbose_name='Inbuilt Field', max_length=50, choices=form_fields_as_choices(), default = None)
     field_widget = models.CharField(verbose_name='Inbuilt Widget', max_length=50, choices=form_widgets_as_choices(), default = None)
@@ -68,7 +69,7 @@ class Template(models.Model):
     name = models.CharField(verbose_name="Label", max_length=50, null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    belongs_to = models.ForeignKey(Company, null=True, blank=True, default=None)
+    belongs_to = models.ForeignKey(Company, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     # created_by = models.ForeignKey(TEMPLATE_MANAGER)
 
     class Meta:
@@ -95,9 +96,9 @@ class Field(models.Model):
     """
 
     name = models.CharField(verbose_name="Label", max_length=50, null=True, blank=True)
-    field_type = models.ForeignKey(FieldType, verbose_name='Field Type')
+    field_type = models.ForeignKey(FieldType, verbose_name='Field Type',on_delete=models.CASCADE)
     is_required = models.BooleanField(verbose_name="Is Required?", blank=True, default=False)
-    template = models.ForeignKey(Template)
+    template = models.ForeignKey(Template,on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     # created_by = models.ForeignKey(TEMPLATE_MANAGER)
@@ -115,7 +116,7 @@ class Option(models.Model):
     """
 
     name = models.CharField(verbose_name="Field Option", max_length=50)
-    field = models.ForeignKey(Field, related_name="field_option")
+    field = models.ForeignKey(Field, related_name="field_option",on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     # created_by = models.ForeignKey(TEMPLATE_MANAGER)
@@ -132,7 +133,7 @@ class FieldValue(models.Model):
     This model stores End User Values filled for :model:`customField.Field`s in :model:`customField.Template`s .
     """
 
-    field = models.ForeignKey(Field)
+    field = models.ForeignKey(Field,on_delete=models.CASCADE)
     value = models.CharField(null=True, blank=True, default="", max_length=50)
 
     class Meta:

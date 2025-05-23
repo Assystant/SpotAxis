@@ -6,7 +6,8 @@ django-helpdesk - A Django powered ticket tracker for small enterprise.
 views/staff.py - The bulk of the application - provides most business logic and
                  renders all staff-facing views.
 """
-from __future__ import unicode_literals
+
+from __future__ import absolute_import
 from datetime import datetime, timedelta
 
 from django import VERSION
@@ -1189,36 +1190,36 @@ def run_report(request, report):
     metric3 = False
     for ticket in report_queryset:
         if report == 'userpriority':
-            metric1 = u'%s' % ticket.get_assigned_to
-            metric2 = u'%s' % ticket.get_priority_display()
+            metric1 = '%s' % ticket.get_assigned_to
+            metric2 = '%s' % ticket.get_priority_display()
 
         elif report == 'userqueue':
-            metric1 = u'%s' % ticket.get_assigned_to
-            metric2 = u'%s' % ticket.queue.title
+            metric1 = '%s' % ticket.get_assigned_to
+            metric2 = '%s' % ticket.queue.title
 
         elif report == 'userstatus':
-            metric1 = u'%s' % ticket.get_assigned_to
-            metric2 = u'%s' % ticket.get_status_display()
+            metric1 = '%s' % ticket.get_assigned_to
+            metric2 = '%s' % ticket.get_status_display()
 
         elif report == 'usermonth':
-            metric1 = u'%s' % ticket.get_assigned_to
-            metric2 = u'%s %s' % (month_name(ticket.created.month), ticket.created.year)
+            metric1 = '%s' % ticket.get_assigned_to
+            metric2 = '%s %s' % (month_name(ticket.created.month), ticket.created.year)
 
         elif report == 'queuepriority':
-            metric1 = u'%s' % ticket.queue.title
-            metric2 = u'%s' % ticket.get_priority_display()
+            metric1 = '%s' % ticket.queue.title
+            metric2 = '%s' % ticket.get_priority_display()
 
         elif report == 'queuestatus':
-            metric1 = u'%s' % ticket.queue.title
-            metric2 = u'%s' % ticket.get_status_display()
+            metric1 = '%s' % ticket.queue.title
+            metric2 = '%s' % ticket.get_status_display()
 
         elif report == 'queuemonth':
-            metric1 = u'%s' % ticket.queue.title
-            metric2 = u'%s %s' % (month_name(ticket.created.month), ticket.created.year)
+            metric1 = '%s' % ticket.queue.title
+            metric2 = '%s %s' % (month_name(ticket.created.month), ticket.created.year)
 
         elif report == 'daysuntilticketclosedbymonth':
-            metric1 = u'%s' % ticket.queue.title
-            metric2 = u'%s %s' % (month_name(ticket.created.month), ticket.created.year)
+            metric1 = '%s' % ticket.queue.title
+            metric2 = '%s %s' % (month_name(ticket.created.month), ticket.created.year)
             metric3 = ticket.modified - ticket.created
             metric3 = metric3.days
 
@@ -1230,10 +1231,10 @@ def run_report(request, report):
     table = []
 
     if report == 'daysuntilticketclosedbymonth':
-        for key in summarytable2.keys():
+        for key in list(summarytable2.keys()):
             summarytable[key] = summarytable2[key] / summarytable[key]
 
-    header1 = sorted(set(list(i for i, _ in summarytable.keys())))
+    header1 = sorted(set(list(i for i, _ in list(summarytable.keys()))))
 
     column_headings = [col1heading] + possible_options
 

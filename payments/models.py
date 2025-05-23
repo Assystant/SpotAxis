@@ -1,4 +1,5 @@
     # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from datetime import datetime
 from common.models import Currency
 from companies.models import Company
@@ -28,9 +29,9 @@ class ServiceCategory(models.Model):
         return self.name
  
 class Services(models.Model):
-    name = models.CharField(verbose_name=_(u'Name of Service'), max_length=100, null=True, blank=True, default=None)
-    codename = models.CharField(verbose_name=_(u'Codename'), max_length=30, null=True, blank=True, default=None)
-    category = models.ForeignKey(ServiceCategory, null=True, blank=True, default=None)
+    name = models.CharField(verbose_name=_('Name of Service'), max_length=100, null=True, blank=True, default=None)
+    codename = models.CharField(verbose_name=_('Codename'), max_length=30, null=True, blank=True, default=None)
+    category = models.ForeignKey(ServiceCategory, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     enabled = models.BooleanField(default=True, blank = True)
     # cost = models.DecimalField(verbose_name=_(u'Cost for Service'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     # iva = models.DecimalField(verbose_name=_(u'IVA'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
@@ -42,11 +43,11 @@ class Services(models.Model):
     all_objects = models.Manager()
     
     def __unicode__(self):
-        return u'%s' % self.name
+        return '%s' % self.name
 
     class Meta:
-        verbose_name = _(u'Service')
-        verbose_name_plural = _(u'Services')
+        verbose_name = _('Service')
+        verbose_name_plural = _('Services')
         ordering = ('name',)
 
 class Package(models.Model):
@@ -88,19 +89,19 @@ class Package(models.Model):
     
 
 SLAB_PERIOD = (
-    ('M', _(u'Monthly')),
-    ('Y', _(u'Yearly'))
+    ('M', _('Monthly')),
+    ('Y', _('Yearly'))
 )
 
 class PriceSlab(models.Model):
-    currency = models.ForeignKey(Currency, null=True, blank=True, default=None)
+    currency = models.ForeignKey(Currency, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     slab_period = models.CharField(choices = SLAB_PERIOD, max_length = 1, null=True, blank=True, default=None)
     expiry_period = models.PositiveSmallIntegerField(null=True, blank=True, default =0)
-    amount = models.DecimalField(verbose_name=_(u'Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
-    buffered_amount = models.DecimalField(verbose_name=_(u'Buffered Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
-    price_per_user = models.DecimalField(verbose_name=_(u'Price Per User'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
-    buffered_price_per_user = models.DecimalField(verbose_name=_(u'Buffered Price Per User'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
-    package = models.ForeignKey(Package, null=True, blank=True, default=None)
+    amount = models.DecimalField(verbose_name=_('Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
+    buffered_amount = models.DecimalField(verbose_name=_('Buffered Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
+    price_per_user = models.DecimalField(verbose_name=_('Price Per User'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
+    buffered_price_per_user = models.DecimalField(verbose_name=_('Buffered Price Per User'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
+    package = models.ForeignKey(Package, null=True, blank=True, default=None,on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = "Price Slab"
@@ -122,7 +123,7 @@ class Subscription(models.Model):
     company = models.OneToOneField(Company, null=True, blank=True, default=None)
     expiry = models.DateTimeField(null=True, blank=True, default=None)
     added_users = models.PositiveIntegerField(null=True, blank=True, default=0)
-    price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None)
+    price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     auto_renew = models.BooleanField(default = True, blank=True)
     last_week = models.BooleanField(default=False, blank=True)
     last_day = models.BooleanField(default=False, blank=True)
@@ -155,45 +156,45 @@ class Subscription(models.Model):
         return amount
     
 WALLET_MOVEMENTS_TYPE = (
-    ('A', _(u'Added')),
-    ('R', _(u'Paid'))
+    ('A', _('Added')),
+    ('R', _('Paid'))
 )
 
 class Transactions(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     company = models.ForeignKey(Company, verbose_name=_('Company'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # service = models.ForeignKey(Services, verbose_name=_('Service'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    type = models.CharField(verbose_name=_(u'Type of Movement'), choices=WALLET_MOVEMENTS_TYPE, max_length=1, null=True, blank=True, default=None)
+    type = models.CharField(verbose_name=_('Type of Movement'), choices=WALLET_MOVEMENTS_TYPE, max_length=1, null=True, blank=True, default=None)
     reason = models.CharField(null=True, blank=True, default=None, max_length=200)
-    amount = models.DecimalField(verbose_name=_(u'Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
-    balance = models.DecimalField(verbose_name=_(u'Balance'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
-    timestamp = models.DateTimeField(verbose_name=_(u'Date'), auto_now_add=True)
+    amount = models.DecimalField(verbose_name=_('Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
+    balance = models.DecimalField(verbose_name=_('Balance'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
+    timestamp = models.DateTimeField(verbose_name=_('Date'), auto_now_add=True)
 
     def __unicode__(self):
-        return u'%s' % str(self.amount)
+        return '%s' % str(self.amount)
 
     class Meta:
-        verbose_name = _(u'Transaction')
-        verbose_name_plural = _(u'Transactions')
+        verbose_name = _('Transaction')
+        verbose_name_plural = _('Transactions')
         ordering = ('-timestamp',)
 
 DISCOUNT_VALUE_TYPE = (
-    ('V', _(u'Value')),
-    ('P', _(u'Percent'))
+    ('V', _('Value')),
+    ('P', _('Percent'))
 )
 DISCOUNT_TRANSACTION_TYPE = (
-    ('A', _(u'Add')),
-    ('S', _(u'Subtract'))
+    ('A', _('Add')),
+    ('S', _('Subtract'))
 )
 
 class Discount(models.Model):
     name = models.CharField(null=True, default='', blank=True, max_length=200)
     label = models.CharField(null=True, default='', blank=True, max_length=50, unique= True)
     expiry = models.DateField(default=None, null=True, blank=True)
-    type = models.CharField(verbose_name=_(u'Type of Value'), choices=DISCOUNT_VALUE_TYPE, max_length=1, null=True, blank=True, default=None)
-    transaction_type = models.CharField(verbose_name=_(u'Type of Movement'), choices=DISCOUNT_TRANSACTION_TYPE, max_length=1, null=True, blank=True, default=None)
-    currency = models.ForeignKey(Currency, null=True, blank=True, default=None)
-    amount = models.DecimalField(verbose_name=_(u'Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
+    type = models.CharField(verbose_name=_('Type of Value'), choices=DISCOUNT_VALUE_TYPE, max_length=1, null=True, blank=True, default=None)
+    transaction_type = models.CharField(verbose_name=_('Type of Movement'), choices=DISCOUNT_TRANSACTION_TYPE, max_length=1, null=True, blank=True, default=None)
+    currency = models.ForeignKey(Currency, null=True, blank=True, default=None,on_delete=models.SET_NULL)
+    amount = models.DecimalField(verbose_name=_('Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     # min_amount = models.DecimalField(verbose_name=_(u'Amount'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     max_usage = models.PositiveSmallIntegerField(default=1, null=True, blank=True)
     available_to_signups = models.BooleanField(default = True)
@@ -204,7 +205,7 @@ class Discount(models.Model):
     companies = models.ManyToManyField(Company, through="Discount_Usage")
 
     def __unicode__(self):
-        return u'%s' % str(self.amount)
+        return '%s' % str(self.amount)
 
     class Meta:
         verbose_name = 'Discount'
@@ -216,12 +217,12 @@ class ScheduledTransactions(models.Model):
     company = models.ForeignKey(Company, verbose_name=_('Company'), null=True, blank=True, default=None, on_delete = models.SET_NULL)
     # amount = models.DecimalField(verbose_name="Amount", max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     timestamp = models.DateTimeField(verbose_name='Timestamp', auto_now=True)
-    discount = models.ForeignKey(Discount, null=True, blank=True, default=None)
+    discount = models.ForeignKey(Discount, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     added_users = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
-    price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None)
+    price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None,on_delete=models.SET_NULL)
 
     def __unicode__(self):
-        return u'%s' % str(self.company)
+        return '%s' % str(self.company)
 
     class Meta:
         verbose_name = "Scheduled Transaction"

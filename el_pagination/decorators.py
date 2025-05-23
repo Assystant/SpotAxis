@@ -1,6 +1,7 @@
 """View decorators for Ajax powered pagination."""
 
-from __future__ import unicode_literals
+
+from __future__ import absolute_import
 from functools import wraps
 
 from el_pagination.settings import (
@@ -43,7 +44,7 @@ def _get_template(querystring_key, mapping):
     """Return the template corresponding to the given ``querystring_key``."""
     default = None
     try:
-        template_and_keys = mapping.items()
+        template_and_keys = list(mapping.items())
     except AttributeError:
         template_and_keys = mapping
     for template, key in template_and_keys:

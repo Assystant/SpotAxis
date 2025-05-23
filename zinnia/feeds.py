@@ -1,10 +1,11 @@
 """Feeds for Zinnia"""
+from __future__ import absolute_import
 import os
 from mimetypes import guess_type
 try:
     from urllib.parse import urljoin
 except ImportError:  # Python 2
-    from urlparse import urljoin
+    from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 

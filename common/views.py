@@ -30,10 +30,38 @@ from utils import generate_random_username
 from requests_oauthlib import OAuth1
 from django.db.models import Q
 
+"""
+View functions for the common app.
+
+This module provides view functions and classes for:
+- User registration and activation
+- Social authentication
+- Profile management
+- Email management
+- Password management
+- Contact form handling
+- Social media integration
+
+Most views require authentication unless explicitly noted.
+"""
+
 # ------------------- #
 # Start Registration #
 # ------------------- #
 def save_candidate_social_data(backend, user, response, *args, **kwargs):
+    """
+    Save additional candidate data from social authentication.
+    
+    Called after successful social authentication to store additional
+    profile information from the social platform.
+    
+    Args:
+        backend: Social auth backend instance
+        user: User instance
+        response: Social platform's response data
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+    """
     # Register candidate and profile when entering with Facebook or Google
     # print backend.name
     # print response
@@ -72,6 +100,16 @@ def save_candidate_social_data(backend, user, response, *args, **kwargs):
 
 
 def registration_activate(request, activation_key):
+    """
+    Activate a user account using the provided activation key.
+    
+    Args:
+        request: HttpRequest object
+        activation_key: String key for account activation
+        
+    Returns:
+        HttpResponse: Activation success/failure page
+    """
     activation_key = activation_key.lower()
     account = AccountVerification.objects.activate_user(activation_key)
 
@@ -132,6 +170,16 @@ def registration_activate(request, activation_key):
 
 
 def registration_complete(request, template_name=None):
+    """
+    Display registration completion page.
+    
+    Args:
+        request: HttpRequest object
+        template_name: Optional template to use
+        
+    Returns:
+        HttpResponse: Registration completion page
+    """
     # raise ValueError(request.session.keys());
     if not template_name:
         template_name = 'new_registration_messages.html'
@@ -149,6 +197,17 @@ def registration_complete(request, template_name=None):
 
 @login_required
 def register_blank_email(request):
+    """
+    Handle registration of email for users without one.
+    
+    Typically used after social authentication when email is not provided.
+    
+    Args:
+        request: HttpRequest object
+        
+    Returns:
+        HttpResponse: Email registration form or success page
+    """
     """ Register e-mail when the user does not have registered in the database """
     if request.method == 'POST':
         form = RegisterEmailForm(instance=request.user, data=request.POST)
@@ -212,6 +271,17 @@ def redirect_after_login(request):
 # ------------ #
 @login_required
 def email_change(request):
+    """
+    Handle email address change requests.
+    
+    Processes the email change form and initiates verification process.
+    
+    Args:
+        request: HttpRequest object
+        
+    Returns:
+        HttpResponse: Email change form or confirmation page
+    """
     if request.method == 'POST':
         form = ChangeEmailForm(request.POST)
         if form.is_valid():
@@ -289,10 +359,32 @@ def contact_form(request):
     return render(request,'contact_page.html',{'form':form,})
 
 class ContactFormView(FormView):
+    """
+    View for handling contact form submissions.
+    
+    Provides:
+    - Form display
+    - Validation
+    - Email sending
+    - Success handling
+    
+    Attributes:
+        form_class: The form class to use
+        template_name: Template for rendering the form
+    """
     form_class = ContactForm
     template_name = 'contact_page.html'
 
     def form_valid(self, form):
+        """
+        Handle valid form submission.
+        
+        Args:
+            form: Validated form instance
+            
+        Returns:
+            HttpResponse: Redirect to success page
+        """
         form.save()
         return super(ContactFormView, self).form_valid(form)
 
@@ -325,6 +417,15 @@ class ContactFormView(FormView):
         )
 
 def debug_fb_token(fbtoken):
+    """
+    Debug a Facebook access token.
+    
+    Args:
+        fbtoken: Facebook access token
+        
+    Returns:
+        dict: Token debug information
+    """
     consumer_key = settings.SOCIALAUTH_FACEBOOK_OAUTH_KEY
     consumer_secret = settings.SOCIALAUTH_FACEBOOK_OAUTH_SECRET
     url = "https://graph.facebook.com/debug_token?input_token="+str(fbtoken)+"&access_token="+consumer_key+"|"+consumer_secret
@@ -479,7 +580,21 @@ def get_li_companies(user):
     return Data
 
 def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redirect_type=None):
-
+    """
+    Handle social media login requests.
+    
+    Processes login/registration through various social platforms.
+    
+    Args:
+        request: HttpRequest object
+        social_code: Identifier for social platform
+        vacancy_id: Optional vacancy to redirect to
+        recruiter_id: Optional recruiter reference
+        redirect_type: Optional redirect behavior specification
+        
+    Returns:
+        HttpResponse: Redirect to appropriate page after login
+    """
     csrftoken = csrf(request).values()[0]
     if not recruiter_id:
         recruiter_id = request.session.pop('recruiter_id', None)

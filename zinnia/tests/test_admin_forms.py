@@ -1,4 +1,5 @@
 """Test cases for Zinnia's admin forms"""
+from __future__ import absolute_import
 from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 from django.test import TestCase
 

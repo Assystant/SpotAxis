@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 from django import forms
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import get_language
 from django.core.exceptions import ImproperlyConfigured
 # from django.forms.util import flatatt
 from django.forms.utils import flatatt
 
 from django.utils.functional import Promise
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.core.serializers.json import DjangoJSONEncoder
 
 class LazyEncoder(DjangoJSONEncoder):

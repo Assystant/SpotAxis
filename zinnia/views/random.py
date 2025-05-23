@@ -1,4 +1,5 @@
 """Views for Zinnia random entry"""
+from __future__ import absolute_import
 from django.views.generic.base import RedirectView
 
 from zinnia.models.entry import Entry

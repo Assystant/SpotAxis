@@ -1,6 +1,7 @@
 """Model tests."""
 
-from __future__ import unicode_literals
+
+from __future__ import absolute_import
 from contextlib import contextmanager
 
 from django.template import Context
@@ -13,6 +14,7 @@ from el_pagination import (
     utils,
 )
 from el_pagination.paginators import DefaultPaginator
+from six.moves import range
 
 
 @contextmanager
@@ -23,7 +25,7 @@ def local_settings(**kwargs):
     ``TestCase.settings()``.
     """
     original_values = []
-    for key, value in kwargs.items():
+    for key, value in list(kwargs.items()):
         original_values.append([key, getattr(settings, key)])
         setattr(settings, key, value)
     try:
@@ -74,7 +76,7 @@ page_list_callable_dummy = lambda number, num_pages: [None]
 class PageListTest(TestCase):
 
     def setUp(self):
-        self.paginator = DefaultPaginator(range(30), 7, orphans=2)
+        self.paginator = DefaultPaginator(list(range(30)), 7, orphans=2)
         self.current_number = 2
         self.page_label = 'page'
         self.factory = RequestFactory()
@@ -117,7 +119,7 @@ class PageListTest(TestCase):
     def test_paginated(self):
         # Ensure the *paginated* method returns True if the page list contains
         # more than one page, False otherwise.
-        page = DefaultPaginator(range(10), 10).page(1)
+        page = DefaultPaginator(list(range(10)), 10).page(1)
         pages = el_models.PageList(self.request, page, self.page_label,
                                    context=Context())
         self.assertFalse(pages.paginated())
@@ -213,7 +215,7 @@ class PageListTest(TestCase):
 
     def test_page_list_render_just_one_page(self):
         # Ensure nothing is rendered if the page list contains only one page.
-        page = DefaultPaginator(range(10), 10).page(1)
+        page = DefaultPaginator(list(range(10)), 10).page(1)
         pages = el_models.PageList(self.request, page, self.page_label,
                                    context=Context())
         self.assertEqual('', utils.text(pages))
@@ -238,7 +240,7 @@ class PageListTest(TestCase):
 
     def test_next(self):
         # Ensure the correct next page is returned.
-        next_page = self.pages.next()
+        next_page = next(self.pages)
         self.assertEqual(self.current_number + 1, next_page.number)
 
     def test_no_previous(self):
@@ -254,7 +256,7 @@ class PageListTest(TestCase):
         pages = el_models.PageList(
             self.request, self.paginator.page(num_pages), self.page_label,
             context=Context())
-        self.assertEqual('', pages.next())
+        self.assertEqual('', next(pages))
 
     def test_customized_page_list_callable(self):
         # The page list is rendered based on ``settings.PAGE_LIST_CALLABLE``.
@@ -270,9 +272,9 @@ class PageListTest(TestCase):
         # Ensure white spaces in paths are correctly handled.
         path = '/a path/containing spaces/'
         request = self.factory.get(path)
-        next = el_models.PageList(
+        next = next(el_models.PageList(
             request, self.paginator.page(self.current_number),
-            self.page_label, context=Context()).next()
+            self.page_label, context=Context()))
         self.assertEqual(path.replace(' ', '%20') + next.url, next.path)
 
     def test_lookup(self):

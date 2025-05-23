@@ -1,11 +1,13 @@
 """Template tags and filters for Zinnia"""
+from __future__ import absolute_import
 import re
 from datetime import date
 from hashlib import md5
+from six.moves import map
 try:
     from urllib.parse import urlencode
 except ImportError:  # Python 2
-    from urllib import urlencode
+    from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -210,9 +212,7 @@ def get_calendar_entries(context, year=None, month=None,
     else:
         current_month = date(year, month, 1)
 
-    dates = list(map(
-        lambda x: settings.USE_TZ and timezone.localtime(x).date() or x.date(),
-        Entry.published.datetimes('publication_date', 'month')))
+    dates = list([settings.USE_TZ and timezone.localtime(x).date() or x.date() for x in Entry.published.datetimes('publication_date', 'month')])
 
     if current_month not in dates:
         dates.append(current_month)
@@ -239,8 +239,8 @@ def get_recent_comments(number=5, template='zinnia/tags/comments_recent.html'):
     Return the most recent comments.
     """
     # Using map(smart_text... fix bug related to issue #8554
-    entry_published_pks = map(smart_text,
-                              Entry.published.values_list('id', flat=True))
+    entry_published_pks = list(map(smart_text,
+                              Entry.published.values_list('id', flat=True)))
     content_type = ContentType.objects.get_for_model(Entry)
 
     comments = get_comment_model().objects.filter(
@@ -260,8 +260,8 @@ def get_recent_linkbacks(number=5,
     """
     Return the most recent linkbacks.
     """
-    entry_published_pks = map(smart_text,
-                              Entry.published.values_list('id', flat=True))
+    entry_published_pks = list(map(smart_text,
+                              Entry.published.values_list('id', flat=True)))
     content_type = ContentType.objects.get_for_model(Entry)
 
     linkbacks = get_comment_model().objects.filter(
@@ -285,7 +285,7 @@ def zinnia_pagination(context, page, begin_pages=1, end_pages=1,
     by splitting long list of page into 3 blocks of pages.
     """
     get_string = ''
-    for key, value in context['request'].GET.items():
+    for key, value in list(context['request'].GET.items()):
         if key != 'page':
             get_string += '&%s=%s' % (key, value)
 

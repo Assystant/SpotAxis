@@ -1,3 +1,13 @@
+"""
+Registration settings for the common app.
+
+This module defines configuration settings for the user registration process.
+It may include settings for:
+- Account activation
+- Email verification
+- Registration timeouts
+- Password policies
+"""
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured

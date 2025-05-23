@@ -15,6 +15,7 @@ Assuming 'food' = 'pizza' and 'best_foods' = ['pizza', 'pie', 'cake]:
 {% endif %}
 """
 
+from __future__ import absolute_import
 from django import template
 
 

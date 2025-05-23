@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import datefinder
-import docx
+from docx import Document
 import json
 import pdb
 import pdfminer
@@ -8,7 +10,7 @@ import re
 import subprocess
 import sys
 from bs4 import BeautifulSoup
-from cStringIO import StringIO
+from io import StringIO
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
@@ -19,7 +21,7 @@ from xml.dom.minidom import parseString
 
 from unidecode import unidecode
 def remove_non_ascii(text):
-    return unidecode(unicode(text, encoding = "utf-8"))
+    return unidecode(str(text, encoding = "utf-8"))
 '''
 global variable declarations
 '''
@@ -72,7 +74,7 @@ def pdf_to_text(filename):
     codec = 'utf-8'
     laparams = LAParams()
     device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
-    fp = file(filename, 'rb')
+    fp = open(filename, 'rb')
     interpreter = PDFPageInterpreter(rsrcmgr, device)
     password = ""
     maxpages = 0
@@ -251,7 +253,7 @@ def get_name(file_content):
         if line.strip():
             local_name_block_string += line.strip() + '\n'
     # Remove all empty sections and return upper block
-    local_list_name_block = filter(None,local_name_block_string.split('\n'))
+    local_list_name_block = [_f for _f in local_name_block_string.split('\n') if _f]
     # while (iter_count <3) and (name_user == ''):
     for item in local_list_name_block:
         if ('NAME' in item) or ('Name' in item):
@@ -417,8 +419,8 @@ def get_work_experience(file_content):
             if find_date == 'not found' or not find_date or not len(find_date) == 2:
                 continue
             else:
-                print word
-                print find_date
+                print(word)
+                print(find_date)
                 find_date = ' - '.join([fd.strip() for fd in find_date])
                 work_dict[find_date] = ''
                 
@@ -511,7 +513,7 @@ def extract_file_content(filename,  output_type):
             file_content = file2.read()
 
         elif file_extension == '.docx':
-            document = docx.Document(filename + '.docx')
+            document = Document(filename + '.docx')
             for paragraph in document.paragraphs:
                 file_content += paragraph.text.encode('utf-8')
         

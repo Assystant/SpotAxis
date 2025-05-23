@@ -1,4 +1,5 @@
 """Test cases for Zinnia's Author"""
+from __future__ import absolute_import
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.test import TestCase

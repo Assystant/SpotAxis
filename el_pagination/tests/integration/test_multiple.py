@@ -1,8 +1,10 @@
 """Multiple pagination integration tests."""
 
-from __future__ import unicode_literals
 
+
+from __future__ import absolute_import
 from el_pagination.tests.integration import SeleniumTestCase
+from six.moves import range
 
 
 class MultiplePaginationTest(SeleniumTestCase):
@@ -12,9 +14,9 @@ class MultiplePaginationTest(SeleniumTestCase):
     def test_new_elements_loaded(self):
         # Ensure a new page is loaded on click for each paginated elements.
         self.get()
-        with self.assertNewElements('object', range(4, 7)):
-            with self.assertNewElements('item', range(7, 10)):
-                with self.assertNewElements('entry', range(1, 5)):
+        with self.assertNewElements('object', list(range(4, 7))):
+            with self.assertNewElements('item', list(range(7, 10))):
+                with self.assertNewElements('entry', list(range(1, 5))):
                     self.click_link(2, 0)
                     self.click_link(3, 1)
                     self.click_link(self.MORE)
@@ -30,9 +32,9 @@ class MultiplePaginationTest(SeleniumTestCase):
     def test_direct_link(self):
         # Ensure direct links work.
         self.get(data={'objects-page': 3, 'items-page': 4, 'entries-page': 5})
-        self.assertElements('object', range(7, 10))
-        self.assertElements('item', range(10, 13))
-        self.assertElements('entry', range(11, 14))
+        self.assertElements('object', list(range(7, 10)))
+        self.assertElements('item', list(range(10, 13)))
+        self.assertElements('entry', list(range(11, 14)))
         self.assertIn('objects-page=3', self.selenium.current_url)
         self.assertIn('items-page=4', self.selenium.current_url)
         self.assertIn('entries-page=5', self.selenium.current_url)
@@ -40,9 +42,9 @@ class MultiplePaginationTest(SeleniumTestCase):
     def test_subsequent_pages(self):
         # Ensure elements are correctly loaded starting from a subsequent page.
         self.get(data={'objects-page': 2, 'items-page': 2, 'entries-page': 2})
-        with self.assertNewElements('object', range(1, 4)):
-            with self.assertNewElements('item', range(7, 10)):
-                with self.assertNewElements('entry', range(2, 8)):
+        with self.assertNewElements('object', list(range(1, 4))):
+            with self.assertNewElements('item', list(range(7, 10))):
+                with self.assertNewElements('entry', list(range(2, 8))):
                     self.click_link(self.PREVIOUS, 0)
                     self.click_link(self.NEXT, 1)
                     self.click_link(self.MORE)

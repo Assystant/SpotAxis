@@ -1,4 +1,81 @@
+"""AJAX View Handlers for SpotAxis Application
+
+This module contains Django view functions that handle asynchronous (AJAX) requests for the SpotAxis
+recruitment platform. It provides endpoints for various interactive features including candidate
+management, vacancy handling, form validation, and user interactions.
+
+Key Functional Areas:
+-------------------
+1. Candidate Management
+   - Profile filtering and search
+   - Academic and career information updates
+   - CV generation and management
+   - Form validation for various candidate sections (personal, contact, academic, etc.)
+
+2. Vacancy Processing
+   - Vacancy application handling
+   - Stage management
+   - Question answering
+   - Favorite/unfavorite functionality
+   - Candidate comparison and filtering
+
+3. User Interaction
+   - Authentication (ajax_login)
+   - Notifications
+   - Comments and ratings
+   - Social sharing
+   - Messaging and communication
+
+4. Company Operations
+   - Member management
+   - Permission updates
+   - Template management
+   - External referral handling
+
+5. Scheduling and Planning
+   - Interview scheduling
+   - Plan management
+   - Recurring updates
+   - Upcoming schedule retrieval
+
+Security Note:
+------------
+Many endpoints are decorated with @csrf_exempt, which disables CSRF protection. This is a potential
+security risk and should be reviewed for proper CSRF protection implementation.
+
+Dependencies:
+------------
+- Django framework
+- Various models from candidates, companies, payments, and vacancies apps
+- Custom forms and utilities
+- External services for social media integration
+
+Response Format:
+--------------
+Most endpoints return JSON responses (application/json) or plain text (text/plain) depending on
+the data being returned. Error handling is implemented throughout the module with appropriate
+HTTP status codes.
+
+Usage:
+-----
+These endpoints are typically called via AJAX from the frontend JavaScript code. They expect
+specific POST parameters and return structured responses that are handled by the frontend.
+
+Example:
+    POST /ajax/vacancies_postulate/
+    Parameters: vacancy_id, candidate_id
+    Returns: JSON response with application status
+
+Note:
+----
+This module is a critical component of the application's interactive features and should be
+maintained with careful consideration of security implications, especially regarding the
+@csrf_exempt decorators.
+"""
+
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
 import json
 import traceback
 from activities.utils import *
@@ -32,7 +109,7 @@ from django.views.decorators.csrf import csrf_exempt
 from scheduler.models import Schedule
 from TRM.context_processors import subdomain
 from TRM.settings import ROOT_DOMAIN, STATIC_URL
-from urlparse import parse_qsl
+from urllib.parse import parse_qsl
 from utils import validate_code, posttofbprofile, posttofbgroup,posttofbpage, posttoliprofile, posttolicompany, posttotwitter
 from vacancies.forms import Public_FilesForm, diff_month
 from vacancies.models import Question, VacancyStage, Vacancy, Comment, Postulate_Stage, Postulate_Score
@@ -40,23 +117,16 @@ from vacancies.models import Vacancy, Postulate, Salary_Type, Candidate_Fav , Va
 from validate_email import validate_email
 
 def filter_text_from_profile(arr=[], postulate_ids = [], public = False):
-    # if public:
-    #     public_postulates = Public_Postulate_Stage.objects.filter(id__in=postulate_ids)
-    #     pps = Public_Postulate_Stage.objects.none()
-    #     for text in arr:
-    #         pp = public_postulates.filter(Q(postulate__full_name__icontains=text) | Q(postulate__email__icontains=text) | Q(postulate__description__icontains=text))
-    #         pps = pps | pp
-    #         ids = []
-    #         text = text.lower()
-    #         for postulate in public_postulates:
-    #             ftext = postulate.postulate.file_text().lower()
-    #             if not text in ftext:
-    #                 ids = ids + [postulate.id]
+    """Filter candidate profiles based on text search criteria.
 
-    #         pp = public_postulates.exclude(id__in=ids)
-    #         pps = pps | pp
-    #     return list(set([p.id for p in pps]))
-    # else:
+    Args:
+        arr (list): List of search terms to filter by
+        postulate_ids (list): List of postulate IDs to search within
+        public (bool): Whether to search in public postulates
+
+    Returns:
+        list: List of matching postulate IDs
+    """
     postulates = Postulate_Stage.objects.filter(id__in=postulate_ids)
     pps = Postulate_Stage.objects.none()
     for text in arr:
@@ -135,6 +205,14 @@ def filter_text_from_profile(arr=[], postulate_ids = [], public = False):
     return list(set([p.id for p in pps]))
 
 def companies_change_academic_area(request):
+    """Update available careers based on selected academic area.
+
+    Args:
+        request: HTTP request containing area ID
+
+    Returns:
+        HttpResponse: JSON serialized career data
+    """
     id_area = request.POST.get('id')
     data = ""
     try:
@@ -145,6 +223,14 @@ def companies_change_academic_area(request):
     return HttpResponse(data, content_type='application/json')
 
 def companies_allow_career(request):
+    """Get degree codenames for selected career IDs.
+
+    Args:
+        request: HTTP request containing selected career IDs
+
+    Returns:
+        HttpResponse: JSON serialized degree data
+    """
     selected_ids = request.POST.getlist('selected_ids[]')
     degree_ids = []
     for selected_id in selected_ids:
@@ -154,12 +240,28 @@ def companies_allow_career(request):
     return HttpResponse(data, content_type='application/json')
 
 def companies_change_state(request):
+    """Get municipalities for selected state.
+
+    Args:
+        request: HTTP request containing state ID
+
+    Returns:
+        HttpResponse: JSON serialized municipality data
+    """
     id_state = request.POST.get('id')
     municipals = Municipal.objects.filter(state_id=id_state)
     data = serializers.serialize('json', municipals, fields=('pk', 'name'))
     return HttpResponse(data, content_type='application/json')
 
 def candidates_change_degree(request):
+    """Get degree codename for selected degree ID.
+
+    Args:
+        request: HTTP request containing degree ID
+
+    Returns:
+        HttpResponse: Degree codename as plain text
+    """
     degree = ""
     try:
         degree = Degree.objects.get(pk=request.POST.get('id')).codename
@@ -168,6 +270,14 @@ def candidates_change_degree(request):
     return HttpResponse(degree, content_type="text/plain")
 
 def candidates_change_career(request):
+    """Get career codename for selected career ID.
+
+    Args:
+        request: HTTP request containing career ID
+
+    Returns:
+        HttpResponse: Career codename as plain text
+    """
     career = ""
     try:
         career = Academic_Career.objects.get(pk=request.POST.get('id')).codename
@@ -176,6 +286,14 @@ def candidates_change_career(request):
     return HttpResponse(career, content_type="text/plain")
 
 def candidates_change_academic_status(request):
+    """Get academic status codename for selected status ID.
+
+    Args:
+        request: HTTP request containing status ID
+
+    Returns:
+        HttpResponse: Status codename as plain text
+    """
     status = ""
     try:
         status = Academic_Status.objects.get(id=request.POST.get('id')).codename
@@ -184,6 +302,14 @@ def candidates_change_academic_status(request):
     return HttpResponse(status, content_type="text/plain")
 
 def get_salarytype_codename(request):
+    """Get salary type codename for selected salary type ID.
+
+    Args:
+        request: HTTP request containing salary type ID
+
+    Returns:
+        HttpResponse: Salary type codename as plain text
+    """
     codename = ""
     try:
         codename = Salary_Type.objects.get(id=request.POST.get('id')).codename
@@ -192,6 +318,14 @@ def get_salarytype_codename(request):
     return HttpResponse(codename, content_type="text/plain")
 
 def vacancies_answer_question(request):
+    """Handle candidate's answer to a vacancy question.
+
+    Args:
+        request: HTTP request containing question ID and answer
+
+    Returns:
+        HttpResponse: Success or error message
+    """
     try:
         # Register Response
         question_id = request.POST.get('id')
@@ -210,18 +344,25 @@ def vacancies_answer_question(request):
         email_template_name = 'mails/answer_vacancy_email.html',
         send_TRM_email(subject_template_name=subject_template_name, email_template_name=email_template_name, context_email=context_email, to_user=question.user.email)
 
-        data = _(u'We have succesfully released a response.')
+        data = _('We have succesfully released a response.')
         # messages.info(request, message)
     except:
         tb = traceback.format_exc()
         print(tb)
-        data = _(u'An error has occured, please try again.')
+        data = _('An error has occured, please try again.')
         # messages.error(request, message)
 
     return HttpResponse(data)
 
 def vacancies_postulate(request):
-    """ Nominate a candidate for a vacancy """
+    """Handle candidate's application to a vacancy.
+
+    Args:
+        request: HTTP request containing vacancy and candidate information
+
+    Returns:
+        HttpResponse: Application status or error message
+    """
     if request.is_ajax():
         vacancy_id = request.GET.get('vacancy_id')
         referer = request.GET.get('referer')
@@ -322,6 +463,14 @@ def vacancies_postulate(request):
         raise Http404
 
 def mark_unmark_vacancy_as_favorite(request):
+    """Toggle favorite status for a vacancy.
+
+    Args:
+        request: HTTP request containing vacancy ID
+
+    Returns:
+        HttpResponse: Updated favorite status
+    """
     try:
         vacancy_id = request.GET.get('id')
         vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
@@ -339,6 +488,14 @@ def mark_unmark_vacancy_as_favorite(request):
     return HttpResponse(message_fav)
 
 def ajax_login(request):
+    """Handle AJAX-based user authentication.
+
+    Args:
+        request: HTTP request containing login credentials
+
+    Returns:
+        JsonResponse: Authentication status and user data
+    """
     context = {}
     context['success'] = False
     if request.is_ajax():
@@ -696,6 +853,14 @@ def archive_postulate(request):
 
 @csrf_exempt
 def validate_personal_form(request):
+    """Validate candidate's personal information form.
+
+    Args:
+        request: HTTP request containing form data
+
+    Returns:
+        JsonResponse: Validation results
+    """
     context={}
     context['success'] = False
     context['post'] = request.POST
@@ -726,6 +891,14 @@ def validate_personal_form(request):
 
 @csrf_exempt
 def validate_contact_form(request):
+    """Validate candidate's contact information form.
+
+    Args:
+        request: HTTP request containing form data
+
+    Returns:
+        JsonResponse: Validation results
+    """
     context={}
     context['success'] = False
     context['post'] = request.POST
@@ -1285,6 +1458,14 @@ def public_contact_form(request):
 
 @csrf_exempt
 def update_permissions(request):
+    """Update user permissions for a company or job.
+
+    Args:
+        request: HTTP request containing permission updates
+
+    Returns:
+        HttpResponse: Success or error message
+    """
     context={}
     context['success'] = False
     if request.method == 'POST':
@@ -2128,6 +2309,14 @@ def notifications(request):
 
 @csrf_exempt
 def post_message_to_stream(request):
+    """Post a message to the activity stream.
+
+    Args:
+        request: HTTP request containing message data
+
+    Returns:
+        JsonResponse: Post status
+    """
     context = {}
     context['success'] = False
     if request.method == 'POST':
@@ -2409,7 +2598,7 @@ def smart_share(request,id):
         debug_data = debug_token(profile.oauth_token,profile.social_code)
         if profile.social_code == 'fb':
             recruiter_social_profile.fb = profile
-            if debug_data.has_key('data') and not debug_data['data'].has_key('error'):
+            if 'data' in debug_data and 'error' not in debug_data['data']:
                 recruiter_social_profile.fbstatus = 2
                 if 'user_managed_groups' in debug_data['data']['scopes']:
                     recruiter_social_profile.fbgroups = get_fb_user_groups(request.user)['data']
@@ -2425,7 +2614,7 @@ def smart_share(request,id):
                 recruiter_social_profile.fbstatus = 1
         elif profile.social_code == 'li':
             recruiter_social_profile.li = profile
-            if debug_data.has_key('id'):
+            if 'id' in debug_data:
                 recruiter_social_profile.listatus = 2
                 comp = get_li_companies(request.user)
                 if comp['_total'] > 0:
@@ -2437,13 +2626,21 @@ def smart_share(request,id):
                 recruiter_social_profile.listatus = 1
         elif profile.social_code == 'tw':
             recruiter_social_profile.tw = profile    
-            if debug_data.has_key('id'):
+            if 'id' in debug_data:
                 recruiter_social_profile.twstatus = 2
             else:
                 recruiter_social_profile.twstatus = 1
     return render(request,'smart_share.html',{'recruiter_social_profile':recruiter_social_profile,'vacancy':vacancy})
 
 def socialshare(request):
+    """Handle social media sharing functionality.
+
+    Args:
+        request: HTTP request containing share parameters
+
+    Returns:
+        HttpResponse: Share status
+    """
     context = {}
     context['success'] = False
     context['msg'] = 'Unauthorised access'
@@ -2567,6 +2764,14 @@ def revoke_social_auth(request, social_code):
 
 @csrf_exempt
 def schedule(request):
+    """Create or update a schedule entry.
+
+    Args:
+        request: HTTP request containing schedule data
+
+    Returns:
+        JsonResponse: Schedule status
+    """
     context={}
     json_context = {}
     candidate = Postulate.objects.filter(id = int(request.POST.get('candidate', 0)))
@@ -2602,6 +2807,14 @@ def schedule(request):
 
 @csrf_exempt
 def remove_schedule(request):
+    """Remove a scheduled event.
+
+    Args:
+        request: HTTP request containing schedule ID
+
+    Returns:
+        JsonResponse: Removal status
+    """
     context = {}
     context['success'] = False
     if request.method == 'POST' and request.is_ajax() and request.user.is_authenticated():
@@ -2625,6 +2838,14 @@ def remove_schedule(request):
 
 @csrf_exempt
 def get_upcoming_schedule(request):
+    """Retrieve upcoming scheduled events.
+
+    Args:
+        request: HTTP request containing filter parameters
+
+    Returns:
+        JsonResponse: List of upcoming events
+    """
     context={}
     json_context = {}
     if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated():
@@ -2634,6 +2855,14 @@ def get_upcoming_schedule(request):
 
 
 def custom_template(request):
+    """Handle custom template operations.
+
+    Args:
+        request: HTTP request containing template data
+
+    Returns:
+        HttpResponse: Template operation status
+    """
     context={}
     context['success'] = False
     context['msg'] = ""
@@ -2680,6 +2909,14 @@ def custom_template(request):
 
 @csrf_exempt
 def update_site_template(request):
+    """Update the site's template settings.
+
+    Args:
+        request: HTTP request containing template update data
+
+    Returns:
+        JsonResponse: Update status
+    """
     context={}
     context['success'] = False
     if request.user.is_authenticated() and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
@@ -2715,6 +2952,14 @@ def update_site_template(request):
 
 @csrf_exempt
 def save_template(request):
+    """Save a new or updated template.
+
+    Args:
+        request: HTTP request containing template data
+
+    Returns:
+        JsonResponse: Save operation status
+    """
     context = {}
     context['success'] = False
     subdomain_data = subdomain(request)
@@ -2798,6 +3043,14 @@ def get_process_criterias(request):
 
 @csrf_exempt 
 def resolve_conflicts_delete(request):
+    """Handle deletion of conflicting entries.
+
+    Args:
+        request: HTTP request containing conflict resolution data
+
+    Returns:
+        JsonResponse: Resolution status
+    """
     context = {}
     context['success'] = False
     context['reload'] = True
@@ -2878,6 +3131,14 @@ def template_form_data(request):
 
 @csrf_exempt 
 def resolve_conflicts_unconflict(request):
+    """Mark conflicts as resolved without merging.
+
+    Args:
+        request: HTTP request containing conflict data
+
+    Returns:
+        JsonResponse: Resolution status
+    """
     context = {}
     context['success'] = False
     context['reload'] = True
@@ -2908,6 +3169,14 @@ def resolve_conflicts_unconflict(request):
 
 @csrf_exempt
 def resolve_conflicts_merge(request):
+    """Merge conflicting entries.
+
+    Args:
+        request: HTTP request containing merge parameters
+
+    Returns:
+        JsonResponse: Merge operation status
+    """
     context = {}
     context['success'] = False
     context['reload'] = False

@@ -1,4 +1,6 @@
 
+from __future__ import absolute_import
+from __future__ import print_function
 import decimal
 import json
 import os
@@ -95,8 +97,8 @@ def record_recruiter(request, token=None):
                 username = form_user.cleaned_data['username']
                 password = form_user.cleaned_data['password']
 
-            except Exception, err:
-                print(traceback.format_exc())
+            except Exception as err:
+                print((traceback.format_exc()))
                 new_user.delete()
                 raise Http404
 
@@ -244,8 +246,8 @@ def record_company(request):
                 # form_user.send_verification_mail(new_user)
                 # username = form_user.cleaned_data['username']
                 # password = form_user.cleaned_data['password']
-            except Exception, err:
-                print(traceback.format_exc())
+            except Exception as err:
+                print((traceback.format_exc()))
                 new_company.delete()
                 raise Http404
                 # messages.error(request,'Could not Save: ' + str(err))
@@ -334,7 +336,7 @@ def edit_company(request):
                 ]
             post_org_notification(message_chunks = message_chunks, user=[r.user for r in Recruiter.admins.all()], actor=request.user,  action ="updated", subject = "Company Profile", url=company.get_absolute_url())
             sub_doman.save()
-            messages.success(request, _(u'We have modified the information successfully'))
+            messages.success(request, _('We have modified the information successfully'))
             subscribers = [r.user for r in user.recruiter.fellow_recruiters.all()]
             return redirect('companies_company_profile')
     else:
@@ -344,7 +346,7 @@ def edit_company(request):
                                    initial={'phone': company.phone})
         form_address = AdressForm(instance=address, country_selected=address.country,
                                   state_selected=address.state, change_profile=True)
-    pageheader = _(u'Modify my Profile')
+    pageheader = _('Modify my Profile')
     return render(request, 'record_edit_company.html', {'form_user': form_user,
                                                         'form_company': form_company,
                                                         'form_address': form_address,
@@ -616,7 +618,7 @@ def finalize_vacancy(request, vacancy_id, message=None):
             }
         ]
     post_activity(message_chunks = message_chunks, actor = request.user,action = 'closed job opening - ', subject = str(vacancy.employment), subscribers = subscribers, action_url = vacancy.get_absolute_url())
-    messages.success(request, _(u'Job Opening for "%s" has been closed') % vacancy.employment)
+    messages.success(request, _('Job Opening for "%s" has been closed') % vacancy.employment)
     return redirect('TRM-Subindex')
 
 @login_required
@@ -628,7 +630,7 @@ def remove_vacancy(request, vacancy_id):
     vacancy.save()
     if not vacancy.expired:
         vacancy.unpublish()
-    messages.success(request, _(u'Job Opening for "%s" has been closed') % vacancy.employment)
+    messages.success(request, _('Job Opening for "%s" has been closed') % vacancy.employment)
     return redirect('companies_vacancies_by_status',vacancy_status_name='closed')
 
 @login_required
@@ -663,7 +665,7 @@ def publish_vacancy(request, vacancy_id):
             vacancy.editing_date = date.today() + timedelta(days=5)
         vacancy.pub_after = False
     vacancy.save()
-    messages.success(request, _(u'Successfully Published Job'))
+    messages.success(request, _('Successfully Published Job'))
     return redirect('companies_vacancies_by_status',vacancy_status_name='open')
 
 @login_required
@@ -678,7 +680,7 @@ def unpublish_vacancy(request, vacancy_id):
     vacancy.unpublish()
     vacancy.pub_after = False
     vacancy.save()
-    messages.success(request, _(u'Successfully UnPublished Job'))
+    messages.success(request, _('Successfully UnPublished Job'))
     return redirect('companies_vacancies_by_status',vacancy_status_name='open')
 
 @login_required
@@ -896,7 +898,7 @@ def vacancies_summary(request, vacancy_status_name=None):
         # to clear disk space
         random_number = request.session.get('random_number')
         if random_number:
-            print ('random_number.- %s' % random_number)
+            print(('random_number.- %s' % random_number))
             uploaded_files = Vacancy_Files.objects.filter(random_number=random_number)
             for uploaded_file in uploaded_files:
                 uploaded_file.delete()
@@ -1030,7 +1032,7 @@ def vacancies_summary(request, vacancy_status_name=None):
     else:
         packages = Package.objects.all()
         service_categories = ServiceCategory.objects.all()
-        if 'first_time' in request.session.keys() and request.session['first_time']:
+        if 'first_time' in list(request.session.keys()) and request.session['first_time']:
             first_time = True
             request.session['first_time'] = False
         else:
@@ -1091,7 +1093,7 @@ def upload_vacancy_file(request):
                     return response
             else:
                 # We pass form data errors
-                data = json.dumps(dict([(k, [unicode(e) for e in v]) for k,v in fileForm.errors.items()]))
+                data = json.dumps(dict([(k, [str(e) for e in v]) for k,v in list(fileForm.errors.items())]))
                 return HttpResponse(content=data, status=400, content_type='application/json')
         except:
             tb = traceback.format_exc()
@@ -1226,7 +1228,7 @@ def add_update_vacancy(request, vacancy_id=False):
                 editing_date = vacancy.editing_date
                 end_date = vacancy.end_date
                 pub_after = vacancy.pub_after
-                message = _(u'We have successfully updated the job')
+                message = _('We have successfully updated the job')
                 pub_date = vacancy.pub_date
             vacancy_form = VacancyForm(instance=vacancy, data=request.POST, files=request.FILES, industry_selected=industry_selected,
                                        company_email=company.user.email, update=update, another_email=another_email, company = recruiter.company.all()[0])
@@ -1245,7 +1247,7 @@ def add_update_vacancy(request, vacancy_id=False):
                 unpub_date = None
                 if not update:
                     # If a new job
-                    message = _(u'The Job opening has been successfuly published.')
+                    message = _('The Job opening has been successfuly published.')
                     if not vacancy_form.cleaned_data['pub_after']:
                         status = Vacancy_Status.objects.get(codename__exact='open')
                     elif vacancy_form.cleaned_data['pub_date'] == date.today():
@@ -1255,7 +1257,7 @@ def add_update_vacancy(request, vacancy_id=False):
                         publish_now = False
                         unpub_date = vacancy_form.cleaned_data['unpub_date']
                         status = Vacancy_Status.objects.get(codename__exact='open')
-                        message = _(u'The job opening has been successfuly scheduled.')
+                        message = _('The job opening has been successfuly scheduled.')
                     # 5 more days are assigned to edit the job
                     editing_date = vacancy_form.cleaned_data['pub_date'] + timedelta(days=5)
                     # The end date of job is assigned 30 days afte the publication date

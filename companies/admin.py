@@ -26,6 +26,7 @@ to enhance admin usability.
 
 # # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 from django.contrib import admin
 from companies.models import Company_Industry, Company, Wallet, Recruiter, RecruiterInvitation, Ban, ExternalReferal
 from common.admin import CustomModelAdminAllFields

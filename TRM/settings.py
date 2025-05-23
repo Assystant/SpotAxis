@@ -2,7 +2,9 @@
 
 # Django settings for TRM project.
 
+from __future__ import absolute_import
 import os.path
+from rest_framework.permissions import AllowAny
 
 PROJECT_NAME = 'SpotAxis'
 
@@ -12,7 +14,7 @@ ADMINS = (('Saket', 'saket@spotaxis.com'),('Holesh','holesh@spotaxis.com'))
 
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = '*'
+ALLOWED_HOSTS = ['*']
 
 # SESSION_COOKIE_DOMAIN = '.'
 
@@ -34,26 +36,26 @@ else:
 
 # Dependiendo el ambiente se importan diferentes configuraciones
 if ENVIRONMENT == 'local_development':
-    from settings_local_development import *
+    from .settings_local_development import *
     HOSTED_URL = "http://spotaxis.com"
     ROOT_DOMAIN = "spotaxis"
 elif ENVIRONMENT == 'server_development':
     HOSTED_URL = "http://demo.spotaxis.com"
     ROOT_DOMAIN = "demo.spotaxis"
-    from settings_server_development import *
+    from .settings_server_development import *
 elif ENVIRONMENT == 'productive':
     HOSTED_URL = "https://spotaxis.com"
-    from settings_productive import *
+    from .settings_productive import *
     ROOT_DOMAIN = "spotaxis"
 
 TIME_ZONE = 'Asia/Kolkata'
 
 LANGUAGE_CODE = 'en-IN'
 
-ugettext = lambda s: s
+gettext = lambda s: s
 
 LANGUAGES = (
-    ('en', ugettext(u'English')),
+    ('en', gettext('English')),
 )
 
 SITE_ID = 1
@@ -118,7 +120,7 @@ INSTALLED_APPS = (
     'payments',
     'django_crontab',
     'django_extensions',
-    'markdown_deux',
+    'markdownify',
     'bootstrapform',
     'helpdesk',
     'django_comments',
@@ -128,6 +130,7 @@ INSTALLED_APPS = (
     'el_pagination',
     'scheduler',
     'customField',
+    'rest_framework',
 )
 
 AUTH_USER_MODEL = 'common.User'
@@ -316,3 +319,15 @@ num_pages=8
 number_objects_page=20
 
 social_application_list = ['fb', 'li', 'gp', 'an', 'gh', 'so', 'tw']
+
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     Add an authentication method for the APIs
+    # ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        #using 'allow any' permission class until authentication is needed and/ an authentication method is agreed upon.
+        #change permission class once required.
+        'rest_framework.permissions.AllowAny'
+        #'rest_framework.permissions.IsAuthenticated',
+    ],
+}

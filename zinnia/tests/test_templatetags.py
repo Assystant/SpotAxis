@@ -1,4 +1,5 @@
 """Test cases for Zinnia's templatetags"""
+from __future__ import absolute_import
 from datetime import date
 
 from django.contrib.sites.models import Site
@@ -55,6 +56,7 @@ from zinnia.templatetags.zinnia import zinnia_statistics
 from zinnia.tests.utils import datetime
 from zinnia.tests.utils import skip_if_custom_user
 from zinnia.tests.utils import url_equal
+from six.moves import range
 
 
 class TemplateTagsTestCase(TestCase):
@@ -622,7 +624,7 @@ class TemplateTagsTestCase(TestCase):
 
         source_context = Context({'request': FakeRequest(
             {'page': '1', 'key': 'val'})})
-        paginator = Paginator(range(200), 10)
+        paginator = Paginator(list(range(200)), 10)
 
         with self.assertNumQueries(0):
             context = zinnia_pagination(
@@ -723,7 +725,7 @@ class TemplateTagsTestCase(TestCase):
         self.assertEqual(list(context['end']), [18, 19, 20])
         self.assertEqual(context['template'], 'custom_template.html')
 
-        paginator = Paginator(range(50), 10)
+        paginator = Paginator(list(range(50)), 10)
         with self.assertNumQueries(0):
             context = zinnia_pagination(
                 source_context, paginator.page(1),
@@ -733,7 +735,7 @@ class TemplateTagsTestCase(TestCase):
         self.assertEqual(list(context['middle']), [])
         self.assertEqual(list(context['end']), [])
 
-        paginator = Paginator(range(60), 10)
+        paginator = Paginator(list(range(60)), 10)
         with self.assertNumQueries(0):
             context = zinnia_pagination(
                 source_context, paginator.page(1),
@@ -743,7 +745,7 @@ class TemplateTagsTestCase(TestCase):
         self.assertEqual(list(context['middle']), [])
         self.assertEqual(list(context['end']), [])
 
-        paginator = Paginator(range(70), 10)
+        paginator = Paginator(list(range(70)), 10)
         with self.assertNumQueries(0):
             context = zinnia_pagination(
                 source_context, paginator.page(1),
@@ -763,7 +765,7 @@ class TemplateTagsTestCase(TestCase):
                 self.GET = get_dict
 
         source_context = Context({'request': FakeRequest()})
-        paginator = Paginator(range(40), 10)
+        paginator = Paginator(list(range(40)), 10)
 
         with self.assertNumQueries(0):
             for i in range(1, 5):
@@ -932,14 +934,14 @@ class TemplateTagsTestCase(TestCase):
 
     def test_zinnia_loop_template(self):
         original_entry_loop_templates = ztemplatetags.ENTRY_LOOP_TEMPLATES
-        paginator = Paginator(range(50), 10)
+        paginator = Paginator(list(range(50)), 10)
         context = Context()
 
         # Test simple
         template = zinnia_loop_template(
             context, 'zinnia/_entry_detail.html')
         self.assertEqual(template.template.name, 'zinnia/_entry_detail.html')
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             TemplateDoesNotExist,
             'zinnia/_entry_custom-0.html, '
             'zinnia/_entry_custom_0.html, '
@@ -948,7 +950,7 @@ class TemplateTagsTestCase(TestCase):
 
         # Test with loop
         context = Context({'forloop': {'counter': 5}})
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             TemplateDoesNotExist,
             'zinnia/_entry_custom-5.html, '
             'zinnia/_entry_custom_5.html, '
@@ -958,7 +960,7 @@ class TemplateTagsTestCase(TestCase):
         # Test with pagination
         context = Context({'forloop': {'counter': 5},
                            'page_obj': paginator.page(3)})
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             TemplateDoesNotExist,
             'zinnia/_entry_custom-25.html, '
             'zinnia/_entry_custom_5.html, '
@@ -968,7 +970,7 @@ class TemplateTagsTestCase(TestCase):
         # Test with default key
         ztemplatetags.ENTRY_LOOP_TEMPLATES = {
             'default': {25: 'template.html'}}
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             TemplateDoesNotExist,
             'template.html, '
             'zinnia/_entry_custom-25.html, '
@@ -989,7 +991,7 @@ class TemplateTagsTestCase(TestCase):
                 {'forloop': {'counter': 5},
                  'page_obj': paginator.page(3),
                  context_object_name: 'slug'})
-            self.assertRaisesRegexp(
+            self.assertRaisesRegex(
                 TemplateDoesNotExist,
                 'template-%s-slug.html, '
                 'template-slug.html, '

@@ -9,6 +9,7 @@ the app when it is included in INSTALLED_APPS.
 
 
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from django.apps import AppConfig
 
 
@@ -22,4 +23,4 @@ class CompaniesConfig(AppConfig):
                             in the Django admin interface.
     """
     name = 'companies'
-    verbose_name = u'Companies/Recruiters'
+    verbose_name = 'Companies/Recruiters'

@@ -7,7 +7,8 @@ models.py - Model (and hence database) definitions. This is the core of the
             helpdesk structure.
 """
 
-from __future__ import unicode_literals
+
+from __future__ import absolute_import
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
@@ -225,6 +226,7 @@ class Queue(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Default owner'),
+        on_delete=models.SET_NULL,
     )
 
     def __str__(self):
@@ -242,9 +244,9 @@ class Queue(models.Model):
         in the sender name field, so hopefully the admin can see and fix it.
         """
         if not self.email_address:
-            return u'NO QUEUE EMAIL ADDRESS DEFINED <%s>' % settings.DEFAULT_FROM_EMAIL
+            return 'NO QUEUE EMAIL ADDRESS DEFINED <%s>' % settings.DEFAULT_FROM_EMAIL
         else:
-            return u'%s <%s>' % (self.title, self.email_address)
+            return '%s <%s>' % (self.title, self.email_address)
     from_address = property(_from_address)
 
     def prepare_permission_name(self):
@@ -352,6 +354,7 @@ class Ticket(models.Model):
     queue = models.ForeignKey(
         Queue,
         verbose_name=_('Queue'),
+        on_delete=models.CASCADE,
         )
 
     created = models.DateTimeField(
@@ -380,6 +383,7 @@ class Ticket(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Assigned to'),
+        on_delete=models.SET_NULL,
         )
 
     status = models.IntegerField(
@@ -448,18 +452,18 @@ class Ticket(models.Model):
         """ A user-friendly ticket ID, which is a combination of ticket ID
         and queue slug. This is generally used in e-mail subjects. """
 
-        return u"[%s]" % self.ticket_for_url
+        return "[%s]" % self.ticket_for_url
     ticket = property(_get_ticket)
 
     def _get_ticket_for_url(self):
         """ A URL-friendly ticket ID, used in links. """
-        return u"%s-%s" % (self.queue.slug, self.id)
+        return "%s-%s" % (self.queue.slug, self.id)
     ticket_for_url = property(_get_ticket_for_url)
 
     def _get_priority_img(self):
         """ Image-based representation of the priority """
         from django.conf import settings
-        return u"%shelpdesk/priorities/priority%s.png" % (settings.MEDIA_URL, self.priority)
+        return "%shelpdesk/priorities/priority%s.png" % (settings.MEDIA_URL, self.priority)
     get_priority_img = property(_get_priority_img)
 
     def _get_priority_css_class(self):
@@ -483,7 +487,7 @@ class Ticket(models.Model):
         dep_msg = ''
         if not self.can_be_resolved:
             dep_msg = _(' - Open dependencies')
-        return u'%s%s%s' % (self.get_status_display(), held_msg, dep_msg)
+        return '%s%s%s' % (self.get_status_display(), held_msg, dep_msg)
     get_status = property(_get_status)
 
     def _get_ticket_url(self):
@@ -497,7 +501,7 @@ class Ticket(models.Model):
             site = Site.objects.get_current()
         except:
             site = Site(domain='configure-django-sites.com')
-        return u"http://%s%s?ticket=%s&email=%s" % (
+        return "http://%s%s?ticket=%s&email=%s" % (
             site.domain,
             reverse('helpdesk_public_view'),
             self.ticket_for_url,
@@ -516,7 +520,7 @@ class Ticket(models.Model):
             site = Site.objects.get_current()
         except:
             site = Site(domain='configure-django-sites.com')
-        return u"http://%s%s" % (
+        return "http://%s%s" % (
             site.domain,
             reverse('helpdesk_view',
             args=[self.id])
@@ -593,6 +597,7 @@ class FollowUp(models.Model):
     ticket = models.ForeignKey(
         Ticket,
         verbose_name=_('Ticket'),
+        on_delete=models.CASCADE,
         )
 
     date = models.DateTimeField(
@@ -626,6 +631,7 @@ class FollowUp(models.Model):
         blank=True,
         null=True,
         verbose_name=_('User'),
+        on_delete=models.SET_NULL,
         )
 
     new_status = models.IntegerField(
@@ -647,7 +653,7 @@ class FollowUp(models.Model):
         return '%s' % self.title
 
     def get_absolute_url(self):
-        return u"%s#followup%s" % (self.ticket.get_absolute_url(), self.id)
+        return "%s#followup%s" % (self.ticket.get_absolute_url(), self.id)
 
     def save(self, *args, **kwargs):
         t = self.ticket
@@ -666,6 +672,7 @@ class TicketChange(models.Model):
     followup = models.ForeignKey(
         FollowUp,
         verbose_name=_('Follow-up'),
+        on_delete=models.CASCADE,
         )
 
     field = models.CharField(
@@ -729,6 +736,7 @@ class Attachment(models.Model):
     followup = models.ForeignKey(
         FollowUp,
         verbose_name=_('Follow-up'),
+        on_delete=models.CASCADE,
         )
 
     file = models.FileField(
@@ -755,8 +763,8 @@ class Attachment(models.Model):
     def get_upload_to(self, field_attname):
         """ Get upload_to path specific to this item """
         if not self.id:
-            return u''
-        return u'helpdesk/attachments/%s/%s' % (
+            return ''
+        return 'helpdesk/attachments/%s/%s' % (
             self.followup.ticket.ticket_for_url,
             self.followup.id
             )
@@ -951,6 +959,7 @@ class KBItem(models.Model):
     category = models.ForeignKey(
         KBCategory,
         verbose_name=_('Category'),
+        on_delete=models.CASCADE,
         )
 
     title = models.CharField(
@@ -1024,6 +1033,7 @@ class SavedSearch(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_('User'),
+        on_delete=models.CASCADE,
         )
 
     title = models.CharField(
@@ -1080,7 +1090,7 @@ class UserSettings(models.Model):
         try:
             import pickle
         except ImportError:
-            import cPickle as pickle
+            import pickle as pickle
         from helpdesk.lib import b64encode
         self.settings_pickled = b64encode(pickle.dumps(data))
 
@@ -1089,7 +1099,7 @@ class UserSettings(models.Model):
         try:
             import pickle
         except ImportError:
-            import cPickle as pickle
+            import pickle as pickle
         from helpdesk.lib import b64decode
         try:
             return pickle.loads(b64decode(str(self.settings_pickled)))
@@ -1213,6 +1223,7 @@ class TicketCC(models.Model):
     ticket = models.ForeignKey(
         Ticket,
         verbose_name=_('Ticket'),
+        on_delete=models.CASCADE,
         )
 
     user = models.ForeignKey(
@@ -1221,6 +1232,7 @@ class TicketCC(models.Model):
         null=True,
         help_text=_('User who wishes to receive updates for this ticket.'),
         verbose_name=_('User'),
+        on_delete=models.SET_NULL
         )
 
     email = models.EmailField(
@@ -1351,7 +1363,7 @@ class CustomField(models.Model):
         )
 
     def _choices_as_array(self):
-        from StringIO import StringIO
+        from io import StringIO
         valuebuffer = StringIO(self.list_values)
         choices = [[item.strip(), item.strip()] for item in valuebuffer.readlines()]
         valuebuffer.close()
@@ -1386,11 +1398,13 @@ class TicketCustomFieldValue(models.Model):
     ticket = models.ForeignKey(
         Ticket,
         verbose_name=_('Ticket'),
+        on_delete=models.CASCADE,
         )
 
     field = models.ForeignKey(
         CustomField,
         verbose_name=_('Field'),
+        on_delete=models.CASCADE,
         )
 
     value = models.TextField(blank=True, null=True)
@@ -1420,12 +1434,14 @@ class TicketDependency(models.Model):
         Ticket,
         verbose_name=_('Ticket'),
         related_name='ticketdependency',
+        on_delete=models.CASCADE,
         )
 
     depends_on = models.ForeignKey(
         Ticket,
         verbose_name=_('Depends On Ticket'),
         related_name='depends_on',
+        on_delete=models.CASCADE,
         )
 
     def __str__(self):

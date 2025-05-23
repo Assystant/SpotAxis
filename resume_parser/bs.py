@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import re
 from bs4 import BeautifulSoup
 import os
-import pdf2txt 
+from . import pdf2txt 
 
 def extract_font_size_font_family(font_string):
 	
@@ -14,7 +16,7 @@ def extract_font_size_font_family(font_string):
 			font_family = font_string[0].split(':')[1].strip()
 		if 'font-size' in font_string[1]:
 			font_size_string = font_string[1].split(':')[1].strip()
-			print font_size_string
+			print(font_size_string)
 			font_size_integer = int((re.findall('\d+', font_size_string))[0])
 
 	return (font_family, font_size_integer)
@@ -62,5 +64,5 @@ for key1 in keyword_dict:
 		del keyword_dict[key1]
 
 
-print max_font_size
-print keyword_dict
+print(max_font_size)
+print(keyword_dict)

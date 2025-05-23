@@ -1,0 +1,128 @@
+name: "Bug Report"
+description: "Create a detailed report to help us fix issues quickly."
+title: "[BUG] "
+labels:
+  - bug
+  - triage
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for taking the time to report a bug!**
+        Please fill out all sections below with as much detail as you can so we can investigate and resolve the issue without delay.
+
+  - type: input
+    id: title
+    attributes:
+      label: "Short description"
+      description: "A concise summary of the bug"
+      placeholder: "e.g., Login page throws 500 error when submitting empty form"
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: "Environment"
+      description: |
+        Provide details about where you encountered the bug, e.g.
+        • SpotAxis version: v1.4.2
+        • OS: Windows 10 (21H2), macOS 13.2, etc.
+        • Browser or runtime: Chrome 113.0, Node.js v18.12.1
+      placeholder: "SpotAxis vX.Y.Z, OS, Browser/Runtime"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: "Severity"
+      description: "Impact on functionality"
+      options:
+        - Blocker
+        - Critical
+        - Major
+        - Minor
+        - Trivial
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Priority"
+      description: "Business urgency"
+      options:
+        - "P0 (Immediate)"
+        - "P1 (Next Sprint)"
+        - "P2 (Backlog)"
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Steps to reproduce"
+      description: |
+        List the precise steps to trigger the bug.
+        1. …
+        2. …
+        3. …
+      placeholder: |
+        1. Go to …
+        2. Click on …
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected behavior"
+      description: "What you expected to happen instead of the bug"
+      placeholder: "e.g., A validation message should appear under the empty field"
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Actual behavior"
+      description: "What actually happened, including any error messages or codes"
+      placeholder: "e.g., HTTP 500 Internal Server Error with stack trace"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs"
+      description: |
+        Include any relevant console, server, or application logs.
+        You can paste snippets or attach log files below.
+      render: bash
+    # logs are optional
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "Screenshots or recordings"
+      description: |
+        (Optional) Drag & drop images or paste screenshots here.
+        Visuals help us understand the problem faster.
+      placeholder: "![Screenshot description](paste image or drag file here)"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: "Additional context"
+      description: "Any other information, workarounds tried, or related issues"
+    validations:
+      required: false

@@ -1,5 +1,6 @@
 # coding=utf-8
 """Test cases for Zinnia's preview"""
+from __future__ import absolute_import
 from django.test import TestCase
 
 from zinnia.preview import HTMLPreview

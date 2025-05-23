@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 import re
 from ckeditor.fields import RichTextField
 from common.models import Address, Subdomain, Country, Currency
@@ -26,42 +27,42 @@ class Company_Industry(models.Model):
     name = models.CharField(verbose_name=_('Name'), max_length=150, blank=True, null=True, default=None)
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return '%s' % self.name
 
     class Meta:
-        verbose_name = _(u'Company Industry')
-        verbose_name_plural = _(u'Company Industries')
+        verbose_name = _('Company Industry')
+        verbose_name_plural = _('Company Industries')
         ordering = ['name']
 
 class Company(models.Model):
     """Model representing a company with its profile and related information."""
     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name='User', null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    subdomain = models.OneToOneField(Subdomain,verbose_name=_(u'Subdomain'),null=True, blank=True, default=None, on_delete = models.SET_NULL)
-    name = models.CharField(verbose_name=_(u'Tradename'), max_length=200, null=True, blank=True, default=None)
-    social_name = models.CharField(verbose_name=_(u'Busness Name'), max_length=200, null=True, blank=True, default=None)
+    subdomain = models.OneToOneField(Subdomain,verbose_name=_('Subdomain'),null=True, blank=True, default=None, on_delete = models.SET_NULL)
+    name = models.CharField(verbose_name=_('Tradename'), max_length=200, null=True, blank=True, default=None)
+    social_name = models.CharField(verbose_name=_('Busness Name'), max_length=200, null=True, blank=True, default=None)
     # rfc = MXRFCField(verbose_name=_(u'RFC'), blank=True, null=True, default=None)
     industry = models.ForeignKey(Company_Industry, verbose_name='Industry', null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # function = models.CharField(verbose_name=_(u'Function'), max_length=100, null=True, blank=True, default=None)
-    no_of_employees = models.IntegerField(verbose_name=_(u'No of Employees'), null=True, blank=True, default=None)
+    no_of_employees = models.IntegerField(verbose_name=_('No of Employees'), null=True, blank=True, default=None)
     # area = models.ForeignKey(Company_Area, verbose_name=_(u'Area'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # address = models.OneToOneField(Address, verbose_name=_(u'Address'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     nationality = models.ForeignKey(Country, verbose_name=_('Nationality'), related_name='+', null=True, blank=True, default=None, on_delete=models.SET_NULL)
     state = models.CharField(verbose_name=_('State'),null=True,blank=True,default=None, max_length=50)
     city = models.CharField(verbose_name=_('City'),null=True,blank=True,default=None, max_length=50)
     
-    description = RichTextField(verbose_name=_(u'Short Description'), blank=True, null=True, default=None)
-    phone = PhoneNumberField(verbose_name=_(u'Phone'), null=True, blank=True, default=None)
-    url = models.URLField(verbose_name=_(u'Website'), blank=True, null=True, default=None)
-    facebook = models.URLField(verbose_name=_(u'Facebook'), blank=True, null=True, default=None)
-    twitter = models.CharField(verbose_name=_(u'Twitter'), max_length=16, blank=True, null=True, default=None,
+    description = RichTextField(verbose_name=_('Short Description'), blank=True, null=True, default=None)
+    phone = PhoneNumberField(verbose_name=_('Phone'), null=True, blank=True, default=None)
+    url = models.URLField(verbose_name=_('Website'), blank=True, null=True, default=None)
+    facebook = models.URLField(verbose_name=_('Facebook'), blank=True, null=True, default=None)
+    twitter = models.CharField(verbose_name=_('Twitter'), max_length=16, blank=True, null=True, default=None,
                                validators=[validators.RegexValidator(re.compile('^[\w.@+-]+$'))])
     company_email = models.EmailField(verbose_name=_('E-mail'), null=True, blank=True, default=None)
     # contact_phone = PhoneNumberField(verbose_name=_(u'Phone'), null=True, blank=True, default=None)
     # contact_phone_ext = models.PositiveIntegerField(verbose_name='Ext', null=True, blank=True, default=None)
     logo = models.ImageField(upload_to='companies/logos/', default=LOGO_COMPANY_DEFAULT,
                              blank=True, null=True, max_length=200)
-    add_date = models.DateTimeField(verbose_name=_(u'Add Date'), auto_now_add=True)
-    last_modified = models.DateTimeField(verbose_name=_(u'Last Modified'), auto_now=True)
+    add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
+    last_modified = models.DateTimeField(verbose_name=_('Last Modified'), auto_now=True)
     ban_list = models.TextField(default=None, null=True, blank=True)
 
     site_template = models.PositiveIntegerField(default=1, blank=True)
@@ -69,7 +70,7 @@ class Company(models.Model):
     below_jobs = models.TextField(default="", null=True, blank=True)
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return '%s' % self.name
 
     def geturl(self):
         """Returns the full URL for the company's subdomain."""
@@ -91,7 +92,7 @@ class Company(models.Model):
         url = self.geturl().strip('/')
         inurl = reverse('companies_company_profile',kwargs={})
         url = url + inurl
-        return u'%s' % url     
+        return '%s' % url     
 
     def next_subscription(self):
         """Placeholder for next subscription logic."""
@@ -139,8 +140,8 @@ class Company(models.Model):
         
 
     class Meta:
-        verbose_name = _(u'Company')
-        verbose_name_plural = _(u'Companies')
+        verbose_name = _('Company')
+        verbose_name_plural = _('Companies')
         ordering = ('name',)
 
 class RecruiterManager(models.Manager):
@@ -177,7 +178,7 @@ class Recruiter(models.Model):
         membership (PositiveSmallIntegerField): Role level (1=Member, 2=Manager, 3=Admin).
     """
     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name = 'user', null=True, blank=True, default=None, on_delete=models.CASCADE)
-    company = models.ManyToManyField(Company,verbose_name=_(u'Company'), default=None)
+    company = models.ManyToManyField(Company,verbose_name=_('Company'), default=None)
     membership = models.PositiveSmallIntegerField(default=1) # 1-member 2-manager 3-admin
 
     # objects = RecruiterManager()
@@ -269,7 +270,7 @@ class Recruiter(models.Model):
         Returns:
             str: The string form of the associated user.
         """
-        return u'%s' % str(self.user)
+        return '%s' % str(self.user)
 
     class Meta:
         verbose_name='Recruiter'
@@ -279,7 +280,7 @@ class Ban(models.Model):
     """Model representing an email ban for a company with duration and ban function details."""
     email = models.EmailField(verbose_name = 'Email', null=True, blank=True, default=None)
     duration = models.PositiveIntegerField(default=0, null=True, blank=True)
-    company = models.ForeignKey(Company, null=True, blank=True, default=None)
+    company = models.ForeignKey(Company, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     add_date = models.DateTimeField(auto_now_add=True)
     ban_function = models.TextField(default=None)
     def __unicode__(self):
@@ -294,7 +295,7 @@ class RecruiterInvitation(models.Model):
     """Model to track invitations sent to potential recruiters."""
     email = models.EmailField(verbose_name = 'email', null=True, blank=True, default=None)
     token = models.CharField(verbose_name='token', max_length=50, null=True, blank=True, default=None)
-    invited_by  = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name = 'Invited by', null=True, blank=True, default=None)
+    invited_by  = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name = 'Invited by', null=True, blank=True, default=None,on_delete=models.SET_NULL)
     membership = models.PositiveSmallIntegerField(default=1)
 
     def __unicode__(self):
@@ -313,8 +314,8 @@ class RecruiterInvitation(models.Model):
 class Wallet(models.Model):
     """Model representing a company's electronic wallet with currency and available balance."""
     company = models.OneToOneField(Company, verbose_name='Company', null=True, blank=True, default=None, on_delete=models.CASCADE)
-    currency = models.ForeignKey(Currency, null=True, blank=True, default=None)
-    available = models.DecimalField(verbose_name=_(u'Available'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
+    currency = models.ForeignKey(Currency, null=True, blank=True, default=None,on_delete=models.SET_NULL)
+    available = models.DecimalField(verbose_name=_('Available'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     last_updated = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def set_available_amount(self):
@@ -332,11 +333,11 @@ class Wallet(models.Model):
         Returns:
             str: Currency and available amount.
         """
-        return u'%s %s' % (str(self.currency),str(self.available))
+        return '%s %s' % (str(self.currency),str(self.available))
 
     class Meta:
-        verbose_name = _(u'Electronic Wallet')
-        verbose_name_plural = _(u'Electronic Wallets')
+        verbose_name = _('Electronic Wallet')
+        verbose_name_plural = _('Electronic Wallets')
         ordering = ['-available']
 
 # Recomendations Companies #
@@ -349,17 +350,17 @@ class Recommendation_Status(models.Model):
         codename (CharField): Status codename.
         order (PositiveSmallIntegerField): Ordering for display.
     """
-    name = models.CharField(verbose_name=_(u'Status'), max_length=30, null=True, blank=True, default=None)
-    codename = models.CharField(verbose_name=_(u'Codename'), max_length=30, null=True, blank=True, default=None)
-    order = models.PositiveSmallIntegerField(verbose_name=_(u'Order'), null=True, blank=True, default=None)
+    name = models.CharField(verbose_name=_('Status'), max_length=30, null=True, blank=True, default=None)
+    codename = models.CharField(verbose_name=_('Codename'), max_length=30, null=True, blank=True, default=None)
+    order = models.PositiveSmallIntegerField(verbose_name=_('Order'), null=True, blank=True, default=None)
 
     def __unicode__(self):
         """Returns the status name."""
-        return u'%s' % self.name
+        return '%s' % self.name
 
     class Meta:
-        verbose_name = _(u'Status of Recommendation')
-        verbose_name_plural = _(u'Status of Recommendations')
+        verbose_name = _('Status of Recommendation')
+        verbose_name_plural = _('Status of Recommendations')
         ordering = ('-order',)
 
 class Recommendations(models.Model):
@@ -367,41 +368,41 @@ class Recommendations(models.Model):
     to_company = models.ForeignKey(Company, verbose_name=_('For'), related_name='+', null=True, blank=True, default=None, on_delete=models.SET_NULL)
     from_company = models.ForeignKey(Company, verbose_name=_('From'), related_name='+', null=True, blank=True, default=None, on_delete=models.SET_NULL)
     status = models.ForeignKey(Recommendation_Status, verbose_name='Status', null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    start_date = models.DateField(verbose_name=_(u'Start Date'), null=True, blank=True, default=None)
-    end_date = models.DateField(verbose_name=_(u'End Date'), null=True, blank=True, default=None)
-    add_date = models.DateTimeField(verbose_name=_(u'Add Date'), auto_now_add=True)
+    start_date = models.DateField(verbose_name=_('Start Date'), null=True, blank=True, default=None)
+    end_date = models.DateField(verbose_name=_('End Date'), null=True, blank=True, default=None)
+    add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
 
     def __unicode__(self):
         """Returns a string representation of the recommendation."""
-        return u'%s -> %s / %s' % (self.from_company.name, self.to_company.name, self.status)
+        return '%s -> %s / %s' % (self.from_company.name, self.to_company.name, self.status)
 
     class Meta:
-        verbose_name = _(u'Recomendation')
-        verbose_name_plural = _(u'Recomendations')
+        verbose_name = _('Recomendation')
+        verbose_name_plural = _('Recomendations')
         ordering = ('status', 'end_date', 'add_date')
 
 class Stage(models.Model):
     """ Model representing a recruitment stage within a company."""
-    name = models.CharField(verbose_name=_(u'Stage Name'), max_length=50, null=True, blank=True, default=None)
-    company = models.ForeignKey(Company, verbose_name=_(u'Company'), null=True,blank=True, default=None, on_delete=models.SET_NULL)
+    name = models.CharField(verbose_name=_('Stage Name'), max_length=50, null=True, blank=True, default=None)
+    company = models.ForeignKey(Company, verbose_name=_('Company'), null=True,blank=True, default=None, on_delete=models.SET_NULL)
     
     def __unicode__(self):
         """Returns the name of the stage."""
         return self.name
 
     class Meta:
-        verbose_name = _(u'Stage')
-        verbose_name = _(u'Stages')
+        verbose_name = _('Stage')
+        verbose_name = _('Stages')
         ordering = ['name']
 
 REFERAL_TYPES = (
-    (u'JB', u'Job Board'),
-    (u'ER', u'External Referer'),
+    ('JB', 'Job Board'),
+    ('ER', 'External Referer'),
 )
 
 class ExternalReferal(models.Model):
     """Model representing an external referral source."""
-    company = models.ForeignKey(Company, default=None, blank=True, null=True)
+    company = models.ForeignKey(Company, default=None, blank=True, null=True,on_delete=models.SET_NULL)
     name = models.CharField(max_length=50, default = "")
     active = models.BooleanField(default=True, blank=True)
     referal_type = models.CharField(choices=REFERAL_TYPES, max_length=2)
