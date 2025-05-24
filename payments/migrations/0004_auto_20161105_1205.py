@@ -6,9 +6,29 @@ from __future__ import absolute_import
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to add ServiceCategory model and link it to Services.
+
+This migration performs the following operations:
+- Creates a new model `ServiceCategory` with fields:
+  - id: Auto-increment primary key
+  - name: Optional name of the category
+  - codename: Optional short code for the category
+- Adds a foreign key field `category` to the existing `Services` model, 
+  linking each service to a service category.
+
+Dependencies:
+    - payments.0003_auto_20161105_1043
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Migration class to add ServiceCategory model and category field to Services.
+    
+    Operations:
+        - Create ServiceCategory model.
+        - Add ForeignKey 'category' field to Services model.
+    """
     dependencies = [
         ('payments', '0003_auto_20161105_1043'),
     ]

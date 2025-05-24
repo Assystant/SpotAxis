@@ -10,7 +10,32 @@ from activities.utils import post_org_notification
 from TRM.settings import ROOT_DOMAIN, protocol
 from payments.models import Subscription, Transactions, PriceSlab
 from django.core.urlresolvers import reverse
+
+"""
+Modules Used:
+    - `datetime`: For time comparisons with subscription expiry.
+    - `django.db.models.Q`: Used for advanced filtering (not directly used here).
+    - `send_TRM_email`: Sends transactional email to recruiters.
+    - `Recruiter`: To fetch company admins.
+    - `post_org_notification`: Sends in-app notifications.
+    - `reverse`: To resolve named URL patterns.
+    - `Subscription`, `Transactions`, `PriceSlab`: Subscription and billing models.
+"""
+
 def SubscriptionCronJob():
+    """
+    Executes a scheduled cron job to manage subscription lifecycles.
+
+    This function performs several tasks to ensure that subscriptions are 
+    appropriately renewed, downgraded, or expired based on their current status 
+    and billing information. It sends notifications and emails to company admins 
+    depending on whether:
+      - the subscription has expired
+      - it's about to expire in 7 days
+      - it's expiring today
+    and handles auto-renewal logic.
+
+    """
     print((str(datetime.now()) + ' --> Subscription Cron start'))
     try:
         subscriptions = Subscription.objects.all()

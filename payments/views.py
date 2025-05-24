@@ -19,10 +19,42 @@ from utils import validate_code
 # gateway = braintree.BraintreeGateway(access_token=settings.BRAINTREE_ACCESS_TOKEN)
 # gateway = braintree.Configuration.gateway()
 
+"""
+This module handles the payment processing view for company subscription plans.
+
+It provides logic for:
+- Calculating prorated charges based on plan change and remaining subscription period.
+- Validating discount codes and applying discounts or account credits.
+- Adjusting company wallet balances and recording all transaction events.
+- Managing scheduled transactions and updating subscription details such as plan and user count.
+
+Dependencies include Django's authentication and messaging frameworks, PayPal SDK, and internal utility and model references.
+"""
 
 @login_required
 @csrf_exempt
 def payment(request):
+    """
+    Handles the company’s subscription and payment processing.
+
+    This function enables an admin recruiter to:
+    - Change or renew a subscription plan.
+    - Add additional users to a subscription.
+    - Validate and apply discount codes.
+    - Redeem unused subscription days as wallet credit.
+    - Deduct payment amounts from the company wallet.
+    - Record all transactions including credits and debits.
+
+    Parameters:
+        request (HttpRequest): The incoming HTTP request object from the user.
+
+    Returns:
+        HttpResponse: Rendered HTML response with appropriate success or error messages.
+
+    Raises:
+        Http404: If any essential model or data is not found or invalid access is attempted.
+        ValueError: For validation or unexpected computation issues (during development/debugging).
+    """
     # raise ValueError()
     if request.user.profile.codename == 'recruiter' and request.user.recruiter.is_admin():
         payment_min = 10
@@ -294,6 +326,37 @@ def payment(request):
 @login_required
 @csrf_exempt
 def checkout(request):
+    """
+    Handles the PayPal payment checkout process for purchasing credits for a company.
+
+    This view supports both POST and GET requests. On a POST request, it initiates a payment
+    using the PayPal SDK by creating a web experience profile and a payment object. If payment
+    creation is successful, it redirects the user to the PayPal approval URL. On a GET request,
+    it handles PayPal's redirect back to the site, confirms the payment execution, updates the
+    wallet balance, logs the transaction, and redirects the user to the billing page.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing method, user, POST/GET data.
+
+    Returns:
+        HttpResponseRedirect: Redirects the user either to PayPal or back to the billing page
+        depending on the payment flow.
+
+    Modules Used:
+        - `paypalrestsdk`: Used to interact with PayPal for creating payments and profiles.
+        - `settings`: Retrieves site-wide configurations like SITE_URL.
+        - `datetime`: Appends timestamps to names to avoid conflicts.
+        - `decimal`: Ensures currency values are handled with precision.
+        - `messages`: Provides user feedback via Django's messaging framework.
+        - `redirect`: Redirects user to a different URL based on payment outcome.
+
+    Payment Flow:
+        1. User selects slab and amount.
+        2. Payment is created with PayPal.
+        3. User is redirected to PayPal.
+        4. On approval or cancelation, PayPal redirects back to the site.
+        5. Payment is executed and credits are added to the company's wallet.
+    """
     # token = paypalrestsdk.get_token()
     # raise ValueError()
     company = request.user.recruiter.company.all()[0]
