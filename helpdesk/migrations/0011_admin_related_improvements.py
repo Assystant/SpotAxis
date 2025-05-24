@@ -6,7 +6,7 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
+    """Updates the Queue model by making 'permission_name' non-editable and enforcing uniqueness and help text on the 'slug' field."""
     dependencies = [
         ('helpdesk', '0010_remove_queuemembership'),
     ]

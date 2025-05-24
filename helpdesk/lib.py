@@ -22,6 +22,19 @@ from django.utils.encoding import smart_str
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 
+"""
+Common utility functions for django-helpdesk, such as multipart email sending,
+queryset filtering, and spam detection.
+
+Includes:
+- send_templated_mail: Sends multipart HTML/text emails using DB-stored templates
+- query_to_dict: Converts raw SQL results to dicts
+- apply_query: Applies filtering, search, and sorting to querysets
+- safe_template_context: Sanitizes ticket and queue data for safe template rendering
+- text_is_spam: Uses Akismet to detect spam in user text submissions
+"""
+
+
 logger = logging.getLogger('helpdesk')
 
 
@@ -267,6 +280,16 @@ def text_is_spam(text, request):
     # This will return 'True' is the given text is deemed to be spam, or
     # False if it is not spam. If it cannot be checked for some reason, we
     # assume it isn't spam.
+    """
+    Checks if the provided text is likely spam using the Akismet API.
+
+    Returns True if detected as spam, False otherwise.
+    Assumes non-spam if Akismet is unavailable or configuration is missing.
+
+    Arguments:
+    - text (str): text to check for spam
+    - request (HttpRequest): Django request object containing metadata for Akismet
+    """
     from django.contrib.sites.models import Site
     from django.conf import settings
     try:
