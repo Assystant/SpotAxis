@@ -8,7 +8,7 @@ from datetime import date, timedelta, datetime
 from django.db import models
 from django.db.models import Q
 from common.models import Gender, Marital_Status, Country, State, Municipal, Degree, Address
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from dateutil.relativedelta import relativedelta
 from companies.models import *
 from django.conf import settings
@@ -540,7 +540,17 @@ class Training(models.Model):
 ## Start of Section Certificate ##
 
 class Certificate(models.Model):
-    candidate = models.ForeignKey(Candidate,verbose_name=candidate, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    
+    """
+    Model representing a certificate associated with a candidate.
+
+    Attributes:
+        candidate (Candidate): Candidate who earned the certificate.
+        name (str): Name of the certificate.
+        description (str): Description or details about the certificate.
+    """
+     
+    candidate = models.ForeignKey('Candidate',verbose_name=_('candidate'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     name = models.CharField(_('Name'), max_length=50)
     description = models.TextField()
 

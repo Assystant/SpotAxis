@@ -56,6 +56,32 @@ class Activity(models.Model):
         else:
             return self.actor.recruiter.company.all()[0].geturl() + "/activities/" + str(self.id) + "/"
 
+    """
+    A model representing notifications sent to users.
+    
+    Notifications are used to alert users about various events, activities, and updates
+    within the system. They can be marked as seen/unseen and contain various types of
+    messages and actions.
+    
+    
+    Attributes:
+        user (User): The user receiving the notification.
+        timestamp (datetime): When the notification was created.
+        last_updated (datetime): When the notification was last modified.
+        action (str): The type of action that triggered the notification. Optional.
+        target_action (str): Action associated with the target. Optional.
+        subject (str): The subject of the notification. Optional.
+        subject_action (str): Action associated with the subject. Optional.
+        seen (bool): Whether the notification has been seen by the user. Defaults to False.
+        action_url (str): URL associated with the notification action. Optional.
+        message (str): The complete notification message. Optional.
+        actor (User): The user who triggered the notification. Optional.
+        target (User): The user who is the target of the notification. Optional.
+        actor_count (int): Count of actors involved. Defaults to 0.
+        message_chunks (ManyToMany[MessageChunk]): Message chunks used in this notification.
+        
+    """
+
 class Notification(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     #template = models.ForeignKey(NotificationTemplate, null=True, blank=True, default=None,on_delete=models.SET_NULL)
