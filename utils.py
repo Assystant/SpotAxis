@@ -1,8 +1,8 @@
 from __future__ import absolute_import
 from __future__ import print_function
 import mammoth
-import docx
-import PyPDF2
+from docx import Document
+from pypdf import PdfReader
 import json
 from datetime import datetime
 from django.db.models import Count
@@ -40,7 +40,7 @@ def get_file_text(path):
     content = ""
     # try:
     if path.split('.')[-1] == 'docx':
-        doc_file = docx.Document(path)
+        doc_file = Document(path)
         full_text = []
         for para in doc_file.paragraphs:
             full_text.append(para.text)
@@ -74,14 +74,14 @@ def get_pdf_content(pdf_path, page_nums=[]):
     content = ''
     try:
         p = open(pdf_path, "rb")
-        pdf = PyPDF2.PdfFileReader(p)
+        pdf = PdfReader(p)
         if page_nums:
-            for page_num in page_nums:
-                content += pdf.getPage(page_num).extractText() + '\n'
+            for page_num in range(len(pdf.pages)):
+                content += pdf.pages[page_num].extract_text() or '' + '\n'
             # print(content)
         else:
-            for page_num in range(0, pdf.getNumPages()):
-                content += pdf.getPage(page_num).extractText() + '\n'
+            for page_num in page_nums:
+                content += pdf.pages[page_num].extract_text() or '' + '\n'
             # print(content)
     except: 
         pass

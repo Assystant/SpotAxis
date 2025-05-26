@@ -1,0 +1,117 @@
+name: 💡 Feature Request
+description: Suggest a new feature or enhancement to SpotAxis
+title: "[FEATURE] "
+labels:
+  - enhancement
+  - triage
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for suggesting a feature!**  
+        Please fill out the sections below so we can understand your request and its importance.
+
+  - type: input
+    id: title
+    attributes:
+      label: Short title
+      description: A concise summary of your feature request
+      placeholder: "e.g., Add dark mode to the dashboard"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected_version
+    attributes:
+      label: Affected Version(s)
+      description: Which SpotAxis version(s) this request applies to
+      options:
+        - "All versions"
+        - "v1.0 – v1.4"
+        - "v1.5 – v1.9"
+        - "v2.0 and above"
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: user_role
+    attributes:
+      label: User Persona / Role
+      description: Who will benefit from this feature (e.g., Recruiter, Admin)
+      placeholder: "e.g., Recruiters handling multiple job openings"
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case / Problem Statement
+      description: Describe the scenario and problem you’re trying to solve
+      placeholder: |
+        I often need to … but currently I have to …
+        This leads to …
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution / Desired Behavior
+      description: How you envision the feature working
+      placeholder: |
+        It would be great if …
+        Then the system could …
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives / Workarounds
+      description: Any existing features or tools you’ve tried
+      placeholder: "e.g., I currently use external script X to accomplish this"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is this request?
+      options:
+        - "P0 (Critical – needed ASAP)"
+        - "P1 (High – next release)"
+        - "P2 (Medium – future release)"
+        - "P3 (Low – nice to have)"
+      default: 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups / Attachments
+      description: Attach any designs, screenshots, or specs (drag & drop)
+      placeholder: "![Wireframe](paste or drag file here)"
+    validations:
+      required: false
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Business or User Impact
+      description: Why is this feature important? Describe the value or benefit.
+      placeholder: "e.g., Would reduce manual work by 50% and speed up hiring process"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Other information that might help us evaluate or implement this feature
+      placeholder: "e.g., Related to issue #123, environment notes, etc."
+    validations:
+      required: false

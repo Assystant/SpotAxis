@@ -7,6 +7,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration class to update several `TextField` fields in the `Candidate` model.
+
+    Purpose:
+        - Standardizes the declaration of optional fields in the Candidate model by
+          explicitly setting `null=True`, `blank=True`, and `default=None`.
+        - Removes any `max_length` constraint that was previously applied to `TextField` types.
+    """
 
     dependencies = [
         ('candidates', '0006_auto_20160908_1619'),
