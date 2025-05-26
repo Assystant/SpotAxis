@@ -144,6 +144,96 @@ def get_30_days_later():
 
 class Vacancy(models.Model):
     """ Jobs """
+    """
+    Represents a Job Vacancy with detailed attributes such as company, user, employment details,
+    status, experience requirements, salary information, publication dates, and related recruiters.
+
+    Attributes:
+        company (ForeignKey): The company offering the job.
+        user (ForeignKey): The user who created the vacancy.
+        employment (CharField): Job role or title.
+        status (ForeignKey): Current status of the vacancy (e.g., active, closed).
+        description (RichTextField): Detailed job description.
+        employmentType (ForeignKey): Type of employment (e.g., full-time, part-time).
+        industry (ForeignKey): Industry sector of the job.
+        function (CharField): Job function or department.
+        skills (CharField): Required skills for the job, comma-separated.
+        notice_period (CharField): Notice period expected from applicants.
+        nationality (ForeignKey): Nationality preference for applicants.
+        state (CharField): State location of the job.
+        city (CharField): City location of the job.
+        gender (ForeignKey): Gender preference, if any.
+        minEmploymentExperience (ForeignKey): Minimum experience required.
+        maxEmploymentExperience (ForeignKey): Maximum experience required.
+        degree (ForeignKey): Educational degree required.
+        min_age (CharField): Minimum age preference.
+        max_age (CharField): Maximum age preference.
+        currency (ForeignKey): Currency for the salary.
+        salaryType (ForeignKey): Type of salary offered.
+        min_salary (CharField): Minimum salary offered.
+        max_salary (CharField): Maximum salary offered.
+        seen (IntegerField): Number of times the vacancy was viewed.
+        postulate (BooleanField): Whether applications are allowed.
+        applications (PositiveIntegerField): Number of applications received.
+        confidential (BooleanField): Whether the vacancy is confidential.
+        data_contact (BooleanField): Whether contact data is shown.
+        another_email (BooleanField): Whether nominations are sent to another email.
+        email (EmailField): Alternative email for nominations.
+        add_date (DateTimeField): Date vacancy was added.
+        last_modified (DateTimeField): Date vacancy was last modified.
+        pub_after (BooleanField): Whether the vacancy is scheduled for future publication.
+        pub_date (DateField): Date the vacancy is published.
+        unpub_date (DateField): Date the vacancy is unpublished.
+        editing_date (DateField): Date editing was done.
+        end_date (DateField): End date of the vacancy.
+        expired (BooleanField): Whether the vacancy is expired.
+        questions (BooleanField): Whether questions are allowed.
+        hiring_date (DateField): Expected hiring date.
+        vacancies_number (PositiveSmallIntegerField): Number of job openings.
+        public_cvs (BooleanField): Whether public CVs are allowed.
+        vacancy_reason (CharField): Reason for closing the vacancy.
+        recruiters (ManyToManyField): Recruiters associated with the vacancy.
+        ban (BooleanField): Whether the vacancy is banned.
+        ban_period (CharField): Duration of the ban.
+        ban_all (BooleanField): Whether all bans apply.
+        has_custom_form (BooleanField): Whether a custom form is used.
+        form_template (ForeignKey): Template for the custom form.
+
+    Managers:
+        objects: Default manager.
+        openjobs: Manager for open vacancies.
+        publishedjobs: Manager for published vacancies.
+        unpublishedjobs: Manager for expired vacancies.
+        scheduledjobs: Manager for scheduled vacancies.
+        closedjobs: Manager for closed vacancies.
+
+    Methods:
+        __unicode__(): Returns the job employment title as string representation.
+        non_members(): Returns recruiters from the company not associated with this vacancy.
+        members(): Returns recruiters associated with this vacancy or with membership.
+        skills_as_list(): Returns the skills as a list split by commas.
+        get_absolute_url(): Returns the full URL to the vacancy details page.
+        get_application_url(): Returns the full URL to the vacancy application page.
+        get_url_block(): Returns a list of URLs related to the vacancy (details and apply links).
+        finalized_count(): Returns count of finalized postulations.
+        application_count(): Returns total number of postulations.
+        employment_experience(): Returns formatted string of experience requirements.
+        age_preference(): Returns formatted string of age preference.
+        location(): Returns formatted location string of the vacancy.
+        hasbeenPublished (property): Indicates if vacancy has any publication history.
+        scheduled (property): Indicates if the vacancy is scheduled for future publication.
+        hasUnseen (property): Returns count of unseen postulations.
+        publish(): Publishes the vacancy, setting dates and history.
+        unpublish(): Unpublishes the vacancy, setting expired flag and history.
+        available_tags(): Returns tags associated with the vacancy.
+        get_tag_cloud(): Returns tag cloud data for postulations.
+        get_tag_cloud_html(): Returns HTML formatted tag cloud.
+
+    Meta:
+        verbose_name: Human-readable singular name "Job".
+        verbose_name_plural: Human-readable plural name "Jobs".
+        ordering: Default ordering by publication date descending, then ID descending.
+    """
     company = models.ForeignKey(Company, verbose_name=_('Company'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     
@@ -358,6 +448,12 @@ ACTION_CHOICES = (
 
 class Publish_History(models.Model):
     """ Log of the published jobs """
+    """
+    Attributes:
+        vacancy (ForeignKey): Reference to the Vacancy instance associated with this log.
+        action (CharField): The type of action performed (e.g., publish, unpublish).
+        action_date (DateField): Date when the action was performed (auto-set on creation).
+    """
     vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     action = models.CharField(choices=ACTION_CHOICES, null=True, blank=True, default=None, max_length=2)
     action_date = models.DateField(verbose_name=_('On'), auto_now_add=True)
@@ -373,6 +469,16 @@ class Publish_History(models.Model):
 
 class Question(models.Model):
     """ Questions/Comments on the published jobs """
+    
+    """
+    Attributes:
+        vacancy (ForeignKey): The related Vacancy instance for the question.
+        user (ForeignKey): The user who asked the question.
+        question (CharField): The question text.
+        answer (CharField): The answer text.
+        question_date (DateTimeField): Timestamp when the question was created.
+        answer_date (DateTimeField): Timestamp when the answer was provided.
+    """
     vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     question = models.CharField(verbose_name=_('Question'), max_length=200, null=True, blank=True, default=None)
@@ -389,6 +495,14 @@ class Question(models.Model):
         ordering = ('-question_date',)
 
 class Candidate_Fav(models.Model):
+    """
+    Represents a candidate's favorite jobs.
+
+    Attributes:
+        vacancy (ForeignKey): The favorite Vacancy instance.
+        candidate (ForeignKey): The Candidate who marked the vacancy as favorite.
+        add_date (DateTimeField): Timestamp when the favorite was added.
+    """
     vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), related_name='+', null=True, blank=True, default=None, on_delete=models.SET_NULL)
     candidate = models.ForeignKey(Candidate, verbose_name=_('Candidate'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
@@ -505,6 +619,17 @@ class VacancyStage(models.Model):
         ordering = ['order']
 
 class StageCriterion(models.Model):
+    """
+    Represents a criterion associated with a VacancyStage.
+
+    Attributes:
+        vacancy_stage (ForeignKey): The VacancyStage this criterion belongs to.
+        name (CharField): Name of the criterion.
+
+    Methods:
+        __unicode__():
+            Returns the criterion's name as string representation.
+    """
     vacancy_stage = models.ForeignKey(VacancyStage,verbose_name='Job Stage', null=True, blank=True, default=None,on_delete=models.SET_NULL)
     name = models.CharField(verbose_name="Criteria Name", max_length=50)
 
@@ -808,6 +933,16 @@ class Postulate_Score(models.Model):
         return process.postulate.comment_set.all().filter(comment_type=2, recruiter=self.recruiter)[0]
 
 class Postulate_Stage(models.Model):
+    """
+    Associates a candidate's application (Postulate) with a specific vacancy stage and holds related scores.
+
+    Methods:
+        __unicode__(): Returns a string representation of the postulate stage.
+        avg_score(): Calculates the average score across all criteria for this stage.
+        avg_stars(): Returns an HTML string visualizing the average score as stars.
+        criteria_avg_scores(): Calculates average scores per criterion with star representations.
+        get_comments(): Retrieves comments associated with this postulate stage, optionally filtering by type.
+    """
     vacancy_stage = models.ForeignKey(VacancyStage,verbose_name='Job Stage', null=True, blank=True, default=None,on_delete=models.SET_NULL)
     postulate = models.ForeignKey(Postulate, verbose_name='Postulate Stage', default=None, null=True, blank=True,on_delete=models.SET_NULL)
     scores = models.ManyToManyField(Postulate_Score, default=None)
