@@ -2,9 +2,9 @@ from __future__ import absolute_import
 from django import forms
 from django.conf import settings
 from django.core.files import File
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 # import urllib2
 try:

@@ -6,7 +6,7 @@ from companies.models import Recruiter, Company
 from common.models import Subdomain
 from payments.models import Package, ServiceCategory
 from activities.models import Notification
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from TRM import settings
 from TRM.settings import LOGO_COMPANY_DEFAULT, LOGO_CANDIDATE_DEFAULT, ROOT_DOMAIN
 import json

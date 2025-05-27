@@ -9,7 +9,7 @@ from companies.models import Recruiter
 from activities.utils import post_org_notification
 from TRM.settings import ROOT_DOMAIN
 from payments.models import Subscription, Transactions, PriceSlab
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.management import call_command
 def EmailTicketCronJob():
     print((str(datetime.now()) + ' --> Email Ticket Cron start'))

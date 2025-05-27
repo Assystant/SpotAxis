@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
 from django.utils.encoding import force_str
-from django.utils.translation import get_language
+from django.utils.translation import gettext as _
 from django.core.exceptions import ImproperlyConfigured
 # from django.forms.util import flatatt
 from django.forms.utils import flatatt
