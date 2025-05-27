@@ -2,7 +2,7 @@
 
 import datetime
 from datetime import date
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 import autodoc
@@ -189,7 +189,7 @@ def job_board(request):
     page_template = 'job_board_item.html'
     if request.is_ajax():
         template = page_template
-    return render_(request,
+    return render(request,
         template,
         {
             'page_template': page_template,

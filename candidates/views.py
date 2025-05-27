@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import Http404, JsonResponse
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template import RequestContext
 from django_xhtml2pdf.utils import render_to_pdf_response
 from companies.models import Company_Industry
@@ -341,7 +341,7 @@ def cv_objective(request):
 #     else:
 #         form_courses = CoursesForm(instance=candidate)
 #     # print candidate.courses
-#     return render_to_response(request,'cv_courses_form.html',
+#     return render(request,'cv_courses_form.html',
 #                               {'isCV': True, 'form_courses': form_courses, 'courses': candidate.courses})
 
 
