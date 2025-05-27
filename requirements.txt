@@ -34,7 +34,6 @@ django-nested-formset==0.1.4
 django-rosetta==0.7.12
 django-tagging==0.4.5
 django-upgrade==1.22.2
-django-xhtml2pdf==0.0.3
 django-xmlrpc==0.1.7
 djangorestframework==3.16
 djangorestframework_simplejwt==5.4.0
@@ -48,7 +47,6 @@ funcsigs==1.0.2
 future==0.16.0
 grappelli-safe==0.4.5
 hashids==1.1.0
-html2pdf==0.1
 html5lib==1.1
 httplib2==0.9.2
 hyperlink==21.0.0
@@ -123,5 +121,4 @@ WebOb==1.6.1
 WebTest==3.0.2
 Werkzeug==0.11.15
 wheel==0.45.1
-xhtml2pdf==0.0.5
 zope.interface==7.2

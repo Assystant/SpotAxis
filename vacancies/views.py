@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse, NoReverseMatch, resolve
 from django.db.models import Count, Q
-from django.http import QueryDict, HttpResponseNotFound, JsonResponse, Http404
+from django.http import QueryDict, HttpResponseNotFound, JsonResponse, Http404, HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404, render
 from django.template import RequestContext,Context, Node, Library, TemplateSyntaxError, VariableDoesNotExist
 from django.template.loader import render_to_string
@@ -26,7 +26,7 @@ from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.timezone import utc
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
-from django_xhtml2pdf.utils import render_to_pdf_response
+from weasyprint import HTML
 from hashids import Hashids
 from payments.models import *
 from TRM.context_processors import subdomain
@@ -1372,15 +1372,20 @@ def vacancy_to_pdf(request, vacancy_id):
             my_vacancy = True
 
     pdf_name = '%s_%s.pdf' % (vacancy.employment[:30].replace(' ', '_'), vacancy.pk)
-    pdf_file = render_to_pdf_response('vacancy_details_pdf.html',
-                                      context={'vacancy': vacancy,
-                                               'MEDIA_URL': MEDIA_URL,
-                                               'logo_pdf': logo_pdf,
-                                               'my_vacancy': my_vacancy,
-                                               'LOGO_COMPANY_DEFAULT': LOGO_COMPANY_DEFAULT,
-                                               },
-                                      pdfname=pdf_name)
-    return pdf_file
+    html_string = render_to_string('vacancy_details_pdf.html',
+                                    context={'vacancy': vacancy,
+                                             'MEDIA_URL': MEDIA_URL,
+                                             'logo_pdf': logo_pdf,
+                                             'my_vacancy': my_vacancy,
+                                             'LOGO_COMPANY_DEFAULT': LOGO_COMPANY_DEFAULT,
+                                             })
+
+    # Create PDF response using WeasyPrint
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="%s"' % pdf_name
+    HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf(response)
+    return response
+
 
 def vacancies_by_company(request, company_id):
     """

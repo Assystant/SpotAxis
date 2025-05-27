@@ -52,7 +52,6 @@ If you need support implementing this ATS on your server, please reach out to ho
 * django-localflavor
 * django-rosetta
 * django-social-share
-* django-xhtml2pdf==0.0.3
 * docutils
 * html5lib
 * httplib2
@@ -75,6 +74,6 @@ If you need support implementing this ATS on your server, please reach out to ho
 * requests-oauthlib
 * six
 * waitress
+* Weasyprint
 * WebOb
 * WebTest
-* xhtml2pdf==0.0.5

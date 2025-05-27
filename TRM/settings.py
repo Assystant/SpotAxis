@@ -114,7 +114,7 @@ INSTALLED_APPS = (
     'vacancies',
     'activities',
     'pytz',
-    'django_xhtml2pdf',
+    'weasyprint',
     'upload_logos',
     'ckeditor',
     'payments',

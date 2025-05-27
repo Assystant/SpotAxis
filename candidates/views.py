@@ -12,10 +12,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
-from django_xhtml2pdf.utils import render_to_pdf_response
+from weasyprint import HTML
 from companies.models import Company_Industry
 from .forms import AcademicForm, CandidateForm, CvLanguageForm, ExpertiseForm, ObjectiveForm, \
     cv_FileForm, TrainingForm, CertificateForm, ProjectForm, InterestsForm, \
@@ -625,6 +625,7 @@ def curriculum_to_pdf(request, candidate_id, template=None):
     Returns:
         HttpResponse: PDF file response with the candidate's CV.
     """
+    from django.template.loader import render_to_string
     from TRM.settings import MEDIA_URL
 
     candidate = get_object_or_404(Candidate, pk=candidate_id)
@@ -638,7 +639,7 @@ def curriculum_to_pdf(request, candidate_id, template=None):
     today = datetime.now().date()
     logo_pdf = 'logos_TRM/logo_pdf.png'
     pdf_name = '%s_%s_%s.pdf' % (candidate.first_name, candidate.last_name, candidate.pk)
-    pdf_file = render_to_pdf_response('curriculum_to_pdf.html',
+    html_string = render_to_string('curriculum_to_pdf.html',
                                     context={'user': request.user,
                                              'today': today,
                                              'candidate': candidate,
@@ -651,10 +652,13 @@ def curriculum_to_pdf(request, candidate_id, template=None):
                                              # 'softwares': softwares,
                                              'MEDIA_URL': MEDIA_URL,
                                              'logo_pdf': logo_pdf,
-                                    },
-                                    pdfname=pdf_name)
-    return pdf_file
-
+                                    })
+    
+    # Generate PDF using WeasyPrint
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="%s"' % pdf_name
+    HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf(response)
+    return response
 
 def create_candidates(request):
     """
