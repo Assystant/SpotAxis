@@ -1,3 +1,9 @@
+"""
+Utility functions for the Django Helpdesk project.
+
+Includes user management helpers and URL configuration reload functionality.
+"""
+
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import sys
@@ -8,6 +14,12 @@ User = get_user_model()
 
 
 def get_staff_user(username='helpdesk.staff', password='password'):
+    """
+    Retrieve or create a staff user for the helpdesk.
+
+    If a user with the given username does not exist, creates one with the provided password
+    and sets it as staff. If the user exists, updates the password. Returns the user instance.
+    """
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
@@ -21,6 +33,14 @@ def get_staff_user(username='helpdesk.staff', password='password'):
 
 
 def reload_urlconf(urlconf=None):
+    """
+    Reload Django URL configuration modules to apply changes immediately.
+
+    If no urlconf is provided, uses the project's ROOT_URLCONF from settings.
+    Reloads both the helpdesk-specific and project URL modules, then clears URL caches.
+
+    Uses 'imp.reload' for compatibility with Python 3.
+    """
 
     from imp import reload  # python 3 needs this import.
 
@@ -35,7 +55,7 @@ def reload_urlconf(urlconf=None):
     if urlconf in sys.modules:
         importlib.reload(sys.modules[urlconf])
 
-    from django.core.urlresolvers import clear_url_caches
+    from django.urls import clear_url_caches
     clear_url_caches()
 
 

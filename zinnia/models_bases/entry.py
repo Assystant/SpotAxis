@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 import django_comments as comments
 from django_comments.models import CommentFlag

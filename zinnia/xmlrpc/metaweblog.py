@@ -12,7 +12,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.defaultfilters import slugify
 from django.utils import six
 from django.utils import timezone

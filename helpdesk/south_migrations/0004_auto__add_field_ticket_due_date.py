@@ -6,15 +6,33 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
+    """
+    Migration script to add the 'due_date' field to the 'Ticket' model
+    in the 'helpdesk' app. Uses South's SchemaMigration class to define
+    the schema changes in the 'forwards' and 'backwards' methods.
+    """
 
     def forwards(self, orm):
-        
+        """
+        Applies the forward migration:
+        Adds a new nullable and optional DateTimeField named 'due_date'
+        to the 'helpdesk_ticket' table.
+
+        Args:
+            orm: Object Relational Mapping reference to the models.
+        """
         # Adding field 'Ticket.due_date'
         db.add_column('helpdesk_ticket', 'due_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True), keep_default=False)
 
 
     def backwards(self, orm):
-        
+        """
+        Reverses the migration:
+        Removes the 'due_date' field from the 'helpdesk_ticket' table.
+
+        Args:
+            orm: Object Relational Mapping reference to the models.
+        """
         # Deleting field 'Ticket.due_date'
         db.delete_column('helpdesk_ticket', 'due_date')
 

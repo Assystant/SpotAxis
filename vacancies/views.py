@@ -15,7 +15,7 @@ from datetime import date, timedelta, datetime
 from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse, NoReverseMatch, resolve
+from django.urls import reverse, NoReverseMatch, resolve
 from django.db.models import Count, Q
 from django.http import QueryDict, HttpResponseNotFound, JsonResponse, Http404
 from django.shortcuts import render_to_response, redirect, get_object_or_404, render
@@ -24,7 +24,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.timezone import utc
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django_xhtml2pdf.utils import render_to_pdf_response
 from hashids import Hashids

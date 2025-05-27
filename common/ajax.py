@@ -94,7 +94,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.contrib.messages import get_messages
 from django.core import serializers
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Q
 from django.http import HttpResponse, Http404, JsonResponse
 from hashids import Hashids
@@ -102,9 +102,9 @@ from payments.models import *
 from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext, Context, TemplateDoesNotExist
 from django.template.loader import get_template, render_to_string
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from scheduler.models import Schedule
 from TRM.context_processors import subdomain
