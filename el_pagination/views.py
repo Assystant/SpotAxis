@@ -6,7 +6,7 @@ from __future__ import absolute_import
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
 from django.utils.encoding import smart_str
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.generic.base import View
 from django.views.generic.list import MultipleObjectTemplateResponseMixin
 

@@ -14,7 +14,7 @@ from django import VERSION
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
-from django.core.urlresolvers import reverse
+from django.urlrs import reverse
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.core import paginator
 from django.db import connection
@@ -22,7 +22,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.dates import MONTHS_3
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.utils.html import escape
 from django import forms
 

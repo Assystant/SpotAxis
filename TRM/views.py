@@ -4,10 +4,10 @@ from __future__ import absolute_import
 import datetime
 from datetime import date
 from django.shortcuts import render_to_response, redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template import RequestContext
 import autodoc
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from common.models import Employment_Type, Degree
 from companies.models import Company_Industry as Industry, Company
 from vacancies.models import Vacancy, Salary_Type, Employment_Experience as Experience

@@ -9,8 +9,7 @@ from companies.models import Recruiter
 from activities.utils import post_org_notification
 from TRM.settings import ROOT_DOMAIN, protocol
 from payments.models import Subscription, Transactions, PriceSlab
-from django.core.urlresolvers import reverse
-
+from django.urls import reverse
 """
 Modules Used:
     - `datetime`: For time comparisons with subscription expiry.
@@ -21,7 +20,6 @@ Modules Used:
     - `reverse`: To resolve named URL patterns.
     - `Subscription`, `Transactions`, `PriceSlab`: Subscription and billing models.
 """
-
 def SubscriptionCronJob():
     """
     Executes a scheduled cron job to manage subscription lifecycles.
