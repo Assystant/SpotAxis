@@ -10,8 +10,8 @@ import traceback
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 from django.http import Http404, JsonResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext

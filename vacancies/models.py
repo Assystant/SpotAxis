@@ -8,10 +8,10 @@ from common.models import Degree, Gender, Employment_Type, Country, Currency
 from companies.models import Company_Industry as Industry, Company, Stage, Recruiter, ExternalReferal
 from customField.models import Template, FieldValue
 from datetime import date, timedelta
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models import Q, Sum
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from TRM import settings
 from utils import get_file_content, get_file_text, tagcloud
 from six.moves import range
@@ -744,7 +744,7 @@ class Publish_History(models.Model):
         vacancy (ForeignKey): Reference to the Vacancy instance associated with this log.
         action (CharField): The type of action performed (e.g., publish, unpublish).
         action_date (DateField): Date when the action was performed (auto-set on creation).
-    """
+   """
     vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     action = models.CharField(choices=ACTION_CHOICES, null=True, blank=True, default=None, max_length=2)
     action_date = models.DateField(verbose_name=_('On'), auto_now_add=True)
@@ -805,6 +805,7 @@ class Candidate_Fav(models.Model):
         candidate (ForeignKey): The Candidate who marked the vacancy as favorite.
         add_date (DateTimeField): Timestamp when the favorite was added.
     """
+
     vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), related_name='+', null=True, blank=True, default=None, on_delete=models.SET_NULL)
     candidate = models.ForeignKey(Candidate, verbose_name=_('Candidate'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
@@ -1573,6 +1574,7 @@ class Postulate_Score(models.Model):
         return process.postulate.comment_set.all().filter(comment_type=2, recruiter=self.recruiter)[0]
 
 class Postulate_Stage(models.Model):
+
     """
     Associates a candidate's application (Postulate) with a specific vacancy stage and holds related scores.
 

@@ -5,9 +5,21 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to extend the RecruiterInvitation model with management permission fields.
+
+This migration:
+- Adds four Boolean fields to the RecruiterInvitation model:
+  - team_management
+  - site_management
+  - job_management
+  - application_process_management
+
+These fields will be used to pre-assign management roles during recruiter invitation.
+"""
 
 class Migration(migrations.Migration):
-
+    """Migration class to add management-related Boolean fields to the RecruiterInvitation model."""
     dependencies = [
         ('companies', '0010_auto_20160920_1401'),
     ]

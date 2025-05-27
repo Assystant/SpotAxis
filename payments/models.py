@@ -6,14 +6,31 @@ from companies.models import Company
 from django.db import models
 from django.db.models.expressions import Value
 from django.db.models.fields import BooleanField
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from TRM import settings
+
+"""
+Models for managing service subscriptions, packages, price slabs, transactions, and discounts
+for companies using the TRM platform.
+
+Modules:
+- `datetime`: Used for date/time operations like checking expiry.
+- `django.db.models`: Provides ORM fields for defining models.
+- `django.utils.translation.ugettext`: Used for translating user-facing strings.
+- `common.models.Currency`: Represents different currencies used in pricing.
+- `companies.models.Company`: Represents a company that subscribes to the platform.
+- `TRM.settings`: Contains project settings, including the user model.
+"""
+
 class Active(models.Manager):
+    """Custom model manager to return only enabled records."""
     use_for_related_fields = True
     def get_queryset(self):
+        """Filters queryset to return only objects with enabled=True."""
         return super(Active, self).get_queryset().filter(enabled=True)
 
 class ServiceCategory(models.Model):
+    """ Model representing a service category (e.g., Support, Hosting)."""
     name = models.CharField(null=True, blank=True, default=None, max_length=50)
     codename = models.CharField(null=True, blank=True, default=None, max_length=5)
     enabled = models.BooleanField(default=True, blank = True)
@@ -29,6 +46,7 @@ class ServiceCategory(models.Model):
         return self.name
  
 class Services(models.Model):
+    """ Model representing a service offered on the platform."""
     name = models.CharField(verbose_name=_('Name of Service'), max_length=100, null=True, blank=True, default=None)
     codename = models.CharField(verbose_name=_('Codename'), max_length=30, null=True, blank=True, default=None)
     category = models.ForeignKey(ServiceCategory, null=True, blank=True, default=None,on_delete=models.SET_NULL)
@@ -51,6 +69,7 @@ class Services(models.Model):
         ordering = ('name',)
 
 class Package(models.Model):
+    """A package containing multiple services."""
     name = models.CharField(null=True, blank=True, default=None, max_length=50)
     services = models.ManyToManyField(Services)
     free_users = models.PositiveIntegerField(null=True, blank=True, default=0)
@@ -64,6 +83,9 @@ class Package(models.Model):
         return self.name
 
     def package_slabs(self):
+        """
+        Retrieves price slabs grouped by currency and annotated with service category information.
+        """
         currencies = self.priceslab_set.all().values_list('currency').distinct()
         slabset = []
         for currency in currencies:
@@ -85,6 +107,9 @@ class Package(models.Model):
         return slabset
 
     def currencies(self):
+        """
+        Returns the list of unique currencies used in associated price slabs.
+        """
         return self.priceslab_set.all().values_list('currency').distinct()
     
 
@@ -94,6 +119,7 @@ SLAB_PERIOD = (
 )
 
 class PriceSlab(models.Model):
+    """Represents pricing for a package based on duration and currency."""
     currency = models.ForeignKey(Currency, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     slab_period = models.CharField(choices = SLAB_PERIOD, max_length = 1, null=True, blank=True, default=None)
     expiry_period = models.PositiveSmallIntegerField(null=True, blank=True, default =0)
@@ -115,11 +141,15 @@ class PriceSlab(models.Model):
             return "%s - %s" % (str(self.package.name), str(self.get_slab_period_display()))
     
     def allows_additional_users(self):
+        """
+        Determines whether additional users can be added to the package.
+        """
         if self.package.max_users == 0 or self.package.max_users > self.package.free_users:
             return True
         return False
 
 class Subscription(models.Model):
+    """Model representing a company's subscription to a pricing plan."""
     company = models.OneToOneField(Company, null=True, blank=True, default=None)
     expiry = models.DateTimeField(null=True, blank=True, default=None)
     added_users = models.PositiveIntegerField(null=True, blank=True, default=0)
@@ -136,18 +166,21 @@ class Subscription(models.Model):
         return str(self.expiry)
 
     def expired(self):
+        """Returns True if the subscription has expired."""
         if self.expiry and self.expiry > datetime.now() or not self.expiry:
             return False
         else:
             return True
 
     def ends_in(self):
+        """Returns time remaining until subscription expires."""
         if self.expiry:
             return self.expiry - datetime.now() 
         else:
             return 0
 
     def bill_amount(self):
+        """Calculates total amount due based on slab and added users."""
         amount = self.price_slab.amount
         if not amount:
             amount = 0
@@ -161,6 +194,7 @@ WALLET_MOVEMENTS_TYPE = (
 )
 
 class Transactions(models.Model):
+    """Model for logging company wallet transactions."""
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     company = models.ForeignKey(Company, verbose_name=_('Company'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # service = models.ForeignKey(Services, verbose_name=_('Service'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
@@ -188,6 +222,7 @@ DISCOUNT_TRANSACTION_TYPE = (
 )
 
 class Discount(models.Model):
+    """Represents discount codes and offers applicable to slabs."""
     name = models.CharField(null=True, default='', blank=True, max_length=200)
     label = models.CharField(null=True, default='', blank=True, max_length=50, unique= True)
     expiry = models.DateField(default=None, null=True, blank=True)
@@ -213,6 +248,7 @@ class Discount(models.Model):
         ordering = ("enabled",'-expiry')   
 
 class ScheduledTransactions(models.Model):
+    """Stores scheduled transactions for renewals or delayed discounts."""
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("User"), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     company = models.ForeignKey(Company, verbose_name=_('Company'), null=True, blank=True, default=None, on_delete = models.SET_NULL)
     # amount = models.DecimalField(verbose_name="Amount", max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
@@ -231,6 +267,7 @@ class ScheduledTransactions(models.Model):
    
 
 class Discount_Usage(models.Model):
+    """Tracks how many times a company has used a specific discount."""
     discount = models.ForeignKey(Discount, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)

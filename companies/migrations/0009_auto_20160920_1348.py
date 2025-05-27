@@ -5,9 +5,19 @@
 from __future__ import absolute_import
 from django.db import migrations
 
+"""
+Migration to update the Recruiter model's meta options.
+
+This migration adds custom permissions for the Recruiter model to manage 
+team, site, jobs, and application processes. It also ensures the verbose 
+names for singular and plural forms are set.
+
+Dependencies:
+    - Depends on migration '0008_auto_20160920_1229' in the 'companies' app.
+"""
 
 class Migration(migrations.Migration):
-
+    """Migration class to alter Recruiter model options."""
     dependencies = [
         ('companies', '0008_auto_20160920_1229'),
     ]

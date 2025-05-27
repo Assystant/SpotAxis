@@ -9,6 +9,10 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+    """
+    Adds a 'default_owner' field to the Queue model, linking to the user model.
+    This field is optional and sets a default owner for tickets in the queue.
+    """
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

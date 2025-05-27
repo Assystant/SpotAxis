@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import string
 
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from TRM.settings import HOSTED_URL
 from zinnia.settings import PROTOCOL
 

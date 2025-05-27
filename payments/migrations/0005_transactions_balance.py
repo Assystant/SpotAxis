@@ -5,9 +5,21 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to add a 'balance' field to the Transactions model.
+
+This migration performs the following operation:
+- Adds a new DecimalField 'balance' to the Transactions model, which stores
+  the balance amount after each transaction.
+
+Dependencies:
+    - payments.0004_auto_20161105_1205
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Migration class to add 'balance' field to the Transactions model.
+    """
     dependencies = [
         ('payments', '0004_auto_20161105_1205'),
     ]
