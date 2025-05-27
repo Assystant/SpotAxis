@@ -9,6 +9,19 @@ from helpdesk.settings import DEFAULT_USER_SETTINGS
 
 
 def pickle_settings(data):
+    """
+    Serialize and encode the given data using cPickle and base64 encoding.
+    
+    This function pickles the given data object using cPickle and then
+    encodes the pickled bytes into a base64 string. This approach ensures
+    consistent serialization of user settings as defined at migration creation time.
+    
+    Args:
+        data (Any): The Python object (typically a dict) representing user settings.
+        
+    Returns:
+        str: A base64 encoded string representing the pickled data.
+    """
     """Pickling as defined at migration's creation time"""
     import pickle
     from helpdesk.lib import b64encode
@@ -35,8 +48,22 @@ def populate_usersettings(orm):
             UserSettings.objects.create(user=u, settings_pickled=settings_pickled)
 
 class Migration(DataMigration):
-
+    """
+    South data migration class to populate UserSettings for existing users.
+    
+    This migration runs the populate_usersettings function forwards, and does not
+    implement backwards migration since removing these settings could cause data loss.
+    
+    Attributes:
+        models (dict): Dictionary of models used during the migration.
+    """
     def forwards(self, orm):
+        """
+        Run the data migration forwards to populate UserSettings for all users.
+        
+        Args:
+            orm (object): The historical ORM passed by South.
+        """
         populate_usersettings(orm)
 
     def backwards(self, orm):
