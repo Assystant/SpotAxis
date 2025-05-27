@@ -2,7 +2,17 @@
 """
 Mexican-specific form helpers.
 """
+"""
+This module includes a custom form field, `MXRFCField_Custom`, which validates 
+Mexico's Registro Federal de Contribuyentes (RFC) values for individuals 
+(Persona física) and companies (Persona moral). It checks format, checksum,
+and filters out invalid or offensive RFC combinations based on government 
+guidelines.
 
+Sources:
+- https://es.wikipedia.org/wiki/Registro_Federal_de_Contribuyentes_(México)
+- http://www.sisi.org.mx/jspsi/documentos/2005/seguimiento/06101/0610100162005_065.doc
+"""
 from __future__ import absolute_import
 import re
 
@@ -63,6 +73,27 @@ class MXRFCField_Custom(RegexField, CharField):
     More info about this:
         http://es.wikipedia.org/wiki/Registro_Federal_de_Contribuyentes_(M%C3%A9xico)
     """
+    """
+    Validates Mexican RFC (Registro Federal de Contribuyentes) numbers.
+
+    Supports both individual (Persona física) and legal entity (Persona moral) RFCs,
+    checking format, date encoding, optional homoclave, checksum, and filtering
+    out any offensive or restricted word combinations in the first 4 characters.
+
+    RFC Formats:
+        - Persona Física: [A-Z][AEIOU][A-Z]{2} + YYMMDD + optional 3-character homoclave
+        - Persona Moral:  [A-Z&Ñ]{3} + YYMMDD + optional 3-character homoclave
+
+    Attributes:
+        default_error_messages (dict): Custom error messages for invalid RFCs,
+        checksum mismatch, and required field.
+
+    Methods:
+        clean(value): Normalizes and validates the RFC string.
+        _has_homoclave(rfc): Checks if the RFC includes a homoclave section.
+        _checksum(rfc): Calculates the checksum digit for the RFC.
+        _has_inconvenient_word(rfc): Checks for inappropriate or blocked word prefixes.
+    """
     default_error_messages = {
         'invalid': _('Ingrese un RFC válido'),
         'invalid_checksum': _('Suma de verificación inválida'),
@@ -76,6 +107,7 @@ class MXRFCField_Custom(RegexField, CharField):
                                          max_length=max_length, *args, **kwargs)
 
     def clean(self, value):
+        """Normalizes and validates the RFC string."""
         value = super(MXRFCField_Custom, self).clean(value)
         if value in EMPTY_VALUES:
             return ''
@@ -118,5 +150,6 @@ class MXRFCField_Custom(RegexField, CharField):
         return six.text_type(checksum)
 
     def _has_inconvenient_word(self, rfc):
+        """Checks for inappropriate or blocked word prefixes."""
         first_four = rfc[:4]
         return first_four in RFC_INCONVENIENT_WORDS
