@@ -7,8 +7,18 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
+    """
+    Migration to remove the unique constraint on the TicketCustomFieldValue model fields 
+    ['ticket', 'field'] and increase the max_length of the 'file' field in the Attachment model.
 
+    The forwards method applies these changes, and the backwards method reverts them.
+    """
     def forwards(self, orm):
+        """
+        Apply the migration:
+        - Remove the unique constraint on the 'ticket' and 'field' fields of the TicketCustomFieldValue model.
+        - Alter the 'file' field in the Attachment model to have a max_length of 1000.
+        """
         # Removing unique constraint on 'TicketCustomFieldValue', fields ['ticket', 'field']
         db.delete_unique('helpdesk_ticketcustomfieldvalue', ['ticket_id', 'field_id'])
 
@@ -17,7 +27,11 @@ class Migration(SchemaMigration):
         db.alter_column('helpdesk_attachment', 'file', self.gf('django.db.models.fields.files.FileField')(max_length=1000))
 
     def backwards(self, orm):
-
+        """
+        Revert the migration:
+        - Re-add the unique constraint on the 'ticket' and 'field' fields of the TicketCustomFieldValue model.
+        - Change the 'file' field in the Attachment model back to max_length 100.
+        """
         # Changing field 'Attachment.file'
         db.alter_column('helpdesk_attachment', 'file', self.gf('django.db.models.fields.files.FileField')(max_length=100))
         # Adding unique constraint on 'TicketCustomFieldValue', fields ['ticket', 'field']

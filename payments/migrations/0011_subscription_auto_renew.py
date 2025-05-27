@@ -5,9 +5,18 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to add the 'auto_renew' field to the Subscription model.
+
+This migration adds a new BooleanField named 'auto_renew' to the Subscription model.
+The field indicates whether the subscription is set to renew automatically.
+It defaults to True, enabling auto-renewal by default.
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Migration class to add 'auto_renew' field to Subscription model.
+    """
     dependencies = [
         ('payments', '0010_scheduledtransactions'),
     ]

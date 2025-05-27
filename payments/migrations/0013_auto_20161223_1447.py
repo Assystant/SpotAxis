@@ -5,9 +5,18 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to add 'last_day' and 'last_week' fields to the Subscription model.
+
+This migration adds two BooleanFields, 'last_day' and 'last_week', to the Subscription model.
+These fields can be used as flags to indicate whether the subscription is in its last day
+or last week respectively. Both fields default to False.
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Migration class to add 'last_day' and 'last_week' BooleanFields to the Subscription model.
+    """
     dependencies = [
         ('payments', '0012_auto_20161201_1441'),
     ]

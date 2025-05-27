@@ -1,6 +1,6 @@
 """Views for Zinnia entries search"""
 from __future__ import absolute_import
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.generic.list import ListView
 
 from zinnia.models.entry import Entry

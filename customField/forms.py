@@ -1,3 +1,14 @@
+"""
+Django forms and formsets for managing custom fields, options, and templates.
+
+Includes:
+- FieldForm: For custom field input.
+- OptionForm: For options tied to fields.
+- TemplateForm: For naming templates.
+- Custom nested formset logic for managing nested fields and options.
+- TemplatedForm: Runtime-generated form based on a template instance.
+"""
+
 from __future__ import absolute_import
 from customField.models import *
 from django import forms
@@ -6,6 +17,14 @@ from django.forms.models import BaseInlineFormSet, inlineformset_factory, ModelF
 from nested_formset import *
 
 class FieldForm(BaseNestedModelForm):
+    """
+        Form for creating or editing a Field model instance, including nested options if required.
+
+        Fields:
+            - name: Label for the field.
+            - field_type: Reference to a FieldType instance.
+            - is_required: Whether the field must be filled by a user.
+        """
     name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder':'Field Label',
                                       'class': 'form-control'}),
@@ -28,6 +47,9 @@ class FieldForm(BaseNestedModelForm):
         required=False,
     )
     def clean_name(self):
+        """
+            Validates and cleans the 'name' field by trimming whitespace.
+        """
         name = self.cleaned_data.get('name')
         if not name.strip():
             raise forms.ValidationError(code = 'required')
@@ -37,6 +59,9 @@ class FieldForm(BaseNestedModelForm):
         fields = ['name','field_type', 'is_required',]   
 
 class OptionForm(ModelForm):
+    """
+        Form for creating or editing an Option associated with a Field.
+    """
     name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder':'Option',
                                       'class': 'form-control'}),
@@ -51,6 +76,9 @@ class OptionForm(ModelForm):
         fields = ['name']
     
 class TemplateForm(ModelForm):
+    """
+        Form for naming a Template that groups Fields together.
+    """
     name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder':'Untitled Template',
                                       'class': 'form-control'}),
@@ -73,6 +101,19 @@ def nestedformset_factory(parent_model, model, nested_formset,
                           localized_fields=None, labels=None,
                           help_texts=None, error_messages=None,
                           min_num=None, validate_min=None):
+    """
+    Creates a nested formset for handling hierarchical form data (e.g., fields and their options).
+
+    Parameters:
+        - parent_model: The model to which child model is related.
+        - model: The child model.
+        - nested_formset: The nested formset class to use.
+        - Other standard formset_factory kwargs.
+
+    Returns:
+        A nested inline formset class.
+    """
+
     kwargs = {
         'form': form,
         'formset': formset,
@@ -110,11 +151,22 @@ def nestedformset_factory(parent_model, model, nested_formset,
     return NestedFormSet
 
 class BaseOptionFormset(BaseInlineFormSet):
+    """
+    Custom formset for validating Option entries.
+
+    Validates:
+        - Duplicate option names are not allowed.
+    """
+
     def __init__(self, *args, **kwargs):
         super(BaseOptionFormset, self).__init__(*args, **kwargs)
         for form in self.forms:
             form.empty_permitted = False
     def clean(self):
+        """
+        Ensures no duplicate option names exist in the formset.
+        """
+
         if any(self.errors):
             return
         options = {}
@@ -134,6 +186,9 @@ class BaseOptionFormset(BaseInlineFormSet):
                     self.forms[index].add_error('name', 'Duplicate options')
 
     def structure(self):
+        """
+        Renders the empty form HTML structure for dynamic front-end insertion.
+        """
         structure_html = ""
         with self.empty_form as subform:
             structure_html += '<div class="formset-form" id="option-formset-structure">'
@@ -147,11 +202,22 @@ class BaseOptionFormset(BaseInlineFormSet):
 OptionFormset = inlineformset_factory(Field,Option,form = OptionForm, formset=BaseOptionFormset, extra=0, can_delete=True)
 
 class BaseFieldFormset(BaseNestedFormset):
+    """
+    Custom nested formset for handling fields and their options.
+
+    Validates:
+        - Duplicate field names.
+        - Required options if field type requires them.
+    """
+
     def __init__(self, *args, **kwargs):
         super(BaseFieldFormset, self).__init__(*args, **kwargs)
         for form in self.forms:
             form.empty_permitted = False
     def clean(self):
+        """
+        Validates field names for uniqueness and ensures required options are provided.
+        """
         fields = {}
         for index,form in enumerate(self.forms):
             cleaned_data = form.clean()
@@ -179,6 +245,9 @@ class BaseFieldFormset(BaseNestedFormset):
 
 
     def structure(self):
+        """
+        Returns HTML structure for empty field form, including nested options.
+        """
         structure_html = ""
         with formset.empty_form as form:
             structure_html += '<div class="formset-form" id="field-formset-structure" '
@@ -208,6 +277,15 @@ class BaseFieldFormset(BaseNestedFormset):
         return structure_html
 
     def templated_form(self, formClasses=None):
+        """
+        Generates a Django form dynamically using the formset data.
+
+        Args:
+            formClasses (str): Optional CSS classes for form styling.
+
+        Returns:
+            A dynamic Django Form instance or a message if no template is bound.
+        """
         form = TemplatedForm()
         if self.is_bound:
             counter = 0
@@ -250,6 +328,15 @@ class BaseFieldFormset(BaseNestedFormset):
 
 
     def save(self, commit=True):
+        """
+        Saves the formset and all nested formsets.
+
+        Args:
+            commit (bool): Whether to commit the changes to the database.
+
+        Returns:
+            The saved result of the parent formset.
+        """
 
         result = super(BaseNestedFormset, self).save(commit=commit)
 
@@ -267,12 +354,28 @@ class TemplatedForm(forms.Form):
     The saving of the form creates and returns the list of :model:`customField.FieldValue` objects mapped with their correponding :model:`customField.Field` and user entered value pairs.
     """
 
+    """
+    Dynamically generated form based on a `Template` instance.
+
+    - Populates fields based on related Field and Option models.
+    - Can be rendered and saved as FieldValue objects.
+
+    Attributes:
+        template (Template): The template this form is based on.
+    """
+
     template = None
     # TODO: Define form fields here
     def __init__(self, *args, **kwargs):
         """
         Initialising the custom :form:`customField.TemplatedForm` with and instance of :model:`customField.Template`. The form populates all the  :model:`customField.Field`s mapped to the template object along with :model:`customField.Option` as choices whereever the field is a base/derived instance of :form:`django.SelectField`.
         """
+
+        """
+        Initializes the form based on the given `template` instance and renders
+        all associated fields with proper widgets, choices, and validation.
+        """
+
         template = kwargs.pop('template', None)
         formClasses = kwargs.pop('formClasses', None)
         super(TemplatedForm, self).__init__(*args, **kwargs)
@@ -303,6 +406,11 @@ class TemplatedForm(forms.Form):
         """
         Cleans the custom :form:`customField.TemplatedForm`'s choice values by returning it's display value in cleaned data or a string of comma seperated list in case of multiselect fields.
         """
+        """
+        Cleans choice fields by resolving stored choice values to their display names.
+        Supports both single and multiple select inputs.
+        """
+
         for field in self.fields:
             if hasattr(self.fields[field],'choices'):
                 data = self.cleaned_data[field]
@@ -315,6 +423,13 @@ class TemplatedForm(forms.Form):
         """
         Save the :form:`customField.TemplatedForm` and return a list of the created :model:`custonField.FieldValue` objects.
         """
+        """
+        Saves the filled form as a list of `FieldValue` model instances.
+
+        Returns:
+            List of created FieldValue objects.
+        """
+
         field_set = []
         for field in self.template.field_set.all():
             data = self.cleaned_data[field.name]

@@ -5,8 +5,20 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to update the 'ban_list' field in the 'Company' model.
+
+This migration modifies the 'ban_list' field to allow null values and blank input,
+providing greater flexibility in how ban-related data is stored or omitted.
+"""
 
 class Migration(migrations.Migration):
+    """
+    Alters the 'ban_list' field in the Company model to accept null and blank values.
+
+    This allows companies to have an empty or unset ban list,
+    enhancing compatibility with various usage scenarios.
+    """
 
     dependencies = [
         ('companies', '0014_auto_20161007_1717'),

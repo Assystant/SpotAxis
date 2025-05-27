@@ -14,7 +14,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import gettext_lazy as _, gettext 
 from django.utils.encoding import python_2_unicode_compatible
 
 try:
@@ -259,6 +259,17 @@ class Queue(models.Model):
         return basename
 
     def save(self, *args, **kwargs):
+        """
+        Overrides the default save method to set up default values
+        for certain fields if they are not provided.
+
+        For example, sets the IMAP folder to 'INBOX' if missing,
+        sets SOCKS proxy host and port if a proxy type is specified,
+        and assigns default email port numbers based on the mailbox type.
+
+        On the first save (when the instance does not yet have an ID),
+        it creates the associated Django permission object for this queue.
+        """
         if self.email_box_type == 'imap' and not self.email_box_imap_folder:
             self.email_box_imap_folder = 'INBOX'
 
@@ -295,6 +306,13 @@ class Queue(models.Model):
         super(Queue, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
+        """
+        Overrides the default delete method to remove the associated
+        permission object when a queue is deleted.
+
+        This ensures that no orphaned permissions remain in the system
+        after the queue is removed.
+        """
         permission_name = self.permission_name
         super(Queue, self).delete(*args, **kwargs)
 
@@ -323,6 +341,14 @@ class Ticket(models.Model):
     Note that assigned_to is optional - unassigned tickets are displayed on
     the dashboard to prompt users to take ownership of them.
     """
+    """
+    A ticket represents a user-submitted request or issue tracked in the system.
+
+    Tickets are linked to queues and include metadata like status, priority,
+    assigned staff, and timestamps. This allows efficient tracking, resolution,
+    and reporting of support issues.
+    """
+
 
     OPEN_STATUS = 1
     REOPENED_STATUS = 2
@@ -496,7 +522,7 @@ class Ticket(models.Model):
         a URL to the submitter of a ticket.
         """
         from django.contrib.sites.models import Site
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         try:
             site = Site.objects.get_current()
         except:
@@ -515,7 +541,7 @@ class Ticket(models.Model):
         a staff member (in emails etc)
         """
         from django.contrib.sites.models import Site
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         try:
             site = Site.objects.get_current()
         except:
@@ -552,6 +578,12 @@ class Ticket(models.Model):
     get_absolute_url = models.permalink(get_absolute_url)
 
     def save(self, *args, **kwargs):
+        """
+        Overrides the default save method to set the creation
+        and modification timestamps automatically.
+
+        Sets default priority to 3 (normal) if not already set.
+        """
         if not self.id:
             # This is a new ticket as no ID yet exists.
             self.created = timezone.now()
@@ -565,6 +597,19 @@ class Ticket(models.Model):
 
     @staticmethod
     def queue_and_id_from_query(query):
+        """
+        Splits a ticket query string into the queue slug and ticket ID.
+
+        For example, 'tech-15' becomes ('tech', '15').
+
+        This method handles queue slugs containing dashes.
+
+        Args:
+            query (str): Ticket query string.
+
+        Returns:
+            tuple: (queue_slug, ticket_id)
+        """
         # Apply the opposite logic here compared to self._get_ticket_for_url
         # Ensure that queues with '-' in them will work
         parts = query.split('-')
@@ -573,10 +618,30 @@ class Ticket(models.Model):
 
 
 class FollowUpManager(models.Manager):
+    """
+    Manager providing custom query methods for filtering FollowUp objects
+    based on their visibility to the ticket submitter.
+    """
     def private_followups(self):
+        """
+        Return a queryset of FollowUp objects marked as private.
+
+        Private follow-ups are only visible to staff and not to the submitter.
+
+        Returns:
+            QuerySet: FollowUps with public=False
+        """
         return self.filter(public=False)
 
     def public_followups(self):
+        """
+        Return a queryset of FollowUp objects marked as public.
+
+        Public follow-ups are visible to both staff and the ticket submitter.
+
+        Returns:
+            QuerySet: FollowUps with public=True
+        """
         return self.filter(public=True)
 
 
@@ -650,12 +715,22 @@ class FollowUp(models.Model):
         verbose_name_plural = _('Follow-ups')
 
     def __str__(self):
+        """
+        Returns the title of the follow-up as its string representation.
+        """
         return '%s' % self.title
 
     def get_absolute_url(self):
+        """
+        Returns a URL fragment pointing to this specific follow-up on the ticket view page.
+        """
         return "%s#followup%s" % (self.ticket.get_absolute_url(), self.id)
 
     def save(self, *args, **kwargs):
+        """
+        Overrides the save method to update the ticket's 'modified' timestamp
+        whenever a follow-up is saved.
+        """
         t = self.ticket
         t.modified = timezone.now()
         t.save()
@@ -665,8 +740,11 @@ class FollowUp(models.Model):
 @python_2_unicode_compatible
 class TicketChange(models.Model):
     """
-    For each FollowUp, any changes to the parent ticket (eg Title, Priority,
-    etc) are tracked here for display purposes.
+    Tracks changes to a ticket's fields associated with a follow-up.
+
+    This includes which field changed, the old value, and the new value.
+
+    It allows for detailed display of what was modified in each follow-up.
     """
 
     followup = models.ForeignKey(
@@ -693,13 +771,21 @@ class TicketChange(models.Model):
         )
 
     def __str__(self):
+        """
+        Returns a human-readable description of the change.
+
+        For example:
+        - "field removed"
+        - "field set to new_value"
+        - "field changed from old_value to new_value"
+        """
         out = '%s ' % self.field
         if not self.new_value:
-            out += ugettext('removed')
+            out += gettext('removed')
         elif not self.old_value:
-            out += ugettext('set to %s') % self.new_value
+            out += gettext('set to %s') % self.new_value
         else:
-            out += ugettext('changed from "%(old_value)s" to "%(new_value)s"') % {
+            out += gettext('changed from "%(old_value)s" to "%(new_value)s"') % {
                 'old_value': self.old_value,
                 'new_value': self.new_value
                 }
@@ -731,6 +817,7 @@ class Attachment(models.Model):
     """
     Represents a file attached to a follow-up. This could come from an e-mail
     attachment, or it could be uploaded via the web interface.
+    Stores metadata such as filename, MIME type, and file size.
     """
 
     followup = models.ForeignKey(
@@ -770,6 +857,7 @@ class Attachment(models.Model):
             )
 
     def __str__(self):
+        """Returns the filename as the string representation of the attachment."""
         return '%s' % self.filename
 
     class Meta:
@@ -817,6 +905,12 @@ class PreSetReply(models.Model):
         )
 
     def __str__(self):
+        """
+        Returns the name of the pre-set reply.
+
+        This name helps users identify and select the reply but is not
+        shown in the reply content.
+        """
         return '%s' % self.name
 
 
@@ -850,6 +944,7 @@ class EscalationExclusion(models.Model):
         )
 
     def __str__(self):
+        """Returns the name of the escalation exclusion entry."""
         return '%s' % self.name
 
     class Meta:
@@ -909,6 +1004,9 @@ class EmailTemplate(models.Model):
         )
 
     def __str__(self):
+        """
+        Returns the template name as the string representation.
+        """
         return '%s' % self.template_name
 
     class Meta:
@@ -946,6 +1044,7 @@ class KBCategory(models.Model):
         verbose_name_plural = _('Knowledge base categories')
 
     def get_absolute_url(self):
+        """Returns the URL path to view this knowledge base category."""
         return 'helpdesk_kb_category', (), {'slug': self.slug}
     get_absolute_url = models.permalink(get_absolute_url)
 
@@ -955,6 +1054,9 @@ class KBItem(models.Model):
     """
     An item within the knowledgebase. Very straightforward question/answer
     style system.
+
+    Supports voting to indicate usefulness, with tracking of positive
+    recommendations and total votes.
     """
     category = models.ForeignKey(
         KBCategory,
@@ -994,11 +1096,16 @@ class KBItem(models.Model):
         )
 
     def save(self, *args, **kwargs):
+        """Sets the last updated timestamp when saving, if not already set."""
         if not self.last_updated:
             self.last_updated = timezone.now()
         return super(KBItem, self).save(*args, **kwargs)
 
     def _score(self):
+        """Calculates a rating score based on positive votes divided by total votes.
+
+        Returns:
+            int or str: Integer score or 'Unrated' if no votes exist."""
         if self.votes > 0:
             return int(self.recommendations / self.votes)
         else:
@@ -1006,6 +1113,7 @@ class KBItem(models.Model):
     score = property(_score)
 
     def __str__(self):
+        """Returns the KB item title."""
         return '%s' % self.title
 
     class Meta:
@@ -1014,6 +1122,7 @@ class KBItem(models.Model):
         verbose_name_plural = _('Knowledge base items')
 
     def get_absolute_url(self):
+        """Returns the URL path to view this knowledge base item."""
         return 'helpdesk_kb_item', (self.id,)
     get_absolute_url = models.permalink(get_absolute_url)
 
@@ -1055,6 +1164,7 @@ class SavedSearch(models.Model):
         )
 
     def __str__(self):
+        """Returns the saved search title, with an asterisk if it is shared."""
         if self.shared:
             return '%s (*)' % self.title
         else:
@@ -1086,6 +1196,7 @@ class UserSettings(models.Model):
         )
 
     def _set_settings(self, data):
+        """Serializes and encodes a Python dictionary to store in the database."""
         # data should always be a Python dictionary.
         try:
             import pickle
@@ -1095,6 +1206,8 @@ class UserSettings(models.Model):
         self.settings_pickled = b64encode(pickle.dumps(data))
 
     def _get_settings(self):
+        """Decodes and deserializes the stored string into a Python dictionary.
+        Returns an empty dict on error."""
         # return a python dictionary representing the pickled data.
         try:
             import pickle
@@ -1109,6 +1222,7 @@ class UserSettings(models.Model):
     settings = property(_get_settings, _set_settings)
 
     def __str__(self):
+        """Returns a human-readable representation showing the user."""
         return 'Preferences for %s' % self.user
 
     class Meta:
@@ -1178,9 +1292,11 @@ class IgnoreEmail(models.Model):
         )
 
     def __str__(self):
+        """Returns the configured name for the ignored email pattern."""
         return '%s' % self.name
 
     def save(self, *args, **kwargs):
+        """Automatically sets the creation date if not already set."""
         if not self.date:
             self.date = timezone.now()
         return super(IgnoreEmail, self).save(*args, **kwargs)
@@ -1257,6 +1373,8 @@ class TicketCC(models.Model):
         )
 
     def _email_address(self):
+        """Returns the email address of the follower, preferring the user's email
+        if linked to a system user."""
         if self.user and self.user.email is not None:
             return self.user.email
         else:
@@ -1264,6 +1382,10 @@ class TicketCC(models.Model):
     email_address = property(_email_address)
 
     def _display(self):
+        """
+        Returns the display name for the follower, preferring the linked user
+        or else the raw email address.
+        """
         if self.user:
             return self.user
         else:
@@ -1271,6 +1393,9 @@ class TicketCC(models.Model):
     display = property(_display)
 
     def __str__(self):
+        """
+        Returns a string showing who is following which ticket.
+        """
         return '%s for %s' % (self.display, self.ticket.title)
 
 
@@ -1363,6 +1488,10 @@ class CustomField(models.Model):
         )
 
     def _choices_as_array(self):
+        """
+        Parses the stored list values into an array of (value, label) pairs
+        for use in choice fields.
+        """
         from io import StringIO
         valuebuffer = StringIO(self.list_values)
         choices = [[item.strip(), item.strip()] for item in valuebuffer.readlines()]
@@ -1386,6 +1515,9 @@ class CustomField(models.Model):
     objects = CustomFieldManager()
 
     def __str__(self):
+        """
+        Returns the internal name of the custom field.
+        """
         return '%s' % self.name
 
     class Meta:
@@ -1395,6 +1527,9 @@ class CustomField(models.Model):
 
 @python_2_unicode_compatible
 class TicketCustomFieldValue(models.Model):
+    """
+    Stores the value of a custom field for a specific ticket.
+    """
     ticket = models.ForeignKey(
         Ticket,
         verbose_name=_('Ticket'),
@@ -1410,6 +1545,9 @@ class TicketCustomFieldValue(models.Model):
     value = models.TextField(blank=True, null=True)
 
     def __str__(self):
+        """
+        Returns a string representation combining the ticket and field.
+        """
         return '%s / %s' % (self.ticket, self.field)
 
     class Meta:
@@ -1445,4 +1583,7 @@ class TicketDependency(models.Model):
         )
 
     def __str__(self):
+        """
+        Returns a string representation showing the dependency relationship.
+        """
         return '%s / %s' % (self.ticket, self.depends_on)

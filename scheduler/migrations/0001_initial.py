@@ -7,9 +7,32 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Initial migration for the 'Schedule' model in the 'scheduler' app.
+
+This migration creates the 'Schedule' model with the following fields:
+- id: Primary key (AutoField).
+- scheduled_on: DateTimeField indicating when the schedule is set.
+- offset: IntegerField representing time offset in minutes.
+- status: CharField with choices 'Pending' or 'Completed', allowing null and blank.
+- application: ForeignKey to 'vacancies.Postulate' representing the related application.
+- user: ForeignKey to the user model who scheduled the event.
+
+Model metadata includes verbose names for singular and plural forms.
+
+Dependencies:
+- Swappable dependency on the user model from settings.AUTH_USER_MODEL.
+- Dependency on the '0049_vacancytags_vacancy' migration of the 'vacancies' app.
+"""
 
 class Migration(migrations.Migration):
+    """
+    Migration class to create the Schedule model.
 
+    This class contains the dependencies required before applying this migration
+    and the operations that define the creation of the Schedule model with its
+    respective fields and options.
+    """
     initial = True
 
     dependencies = [
