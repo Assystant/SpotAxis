@@ -1,3 +1,6 @@
+"""
+This module provides functionality to parse resumes using BeautifulSoup.
+"""
 from __future__ import absolute_import
 from __future__ import print_function
 import re
@@ -19,6 +22,12 @@ keyword_list = ['EDUCATION', 'Education', 'OBJECTIVE', 'Objective', 'SKILLS', 'S
 keyword_dict = dict()
 
 for item in span_tag_list:
+	"""
+	Iterates through all span tags in the HTML content.
+
+	Args:
+		item (bs4.element.Tag): A BeautifulSoup span tag.
+	"""
 
 	if item.descendants is not None:
 		for child in item.descendants:
