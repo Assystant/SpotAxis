@@ -3,6 +3,12 @@ from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from zinnia.models import Entry, Author, Category
 from zinnia.managers import PUBLISHED
+from django.utils import timezone
+
+# Import existing serializers from other modules
+from ckeditor.api.serializers import RichTextSerializer
+from scheduler.api.serializers import ScheduleSerializer
+from customField.api.serializers import FieldSerializer
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -67,6 +73,9 @@ class EntrySerializer(serializers.ModelSerializer):
         queryset=Site.objects.all(),
         many=True
     )
+    ckeditor_content = RichTextSerializer(source='ckeditor', read_only=True)
+    scheduler = ScheduleSerializer(read_only=True)
+    custom_fields = FieldSerializer(many=True, read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     html_content = serializers.CharField(read_only=True)
     html_preview = serializers.CharField(read_only=True)
@@ -93,14 +102,16 @@ class EntrySerializer(serializers.ModelSerializer):
             'login_required', 'password',
             'content_template', 'detail_template',
             'is_actual', 'is_visible', 'short_url',
-            'related_entries', 'get_absolute_url'
+            'related_entries', 'get_absolute_url',
+            'ckeditor_content', 'scheduler', 'custom_fields'
         ]
         read_only_fields = [
             'id', 'creation_date', 'last_update',
             'html_content', 'html_preview', 'word_count',
             'comments_count', 'pingbacks_count', 'trackbacks_count',
             'is_actual', 'is_visible', 'short_url',
-            'related_entries', 'get_absolute_url'
+            'related_entries', 'get_absolute_url',
+            'ckeditor_content', 'scheduler', 'custom_fields'
         ]
 
     def get_related_entries(self, obj):
