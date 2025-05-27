@@ -1,0 +1,47 @@
+default_language_version:
+  python: python3.8.19
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: debug-statements
+      - id: detect-private-key
+      - id: double-quote-string-fixer
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+        stages: [commit]
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+    - id: isort
+      name: isort
+      description: This hook sorts imports in the files.
+      stages: [commit]
+  - repo: https://github.com/pycqa/docformatter
+    rev: v1.7.5
+    hooks:
+    - id: docformatter
+      name: docformatter
+      description: This hook formats inline docs.
+      stages: [commit]
+  - repo: https://github.com/hhatto/autopep8
+    rev: v2.3.1
+    hooks:
+    - id: autopep8
+      name: autopep8
+      entry: autopep8 --ignore=E501,W504
+      language: python
+      types: [python]
+      stages: [commit]
+
+exclude:
+  - ^config\/asgi\.py$
+  - ^config\/wsgi\.py$

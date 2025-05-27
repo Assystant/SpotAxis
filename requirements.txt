@@ -75,6 +75,7 @@ pdfquery==0.4.3
 pillow==11.2.1
 pip-tools==7.4.1
 polib==1.0.7
+pre-commit==4.2.0
 pyasn1==0.1.9
 pyasn1_modules==0.4.1
 pycodestyle==2.12.1
