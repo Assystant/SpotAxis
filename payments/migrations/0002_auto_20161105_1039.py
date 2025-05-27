@@ -7,9 +7,37 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to add subscription-related models and remove deprecated wallet movements.
+
+This migration includes:
+- Creation of `Package` model to group services with user limits.
+- Creation of `PriceSlab` model to define pricing tiers per package and currency.
+- Creation of `Subscription` model to associate companies with price slabs.
+- Creation of `Transactions` model to record deposit/redeem actions.
+- Removal of `Wallet_Movements` model and related fields.
+- Modification of `Services` model by removing unused fields and changing ordering.
+
+Dependencies:
+    - common.0004_auto_20160908_2311
+    - companies.0016_auto_20161105_1039
+    - payments.0001_initial
+    - swappable user model from settings.AUTH_USER_MODEL
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Migration class implementing the schema changes.
+    Operations:
+        - Create `Package` model with name, free_users, max_users fields.
+        - Create `PriceSlab` model with pricing details linked to Package and Currency.
+        - Create `Subscription` model linking companies with price slabs and tracking expiry.
+        - Create `Transactions` model to record financial transaction details.
+        - Remove `Wallet_Movements` model and its foreign key relations.
+        - Alter `Services` model to remove IVA, order, total, wallet_amount fields and change ordering.
+        - Add many-to-many relation between `Package` and `Services`.
+        - Enforce unique constraint on `PriceSlab` for `(currency, slab_period)`.
+    """
     dependencies = [
         ('common', '0004_auto_20160908_2311'),
         ('companies', '0016_auto_20161105_1039'),

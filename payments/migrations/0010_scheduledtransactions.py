@@ -7,9 +7,19 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to create the ScheduledTransactions model.
+
+This migration introduces the ScheduledTransactions model which tracks
+scheduled financial transactions associated with companies, discounts,
+price slabs, and users. It records the timestamp of the last update and
+the count of users added in the schedule.
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Migration class to create ScheduledTransactions model.
+    """
     dependencies = [
         ('companies', '0017_auto_20161114_1757'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

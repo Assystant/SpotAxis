@@ -6,9 +6,22 @@ from __future__ import absolute_import
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to add Discount and Discount_Usage models and related fields.
+
+This migration introduces:
+- A new 'Discount' model to represent discount offers, with fields like
+  name, label, expiry, type, transaction_type, amount, usage limits,
+  enabled status, and timestamp.
+- A new 'Discount_Usage' model to track usage counts of discounts by companies.
+- Many-to-many relationship between Discount and Company through Discount_Usage.
+- A foreign key from Discount to Currency for currency specification.
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Migration class for adding Discount and Discount_Usage models with relationships.
+    """
     dependencies = [
         ('common', '0004_auto_20160908_2311'),
         ('companies', '0016_auto_20161105_1039'),
