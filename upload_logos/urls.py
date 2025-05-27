@@ -1,7 +1,7 @@
 from __future__ import absolute_import
-from django.conf.urls import url
+from django.urls import re_path
 from upload_logos.views import upload
 
 urlpatterns = [
-    url(r'^$', upload, name='ajax-upload'),
+    re_path(r'^$', upload, name='ajax-upload'),
 ]

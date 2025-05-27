@@ -12,7 +12,7 @@ from django.utils.html import conditional_escape
 from django.utils.html import format_html
 from django.utils.html import format_html_join
 from django.utils.translation import gettext_lazy as _
-from django.utils.translation import ungettext_lazy
+from django.utils.translation import ngettext_lazy
 
 from zinnia import settings
 from zinnia.admin.filters import AuthorListFilter

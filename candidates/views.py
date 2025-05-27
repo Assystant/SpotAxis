@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.http import Http404, JsonResponse
-from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.shortcuts import render as render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 from django_xhtml2pdf.utils import render_to_pdf_response
 from companies.models import Company_Industry

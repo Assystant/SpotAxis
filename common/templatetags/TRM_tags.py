@@ -160,7 +160,7 @@ def show_no_email(value):
 def split(value, arg):
     return value.split(arg)
 
-@register.assignment_tag
+@register.simple_tag
 def get_status_count(status,company):
     try:
         return Vacancy_Status.objects.get(name = status).vacancy_set.filter(company__id=company).count()

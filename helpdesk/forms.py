@@ -15,7 +15,7 @@ except ImportError:
     from io import StringIO
 
 from django import forms
-from django.forms import extras
+# from django.forms import extras
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
@@ -28,6 +28,7 @@ from helpdesk.lib import send_templated_mail, safe_template_context
 from helpdesk.models import (Ticket, Queue, FollowUp, Attachment, IgnoreEmail, TicketCC,
                              CustomField, TicketCustomFieldValue, TicketDependency)
 from helpdesk import settings as helpdesk_settings
+from django.forms.widgets import SelectDateWidget
 
 User = get_user_model()
 
@@ -174,7 +175,7 @@ class TicketForm(CustomFieldMixin, forms.Form):
         )
 
     due_date = forms.DateTimeField(
-        widget=extras.SelectDateWidget,
+        widget=SelectDateWidget,
         required=False,
         label=_('Due on'),
         )
