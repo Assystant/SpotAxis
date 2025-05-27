@@ -13,9 +13,9 @@ unassigned tickets, recent activity, and queue-based ticket listings.
 from __future__ import absolute_import
 from django.contrib.auth import get_user_model
 from django.contrib.syndication.views import Feed
-from django.core.urlresolvers import reverse
+from django.urlrs import reverse
 from django.db.models import Q
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.shortcuts import get_object_or_404
 
 from helpdesk.models import Ticket, FollowUp, Queue

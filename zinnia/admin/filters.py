@@ -3,8 +3,8 @@ from __future__ import absolute_import
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Count
 from django.utils.encoding import smart_text
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ungettext_lazy
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext_lazy 
 
 from zinnia.models.author import Author
 from zinnia.models.category import Category
@@ -26,7 +26,7 @@ class RelatedPublishedFilter(SimpleListFilter):
             '-count_entries_published', '-pk')
         for active_object in active_objects:
             yield (
-                str(active_object.pk), ungettext_lazy(
+                str(active_object.pk), ngettext_lazy(
                     '%(item)s (%(count)i entry)',
                     '%(item)s (%(count)i entries)',
                     active_object.count_entries_published) % {

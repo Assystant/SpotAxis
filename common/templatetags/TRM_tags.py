@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from datetime import datetime, timedelta
 from django import template
 from django.template.defaultfilters import stringfilter
-from django.core.urlresolvers import reverse
+from django.urlrs import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from vacancies.models import Vacancy_Status, Postulate_Stage

@@ -6,7 +6,7 @@ from companies.models import Company
 from django.db import models
 from django.db.models.expressions import Value
 from django.db.models.fields import BooleanField
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from TRM import settings
 class Active(models.Manager):
     use_for_related_fields = True

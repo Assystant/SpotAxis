@@ -19,7 +19,7 @@ import re
 from django.forms import ValidationError
 from django.forms.fields import RegexField, CharField
 from django.utils import six
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.core.validators import EMPTY_VALUES
 from six.moves import range
 from six.moves import zip

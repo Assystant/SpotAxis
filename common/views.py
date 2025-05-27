@@ -5,7 +5,7 @@ import urllib
 import urlparse
 import requests
 import json
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404, JsonResponse
 from django.shortcuts import render, redirect
 from candidates.models import *
@@ -15,7 +15,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from common.models import User, AccountVerification, Profile, Gender, send_email_to_TRM, send_TRM_email, SocialAuth, Country
 from django.contrib.auth.decorators import login_required
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from common import registration_settings
 from common.forms import ChangeEmailForm, ContactForm, RegisterEmailForm
 from common.models import EmailVerification

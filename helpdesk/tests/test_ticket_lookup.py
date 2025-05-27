@@ -12,7 +12,7 @@ It focuses on how users (typically ticket submitters) can access their tickets v
 These tests ensure robust public access behavior independent of the knowledge base setting.
 """
 from __future__ import absolute_import
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from helpdesk.models import Ticket, Queue
 

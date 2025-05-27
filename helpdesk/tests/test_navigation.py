@@ -6,7 +6,7 @@ Ensures that navigation and URL reversing handle the knowledgebase being turned 
 
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from helpdesk.tests.helpers import get_staff_user, reload_urlconf
@@ -44,7 +44,7 @@ class TestKBDisabled(TestCase):
         Confirms that reversing 'helpdesk_kb_index' raises NoReverseMatch,
         and that the dashboard loads with HTTP 200 status.
         """
-        from django.core.urlresolvers import NoReverseMatch
+        from django.urls import NoReverseMatch
 
         self.client.login(username=get_staff_user().get_username(), password='password')
         self.assertRaises(NoReverseMatch, reverse, 'helpdesk_kb_index')
