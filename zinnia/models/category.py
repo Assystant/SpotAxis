@@ -11,7 +11,7 @@ from zinnia.managers import EntryRelatedPublishedManager
 from zinnia.managers import entries_published
 
 
-class Category(models.Model):
+class Category(MPTTModel):
     """
     Simple model for categorizing entries.
     """
