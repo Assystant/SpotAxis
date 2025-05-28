@@ -35,7 +35,6 @@ from zinnia.settings import UPLOAD_TO
 from zinnia.url_shortener import get_url_shortener
 
 
-@python_2_unicode_compatible
 class CoreEntry(models.Model):
     """
     Abstract core entry model class providing

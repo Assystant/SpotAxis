@@ -11,7 +11,7 @@ from TRM import settings
 from TRM.settings import LOGO_COMPANY_DEFAULT, LOGO_CANDIDATE_DEFAULT, ROOT_DOMAIN
 import json
 from django.db.models import Q
-from zinnia import settings as zinnia_settings
+# from zinnia import settings as zinnia_settings
 def debug_mode(request):
     return {'debug_mode': settings.DEBUG}
 
@@ -98,7 +98,9 @@ def user_profile(request):
     # print (recruiter)
     # print(subdomain(request)['active_subdomain'])
     # print ('recruiter')
-    return {'user_profile': user_profile,'recruiter': recruiter, 'settings':settings, 'zinnia_settings':zinnia_settings}
+    #added a new line without mentioning zinnia
+    return {'user_profile': user_profile,'recruiter': recruiter, 'settings':settings}
+    # return {'user_profile': user_profile,'recruiter': recruiter, 'settings':settings, 'zinnia_settings':zinnia_settings}
 
 def notifications(request):
     if request.user.is_authenticated():
