@@ -20,7 +20,7 @@ from django.conf import settings
 import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
-import localflavor.us.models
+from phonenumber_field.modelfields import PhoneNumberField
 import re
 
 
@@ -98,8 +98,8 @@ class Migration(migrations.Migration):
                 ('birthday', models.DateField(blank=True, default=None, null=True, verbose_name='Birthday')),
                 ('state', models.CharField(blank=True, default=None, max_length=50, null=True, verbose_name='State')),
                 ('city', models.CharField(blank=True, default=None, max_length=50, null=True, verbose_name='City')),
-                ('phone', localflavor.us.models.PhoneNumberField(blank=True, default=None, null=True)),
-                ('cellphone', localflavor.us.models.PhoneNumberField(blank=True, default=None, null=True)),
+                ('phone', PhoneNumberField(blank=True, default=None, null=True)),
+                ('cellphone', PhoneNumberField(blank=True, default=None, null=True)),
                 ('travel', models.BooleanField(default=False, verbose_name='Availability to Travel')),
                 ('residence', models.BooleanField(default=False, verbose_name='Availability to change residence')),
                 ('min_salary', models.PositiveIntegerField(blank=True, default=None, null=True, verbose_name='Minimum Salary')),

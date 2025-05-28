@@ -4,6 +4,8 @@ from __future__ import print_function
 import ast
 import json
 import traceback
+
+from pytz import utc
 from activities.utils import post_activity
 from candidates.models import Candidate, Curriculum, Academic, Academic_Status
 from common.forms import ContactForm

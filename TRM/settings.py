@@ -83,7 +83,7 @@ STATICFILES_FINDERS = [
 SECRET_KEY = 'o&amp;-l=w!!q%mgfn9#%9wdawrifyy+bsxr38b$p4ujw%ok=zv9&amp;d'
 
 # Change the defautl Serialization in Django 1.6 form Json to Pickle
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 ROOT_URLCONF = 'TRM.urls'
 
@@ -135,7 +135,7 @@ INSTALLED_APPS = (
 
 AUTH_USER_MODEL = 'common.User'
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     # 'TRM.middleware.CrossDomainSessionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -143,7 +143,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'TRM.middleware.CustomSocialAuthExceptionMiddleware',
@@ -175,6 +175,7 @@ TEMPLATES = [
                 'django.core.context_processors.request',
                 'django.core.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
                 'TRM.context_processors.project_name',
                 'TRM.context_processors.user_profile',
                 'TRM.context_processors.candidate_full_name',
@@ -331,3 +332,5 @@ REST_FRAMEWORK = {
         #'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
