@@ -122,11 +122,11 @@ INSTALLED_APPS = (
     'django_extensions',
     'markdownify',
     'bootstrapform',
-    'helpdesk',
+    # 'helpdesk',
     'django_comments',
     'mptt',
     'tagging',
-    'zinnia',
+    # 'zinnia',
     'el_pagination',
     'scheduler',
     'customField',
@@ -152,7 +152,7 @@ MIDDLEWARE_CLASSES = [
     'TRM.middleware.MediumMiddleware',
 ]
 CRONJOBS = [
-    ('*/5 * * * *', 'helpdesk.cron.EmailTicketCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
+    # ('*/5 * * * *', 'helpdesk.cron.EmailTicketCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
     ('* * * * *', 'payments.cron.SubscriptionCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
     ('0 0 * * *', 'vacancies.cron.PublishCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
     ('0 0 * * *', 'vacancies.cron.UnPublishCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
@@ -185,7 +185,7 @@ TEMPLATES = [
                 'TRM.context_processors.packages',
                 # 'social.apps.django_app.context_processors.backends',
                 # 'social.apps.django_app.context_processors.login_redirect',
-                'zinnia.context_processors.version',
+                # 'zinnia.context_processors.version',
             ],
         },
     },
@@ -215,12 +215,12 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'helpdesk': {
-            'level': 'DEBUG',
-            'filters': [],
-            'class': 'logging.FileHandler',
-            'filename': PROJECT_PATH+'/debug.log'
-        },
+        # 'helpdesk': {
+        #     'level': 'DEBUG',
+        #     'filters': [],
+        #     'class': 'logging.FileHandler',
+        #     'filename': PROJECT_PATH+'/debug.log'
+        # },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -237,11 +237,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'helpdesk': {
-            'handlers': ['helpdesk', 'mail_admins'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
+        # 'helpdesk': {
+        #     'handlers': ['helpdesk', 'mail_admins'],
+        #     'level': 'DEBUG',
+        #     'propagate': True
+        # },
         'werkzeug': {
             'handlers': ['console'],
             'level': 'DEBUG',

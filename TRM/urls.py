@@ -40,8 +40,8 @@ urlpatterns = [
 
     # Resources
     re_path(r'resources/comments/', include('django_comments.urls')),
-    re_path(r'resources/', include('zinnia.urls')),
-    re_path(r'help/', include('helpdesk.urls')),
+    # re_path(r'resources/', include('zinnia.urls')),
+    # re_path(r'help/', include('helpdesk.urls')),
 
     # Index
     re_path(r'^$', vacancy_views.search_vacancies, {'template_name': 'index.html'}, name='TRM-index'),
