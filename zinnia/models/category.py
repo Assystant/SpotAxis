@@ -1,6 +1,8 @@
 """Category model for Zinnia"""
 from __future__ import absolute_import
 from django.db import models
+from django.urls import reverse
+
 from django.utils.translation import gettext_lazy as _
 
 from mptt.managers import TreeManager
@@ -54,13 +56,12 @@ class Category(MPTTModel):
                 [self.slug])
         return self.slug
 
-    @models.permalink
     def get_absolute_url(self):
         """
         Builds and returns the category's URL
         based on his tree path.
         """
-        return ('zinnia:category_detail', (self.tree_path,))
+        return reverse('zinnia:category_detail', args=[self.tree_path])
 
     def __str__(self):
         return self.title

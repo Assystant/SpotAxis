@@ -13,6 +13,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.urls import reverse
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _, gettext 
 
@@ -572,8 +573,7 @@ class Ticket(models.Model):
         return '%s %s' % (self.id, self.title)
 
     def get_absolute_url(self):
-        return 'helpdesk_view', (self.id,)
-    get_absolute_url = models.permalink(get_absolute_url)
+        return reverse('helpdesk_view', args=[self.id])
 
     def save(self, *args, **kwargs):
         """
@@ -1036,8 +1036,7 @@ class KBCategory(models.Model):
 
     def get_absolute_url(self):
         """Returns the URL path to view this knowledge base category."""
-        return 'helpdesk_kb_category', (), {'slug': self.slug}
-    get_absolute_url = models.permalink(get_absolute_url)
+        return reverse('helpdesk_kb_category', kwargs={'slug': self.slug})
 
 
 class KBItem(models.Model):
@@ -1113,8 +1112,7 @@ class KBItem(models.Model):
 
     def get_absolute_url(self):
         """Returns the URL path to view this knowledge base item."""
-        return 'helpdesk_kb_item', (self.id,)
-    get_absolute_url = models.permalink(get_absolute_url)
+        return reverse('helpdesk_kb_item', args=[self.id])
 
 
 class SavedSearch(models.Model):
