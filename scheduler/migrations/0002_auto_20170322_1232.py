@@ -5,9 +5,24 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to update fields in the 'Schedule' model of the 'scheduler' app.
+
+Changes:
+- Alters the 'offset' field to allow null and blank values, with a default of 0.
+- Alters the 'scheduled_on' field to allow null and blank values, with a verbose name.
+
+Dependencies:
+- Depends on the initial migration '0001_initial' for the 'scheduler' app.
+"""
 
 class Migration(migrations.Migration):
+    """
+    Migration class to modify 'offset' and 'scheduled_on' fields in 'Schedule' model.
 
+    This migration updates the field options to support nullable and blank values,
+    improving flexibility in scheduling.
+    """
     dependencies = [
         ('scheduler', '0001_initial'),
     ]

@@ -1,0 +1,45 @@
+from django.urls import path
+from .views import (
+    CountryList, CountryDetail, StateList, StateDetail, MunicipalList, MunicipalDetail,
+    CurrencyList, CurrencyDetail, ProfileList, ProfileDetail, UserList, UserDetail,
+    AccountVerificationList, AccountVerificationDetail, EmailVerificationList, EmailVerificationDetail,
+    AddressList, AddressDetail, DegreeList, DegreeDetail, IdentificationDocList, IdentificationDocDetail,
+    MaritalStatusList, MaritalStatusDetail, EmploymentTypeList, EmploymentTypeDetail,
+    GenderList, GenderDetail, SubdomainList, SubdomainDetail, SocialAuthList, SocialAuthDetail
+)
+
+urlpatterns = [
+    path('countries/', CountryList.as_view(), name='country-list-create'),
+    path('countries/<int:pk>/', CountryDetail.as_view(), name='country-detail'),
+    path('states/', StateList.as_view(), name='state-list-create'),
+    path('states/<int:pk>/', StateDetail.as_view(), name='state-detail'),
+    path('municipals/', MunicipalList.as_view(), name='municipal-list-create'),
+    path('municipals/<int:pk>/', MunicipalDetail.as_view(), name='municipal-detail'),
+    path('currencies/', CurrencyList.as_view(), name='currency-list-create'),
+    path('currencies/<int:pk>/', CurrencyDetail.as_view(), name='currency-detail'),
+    path('profiles/', ProfileList.as_view(), name='profile-list-create'),
+    path('profiles/<int:pk>/', ProfileDetail.as_view(), name='profile-detail'),
+    path('users/', UserList.as_view(), name='user-list-create'),
+    path('users/<int:pk>/', UserDetail.as_view(), name='user-detail'),
+    path('account-verifications/', AccountVerificationList.as_view(), name='account-verification-list-create'),
+    path('account-verifications/<int:pk>/', AccountVerificationDetail.as_view(), name='account-verification-detail'),
+    path('email-verifications/', EmailVerificationList.as_view(), name='email-verification-list-create'),
+    path('email-verifications/<int:pk>/', EmailVerificationDetail.as_view(), name='email-verification-detail'),
+    path('addresses/', AddressList.as_view(), name='address-list-create'),
+    path('addresses/<int:pk>/', AddressDetail.as_view(), name='address-detail'),
+    path('degrees/', DegreeList.as_view(), name='degree-list-create'),
+    path('degrees/<int:pk>/', DegreeDetail.as_view(), name='degree-detail'),
+    path('identification-docs/', IdentificationDocList.as_view(), name='identification-doc-list-create'),
+    path('identification-docs/<int:pk>/', IdentificationDocDetail.as_view(), name='identification-doc-detail'),
+    path('marital-statuses/', MaritalStatusList.as_view(), name='marital-status-list-create'),
+    path('marital-statuses/<int:pk>/', MaritalStatusDetail.as_view(), name='marital-status-detail'),
+    path('employment-types/', EmploymentTypeList.as_view(), name='employment-type-list-create'),
+    path('employment-types/<int:pk>/', EmploymentTypeDetail.as_view(), name='employment-type-detail'),
+    path('genders/', GenderList.as_view(), name='gender-list-create'),
+    path('genders/<int:pk>/', GenderDetail.as_view(), name='gender-detail'),
+    path('subdomains/', SubdomainList.as_view(), name='subdomain-list-create'),
+    path('subdomains/<int:pk>/', SubdomainDetail.as_view(), name='subdomain-detail'),
+    path('social-auths/', SocialAuthList.as_view(), name='social-auth-list-create'),
+    path('social-auths/<int:pk>/', SocialAuthDetail.as_view(), name='social-auth-detail'),
+]
+

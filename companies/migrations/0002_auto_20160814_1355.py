@@ -6,6 +6,21 @@ from __future__ import absolute_import
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to update the Company model in the companies app.
+
+Changes made:
+- Removed the `address` field (OneToOne to common.Address).
+- Added explicit fields for:
+  - `city`: City name of the company.
+  - `state`: State name of the company.
+  - `nationality`: ForeignKey to common.Country.
+
+Purpose:
+This migration simplifies location tracking by replacing the address relation
+with direct fields for city, state, and nationality, possibly to improve
+query performance or simplify the schema.
+"""
 
 class Migration(migrations.Migration):
 

@@ -33,6 +33,15 @@ urlpatterns = [
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type= 'text/plain')),
     url(r'^sitemap\.xml$', TemplateView.as_view(template_name='sitemap.xml', content_type= 'text/plain')),
     url(r'^google7467b69f25fa8f1e\.html$', TemplateView.as_view(template_name='google7467b69f25fa8f1e.html')),
+  
+    # API URLs
+    url(r'^api/common/', include('common.api.urls')),
+    url(r'^api/activities/',include('activities.api.urls')),
+    url(r'^api/vacancy/', include('vacancies_api.urls')),
+    url(r'^api/zinnia/',include('zinna.api.urls')),
+    url(r'^api/ckeditor/', include('ckeditor.api.urls')),
+    url(r'api/companies/', include('companies_api.urls')),
+    url(r'^api/candidates/', include('candidates.api.urls')),
 
     # Resources
     url(r'resources/comments/', include('django_comments.urls')),

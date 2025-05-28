@@ -4,12 +4,12 @@ Version: 1.0
 
 SpotAxis is an Open-source (MIT Licensed) Applicant Tracking System to streamline your hiring process.
 
-Our vision is to create the most adapted open-source Applicant Tracking System (ATS) that helps businesses manage the entire recruitment process, from attracting candidates to scheduling interviews, making hiring decisions and onboarding.
+Our vision is to create the most adapted open-source Applicant Tracking System (ATS) that helps businesses to seamlessly manage the entire recruitment process, from attracting candidates to scheduling interviews, making hiring decisions and onboarding.
 
 ## SpotAxis can satisfy the use cases of two types of users ##
 
 ### 1. End users(Companies): ###
-These are organizations who want to directly manage their own recruitment process using Spotaxis.
+These are organizations that want to directly manage their own recruitment process using Spotaxis.
 
 The key features for end users include the following
 1. Post jobs and maintain job templates
@@ -31,6 +31,8 @@ The key features for this user type include the following
 4. Manage jobs and applicants as a super admin
 5. Subscription/Pricing Management for ATS
 
+If you need support implementing this ATS on your server, please reach out to holesh+ats@assystant.com
+
 ## Contributors required ##
 
 1. You can submit bugs  and help us verify as they are live
@@ -50,7 +52,6 @@ The key features for this user type include the following
 * django-localflavor
 * django-rosetta
 * django-social-share
-* django-xhtml2pdf==0.0.3
 * docutils
 * html5lib
 * httplib2
@@ -63,7 +64,7 @@ The key features for this user type include the following
 * PyJWT
 * PyMySQL
 * pyPdf
-* PyPDF2
+* ~PyPDF2~
 * python-dateutil
 * python-openid
 * python-social-auth
@@ -73,6 +74,6 @@ The key features for this user type include the following
 * requests-oauthlib
 * six
 * waitress
+* Weasyprint
 * WebOb
 * WebTest
-* xhtml2pdf==0.0.5

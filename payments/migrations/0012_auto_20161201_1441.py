@@ -5,9 +5,18 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to add 'enabled' fields to ServiceCategory and Services models.
+
+This migration adds a BooleanField named 'enabled' to both the ServiceCategory and Services models.
+The 'enabled' field is used to indicate whether a service category or service is active or not.
+By default, this field is set to True, meaning the service or category is enabled initially.
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Migration class to add 'enabled' BooleanFields to ServiceCategory and Services models.
+    """
     dependencies = [
         ('payments', '0011_subscription_auto_renew'),
     ]

@@ -4,6 +4,7 @@
 
 from __future__ import absolute_import
 import os.path
+from rest_framework.permissions import AllowAny
 
 PROJECT_NAME = 'SpotAxis'
 
@@ -113,7 +114,7 @@ INSTALLED_APPS = (
     'vacancies',
     'activities',
     'pytz',
-    'django_xhtml2pdf',
+    'weasyprint',
     'upload_logos',
     'ckeditor',
     'payments',
@@ -129,6 +130,7 @@ INSTALLED_APPS = (
     'el_pagination',
     'scheduler',
     'customField',
+    'rest_framework',
 )
 
 AUTH_USER_MODEL = 'common.User'
@@ -317,3 +319,15 @@ num_pages=8
 number_objects_page=20
 
 social_application_list = ['fb', 'li', 'gp', 'an', 'gh', 'so', 'tw']
+
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     Add an authentication method for the APIs
+    # ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        #using 'allow any' permission class until authentication is needed and/ an authentication method is agreed upon.
+        #change permission class once required.
+        'rest_framework.permissions.AllowAny'
+        #'rest_framework.permissions.IsAuthenticated',
+    ],
+}

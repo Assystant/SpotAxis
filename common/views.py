@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
 import traceback
-import urllib.request, urllib.parse, urllib.error
-import urllib.parse
+import urllib
+import urlparse
 import requests
 import json
 from django.urls import reverse
@@ -31,10 +30,38 @@ from utils import generate_random_username
 from requests_oauthlib import OAuth1
 from django.db.models import Q
 
+"""
+View functions for the common app.
+
+This module provides view functions and classes for:
+- User registration and activation
+- Social authentication
+- Profile management
+- Email management
+- Password management
+- Contact form handling
+- Social media integration
+
+Most views require authentication unless explicitly noted.
+"""
+
 # ------------------- #
 # Start Registration #
 # ------------------- #
 def save_candidate_social_data(backend, user, response, *args, **kwargs):
+    """
+    Save additional candidate data from social authentication.
+    
+    Called after successful social authentication to store additional
+    profile information from the social platform.
+    
+    Args:
+        backend: Social auth backend instance
+        user: User instance
+        response: Social platform's response data
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+    """
     # Register candidate and profile when entering with Facebook or Google
     # print backend.name
     # print response
@@ -73,6 +100,16 @@ def save_candidate_social_data(backend, user, response, *args, **kwargs):
 
 
 def registration_activate(request, activation_key):
+    """
+    Activate a user account using the provided activation key.
+    
+    Args:
+        request: HttpRequest object
+        activation_key: String key for account activation
+        
+    Returns:
+        HttpResponse: Activation success/failure page
+    """
     activation_key = activation_key.lower()
     account = AccountVerification.objects.activate_user(activation_key)
 
@@ -92,7 +129,7 @@ def registration_activate(request, activation_key):
             except:
                 pass
 
-            messages.success(request, _('Welcome to %s. We have successfully activated your account. The next step is to complete your Profile.'%PROJECT_NAME))
+            messages.success(request, _(u'Welcome to %s. We have successfully activated your account. The next step is to complete your Profile.'%PROJECT_NAME))
             post_notification(user = request.user,action = "Welcome to SpotAxis!")
             return redirect('candidates_edit_curriculum')
         elif user_profile == 'recruiter':
@@ -124,7 +161,7 @@ def registration_activate(request, activation_key):
             except:
                 pass
 
-            messages.success(request, _('Welcome to %s. We have successfully activated your account.' % PROJECT_NAME))
+            messages.success(request, _(u'Welcome to %s. We have successfully activated your account.' % PROJECT_NAME))
             return redirect('companies_record_company')
         else:
             raise Http404
@@ -133,6 +170,16 @@ def registration_activate(request, activation_key):
 
 
 def registration_complete(request, template_name=None):
+    """
+    Display registration completion page.
+    
+    Args:
+        request: HttpRequest object
+        template_name: Optional template to use
+        
+    Returns:
+        HttpResponse: Registration completion page
+    """
     # raise ValueError(request.session.keys());
     if not template_name:
         template_name = 'new_registration_messages.html'
@@ -150,6 +197,17 @@ def registration_complete(request, template_name=None):
 
 @login_required
 def register_blank_email(request):
+    """
+    Handle registration of email for users without one.
+    
+    Typically used after social authentication when email is not provided.
+    
+    Args:
+        request: HttpRequest object
+        
+    Returns:
+        HttpResponse: Email registration form or success page
+    """
     """ Register e-mail when the user does not have registered in the database """
     if request.method == 'POST':
         form = RegisterEmailForm(instance=request.user, data=request.POST)
@@ -213,6 +271,17 @@ def redirect_after_login(request):
 # ------------ #
 @login_required
 def email_change(request):
+    """
+    Handle email address change requests.
+    
+    Processes the email change form and initiates verification process.
+    
+    Args:
+        request: HttpRequest object
+        
+    Returns:
+        HttpResponse: Email change form or confirmation page
+    """
     if request.method == 'POST':
         form = ChangeEmailForm(request.POST)
         if form.is_valid():
@@ -240,11 +309,11 @@ def email_change_approve(request, token, code):
             user=request.user, is_expired=False, is_approved=False)
         verification.is_approved = True
         verification.save()
-        messages.success(request, _('The email has changed to %(email)s' % {
+        messages.success(request, _(u'The email has changed to %(email)s' % {
             'email': verification.new_email}))
     except EmailVerification.DoesNotExist:
         messages.error(request,
-            _('You cannot change the Email address. The confirmation link is invalid.'))
+            _(u'You cannot change the Email address. The confirmation link is invalid.'))
     profile = request.user.profile.codename
     if profile == 'candidate':
         return redirect('candidates_edit_curriculum')
@@ -258,7 +327,7 @@ def email_change_approve(request, token, code):
 @login_required
 def password_change_done(request):
     profile = request.user.profile
-    messages.success(request, _('Your password has changed successfully.'))
+    messages.success(request, _(u'Your password has changed successfully.'))
     if profile == 'candidate':
         return redirect('candidates_edit_curriculum')
     else:
@@ -267,7 +336,7 @@ def password_change_done(request):
 
 def custom_password_reset_complete(request):
     """ When the password is reset """
-    messages.success(request, _('Your password has been successfully restored'))
+    messages.success(request, _(u'Your password has been successfully restored'))
     return redirect('auth_login')
 
 
@@ -290,10 +359,32 @@ def contact_form(request):
     return render(request,'contact_page.html',{'form':form,})
 
 class ContactFormView(FormView):
+    """
+    View for handling contact form submissions.
+    
+    Provides:
+    - Form display
+    - Validation
+    - Email sending
+    - Success handling
+    
+    Attributes:
+        form_class: The form class to use
+        template_name: Template for rendering the form
+    """
     form_class = ContactForm
     template_name = 'contact_page.html'
 
     def form_valid(self, form):
+        """
+        Handle valid form submission.
+        
+        Args:
+            form: Validated form instance
+            
+        Returns:
+            HttpResponse: Redirect to success page
+        """
         form.save()
         return super(ContactFormView, self).form_valid(form)
 
@@ -326,10 +417,19 @@ class ContactFormView(FormView):
         )
 
 def debug_fb_token(fbtoken):
+    """
+    Debug a Facebook access token.
+    
+    Args:
+        fbtoken: Facebook access token
+        
+    Returns:
+        dict: Token debug information
+    """
     consumer_key = settings.SOCIALAUTH_FACEBOOK_OAUTH_KEY
     consumer_secret = settings.SOCIALAUTH_FACEBOOK_OAUTH_SECRET
     url = "https://graph.facebook.com/debug_token?input_token="+str(fbtoken)+"&access_token="+consumer_key+"|"+consumer_secret
-    resp = urllib.request.urlopen(url)
+    resp = urllib.urlopen(url)
     Data = json.loads(resp.read())
     return Data
 
@@ -337,7 +437,7 @@ def revoke_fb_token(fbtoken):
     consumer_key = settings.SOCIALAUTH_FACEBOOK_OAUTH_KEY
     consumer_secret = settings.SOCIALAUTH_FACEBOOK_OAUTH_SECRET
     url = "https://graph.facebook.com/debug_token?input_token="+str(fbtoken)+"&access_token="+consumer_key+"|"+consumer_secret
-    resp = urllib.request.urlopen(url)
+    resp = urllib.urlopen(url)
     Data = json.loads(resp.read())
     return Data
 
@@ -345,7 +445,7 @@ def debug_gp_token(ghtoken):
     consumer_key = settings.SOCIALAUTH_GOOGLEPLUS_OAUTH_KEY
     consumer_secret = settings.SOCIALAUTH_GOOGLEPLUS_OAUTH_SECRET
     url = " https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+ghtoken
-    resp = urllib.request.urlopen(url)
+    resp = urllib.urlopen(url)
     Data = json.loads(resp.read())
     return Data
 
@@ -353,7 +453,7 @@ def debug_gh_token(ghtoken):
     consumer_key = settings.SOCIALAUTH_GITHUB_OAUTH_KEY
     consumer_secret = settings.SOCIALAUTH_GITHUB_OAUTH_SECRET
     url = "https://api.github.com/user?access_token="+ghtoken
-    resp = urllib.request.urlopen(url)
+    resp = urllib.urlopen(url)
     Data = json.loads(resp.read())
     return Data
 
@@ -442,7 +542,7 @@ def get_fb_web_response(suffix, socialauth=None):
     url = "https://graph.facebook.com/v2.8/" + suffix
     if socialauth:
         url = url + '&access_token=' + str(socialauth)
-    resp = urllib.request.urlopen(url)
+    resp = urllib.urlopen(url)
     return resp
 
 def get_fb_user_groups(user):
@@ -450,7 +550,7 @@ def get_fb_user_groups(user):
     consumer_secret = settings.SOCIALAUTH_FACEBOOK_OAUTH_SECRET
     socialUser = SocialAuth.objects.get(user = user, social_code = 'fb')
     url = "https://graph.facebook.com/me/groups?access_token="+socialUser.oauth_token
-    resp = urllib.request.urlopen(url)
+    resp = urllib.urlopen(url)
     Data = json.loads(resp.read())
     return Data
 
@@ -459,7 +559,7 @@ def get_fb_user_pages(user):
     consumer_secret = settings.SOCIALAUTH_FACEBOOK_OAUTH_SECRET
     socialUser = SocialAuth.objects.get(user = user, social_code = 'fb')
     url = "https://graph.facebook.com/me/accounts?access_token="+socialUser.oauth_token
-    resp = urllib.request.urlopen(url)
+    resp = urllib.urlopen(url)
     Data = json.loads(resp.read())
     return Data
 
@@ -468,20 +568,34 @@ def get_fb_profile(user):
     consumer_secret = settings.SOCIALAUTH_FACEBOOK_OAUTH_SECRET
     socialUser = SocialAuth.objects.get(user = user, social_code = 'fb')
     url = "https://graph.facebook.com/me/?fields=name,picture&access_token="+socialUser.oauth_token
-    resp = urllib.request.urlopen(url)
+    resp = urllib.urlopen(url)
     Data = json.loads(resp.read())
     return Data
     
 def get_li_companies(user):
     socialUser = SocialAuth.objects.get(user = user, social_code = 'li')
     url = 'https://api.linkedin.com/v1/companies?format=json&is-company-admin=true&oauth2_access_token='+socialUser.oauth_token
-    resp = urllib.request.urlopen(url)
+    resp = urllib.urlopen(url)
     Data = json.loads(resp.read())
     return Data
 
 def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redirect_type=None):
-
-    csrftoken = list(csrf(request).values())[0]
+    """
+    Handle social media login requests.
+    
+    Processes login/registration through various social platforms.
+    
+    Args:
+        request: HttpRequest object
+        social_code: Identifier for social platform
+        vacancy_id: Optional vacancy to redirect to
+        recruiter_id: Optional recruiter reference
+        redirect_type: Optional redirect behavior specification
+        
+    Returns:
+        HttpResponse: Redirect to appropriate page after login
+    """
+    csrftoken = csrf(request).values()[0]
     if not recruiter_id:
         recruiter_id = request.session.pop('recruiter_id', None)
     if not vacancy_id:
@@ -534,7 +648,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
             oauth_token_url = "https://api.twitter.com/oauth/request_token"
             oauth_token_response = requests.get(oauth_token_url, auth=auth)
             code = oauth_token_response.status_code
-            content = json.loads(json.dumps(urllib.parse.parse_qs(oauth_token_response.content)))
+            content = json.loads(json.dumps(urlparse.parse_qs(oauth_token_response.content)))
             oauth_token = content['oauth_token']
             oauth_token_secret = content['oauth_token_secret']
             auth_url_prefix += oauth_token[0]
@@ -629,7 +743,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
         #check permissions on token
         access_token = auth_data['access_token']
         token_data = debug_fb_token(auth_data['access_token'])
-        if 'data' not in token_data:
+        if not token_data.has_key('data'):
             messages.error(request,'Failed to acquire authentication')
             return redirect('vacancies_get_vacancy_details',vacancy_id=vacancy_id)
         token_data = token_data['data']
@@ -646,7 +760,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
         identifier = token_data['id']
         scopes = ""
     elif social_code  == 'tw':
-        resp_data = json.dumps(urllib.parse.parse_qs(resp_data))
+        resp_data = json.dumps(urlparse.parse_qs(resp_data))
         auth_data = json.loads(resp_data)
         access_token = auth_data['oauth_token'][0] + '|-|' + auth_data['oauth_token_secret'][0]
         token_data = debug_tw_token(access_token)
@@ -656,7 +770,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
         received_scopes = ""
         scopes = scope.split(',')
     elif social_code == 'gh':
-        resp_data = json.dumps(urllib.parse.parse_qs(resp_data))
+        resp_data = json.dumps(urlparse.parse_qs(resp_data))
         auth_data = json.loads(resp_data)
         access_token = auth_data['access_token']
         if access_token:
@@ -682,7 +796,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
             received_scopes = received_scopes.split(' ')
         scopes = scope.split(' ')
     elif social_code == 'so':
-        resp_data = json.dumps(urllib.parse.parse_qs(resp_data))
+        resp_data = json.dumps(urlparse.parse_qs(resp_data))
         auth_data = json.loads(resp_data)
         access_token = auth_data['access_token'][0]
         token_data = debug_so_token(access_token)
@@ -727,18 +841,18 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
         if social_code == 'fb':
             fields = 'id,name,work,education,email,first_name,last_name,gender,birthday,website,languages,picture'
             perm_url = "https://graph.facebook.com/me?fields="+fields+"&access_token=" + access_token
-            perm_resp = urllib.request.urlopen(perm_url)
+            perm_resp = urllib.urlopen(perm_url)
             perm_data = json.loads(perm_resp.read())
         elif social_code == 'li':
             fields = 'id,first-name,last-name,location,positions,picture-url,email-address'
             perm_url = 'https://api.linkedin.com/v1/people/~:(' + fields + ')?format=json&oauth2_access_token=' + access_token
-            perm_resp = urllib.request.urlopen(perm_url)
+            perm_resp = urllib.urlopen(perm_url)
             perm_data = json.loads(perm_resp.read())
         elif social_code == 'gh':
             perm_url = 'http://api.github.com/user?access_token='+access_token
             repo_url = 'http://api.github.com/user/repos?access_token='+access_token
-            perm_resp = urllib.request.urlopen(perm_url)
-            repo_resp = urllib.request.urlopen(repo_url)
+            perm_resp = urllib.urlopen(perm_url)
+            repo_resp = urllib.urlopen(repo_url)
             perm_data = json.loads(perm_resp.read())
             perm_data['repos'] = json.loads(repo_resp.read())
             try:
@@ -749,7 +863,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
             identifier = perm_data['id']
         elif social_code == 'gp':
             perm_url = 'https://www.googleapis.com/plus/v1/people/me?access_token='+access_token
-            perm_resp = urllib.request.urlopen(perm_url)
+            perm_resp = urllib.urlopen(perm_url)
             perm_data = json.loads(perm_resp.read())
         elif social_code == 'so':
             requestkey = settings.SOCIALAUTH_STACKOVERFLOW_OAUTH_REQUESTKEY
@@ -766,29 +880,29 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                 perm_data['skilltags'] = skill_data
 
         email = ""
-        if 'email' in perm_data:
+        if perm_data.has_key('email'):
             email = perm_data['email']
-        elif 'emails' in perm_data:
+        elif perm_data.has_key('emails'):
             email = perm_data['emails'][0]['value']
-        elif 'emailAddress' in perm_data:
+        elif perm_data.has_key('emailAddress'):
             email = perm_data['emailAddress']
         user = get_account(social_code,identifier, email)
         first_name = ""
         last_name = ""
-        if 'first_name' in perm_data:
+        if perm_data.has_key('first_name'):
             first_name = perm_data['first_name']
-        elif 'firstName' in perm_data:
+        elif perm_data.has_key('firstName'):
             first_name = perm_data['firstName']
-        if 'last_name' in perm_data:
+        if perm_data.has_key('last_name'):
             last_name = perm_data['last_name']
-        elif 'lastName' in perm_data:
+        elif perm_data.has_key('lastName'):
             last_name = perm_data['lastName']
 
-        if 'first_name' not in perm_data and 'last_name' not in perm_data:
-            if 'name' in perm_data:
+        if not perm_data.has_key('first_name') and not perm_data.has_key('last_name'):
+            if perm_data.has_key('name'):
                 name = perm_data['name']
                 try:
-                    if 'givenName' in name or 'familyName' in name:
+                    if name.has_key('givenName') or name.has_key('familyName'):
                         first_name = name['givenName']
                         last_name = name['familyName']
                 except:
@@ -796,9 +910,9 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                     first_name = name[0]
                     if len(name)>1:
                         last_name = name[-1]
-            elif 'items' in perm_data:
+            elif perm_data.has_key('items'):
                 items = perm_data['items'][0]
-                if 'display_name' in items:
+                if items.has_key('display_name'):
                     name  = items['display_name'].split(' ')
                     first_name = name[0]
                     if len(name) > 1:
@@ -808,7 +922,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
             user = User.objects.create_user(username = generate_random_username(),email = email, first_name = first_name, last_name = last_name, profile = Profile.objects.get(codename='candidate'))
             # user.set_unusable_pasword()
         candidate,candidate_created = Candidate.objects.get_or_create(user = user)
-        if('gender' in perm_data):
+        if(perm_data.has_key('gender')):
             try:
                 gender = Gender.objects.get(codename = perm_data['gender'])
             except:
@@ -823,10 +937,10 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
         if not candidate.last_name:
             candidate.last_name = candidate.user.last_name
 
-        if('birthday' in perm_data):
+        if(perm_data.has_key('birthday')):
             if social_code == 'gp':
                 bday = perm_data['birthday'].split('-')
-                if int(bday[0]) == 0 and 'ageRange' in perm_data:
+                if int(bday[0]) == 0 and perm_data.has_key('ageRange'):
                     bday[0] = date.today().year - perm_data['ageRange']['min']
                 if int(bday[0]) == 0:
                     pass
@@ -840,7 +954,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                     candidate.birthday = date(int(bday[2]),int(bday[0]),int(bday[1]))
                 elif len(bday) == 3 and candidate.birthday != date(int(bday[2]),int(bday[0]),int(bday[1])):
                     review['birthday'] = str(date(int(bday[2]),int(bday[0]),int(bday[1])))    
-        if('education' in perm_data):
+        if(perm_data.has_key('education')):
             for school in perm_data['education']:
                 schoolname = ''
                 schoolyear = None
@@ -851,23 +965,23 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                 schoolcity = ''
                 schoolstate = ''
                 schoolcountry = ''
-                if 'school' in school:
+                if school.has_key('school'):
                     schoolname = school['school']['name'] or ''
                     request_slug = str(school['school']['id']) + '/?fields=location&access_token=' + auth_data['access_token']
                     subresp = get_fb_web_response(request_slug)
                     if subresp.getcode() == 200:
                         subdata = json.loads(subresp.read())
-                        if 'location' in subdata:
-                            if 'city' in subdata['location']:
+                        if subdata.has_key('location'):
+                            if subdata['location'].has_key('city'):
                                 schoolcity = subdata['location']['city']
-                            if 'state' in subdata['location']:
+                            if subdata['location'].has_key('state'):
                                 schoolstate = subdata['location']['state']
-                            if 'country' in subdata['location']:
+                            if subdata['location'].has_key('country'):
                                 schoolcountry = subdata['location']['country']
                                 schoolcountry = Country.objects.filter(name__iexact=schoolcountry)
                                 if schoolcountry:
                                     schoolcountry = schoolcountry[0]
-                if 'year' in school:
+                if school.has_key('year'):
                     schoolyear = datetime(int(school['year']['name']),1,1)
                     if int(school['year']['name']) < datetime.now().year:
                         schoolstatus = Academic_Status.objects.get(codename = 'complete')
@@ -881,9 +995,9 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                     schooltype = Degree.objects.get(codename = 'pg')
                 else:
                     schooltype = Degree.objects.get(codename = 'other')
-                if 'degree' in school:
+                if school.has_key('degree'):
                     schooldegree = school['degree']['name']
-                if 'concentration' in school:
+                if school.has_key('concentration'):
                     schoolarea = ','.join([concentration['name'] for concentration in school['concentration']])
                 academic,academic_created=Academic.objects.get_or_create(candidate=candidate, school = schoolname, end_date=schoolyear, degree=schooltype, area = schoolarea, course_name = schooldegree)
                 if academic and academic.status!=schoolstatus:
@@ -895,7 +1009,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                 if schoolcountry and not academic.country:
                     academic.country = schoolcountry
                 academic.save()
-        if('work' in perm_data):
+        if(perm_data.has_key('work')):
             for work in perm_data['work']:
                 workname = ''
                 workstart = None
@@ -906,38 +1020,38 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                 workcity = ''
                 workstate = ''
                 workcountry = ''
-                if 'employer' in work:
+                if work.has_key('employer'):
                     workname = work['employer']['name'] or ''
                     request_slug = str(work['id']) + '/?fields=location&access_token=' + auth_data['access_token']
                     subresp = get_fb_web_response(request_slug)
                     if subresp.getcode() == 200:
                         subdata = json.loads(subresp.read())
-                        if 'location' in subdata:
-                            if 'city' in subdata['location']:
+                        if subdata.has_key('location'):
+                            if subdata['location'].has_key('city'):
                                 workcity = subdata['location']['city']
-                            if 'state' in subdata['location']:
+                            if subdata['location'].has_key('state'):
                                 workstate = subdata['location']['state']
-                            if 'country' in subdata['location']:
+                            if subdata['location'].has_key('country'):
                                 workcountry = subdata['location']['country']
                                 try:
                                     workcountry = Country.objects.get(Q(name__iexact=workcountry)|Q(iso2_code__iexact=workcountry))
                                 except:
                                     workcountry = None
-                if 'start_date' in work:
+                if work.has_key('start_date'):
                     datesplit = work['start_date'].split('-')
                     if len(datesplit) == 3:
                         workstart = datetime(int(datesplit[0]),int(datesplit[1]),int(datesplit[2]))
-                if 'end_date' in work:
+                if work.has_key('end_date'):
                     datesplit = work['end_date'].split('-')
                     if len(datesplit) == 3:
                         workend = datetime(int(datesplit[0]),int(datesplit[1]),int(datesplit[2]))
                 else:
                     workongoing = True
-                if 'position' in work:
+                if work.has_key('position'):
                     worktype = work['position']['name']
-                if 'description' in work:
+                if work.has_key('description'):
                     workdegree = work['description']['name']
-                if 'projects' in work:
+                if work.has_key('projects'):
                     for project in work['projects']:
                         projectname = project['name']
                         projectdescription = project['description']
@@ -955,7 +1069,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                 if workcountry and not experience.country:
                     experience.country = workcountry
                 experience.save()
-        elif('positions' in perm_data):
+        elif(perm_data.has_key('positions')):
             for work in perm_data['positions']['values']:
                 workname = ''
                 workstart = None
@@ -966,31 +1080,31 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                 workcity = ''
                 workstate = ''
                 workcountry = '' 
-                if 'title' in work:
+                if work.has_key('title'):
                     worktype = work['title']
-                if 'isCurrent' in work:
+                if work.has_key('isCurrent'):
                     workongoing = work['isCurrent']
-                if 'startDate' in work:
+                if work.has_key('startDate'):
                     year = ""
                     month = ""
-                    if 'year' in work['startDate']:
+                    if work['startDate'].has_key('year'):
                         year = work['startDate']['year']
-                    if 'month' in work['startDate']:
+                    if work['startDate'].has_key('month'):
                         month = work['startDate']['month']
                     if year and month:
                         workstart = datetime(int(year),int(month),1)
                     elif year:
                         workstart = datetime(int(year),1,1)
-                if 'company' in work:
-                    if 'name' in work['company']:
+                if work.has_key('company'):
+                    if work['company'].has_key('name'):
                         workname = work['company']['name']
-                if 'location' in work:
-                    if 'country' in work['location']:
+                if work.has_key('location'):
+                    if work['location'].has_key('country'):
                         try:
                             workcountry = Country.objects.get(Q(name__iexact=work['location']['country']['name'])|Q(iso2_code__iexact=work['location']['country']['code']))
                         except:
                             workcountry = None
-                    if 'name' in work['location']:
+                    if work['location'].has_key('name'):
                         workcity = work['location']['name'].split(',')[0]
                 experience, experience_created = Expertise.objects.get_or_create(candidate=candidate, company = workname, employment = worktype, tasks = workdegree)
                 experience.present = workongoing
@@ -1006,28 +1120,28 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                     experience.country = workcountry
                 experience.save()       
 
-        if('languages' in perm_data):
+        if(perm_data.has_key('languages')):
             for language in perm_data['languages']:
                 languages = Language.objects.filter(name__iexact = language['name'])
                 if languages:
                     language, language_created = CV_Language.objects.get_or_create(candidate = candidate, language=languages[0])
-        if('picture' in perm_data) and candidate.user.photo.name == settings.PHOTO_USER_DEFAULT:
+        if(perm_data.has_key('picture')) and candidate.user.photo.name == settings.PHOTO_USER_DEFAULT:
             if not perm_data['picture']['data']['is_silhouette']:
                 result = candidate.user.get_remote_image(perm_data['picture']['data']['url'])
-        elif 'image' in perm_data and candidate.user.photo.name == settings.PHOTO_USER_DEFAULT:
+        elif perm_data.has_key('image') and candidate.user.photo.name == settings.PHOTO_USER_DEFAULT:
             candidate.user.get_remote_image(perm_data['image']['url'].split('?sz=')[0]+'?sz=200')
-        elif 'pictureUrl' in perm_data and candidate.user.photo.name == settings.PHOTO_USER_DEFAULT:
+        elif perm_data.has_key('pictureUrl') and candidate.user.photo.name == settings.PHOTO_USER_DEFAULT:
             candidate.user.get_remote_image(perm_data['pictureUrl'])
-        if 'bio' in perm_data:
+        if perm_data.has_key('bio'):
             candidate.objective = perm_data['bio']
-        if 'repos' in perm_data:
+        if perm_data.has_key('repos'):
             for repo in perm_data['repos']:
                 if repo['fork'] == False:
                     description = repo['description']
                     if not description:
                         description = ''
                     project, project_created = Project.objects.get_or_create(candidate=candidate, name=repo['name'], description=description)
-        if 'organizations' in perm_data:
+        if perm_data.has_key('organizations'):
             for organization in perm_data['organizations']:
                 if organization['type'] == 'work':
                     organizationname = ''
@@ -1039,17 +1153,17 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                     organizationcity = ''
                     organizationstate = ''
                     organizationcountry = ''
-                    if 'name' in organization:
+                    if organization.has_key('name'):
                         organizationname = organization['name'] or ''
-                    if 'startDate' in organization:
+                    if organization.has_key('startDate'):
                         organizationstart = datetime(int(organization['startDate']),1,1)
-                    if 'endDate' in organization:
+                    if organization.has_key('endDate'):
                         organizationend = datetime(int(organization['endDate']),1,1)
                     else:
                         organizationongoing = True
-                    if 'title' in organization:
+                    if organization.has_key('title'):
                         organizationtype = organization['title']
-                    if 'description' in organization:
+                    if organization.has_key('description'):
                         organizationdegree = organization['description']['name']
                     experience, experience_created = Expertise.objects.get_or_create(candidate=candidate, company = organizationname, employment = organizationtype, tasks = organizationdegree)
                     experience.present = organizationongoing
@@ -1069,13 +1183,13 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                     organizationcity = ''
                     organizationstate = ''
                     organizationcountry = ''
-                    if 'name' in organization:
+                    if organization.has_key('name'):
                         organizationname = organization['name'] or ''
-                    if 'startDate' in organization:
+                    if organization.has_key('startDate'):
                         organizationstart = datetime(int(organization['startDate']),1,1)
 
 
-                    if 'endDate' in organization:
+                    if organization.has_key('endDate'):
                         organizationend = datetime(int(organization['endDate']),1,1)
                         if int(organization['endDate']) < datetime.now().year:
                             organizationstatus = Academic_Status.objects.get(codename = 'complete')
@@ -1083,13 +1197,13 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                             organizationstatus = Academic_Status.objects.get(codename = 'progress')
                     else:
                         organizationstatus = Academic_Status.objects.get(codename = 'progress')
-                    if 'title' in organization:
+                    if organization.has_key('title'):
                         organizationdegree = organization['title']
                     academic,academic_created=Academic.objects.get_or_create(candidate=candidate, school = organizationname, end_date=organizationend, start_date=organizationstart, course_name = organizationdegree)
                     if academic and academic.status!=organizationstatus:
                         academic.status = organizationstatus
                     academic.save()
-        if 'items' in perm_data:
+        if perm_data.has_key('items'):
             item = perm_data['items'][0]
             # if item.has_key('website_url') and item['website_url']:
             #     if not candidate.website:
@@ -1101,9 +1215,9 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
             #         candidate.website = "http://stackoverflow.com/users/story/"+item['user_id']
             #     elif candidate.website != item['website_url']:
             #         review['website'] = "http://stackoverflow.com/users/story/"+item['user_id']
-            if 'profile_image' in item and not candidate.user.photo.name == settings.PHOTO_USER_DEFAULT:
+            if item.has_key('profile_image') and not candidate.user.photo.name == settings.PHOTO_USER_DEFAULT:
                 candidate.user.get_remote_image(item['profile_image'].split('?s=')[0] + '?s=200')
-        if 'skilltags' in perm_data:
+        if perm_data.has_key('skilltags'):
             skills = ""
             skills += ','.join([skill['tag_name'] for skill in perm_data['skilltags']['items']])
             if not candidate.skills:
@@ -1113,16 +1227,16 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
                 for skill in skills.split(','):
                     if skill and not skill in candidate_skills:
                         candidate.skills += ',' + skill
-        if 'location' in perm_data:
-            if 'country' in perm_data['location']:
-                if 'code' in perm_data['location']['country']:
+        if perm_data.has_key('location'):
+            if perm_data['location'].has_key('country'):
+                if perm_data['location']['country'].has_key('code'):
                     try:
                         country = Country.objects.get(iso2_code__iexact=perm_data['location']['country']['code'])
                     except:
                         country = None
                     if country and not candidate.nationality:
                         candidate.nationality = country
-            if 'name' in perm_data['location'] and not candidate.city:
+            if perm_data['location'].has_key('name') and not candidate.city:
                 candidate.city = perm_data['location']['name'].split(',')[0]
         # if perm_data.has_key
         candidate.save()

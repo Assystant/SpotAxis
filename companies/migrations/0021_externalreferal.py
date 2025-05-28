@@ -6,6 +6,19 @@ from __future__ import absolute_import
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+Migration to create the ExternalReferal model.
+
+This model tracks external referrals linked to a company. It includes:
+- id: Auto-generated primary key.
+- name: A short name or label for the referral (max 50 chars, defaults to empty string).
+- active: A boolean indicating if the referral is active (default True).
+- company: ForeignKey linking the referral to a specific Company, with cascading deletes.
+
+Model metadata:
+- verbose_name: 'External Referal'
+- verbose_name_plural: 'External Referals'
+"""
 
 class Migration(migrations.Migration):
 

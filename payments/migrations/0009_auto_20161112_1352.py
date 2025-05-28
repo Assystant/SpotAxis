@@ -5,8 +5,17 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to update the 'type' field choices in the Transactions model.
+
+This migration modifies the 'type' field of the Transactions model to
+change the choice labels to 'Added' and 'Paid' instead of previous values.
+"""
 
 class Migration(migrations.Migration):
+    """
+    Migration class to update the 'type' field choices in Transactions model.
+    """
 
     dependencies = [
         ('payments', '0008_auto_20161111_1946'),

@@ -1,3 +1,15 @@
+
+
+"""
+This migration script adds a new model `TicketDependency` to the helpdesk application.
+It creates a table to track dependencies between tickets and enforces uniqueness
+on the combination of ticket and its dependency.
+
+Dependencies:
+- Django ORM models
+- South migration tools (SchemaMigration)
+"""
+
 # encoding: utf-8
 from __future__ import absolute_import
 import datetime
@@ -6,9 +18,17 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-
+    """
+    Handles the schema migration for adding the `TicketDependency` model
+    in the helpdesk application. This model allows a ticket to declare
+    dependencies on other tickets.
+    """
     def forwards(self, orm):
-        
+        """
+        Applies the forward migration:
+        - Creates the `TicketDependency` table.
+        - Adds a unique constraint on the combination of `ticket` and `depends_on`.
+        """
         # Adding model 'TicketDependency'
         db.create_table('helpdesk_ticketdependency', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -22,7 +42,11 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+        """
+        Reverts the forward migration:
+        - Removes the unique constraint from the `TicketDependency` table.
+        - Deletes the `TicketDependency` table.
+        """
         # Removing unique constraint on 'TicketDependency', fields ['ticket', 'depends_on']
         db.delete_unique('helpdesk_ticketdependency', ['ticket_id', 'depends_on_id'])
 

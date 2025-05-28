@@ -5,9 +5,17 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to alter fields in the Discount model.
+
+This migration modifies the 'label' field to be unique and
+changes the choices and verbose name for the 'type' field.
+"""
 
 class Migration(migrations.Migration):
-
+    """
+    Migration class to update 'label' and 'type' fields in Discount model.
+    """
     dependencies = [
         ('payments', '0007_discount_plans'),
     ]

@@ -5,9 +5,23 @@
 from __future__ import absolute_import
 from django.db import migrations, models
 
+"""
+Migration to refactor recruiter invitation permissions.
+
+This migration:
+- Removes individual Boolean permission fields from the RecruiterInvitation model:
+  - application_process_management
+  - job_management
+  - site_management
+  - team_management
+- Adds a single 'membership' field (PositiveSmallIntegerField) to encapsulate permission roles.
+
+This change aligns the permission model of RecruiterInvitation with the updated Recruiter model structure.
+"""
 
 class Migration(migrations.Migration):
-
+    """Replaces multiple permission-related Boolean fields in RecruiterInvitation 
+    with a single numeric 'membership' field for simplified role management."""
     dependencies = [
         ('companies', '0012_auto_20160928_1104'),
     ]

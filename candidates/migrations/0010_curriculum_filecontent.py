@@ -7,7 +7,13 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration class to add a `filecontent` field to the `Curriculum` model.
 
+    Purpose:
+        - Enables storing the textual content of curriculum documents (CVs) as plain text.
+        - Facilitates full-text search, parsing, or preview functionalities within the application.
+    """
     dependencies = [
         ('candidates', '0009_auto_20160908_1955'),
     ]

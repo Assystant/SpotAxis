@@ -17,7 +17,7 @@ from django.urls import NoReverseMatch
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.feedgenerator import Atom1Feed
 from django.utils.translation import gettext as _
 
@@ -262,14 +262,14 @@ class AuthorEntries(EntryFeed):
         Title of the feed.
         """
         return _('Entries for the author %(object)s') % {
-            'object': smart_text(obj.__str__())}
+            'object': smart_str(obj.__str__())}
 
     def description(self, obj):
         """
         Description of the feed.
         """
         return _('The last entries by %(object)s') % {
-            'object': smart_text(obj.__str__())}
+            'object': smart_str(obj.__str__())}
 
 
 class TagEntries(EntryFeed):
