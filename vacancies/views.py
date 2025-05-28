@@ -16,7 +16,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse, NoReverseMatch, resolve
 from django.db.models import Count, Q
 from django.http import QueryDict, HttpResponseNotFound, JsonResponse, Http404
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import render_to_response, redirect, get_object_or_404, render
 from django.template import RequestContext,Context, Node, Library, TemplateSyntaxError, VariableDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -459,7 +459,7 @@ def search_vacancies(request, template_name):
 
     del_filters = request.session.get('del_filters')
 
-    return render(request,template_name,
+    return render_to_response(template_name,
                               {'isIndex': isIndex,
                                'latest_vacancies': latest_vacancies,
                                'isSearchVacancies': isSearchVacancies,
@@ -490,7 +490,8 @@ def search_vacancies(request, template_name):
                                'vacancies_search_industry': request.session.get('vacancies_search_industry'),
                                'vacancies_search_employment_type': request.session.get('vacancies_search_employment_type'),
                                'vacancies_search_pub_date_days': request.session.get('vacancies_search_pub_date_days'),
-                               })
+                               },
+                              context_instance=RequestContext(request))
 
 @csrf_exempt
 def vacancy_details(request, vacancy_id=None, referer = None, external_referer = None, social_code=None):
@@ -943,7 +944,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
             templated_form = TemplatedForm(template = vacancy.form_template, formClasses="form-control mt2")
         else:
             request.session.pop('fill_template')
-    response = render(request,'vacancy_details.html',
+    response = render_to_response('vacancy_details.html',
                               {'isSearchVacancies': True,
                                'og': og,
                                'vacancy': vacancy,
@@ -969,7 +970,8 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
                                'fill_template': fill_template,
                                'templated_form': templated_form,
                                'talent_only': True,
-                               })
+                               },
+                              context_instance=RequestContext(request))
     if referer:
         response.set_cookie('referer-'+str(vacancy.id),str(referer.id))
     if external_referer:
@@ -1166,7 +1168,7 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
     # vacancies = Vacancy.objects.filter(company = company)
     # for vacancy in vacancies:
     #     vacancy.stages = VacancyStage.objects.filter(vacancy=vacancy)
-    return render(request,'vacancies_stage_details.html',
+    return render_to_response('vacancies_stage_details.html',
                               {'isSearchVacancies': True,
                                'vacancy': vacancy,
                                'public_form': public_form,
@@ -1191,7 +1193,8 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
                                'vacancy_stage': vacancy_stage,
                                'stage_section': str(stage_section)},
                                # 'vacancies': vacancies},
-                               # 'public_form': public_form})
+                               # 'public_form': public_form},
+                              context_instance=RequestContext(request))
 
 def vacancy_to_pdf(request, vacancy_id):
     from TRM.settings import MEDIA_URL
@@ -1258,7 +1261,7 @@ def vacancies_by_company(request, company_id):
     if 1 < minimo_paginas - 4:
         link_anterior = minimo_paginas - 4
 
-    return render(request,'vacancies_by_company.html',
+    return render_to_response('vacancies_by_company.html',
                               {'company': company,
                                'company_user': company_user,
                                'vacancies': vacancies,
@@ -1269,7 +1272,8 @@ def vacancies_by_company(request, company_id):
                                'link_anterior': link_anterior,
                                'num_pages_visible':num_pages_visible,
                                'paginas_finales':paginas_finales,
-                               })
+                               },
+                              context_instance=RequestContext(request))
 
 def create_vacancies(request):
     import random
@@ -1455,13 +1459,13 @@ def public_apply(request, vacancy_id = None, referer = None, external_referer=No
     else:
         messages.error(request, error_message)
         return redirect('TRM-Subindex')
-    response =  render(request,'job_public_apply.html',{
+    response =  render_to_response('job_public_apply.html',{
         'company': company,
         'vacancy': vacancy,
         'referer': referer,
         'external_referer': external_referer,
         'public_form': public_form,
-        })
+        },context_instance=RequestContext(request))
     if referer:
         response.set_cookie('referer-'+str(vacancy.id),str(referer.id))
     if external_referer:
@@ -1785,7 +1789,7 @@ def new_application(request, vacancy_id):
     applicant = candidate
     if recruiter_upload:
         candidate = None
-    return render(request,'new_application.html', {
+    return render_to_response('new_application.html', {
             'vacancy' : vacancy,
             'applicant': applicant,
             'candidate': candidate,
@@ -1799,7 +1803,7 @@ def new_application(request, vacancy_id):
             'conflicts': conflicts,
             'talent_only': True,
             'today': today
-        })
+        }, context_instance = RequestContext(request))
 
 def new_application_resolve_conflicts(request, vacancy_id, card_type):
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)

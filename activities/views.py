@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 from TRM.settings import SITE_URL, num_pages, number_objects_page
 from TRM.context_processors import subdomain
@@ -38,4 +38,4 @@ def activities(request, activity_id=None):
 		context['activity_stream'] = Activity.objects.all().filter(Q(id=activity_id) & (Q(actor=request.user) | Q(subscribers__in =[request.user]))).distinct()
 		if not context['activity_stream']:
 			raise Http404
-	return render(request,'activities.html',context)
+	return render_to_response('activities.html',context,context_instance=RequestContext(request))
