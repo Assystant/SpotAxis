@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import print_function
 import hashlib
 import random
 import re
-import urllib.request, urllib.parse, urllib.error
+import urllib
 import uuid
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import gettext as _
+from django.utils.translation import ugettext as _
 from django.db import models
 from django.utils import timezone
 from common import registration_settings as registration_settings
@@ -29,11 +27,11 @@ class Profile(models.Model):
     codename = models.CharField(max_length=20)
 
     def __unicode__(self):
-        return '%s' % self.name
+        return u'%s' % self.name
 
     class Meta:
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
+        verbose_name = u'Profile'
+        verbose_name_plural = u'Profiles'
 
 
 LOGIN_OPTIONS = (
@@ -49,8 +47,8 @@ import os
 class User(AbstractUser):
     """ Custom User """
     profile = models.ForeignKey(Profile, verbose_name=_('Profile'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    phone = PhoneNumberField(verbose_name=_('Phone'), null=True, blank=True, default=None)
-    phone_ext = models.PositiveIntegerField(verbose_name=_('Extension'), null=True, blank=True, default=None)
+    phone = PhoneNumberField(verbose_name=_(u'Phone'), null=True, blank=True, default=None)
+    phone_ext = models.PositiveIntegerField(verbose_name=_(u'Extension'), null=True, blank=True, default=None)
     cellphone = PhoneNumberField(verbose_name=_('Celular'), null=True, blank=True, default=None)
     photo = models.ImageField(verbose_name=_('Photo'), upload_to='photos/', default=PHOTO_USER_DEFAULT, blank=True, null=True, max_length=200)
     logued_by = models.CharField(_('Loggin Method'), choices=LOGIN_OPTIONS, max_length=2, null=True, blank=True, default=None)
@@ -64,17 +62,17 @@ class User(AbstractUser):
         name = self.username
         if self.first_name:
             name = self.get_full_name()
-        return '%s' % name
+        return u'%s' % name
 
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = u'User'
+        verbose_name_plural = u'Users'
         ordering = ['-date_joined']
 
     def get_remote_image(self,url):
         if url:
             try:
-                result = urllib.request.urlretrieve(url)
+                result = urllib.urlretrieve(url)
                 # raise ValueError(os.path.basename(result[0]))
                 file = File(open(result[0]),'rb')
                 self.photo.save(os.path.basename(result[0]),file)
@@ -112,7 +110,7 @@ def send_TRM_email(subject_template_name, email_template_name, context_email, to
         if not from_email:
             from_email = DEFAULT_FROM_EMAIL
         html_email.encoding = "utf-8"
-        if isinstance(to_user, str):
+        if isinstance(to_user, types.StringTypes):
             to_user = [to_user]
         to_user = list(to_user)
         # try:
@@ -130,7 +128,7 @@ def send_TRM_email(subject_template_name, email_template_name, context_email, to
             msg.attach_file(file)
         return msg.send()
     except Exception as e:
-        print(('%s (%s)' % (e.message, type(e))))
+        print '%s (%s)' % (e.message, type(e))
         return 0
 
 def send_email_to_TRM(subject="No Subject", body_email=None, notify = False):
@@ -208,7 +206,7 @@ class AccountVerification(models.Model):
     ACTIVATED = 'ALREADY_ACTIVATED'
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), null=True, blank=True, default=None, on_delete=models.CASCADE)
-    activation_key = models.CharField(_('Activation Key'), max_length=40, null=True, blank=True, default=None)
+    activation_key = models.CharField(_(u'Activation Key'), max_length=40, null=True, blank=True, default=None)
 
     objects = AccountVerificationManager()
 
@@ -219,11 +217,11 @@ class AccountVerification(models.Model):
     activation_key_expired.boolean = True
 
     def __unicode__(self):
-        return '%s' % self.user
+        return u'%s' % self.user
 
     class Meta:
-        verbose_name = _('Checking Account')
-        verbose_name_plural = _('Checking Accounts')
+        verbose_name = _(u'Checking Account')
+        verbose_name_plural = _(u'Checking Accounts')
         ordering = ['-id']
 # ----------------------- #
 # Fin AccountVerification #
@@ -242,14 +240,15 @@ def generate_confirm_expire_date():
 
 
 class EmailVerification(models.Model):
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=False, null=True, default=None, on_delete=models.SET_NULL)
     old_email = models.EmailField(_('Email Old'))
     new_email = models.EmailField(_('Email New'))
     token = models.CharField(_('Token'), max_length=40, default=generate_token)
-    code = models.CharField(_('Code'), max_length=40, default=generate_token)
+    code = models.CharField(_(u'Code'), max_length=40, default=generate_token)
     is_approved = models.BooleanField(_('Approved'), default=False)
     is_expired = models.BooleanField(_('Expired'), default=False)
-    expiration_date = models.DateTimeField(_('Date of Expiration'), default=generate_confirm_expire_date)
+    expiration_date = models.DateTimeField(_(u'Date of Expiration'), default=generate_confirm_expire_date)
 
     def save(self, *args, **kwargs):
         if self.is_approved:
@@ -264,11 +263,11 @@ class EmailVerification(models.Model):
         return super(EmailVerification, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return '%s' % self.user
+        return u'%s' % self.user
 
     class Meta:
-        verbose_name = _('Verification of Email')
-        verbose_name_plural = _('Verification of Emails')
+        verbose_name = _(u'Verification of Email')
+        verbose_name_plural = _(u'Verification of Emails')
         ordering = ['-id']
 # ---------------------- #
 # End Email Verification #
@@ -292,24 +291,25 @@ CONTINENTS = (
 class Country(models.Model):
     iso2_code = models.CharField('ISO alpha-2', max_length=2, unique=True, null=True, blank=True, default=None)
     name = models.CharField(Name, max_length=128, null=True, blank=True, default=None)
-    continent = models.CharField(_('Continents'), choices=CONTINENTS, max_length=2, null=True, blank=True, default=None)
-    order = models.PositiveSmallIntegerField(_('Order'), null=True, blank=True, default=1000)
+    continent = models.CharField(_(u'Continents'), choices=CONTINENTS, max_length=2, null=True, blank=True, default=None)
+    order = models.PositiveSmallIntegerField(_(u'Order'), null=True, blank=True, default=1000)
 
     def __unicode__(self):
-        return '%s' % self.name
+        return u'%s' % self.name
 
     class Meta:
-        verbose_name = _('Country')
-        verbose_name_plural = _('Countries')
+        verbose_name = _(u'Country')
+        verbose_name_plural = _(u'Countries')
         ordering = ['name']
 
 
 class State(models.Model):
+
     country = models.ForeignKey(Country,verbose_name=_('Country'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.SET_NULL)
     name = models.CharField(Name, max_length=60, null=True, blank=True, default=None)
 
     def __unicode__(self):
-        return '%s' % self.name
+        return u'%s' % self.name
 
     class Meta:
         verbose_name = _('State')
@@ -318,15 +318,17 @@ class State(models.Model):
 
 
 class Municipal(models.Model):
+
     state = models.ForeignKey(State, verbose_name=_('State'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.SET_NULL)
+
     name = models.CharField(Name, max_length=80, null=True, blank=True, default=None)
 
     def __unicode__(self):
-        return '%s' % self.name
+        return u'%s' % self.name
 
     class Meta:
-        verbose_name = _('City')
-        verbose_name_plural = _('Cities')
+        verbose_name = _(u'City')
+        verbose_name_plural = _(u'Cities')
         ordering = ['state', 'name']
 
 
@@ -340,7 +342,7 @@ class Currency(models.Model):
     name_plural = models.CharField(verbose_name='Plural Name', max_length=50, null=True, blank=True, default=None)
 
     def __unicode__(self):
-        return '%s' % self.code
+        return u'%s' % self.code
 
     class Meta:
         verbose_name='Currency'
@@ -352,21 +354,21 @@ class Currency(models.Model):
 
 
 class Address(models.Model):
-    street = models.CharField(verbose_name=_('Street'), max_length=20, null=True, blank=True, default=None)
+    street = models.CharField(verbose_name=_(u'Street'), max_length=20, null=True, blank=True, default=None)
     postal_code = models.CharField(verbose_name=_('Postal Code'), max_length=13, null=True, blank=True, default=None)
-    country = models.ForeignKey(Country, verbose_name=_('Country'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    country = models.ForeignKey(Country, verbose_name=_(u'Country'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # state = models.ForeignKey(State, verbose_name=_(u'State'), null=True, default=None, on_delete=models.SET_NULL)
-    state = models.CharField(verbose_name=_('State'),max_length=20, null = True, blank=True, default=None)
-    city = models.CharField(verbose_name=_('City'),max_length=20, null = True, blank=True, default=None)
-    municipal = models.ForeignKey(Municipal, verbose_name=_('City'), null=True, default=None, on_delete=models.SET_NULL)
-    last_modified = models.DateTimeField(verbose_name=_('Last Modified'), auto_now=True)
+    state = models.CharField(verbose_name=_(u'State'),max_length=20, null = True, blank=True, default=None)
+    city = models.CharField(verbose_name=_(u'City'),max_length=20, null = True, blank=True, default=None)
+    municipal = models.ForeignKey(Municipal, verbose_name=_(u'City'), null=True, default=None, on_delete=models.SET_NULL)
+    last_modified = models.DateTimeField(verbose_name=_(u'Last Modified'), auto_now=True)
 
     def __unicode__(self):
-        return '%s, %s, %s, %s, %s' % (self.street, self.city, self.state, self.country.name,  self.postal_code)
+        return u'%s, %s, %s, %s, %s' % (self.street, self.city, self.state, self.country.name,  self.postal_code)
 
     class Meta:
-        verbose_name = _('Address')
-        verbose_name_plural = _('Addresses')
+        verbose_name = _(u'Address')
+        verbose_name_plural = _(u'Addresses')
         ordering = ['-last_modified']
 
 
@@ -401,11 +403,11 @@ class Degree(models.Model):
     order = models.PositiveSmallIntegerField(null=True, blank=True, default=100)
 
     def __unicode__(self):
-        return '%s' % self.name
+        return u'%s' % self.name
 
     class Meta:
-        verbose_name = _('School Grade')
-        verbose_name_plural = _('School Grades')
+        verbose_name = _(u'School Grade')
+        verbose_name_plural = _(u'School Grades')
         ordering = ['order']
 
 
@@ -414,11 +416,11 @@ class Identification_Doc(models.Model):
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
 
     def __unicode__(self):
-        return '%s' % self.name
+        return u'%s' % self.name
 
     class Meta:
-        verbose_name = _('Type of Identification')
-        verbose_name_plural = _('Type of Identification')
+        verbose_name = _(u'Type of Identification')
+        verbose_name_plural = _(u'Type of Identification')
         ordering = ['name']
 
 
@@ -427,10 +429,10 @@ class Marital_Status(models.Model):
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
 
     def __unicode__(self):
-        return '%s' % self.name
+        return u'%s' % self.name
 
     class Meta:
-        verbose_name = _('Marital Status')
+        verbose_name = _(u'Marital Status')
         verbose_name_plural = verbose_name
         ordering = ['name']
 
@@ -441,11 +443,11 @@ class Employment_Type(models.Model):
     order = models.SmallIntegerField(blank=True, null=True, default=100)
 
     def __unicode__(self):
-        return '%s' % self.name
+        return u'%s' % self.name
 
     class Meta:
-        verbose_name = _('Type of Employment')
-        verbose_name_plural = _('Type of Employments')
+        verbose_name = _(u'Type of Employment')
+        verbose_name_plural = _(u'Type of Employments')
         ordering = ['order']
 
 
@@ -454,10 +456,10 @@ class Gender(models.Model):
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
 
     def __unicode__(self):
-        return '%s' % self.name
+        return u'%s' % self.name
 
     class Meta:
-        verbose_name = _('Gender')
+        verbose_name = _(u'Gender')
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -466,19 +468,19 @@ class Gender(models.Model):
 
 
 class Subdomain(models.Model):
-    cname = models.CharField(verbose_name=_('Cname'), max_length=255, null=True, blank=True, default=None, unique=True)
-    slug = models.CharField(verbose_name=_('Subdomain'), max_length=255, null=True, blank=True, default=True)
+    cname = models.CharField(verbose_name=_(u'Cname'), max_length=255, null=True, blank=True, default=None, unique=True)
+    slug = models.CharField(verbose_name=_(u'Subdomain'), max_length=255, null=True, blank=True, default=True)
 
     def __unicode__(self):
         if self.cname:
-            return '%s' % self.cname
+            return u'%s' % self.cname
         else:
-            return '%s%s' % (self.slug , SITE_SUFFIX)
+            return u'%s%s' % (self.slug , SITE_SUFFIX)
         # return u'%s.%s.%s' % (HOST,self.slug,SITE_URL)
 
     class Meta:
-        verbose_name = _('Subdomain')
-        verbose_name_plural = _('Subdomain') 
+        verbose_name = _(u'Subdomain')
+        verbose_name_plural = _(u'Subdomain') 
 
 class SocialAuth(models.Model):
     MEDIA_CHOICES=(
@@ -504,7 +506,7 @@ class SocialAuth(models.Model):
     def get_remote_image(self,url):
         if url:
             try:
-                result = urllib.request.urlretrieve(url)
+                result = urllib.urlretrieve(url)
                 # raise ValueError(os.path.basename(result[0]))
                 file = File(open(result[0]),'rb')
                 self.photo.save(os.path.basename(result[0]),file)

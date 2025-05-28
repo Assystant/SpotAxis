@@ -7,6 +7,8 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """Migration class that applies a schema update by adding the 'public_photo'
+    ImageField to the 'candidate' model in the 'candidates' app."""
 
     dependencies = [
         ('candidates', '0003_auto_20160824_2027'),

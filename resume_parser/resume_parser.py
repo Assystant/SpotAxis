@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 import datefinder
-import docx
+from docx import Document
 import json
 import pdb
 import pdfminer
@@ -513,7 +513,7 @@ def extract_file_content(filename,  output_type):
             file_content = file2.read()
 
         elif file_extension == '.docx':
-            document = docx.Document(filename + '.docx')
+            document = Document(filename + '.docx')
             for paragraph in document.paragraphs:
                 file_content += paragraph.text.encode('utf-8')
         

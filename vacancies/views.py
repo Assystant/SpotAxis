@@ -40,6 +40,12 @@ referer_hash = Hashids(salt='Job Referal', min_length = 5)
 external_referer_hash = Hashids(salt='Job External Referal', min_length=5)
 
 def get_vacancy_active_status():
+    """
+    Retrieve the Vacancy_Status instance with codename 'open' representing active vacancies.
+
+    Returns:
+        Vacancy_Status or None: The Vacancy_Status object with codename 'open', or None if not found.
+    """
     try:
         status = Vacancy_Status.objects.get(codename='open')
     except Vacancy_Status.DoesNotExist:
@@ -47,6 +53,12 @@ def get_vacancy_active_status():
     return status
 
 def first_search(request):
+    """ 
+    Retrieve the Vacancy_Status instance with codename 'open' representing active vacancies.
+
+    Returns:
+        Vacancy_Status or None: The Vacancy_Status object with codename 'open', or None if not found.
+    """
     if request.user.is_authenticated() and not request.user.email:
         # If user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
@@ -90,11 +102,33 @@ def first_search(request):
     return redirect('vacancies_search_vacancies')
 
 def get_comments(request):
+    """
+    Retrieve all Question objects representing comments.
+
+    Args:
+        request (HttpRequest): The current HTTP request.
+
+    Returns:
+        QuerySet: All Question objects.
+    """
     all_comments =Question.objects.all()
     comments=all_comments
     return comments
 
 def get_vacancies_and_filters(request):
+    """
+    Retrieve and filter vacancies based on session search parameters, and prepare filter data for the sidebar.
+
+    This includes filtering vacancies by industry, area, state, employment type, publication date,
+    and search text. It also computes aggregated counts for publication dates, industries, states,
+    and employment types to populate filter options.
+
+    Args:
+        request (HttpRequest): The current HTTP request.
+
+    Returns:
+        QuerySet: The filtered vacancies queryset.
+    """
     #### Section Vacancies ####
     all_vacancies = Vacancy.publishedjobs.all()
     vacancies = all_vacancies
@@ -283,6 +317,19 @@ def get_vacancies_and_filters(request):
     return vacancies
 
 def filter_vacancies_by_industry(request, industry_id=None):
+    """
+    Stores the selected industry filter in the session based on the provided industry_id.
+    
+    If industry_id is not zero, it fetches the corresponding Industry object and stores it in the session.
+    If industry_id is zero, it clears the industry filter from the session.
+
+    Args:
+        request (HttpRequest): The incoming HTTP request.
+        industry_id (int or None): ID of the industry to filter vacancies by.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the vacancies search results page.
+    """
     if industry_id:
         if int(industry_id) != 0:
             request.session['vacancies_search_industry'] = get_object_or_404(Industry, pk=int(industry_id))
@@ -291,6 +338,19 @@ def filter_vacancies_by_industry(request, industry_id=None):
     return redirect('vacancies_search_vacancies')
 
 def filter_vacancies_by_state(request, state_id=None):
+    """
+    Stores the selected state filter in the session based on the provided state_id.
+
+    If state_id is not zero, it fetches the corresponding State object and stores it in the session.
+    If state_id is zero, it clears the state filter from the session.
+
+    Args:
+        request (HttpRequest): The incoming HTTP request.
+        state_id (int or None): ID of the state to filter vacancies by.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the vacancies search results page.
+    """
     if state_id:
         if int(state_id) != 0:
             request.session['vacancies_search_state'] = get_object_or_404(State, pk=int(state_id))
@@ -299,6 +359,19 @@ def filter_vacancies_by_state(request, state_id=None):
     return redirect('vacancies_search_vacancies')
 
 def filter_vacancies_by_employment_type(request, employmentType_id):
+    """
+    Stores the selected employment type filter in the session based on the provided employmentType_id.
+
+    If employmentType_id is not zero, it fetches the corresponding Employment_Type object and stores it.
+    If employmentType_id is zero, it clears the employment type filter from the session.
+
+    Args:
+        request (HttpRequest): The incoming HTTP request.
+        employmentType_id (int): ID of the employment type to filter vacancies by.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the vacancies search results page.
+    """
     if employmentType_id:
         if int(employmentType_id) != 0:
             request.session['vacancies_search_employment_type'] = get_object_or_404(Employment_Type,
@@ -308,6 +381,19 @@ def filter_vacancies_by_employment_type(request, employmentType_id):
     return redirect('vacancies_search_vacancies')
 
 def filter_vacancies_by_pub_date(request, days):
+    """
+    Stores the publication date filter in the session based on the provided number of days.
+
+    If days is between 1 and 30, filters vacancies published within that range.
+    Otherwise, applies a default day range (defined in days_default_search).
+
+    Args:
+        request (HttpRequest): The incoming HTTP request.
+        days (int): Number of days to filter vacancies by publication date.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the vacancies search results page.
+    """
     if days:
         now = datetime.utcnow().replace(tzinfo=utc)
         if int(days) > 0 < 30:
@@ -321,6 +407,20 @@ def filter_vacancies_by_pub_date(request, days):
 
 def search_vacancies(request, template_name):
     """ Seen search for vacancy and currently also """
+    """
+    Handles vacancy search logic, including filtering, form processing, session storage, and pagination.
+
+    If the request method is POST, it validates and processes the submitted form.
+    If GET, it retrieves vacancies using existing filters stored in the session.
+    Renders the appropriate template with filtered vacancy results and auxiliary data.
+
+    Args:
+        request (HttpRequest): The incoming HTTP request.
+        template_name (str): The template to render, e.g., 'index.html' or search results page.
+
+    Returns:
+        HttpResponse: Rendered HTML page with context including vacancies, filters, and UI components.
+    """
     # raise ValueError()
     subdomain_data = subdomain(request)
 
@@ -498,6 +598,37 @@ def search_vacancies(request, template_name):
 
 @csrf_exempt
 def vacancy_details(request, vacancy_id=None, referer = None, external_referer = None, social_code=None):
+    """
+    Handles the display and interaction logic for a specific job vacancy page.
+
+    This view is responsible for:
+    - Authenticating and authorizing access for recruiters, candidates, and anonymous users.
+    - Managing social login and application flows through social networks.
+    - Handling GET/POST requests related to:
+        * Submitting questions about the vacancy.
+        * Applying publicly to the vacancy.
+        * Uploading files (photo or CV) for social applicants.
+        * Posting the vacancy to social networks.
+    - Loading context data for the vacancy details page including:
+        * Vacancy metadata, files, and custom application forms.
+        * Social sharing configuration and tokens.
+        * Recruiter/candidate-specific views.
+        * Referral tracking from recruiters or external referrers.
+
+    Parameters:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int, optional): ID of the vacancy to fetch details for.
+        referer (str, optional): Encoded recruiter referral identifier.
+        external_referer (str, optional): Encoded external referral identifier.
+        social_code (str, optional): Identifier for social network authentication (e.g., 'fb', 'li', 'tw').
+
+    Returns:
+        HttpResponse: Renders the vacancy detail template or redirects as needed for social auth, access errors,
+                      completed applications, or invalid references.
+
+    Raises:
+        Http404: If the vacancy does not exist or access is unauthorized.
+    """
     error_message = _('The job opening you are trying to find does not exist or has ended')
     redirect_type = None
     socialUser = None
@@ -984,8 +1115,25 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
 
 # @login_required
 def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_section=0):
+    """
+    View that displays detailed information about candidates in a specific stage of a vacancy.
+    - Checks if the subdomain and recruiter are valid.
+    - Verifies if the authenticated user has access to the vacancy.
+    - Displays candidate lists segmented by stage section:
+        - Section 0: Candidates in the current stage.
+        - Section 1: Candidates who have passed this stage.
+        - Section 2: Discarded candidates.
+    - Includes recruiter rating, comments, and interview schedule data per candidate.
+    - Gathers additional data like form questions, counts per section, available stages, etc.
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int, optional): The primary key of the vacancy.
+        vacancy_stage (int or str, optional): The order of the stage in the pipeline.
+        stage_section (int, optional): Section filter (0=current, 1=next/finalized, 2=discarded).
 
-    
+    Returns:
+        HttpResponse: Rendered HTML response for the vacancy stage details view.
+    """
     error_message = _('The job opening you are trying to find does not exist or has ended')
     today = date.today()
     postulate = False
@@ -1200,6 +1348,19 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
                               context_instance=RequestContext(request))
 
 def vacancy_to_pdf(request, vacancy_id):
+    """
+    Generates a PDF version of the vacancy details.
+
+    - Validates user ownership to determine if it's their vacancy.
+    - Renders a template with company logo and media info into a PDF.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int): The ID of the vacancy to generate the PDF for.
+
+    Returns:
+        HttpResponse: A PDF file download response.
+    """
     from TRM.settings import MEDIA_URL
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
     logo_pdf = 'logos_TRM/logo_pdf.png'
@@ -1222,6 +1383,20 @@ def vacancy_to_pdf(request, vacancy_id):
     return pdf_file
 
 def vacancies_by_company(request, company_id):
+    """
+    Displays all published vacancies for a given company.
+
+    - Paginates the result set.
+    - Adjusts pagination display controls (next, previous, max/min pages).
+    - Loads the company and its user.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        company_id (int): The ID of the company whose vacancies are being shown.
+
+    Returns:
+        HttpResponse: Rendered HTML page listing all active non-confidential vacancies.
+    """
     total_vacancies = 0
     company = get_object_or_404(Company, pk=company_id)
     vacancies = Vacancy.publishedjobs.filter(company=company, confidential=False)
@@ -1279,6 +1454,19 @@ def vacancies_by_company(request, company_id):
                               context_instance=RequestContext(request))
 
 def create_vacancies(request):
+    """
+    Generates multiple random vacancies across different states and industries for Mexico.
+
+    - Loops through Mexican states and selects random municipalities.
+    - Chooses a random company, area, and other properties.
+    - Randomly fills vacancy fields such as salary, age, and experience.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        None
+    """
     import random
     industries = Industry.objects.all()
     country_mex = Country.objects.get(iso2_code__exact='MX')
@@ -1346,6 +1534,23 @@ def create_vacancies(request):
     return redirect('TRM-Subindex')
 
 def public_apply(request, vacancy_id = None, referer = None, external_referer=None):
+    """
+    Handles the public job application process for a given vacancy.
+
+    This view renders a public application form for anonymous users or non-logged-in candidates.
+    It supports application tracking via recruiter or external referer hashes.
+    If a valid application is submitted, the candidate's profile and curriculum are saved,
+    and appropriate tracking (referer, recruiter, etc.) is recorded.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int, optional): ID of the vacancy being applied to.
+        referer (str, optional): Encoded hash representing an internal recruiter referer.
+        external_referer (str, optional): Encoded hash representing an external referer.
+
+    Returns:
+        HttpResponse: Rendered application form, or redirect on success/error.
+    """
     error_message = _('The job opening you are trying to find does not exist or has ended')
     today = date.today()
     postulate = False
@@ -1476,6 +1681,23 @@ def public_apply(request, vacancy_id = None, referer = None, external_referer=No
     return response
 
 def save_public_application(request,vacancy, recruiter, referer = None, external_referer=None, array = False):
+    """
+    Saves a public job application submitted by a user without a candidate account.
+
+    Creates a new `Candidate`, `Curriculum`, and `Postulate` instance based on uploaded files
+    and form data. Attaches referer, external referer, or recruiter if present and logs a comment.
+
+    Args:
+        request (HttpRequest): The HTTP request containing form data and uploaded files.
+        vacancy (Vacancy): The vacancy object to which the application is being submitted.
+        recruiter (Recruiter): Optional recruiter submitting the application on behalf of the candidate.
+        referer (Recruiter, optional): Referring recruiter (internal).
+        external_referer (ExternalReferal, optional): External referral source.
+        array (bool, optional): If True, returns a list containing form, saved flag, and postulate.
+
+    Returns:
+        Public_FilesForm or list: The submitted form or [form, saved (bool), new_cv_public (Postulate)]
+    """
     saved = False
     new_cv_public = None
     try:
@@ -1564,6 +1786,20 @@ def save_public_application(request,vacancy, recruiter, referer = None, external
         return [public_form, saved, new_cv_public]
 
 def extract_public_form_content(public_form):
+    """
+    Parses uploaded resume content from the public form and generates a minimal candidate profile.
+
+    Utilizes a resume parsing library to extract structured information such as name, email,
+    phone, skills, and education history from the uploaded file. Creates corresponding
+    Candidate, Curriculum, and Academic objects in the database.
+
+    Args:
+        public_form (Public_FilesForm): The validated form containing the uploaded resume.
+
+    Returns:
+        list: A list containing the created Candidate and Curriculum instances.
+    """
+
     from resume_parser.resume_parser import extract_file_content
     file = public_form.clean_file()
     candidate = Candidate.objects.create()
@@ -1656,6 +1892,20 @@ def extract_public_form_content(public_form):
     return [candidate, curriculum]
 
 def new_application(request, vacancy_id):
+    """
+    Handles a new job application process, including file upload and structured candidate input.
+
+    This view supports both anonymous applications (with resume upload) and authenticated
+    candidate profiles. It validates duplicate applications, parses resume data, and allows
+    form-based editing of candidate profile, academic history, and expertise.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int): ID of the vacancy the user is applying to.
+
+    Returns:
+        HttpResponse: A redirect on success or error, or form re-render on validation failure.
+    """
     from candidates.forms import CandidateMiniForm, ExpertiseFormset, AcademicFormset
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
     # Check Vacancy status
@@ -1809,6 +2059,23 @@ def new_application(request, vacancy_id):
         }, context_instance = RequestContext(request))
 
 def new_application_resolve_conflicts(request, vacancy_id, card_type):
+    """
+    Handles resolution of conflicting candidate application data (academic or professional) during the application process.
+
+    This view is accessible only to authenticated users with a 'candidate' profile. Based on the card type, it updates or replaces
+    either academic qualifications or work experiences. After modifications, it identifies any remaining conflicts in the candidate's profile.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing user and form data.
+        vacancy_id (int): The ID of the vacancy the candidate is applying to.
+        card_type (int or str): Indicates the type of data being updated ('1' for academic, '2' for professional experience).
+
+    Returns:
+        HttpResponse: A rendered HTML page ('resolve_conflicts.html') with conflict resolution results.
+
+    Raises:
+        Http404: If the user is not authenticated or is not a candidate.
+    """
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
     if request.user.is_authenticated():
         if not request.user.profile.codename == 'candidate':
@@ -1882,6 +2149,23 @@ def new_application_resolve_conflicts(request, vacancy_id, card_type):
         raise Http404
 
 def complete_application(request, vacancy_id):
+    """
+    Finalizes and submits a job application for a specific vacancy.
+
+    Depending on the user's role (candidate or recruiter), this view processes form submissions, manages custom templated forms,
+    handles referral information, and creates or updates a Postulate instance (application). It also logs application source details
+    and optional cover letter.
+
+    Args:
+        request (HttpRequest): The HTTP request object, potentially containing form POST data.
+        vacancy_id (int): The ID of the vacancy being applied to.
+
+    Returns:
+        HttpResponse: Redirects to the vacancy detail page on successful application or re-renders 'complete_application.html' if not.
+    
+    Raises:
+        Http404: If the user is neither a candidate nor a valid recruiter.
+    """
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
     # Check if vacancy is open
     vacancy_has_form_template = vacancy.form_template
@@ -1981,6 +2265,22 @@ def complete_application(request, vacancy_id):
         })
 
 def vacancy_talent_sourcing(request, vacancy_id):
+    """
+    Displays the talent sourcing page for a specific vacancy, accessible only to manager recruiters of the associated company.
+
+    Validates that the user has the appropriate permissions and that the company's job post service is active.
+    Retrieves associated external referers for the company to assist in talent sourcing.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        vacancy_id (int): The ID of the vacancy being sourced.
+
+    Returns:
+        HttpResponse: A rendered HTML page ('vacancy_talent_sourcing.html') with relevant sourcing details.
+
+    Raises:
+        Http404: If the subdomain is inactive, user is not a manager recruiter, or the company/service validation fails.
+    """
     subdomain_data =  subdomain(request)
     if not subdomain_data['active_subdomain']:
         raise Http404
