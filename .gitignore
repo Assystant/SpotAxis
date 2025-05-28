@@ -16,6 +16,9 @@ local.properties
 .settings/
 .loadpath
 
+venv/
+env/
+
 # External tool builders
 .externalToolBuilders/
 
