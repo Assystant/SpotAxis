@@ -122,7 +122,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'markdownify',
     'bootstrapform',
-    'helpdesk',
+    # 'helpdesk',
     'django_comments',
     'mptt',
     'tagging',
@@ -152,7 +152,7 @@ MIDDLEWARE_CLASSES = [
     'TRM.middleware.MediumMiddleware',
 ]
 CRONJOBS = [
-    ('*/5 * * * *', 'helpdesk.cron.EmailTicketCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
+    # ('*/5 * * * *', 'helpdesk.cron.EmailTicketCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
     ('* * * * *', 'payments.cron.SubscriptionCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
     ('0 0 * * *', 'vacancies.cron.PublishCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
     ('0 0 * * *', 'vacancies.cron.UnPublishCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
@@ -237,11 +237,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'helpdesk': {
-            'handlers': ['helpdesk', 'mail_admins'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
+        # 'helpdesk': {
+        #     'handlers': ['helpdesk', 'mail_admins'],
+        #     'level': 'DEBUG',
+        #     'propagate': True
+        # },
         'werkzeug': {
             'handlers': ['console'],
             'level': 'DEBUG',

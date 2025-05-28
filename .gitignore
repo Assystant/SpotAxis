@@ -16,6 +16,9 @@ local.properties
 .settings/
 .loadpath
 
+venv/
+env/
+
 # External tool builders
 .externalToolBuilders/
 
@@ -188,6 +191,7 @@ $RECYCLE.BIN/
 #############
 
 *.py[co]
+venv/
 
 # Packages
 *.egg
@@ -227,3 +231,5 @@ pip-log.txt
 environment.py
 filecontent.txt
 .vscode
+
+venv/

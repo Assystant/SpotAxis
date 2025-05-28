@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Count
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext_lazy 
 
@@ -30,7 +30,7 @@ class RelatedPublishedFilter(SimpleListFilter):
                     '%(item)s (%(count)i entry)',
                     '%(item)s (%(count)i entries)',
                     active_object.count_entries_published) % {
-                    'item': smart_text(active_object),
+                    'item': smart_str(active_object),
                     'count': active_object.count_entries_published})
 
     def queryset(self, request, queryset):
