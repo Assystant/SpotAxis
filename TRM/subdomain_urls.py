@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^comingsoon/$',  TRM_views.comingsoon, name="comingsoon"),
     url(r'^jobs/$',  TRM_views.job_board, name="job_board"),
     url(r'resources/comments/', include('django_comments.urls')),
-    url(r'resources/', include('zinnia.urls')),
+    # url(r'resources/', include('zinnia.urls')),
     # url(r'help/', include('helpdesk.urls')),
     url(r'modal/', TemplateView.as_view(template_name='careers/modal.html')),
 

@@ -46,7 +46,7 @@ handler500 = 'TRM.views.handler500'
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('zinnia.urls')),
+    # url(r'^', include('zinnia.urls')),
 	url(r'^comments/', include('django_comments.urls')),
 
 

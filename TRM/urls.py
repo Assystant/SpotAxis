@@ -38,14 +38,14 @@ urlpatterns = [
     url(r'^api/common/', include('common.api.urls')),
     url(r'^api/activities/',include('activities.api.urls')),
     url(r'^api/vacancy/', include('vacancies_api.urls')),
-    url(r'^api/zinnia/',include('zinna.api.urls')),
+    # url(r'^api/zinnia/',include('zinna.api.urls')),
     url(r'^api/ckeditor/', include('ckeditor.api.urls')),
     url(r'api/companies/', include('companies_api.urls')),
     url(r'^api/candidates/', include('candidates.api.urls')),
 
     # Resources
     url(r'resources/comments/', include('django_comments.urls')),
-    url(r'resources/', include('zinnia.urls')),
+    # url(r'resources/', include('zinnia.urls')),
     # url(r'help/', include('helpdesk.urls')),
 
     # Index
