@@ -1,7 +1,7 @@
 """Test cases for Zinnia's admin fields"""
 from __future__ import absolute_import
 from django.test import TestCase
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 
 from zinnia.admin.fields import MPTTModelChoiceIterator
 from zinnia.admin.fields import MPTTModelMultipleChoiceField
@@ -24,7 +24,7 @@ class MPTTModelChoiceIteratorTestCase(TestCase):
                 return value.pk
 
             def label_from_instance(self, obj):
-                return smart_text(obj)
+                return smart_str(obj)
 
         field = FakeField()
         iterator = MPTTModelChoiceIterator(field)

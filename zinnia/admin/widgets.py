@@ -6,7 +6,7 @@ from django.contrib.admin import widgets
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.forms import Media
 from django.utils import six
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import escape
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -34,8 +34,8 @@ class MPTTFilteredSelectMultiple(widgets.FilteredSelectMultiple):
         Overrides the render_option method to handle
         the sort_fields argument.
         """
-        option_value = force_text(option_value)
-        option_label = escape(force_text(option_label))
+        option_value = force_str(option_value)
+        option_label = escape(force_str(option_label))
 
         if option_value in selected_choices:
             selected_html = mark_safe(' selected="selected"')
@@ -55,7 +55,7 @@ class MPTTFilteredSelectMultiple(widgets.FilteredSelectMultiple):
         some default choices for this field, make sure they have the
         extra tuple too!).
         """
-        selected_choices = set(force_text(v) for v in selected_choices)
+        selected_choices = set(force_str(v) for v in selected_choices)
         output = []
         for option_value, option_label, sort_fields in self.choices:
             output.append(self.render_option(

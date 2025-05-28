@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 
 from zinnia.admin.widgets import MPTTFilteredSelectMultiple
 from zinnia.admin.widgets import MiniTextarea
@@ -38,7 +38,7 @@ class MPTTFilteredSelectMultipleTestCase(TestCase):
 
         self.assertEqual(
             option,
-            smart_text('<option value="1" data-tree-id="1"'
+            smart_str('<option value="1" data-tree-id="1"'
                        ' data-left-value="1">тест</option>'))
 
     def test_render_options(self):

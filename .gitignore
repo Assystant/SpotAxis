@@ -188,6 +188,7 @@ $RECYCLE.BIN/
 #############
 
 *.py[co]
+venv/
 
 # Packages
 *.egg
