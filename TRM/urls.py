@@ -46,7 +46,7 @@ urlpatterns = [
     # Resources
     url(r'resources/comments/', include('django_comments.urls')),
     url(r'resources/', include('zinnia.urls')),
-    url(r'help/', include('helpdesk.urls')),
+    # url(r'help/', include('helpdesk.urls')),
 
     # Index
     url(r'^$', vacancy_views.search_vacancies, {'template_name': 'index.html'}, name='TRM-index'),
