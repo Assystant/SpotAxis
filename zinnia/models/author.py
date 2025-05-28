@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from django.apps import apps
 from django.conf import settings
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
+
 
 from zinnia.managers import EntryRelatedPublishedManager
 from zinnia.managers import entries_published
@@ -28,7 +28,6 @@ class AuthorPublishedManager(models.Model):
         abstract = True
 
 
-@python_2_unicode_compatible
 class Author(safe_get_user_model(),
              AuthorPublishedManager):
     """
