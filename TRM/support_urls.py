@@ -28,8 +28,8 @@ admin.autodiscover()
 handler500 = 'TRM.views.handler500'
 
 urlpatterns = [
-    url(r'helpdesk/', include('helpdesk.urls')),
-    url(r'', include('helpdesk.urls')),
+    # url(r'helpdesk/', include('helpdesk.urls')),
+    # url(r'', include('helpdesk.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #
 # if settings.DEBUG:
