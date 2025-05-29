@@ -7,7 +7,8 @@ from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
 from django.views import generic
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
+#from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from ckeditor import image_processing
@@ -219,4 +220,5 @@ def browse(request):
     context = RequestContext(request, {
         'files': get_files_browse_urls(request.user),
     })
-    return render_to_response('browse.html', context)
+    return render(request,'browse.html', context)
+    #return render_to_response('browse.html', context)

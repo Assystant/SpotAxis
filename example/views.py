@@ -3,8 +3,8 @@
 from __future__ import absolute_import
 import random
 from django.contrib import messages
-
-from django.shortcuts import get_object_or_404, render, redirect, render_to_response
+from django.shortcuts import get_object_or_404, render, redirect
+#from django.shortcuts import get_object_or_404, render, redirect, render_to_response
 from django.template import RequestContext
 
 
@@ -16,7 +16,8 @@ def test(request):
     # else:
     #     form = BasicSearchVacancyForm()
 
-    return render_to_response('test.html',
+    return render(request,'test.html',
+    #return render_to_response('test.html',
                               {'isIndex': True,
-                               },
-                              context_instance=RequestContext(request))
+                               })
+   # , context_instance=RequestContext(request))
