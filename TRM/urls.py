@@ -80,7 +80,7 @@ urlpatterns = [
     
     # Common - Django Contrib Auth
     # url(r'^', include('common.common_auth_urls')),
-    re_path(r'^login/$', django_auth_views.LoginView.as_view(), {'template_name': 'login.html', 'extra_context': {'static_header': True}}, name='auth_login'),
+    re_path(r'^login/$', django_auth_views.LoginView.as_view(template_name= 'login.html', extra_context= {'static_header': True}), name='auth_login'),
     re_path(r'^logout/$', django_auth_views.LogoutView.as_view(), {'next_page': '/'}, name='auth_logout'),
     re_path(r'^password/change/$', django_auth_views.PasswordChangeView.as_view(),
         {'post_change_redirect': 'common_password_change_done',
@@ -218,9 +218,9 @@ urlpatterns = [
     # re_path(r'^test/$', example_views.test, name='test'),
 
     # Vacancies - vacancies.views.py
-    # re_path(r'^search/vacancies/$', vacancy_views.first_search, name='vacancies_first_search'),
-    # re_path(r'^vacancies/$', vacancy_views.search_vacancies, {'template_name': 'search_vacancies.html'},
-    #     name='vacancies_search_vacancies'),
+    re_path(r'^search/vacancies/$', vacancy_views.first_search, name='vacancies_first_search'),
+    re_path(r'^vacancies/$', vacancy_views.search_vacancies, {'template_name': 'search_vacancies.html'},
+        name='vacancies_search_vacancies'),
     # re_path(r'^jobs/fetch/(?P<days>\d+)/$', vacancy_views.filter_vacancies_by_pub_date,
     #     name='vacancies_filter_vacancies_by_pub_date'),
     # re_path(r'^jobs/industry/(?P<industry_id>\d+)/$', vacancy_views.filter_vacancies_by_industry,
