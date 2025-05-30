@@ -100,7 +100,6 @@ from django.http import HttpResponse, Http404, JsonResponse
 from hashids import Hashids
 from payments.models import *
 from django.shortcuts import get_object_or_404, render
-#from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext, Context, TemplateDoesNotExist
 from django.template.loader import get_template, render_to_string
 from django.utils.translation import gettext as _
@@ -2081,9 +2080,7 @@ def compare_candidates(request):
     else:
         raise ValueError()
     return render(request, 'compare_candidates.html', context)
-    #return render_to_response('compare_candidates.html',context,
-    #                          context_instance=RequestContext(request))
-
+   
 @csrf_exempt
 def filter_candidates(request):
     context = {}

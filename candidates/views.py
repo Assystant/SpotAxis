@@ -156,9 +156,7 @@ def record_candidate(request):
     # raise ValueError(form_user.errors)
     return render(request,'candidate_registration.html',
                               {'form_user': form_user})
-    """return render_to_response('candidate_registration.html',
-                              {'form_user': form_user},
-                               context_instance = RequestContext(request))"""
+   
 
 
 @login_required
@@ -313,7 +311,6 @@ def edit_curriculum(request, candidate_id=None):
 
     today = datetime.now().date()
     return render(request,'edit_view_curriculum.html',
-    #return render_to_response('edit_view_curriculum.html',
                               {'user': request.user,
                                'isCV': True,
                                'today': today,
@@ -341,9 +338,8 @@ def edit_curriculum(request, candidate_id=None):
                                'expertises': expertises,
                                'languages': languages,
                                # 'softwares': softwares,
-                               'company': company}),
-                              #context_instance=RequestContext(request))
-
+                               'company': company})
+                              
 
 @login_required
 def cv_personal_info(request):
@@ -825,7 +821,6 @@ def vacancies_postulated(request):
     active_postulates = Postulate.objects.filter(candidate = candidate, vacancy__status = active_status, discard = False)
     rejected_postulates = Postulate.objects.filter(Q(candidate = candidate, discard = True) | Q(candidate = candidate, vacancy__status = finalized_status, finalize = False))
     return render(request,
-   # return render_to_response(
         'vacancies_postulated.html', {
             'isApplication': True,
             'active_postulates': active_postulates,
@@ -834,7 +829,7 @@ def vacancies_postulated(request):
             'active_status':active_status,
             'finalized_status':finalized_status,
         }
-        #, context_instance = RequestContext(request)
+      
     )
 
 
@@ -859,5 +854,5 @@ def vacancies_favorites(request):
     candidate_favs = Candidate_Fav.objects.filter(candidate=candidate)
     return render(request,'vacancies_favorites.html',
                               {'candidate_favs': candidate_favs,
-                              'isFav': True}),
+                              'isFav': True})
                             
