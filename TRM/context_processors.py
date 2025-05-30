@@ -20,11 +20,16 @@ def project_name(request):
 
 def candidate_full_name(request):
     full_name = _('Your Name')
+
     if request.user.is_authenticated:
-        user_profile = request.user.profile.codename
-        if user_profile == 'candidate':
-            candidate = get_object_or_404(Candidate, user=request.user)
-            full_name = '%s %s' % (candidate.first_name, candidate.last_name)
+        profile = getattr(request.user, 'profile', None)
+        if profile and profile.codename == 'candidate':
+            try:
+                candidate = Candidate.objects.get(user=request.user)
+                full_name = f"{candidate.first_name} {candidate.last_name}"
+            except Candidate.DoesNotExist:
+                pass  # Optional: log a warning if needed
+
     return {'candidate_full_name': full_name}
 
 def logo_company_default(request):
@@ -83,24 +88,37 @@ def subdomain(request):
     return {'active_subdomain': slug,'active_host':active_host, 'isRoot':False, 'hasCNAME':hasCNAME}
 
 def user_profile(request):
+    user_profile = None
+    recruiter = None
+
     if request.user.is_authenticated:
-        user_profile = request.user.profile.codename
+        profile = getattr(request.user, 'profile', None)
+        if profile:
+            user_profile = profile.codename
+
+        try:
+            company = Company.objects.get(subdomain__slug=subdomain(request)['active_subdomain'])
+        except Company.DoesNotExist:
+            company = None
+
+        if company:
+            try:
+                recruiter = Recruiter.objects.get(
+                    user=request.user,
+                    company=company,
+                    user__is_active=True
+                )
+            except Recruiter.DoesNotExist:
+                recruiter = None
     else:
-        user_profile = None
-    try:
-        company = Company.objects.get(subdomain__slug=subdomain(request)['active_subdomain'])
-    except:
-        company=None
-    try:
-        recruiter = Recruiter.objects.get(user=request.user,company=company, user__is_active=True)
-    except:
-        recruiter = None
-    # print (recruiter)
-    # print(subdomain(request)['active_subdomain'])
-    # print ('recruiter')
-    #added a new line without mentioning zinnia
-    return {'user_profile': user_profile,'recruiter': recruiter, 'settings':settings}
-    # return {'user_profile': user_profile,'recruiter': recruiter, 'settings':settings, 'zinnia_settings':zinnia_settings}
+        company = None
+
+    return {
+        'user_profile': user_profile,
+        'recruiter': recruiter,
+        'settings': settings,
+    }
+
 
 def notifications(request):
     if request.user.is_authenticated:

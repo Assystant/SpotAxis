@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 """
 Settings for Custom Fields 
 """
@@ -9,7 +10,6 @@ These include allowed field types, widget types, and the user model
 responsible for managing templates.
 """
 
-from __future__ import absolute_import
 from django.conf import settings
 
 TEMPLATE_MANAGER = getattr(settings, 'CF_TEMPLATE_MANAGER', settings.AUTH_USER_MODEL)

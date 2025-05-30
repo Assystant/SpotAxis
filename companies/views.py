@@ -3,18 +3,19 @@ from __future__ import absolute_import
 from __future__ import print_function
 import decimal
 import json
+from multiprocessing import context
 import os
 import random
 import re
 import traceback
 from activities.utils import *
 from activities.models import *
-from candidates.models import Candidate, Academic, CV_Language, Curriculum, Academic_Area, Expertise, Training, Certificate, Project
+from candidates.models import *
 from common import registration_settings
 from common.forms import AdressForm, UserDataForm, BasicUserDataForm, send_TRM_email, UserPhotoForm, SubdomainForm
-from common.models import Profile, Country, send_email_to_TRM, Gender, Subdomain
+from common.models import *
 from companies.forms import CompanyForm, SearchCvForm, CompanyLogoForm, MemberInviteForm
-from companies.models import Company_Industry, Recommendations, Recommendation_Status, Company, Wallet, Recruiter, Stage, RecruiterInvitation, ExternalReferal
+from companies.models import *
 from customField.forms import TemplateForm, FieldFormset
 from datetime import timedelta, datetime, date
 from dateutil.relativedelta import relativedelta
@@ -25,7 +26,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render as render_to_response, redirect, get_object_or_404, render
 from django.template import RequestContext, Context, TemplateDoesNotExist
 from django.template.loader import get_template, render_to_string
@@ -37,7 +38,7 @@ from payments.models import *
 from TRM.context_processors import subdomain
 from TRM.settings import SITE_URL, num_pages, number_objects_page, DEFAULT_SITE_TEMPLATE, STATIC_URL
 from vacancies.forms import VacancyForm, VacancyFileForm, Public_FilesForm
-from vacancies.models import Vacancy, Vacancy_Status, Postulate, Vacancy_Files, VacancyStage
+from vacancies.models import *
 from vacancies.response import JSONResponse, response_mimetype
 from vacancies.serialize import serialize
 from vacancies.views import save_public_application
@@ -58,7 +59,7 @@ def record_recruiter(request, token=None):
     """
     context = {}
     context['success'] = False
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         raise Http404
     if request.GET:
         slabid = request.GET['price_slab']
@@ -142,13 +143,13 @@ def record_recruiter(request, token=None):
     if subdomain_data['active_host']:
         template = 'record_edit_recruiter.html'
         static_header = False
-    return render_to_response(template,
+    return render_to_response(render, template,
                               {'form_user': form_user,
                                'registration': True,
                                'invitation': invitation,
                                'token': token,
                                'static_header': static_header},
-                              context_instance=RequestContext(request))
+                              )
 
 @login_required
 def record_company(request):
@@ -275,7 +276,7 @@ def edit_company(request):
     Handles POST requests to validate and save updated user, address, and company information,
     including updating the company subdomain slug and notifying relevant recruiters.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -335,7 +336,7 @@ def edit_company(request):
                     }
                 ]
             post_org_notification(message_chunks = message_chunks, user=[r.user for r in Recruiter.admins.all()], actor=request.user,  action ="updated", subject = "Company Profile", url=company.get_absolute_url())
-            sub_doman.save()
+            sub_domain.save()
             messages.success(request, _('We have modified the information successfully'))
             subscribers = [r.user for r in user.recruiter.fellow_recruiters.all()]
             return redirect('companies_company_profile')
@@ -364,7 +365,7 @@ def recruiter_profile(request):
     """
     context={}
     context['success'] = False
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -422,7 +423,7 @@ def company_profile(request):
     Handles both standard and AJAX requests, returning JSON responses for AJAX updates.
     Loads and passes company vacancies and their stages to the template.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -497,7 +498,7 @@ def company_profile(request):
 @login_required
 def site_management(request, setting=None):
     """ Handles site management pages for a recruiter's company including template, subdomain, and embed settings."""
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -551,7 +552,7 @@ def site_management(request, setting=None):
 @login_required
 def team_space(request):
     """Displays the team space page where the recruiter can invite new team members and view existing members."""
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
     context={}
@@ -687,7 +688,7 @@ def unpublish_vacancy(request, vacancy_id):
 def applications_for_vacancy(request, vacancy_id):
     """ Displays a list of candidates who have applied for a specific vacancy.
     Handles discarding candidates via POST requests."""
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -870,7 +871,7 @@ def vacancies_summary(request, vacancy_status_name=None):
     renders appropriate templates."""
     """ Show the summary of a Company's vacancies """
     # raise ValueError()
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -878,7 +879,7 @@ def vacancies_summary(request, vacancy_status_name=None):
     if not subdomain_data['active_subdomain']:
         raise Http404
         # company = get_object_or_404(Company, user=request.user)
-    if request.user.is_authenticated() and request.user.profile.codename == 'recruiter':
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter':
         try:
             recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
         except:
@@ -1132,7 +1133,7 @@ def add_update_vacancy(request, vacancy_id=False):
     a vacancy for their company. It supports both displaying the vacancy form and processing
     form submissions including file uploads related to the vacancy.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -1456,7 +1457,7 @@ def add_update_vacancy_hiring_process(request, vacancy_id = None):
     - Retrieves stages already added to the vacancy and all other stages available in the company.
     - Renders the 'add_update_vacancy_hiring_process.html' template with vacancy and stage data.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)    
@@ -1503,7 +1504,7 @@ def add_update_vacancy_talent_sourcing(request, vacancy_id = None):
     - Renders the 'add_update_vacancy_talent_sourcing.html' template with relevant data.
 
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)    
@@ -1551,7 +1552,7 @@ def company_recommendations(request):
     - Fetches recommendations directed to this company.
     - Renders 'recommendations.html' template with company and recommendations data.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -1575,7 +1576,7 @@ def first_search_curricula(request):
     If the user is authenticated but has no registered email, they are redirected
     to complete their email registration.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -1628,7 +1629,7 @@ def search_curricula(request):
 
     Filters are stored in the session to preserve state across page navigations.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -1934,7 +1935,7 @@ def widget_jobs(request):
     subdomain_data = subdomain(request)
     if not subdomain_data['active_subdomain']:
         raise Http404
-    if request.user.is_authenticated() and request.user.profile.codename == 'recruiter':
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter':
         try:
             recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
         except:

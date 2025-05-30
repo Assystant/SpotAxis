@@ -463,7 +463,7 @@ def update_ticket(request, ticket_id, public=False):
     """
 
     if not (public or (
-            request.user.is_authenticated() and
+            request.user.is_authenticated and
             request.user.is_active and (
                 request.user.is_staff or
                 helpdesk_settings.HELPDESK_ALLOW_NON_STAFF_TICKET_UPDATE))):
@@ -724,7 +724,7 @@ def update_ticket(request, ticket_id, public=False):
     ticket.save()
 
     # auto subscribe user if enabled
-    if helpdesk_settings.HELPDESK_AUTO_SUBSCRIBE_ON_TICKET_RESPONSE and request.user.is_authenticated():
+    if helpdesk_settings.HELPDESK_AUTO_SUBSCRIBE_ON_TICKET_RESPONSE and request.user.is_authenticated:
         ticketcc_string, SHOW_SUBSCRIBE = return_ticketccstring_and_show_subscribe(request.user, ticket)
         if SHOW_SUBSCRIBE:
             subscribe_staff_member_to_ticket(ticket, request.user)

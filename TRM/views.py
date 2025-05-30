@@ -61,17 +61,17 @@ def handler500(request):
     return response
 
 def pricing_comparison(request):
-    return render_to_response('pricing.html',{},RequestContext(request))
+    return render_to_response(request,'pricing.html',{})
 
 def about_us(request):
-    return render_to_response('about_us.html',{},context_instance = RequestContext(request))
+    return render_to_response(request, 'about_us.html', {})
 
 def product(request):
-    return render_to_response('product.html',{},context_instance = RequestContext(request))
+    return render_to_response(request, 'product.html',{})
 
 def pricing(request):
     packages = Package.objects.all()
-    return render_to_response('pricing.html',{'packages':packages},context_instance = RequestContext(request))
+    return render_to_response(request, 'pricing.html',{'packages':packages})
 
 def contact(request):
     if request.method == 'POST':
@@ -81,7 +81,7 @@ def contact(request):
             form_contact = ContactForm(request=request)
     else:
         form_contact = ContactForm(request=request)
-    return render_to_response('contact.html',{'form_contact':form_contact},context_instance = RequestContext(request))
+    return render_to_response(request, 'contact.html',{'form_contact':form_contact})
 
 def comingsoon(request):
     if request.method == 'POST':
@@ -91,7 +91,7 @@ def comingsoon(request):
             form_request = EarlyAccessForm(request=request)
     else:
         form_request = EarlyAccessForm(request=request)
-    return render_to_response('comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request},context_instance = RequestContext(request))
+    return render_to_response(request, 'comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request})
 
 def job_board(request):
     subdomain_data = subdomain(request)
