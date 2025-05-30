@@ -6,7 +6,7 @@ from __future__ import absolute_import
 from django.db.models import Q
 from django.utils.translation import gettext as _
 from django import forms
-from phonenumber_field.modelfields import PhoneNumberField
+#from phonenumber_field.modelfields import PhoneNumberField
 from common.forms import get_states, get_municipals, get_initial_country
 from candidates.models import *
 from companies.forms import get_company_industries#, get_company_areas
@@ -230,6 +230,7 @@ class CandidateContactForm(forms.ModelForm):
         error_messages={
             'required': _("City is required")},
     )
+    """
     phone = PhoneNumberField(
         min_length=10,
         max_length=12,
@@ -252,6 +253,7 @@ class CandidateContactForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={'placeholder': _('Cell number to 10 digits'), 'class': "form-control"}),
     )
+    """
     linkedin = forms.URLField(
         widget=forms.TextInput(attrs={'placeholder': _('http://linkedin.com/YourAccount'),
                                       'class': "form-control"}),
@@ -334,7 +336,8 @@ class CandidateContactForm(forms.ModelForm):
 
     class Meta:
         model = Candidate
-        fields = ('nationality', 'state', 'city', 'phone', 'cellphone', 'linkedin', 'facebook', 'twitter', 'google')
+        #fields = ('nationality', 'state', 'city', 'phone', 'cellphone', 'linkedin', 'facebook', 'twitter', 'google')
+        fields = ('nationality', 'state', 'city', 'linkedin', 'facebook', 'twitter', 'google')
 
 class ObjectiveForm(forms.ModelForm):
     """
@@ -1081,6 +1084,7 @@ class CandidateMiniForm(forms.ModelForm):
         label=_('Email'),
         error_messages={'required': _("Enter your Email")},
     )
+    """
     phone = PhoneNumberField(
         min_length=10,
         max_length=12,
@@ -1092,6 +1096,7 @@ class CandidateMiniForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={'placeholder': _('Local telephone number to 10 digits'), 'class': "form-control"}),
     )
+    """
     nationality = forms.ModelChoiceField(
         queryset=countries,
         widget=forms.Select(attrs={'class': "form-control"}),
@@ -1183,7 +1188,8 @@ class CandidateMiniForm(forms.ModelForm):
 
     class Meta:
         model = Candidate
-        fields =('public_photo','last_name','public_email','first_name', 'nationality', 'state', 'city', 'phone')
+        #fields =('public_photo','last_name','public_email','first_name', 'nationality', 'state', 'city', 'phone')
+        fields =('public_photo','last_name','public_email','first_name', 'nationality', 'state', 'city')
         # exclude = ('user', 'country', 'objective', 'courses', 'photo','')
 
 class ExpertiseMiniForm(forms.ModelForm):

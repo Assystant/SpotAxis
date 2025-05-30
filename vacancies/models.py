@@ -14,7 +14,6 @@ from django.db.models import Q, Sum
 from django.utils.translation import gettext as _
 from TRM import settings
 from utils import get_file_content, get_file_text, tagcloud
-from six.moves import range
 
 Name = _('Name')
 
