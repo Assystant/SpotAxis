@@ -29,6 +29,8 @@ from django.views.generic import TemplateView
 
 from helpdesk import settings as helpdesk_settings
 from helpdesk.views import feeds, staff, public, api, kb
+from helpdesk.views.auth import HelpdeskLoginView, HelpdeskLogoutView
+from helpdesk.views.help import HelpAPIView, HelpContextView, SystemSettingsView
 
 
 class DirectTemplateView(TemplateView):
@@ -108,8 +110,8 @@ urlpatterns += [
 
 urlpatterns += [
     path(r'^api/(?P<method>[a-z_-]+)/$', api.api, name='helpdesk_api'),
-    path(r'^login/$', auth_views.login, name='login'),
-    path(r'^logout/$', auth_views.logout, name='logout'),
+    path(r'^login/$', HelpdeskLoginView.as_view(), name='login'),
+    path(r'^logout/$', HelpdeskLogoutView.as_view(), name='logout'),
 ]
 
 if helpdesk_settings.HELPDESK_KB_ENABLED:
@@ -121,7 +123,7 @@ if helpdesk_settings.HELPDESK_KB_ENABLED:
     ]
 
 urlpatterns += [
-    path(r'^api/$', TemplateView.as_view(), name='helpdesk_api_help'),
-    path(r'^help/context/$', TemplateView.as_view(), name='helpdesk_help_context'),
-    path(r'^system_settings/$', DirectTemplateView.as_view(), name='helpdesk_system_settings'),
+    path(r'^api/$', HelpAPIView.as_view(), name='helpdesk_api_help'),
+    path(r'^help/context/$', HelpContextView.as_view(), name='helpdesk_help_context'),
+    path(r'^system_settings/$', SystemSettingsView.as_view(), name='helpdesk_system_settings'),
 ]

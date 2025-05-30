@@ -15,6 +15,7 @@ from common import views as common_views
 from common import ajax as common_ajax_views
 from companies import views as companies_views
 from TRM import views as TRM_views
+from TRM.views.static import RobotsTxtView, SitemapXmlView, GoogleVerificationView
 from example import views as example_views
 from payments import views as payments_views
 from vacancies import views as vacancy_views
@@ -30,9 +31,9 @@ urlpatterns = [
     # Admin:
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', include(admin.site.urls)),
-    path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
-    path('sitemap.xml', TemplateView.as_view(template_name='sitemap.xml', content_type='text/plain')),
-    path('google7467b69f25fa8f1e.html', TemplateView.as_view(template_name='google7467b69f25fa8f1e.html')),
+    path('robots.txt', RobotsTxtView.as_view()),
+    path('sitemap.xml', SitemapXmlView.as_view()),
+    path('google7467b69f25fa8f1e.html', GoogleVerificationView.as_view()),
   
     # API URLs
     path('api/common/', include('common.api.urls')),
