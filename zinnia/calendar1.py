@@ -2,7 +2,7 @@
 
 
 from __future__ import absolute_import
-from .calendar import HTMLCalendar
+from calendar import HTMLCalendar
 from datetime import date
 
 from django.urls import reverse
@@ -16,7 +16,7 @@ from zinnia.models.entry import Entry
 AMERICAN_TO_EUROPEAN_WEEK_DAYS = [6, 0, 1, 2, 3, 4, 5]
 
 
-class Calendar(HTMLCalendar):
+class ZinniaCalendar(HTMLCalendar):
     """
     Extension of the HTMLCalendar.
     """

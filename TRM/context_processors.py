@@ -20,7 +20,7 @@ def project_name(request):
 
 def candidate_full_name(request):
     full_name = _('Your Name')
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user_profile = request.user.profile.codename
         if user_profile == 'candidate':
             candidate = get_object_or_404(Candidate, user=request.user)
@@ -83,7 +83,7 @@ def subdomain(request):
     return {'active_subdomain': slug,'active_host':active_host, 'isRoot':False, 'hasCNAME':hasCNAME}
 
 def user_profile(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user_profile = request.user.profile.codename
     else:
         user_profile = None
@@ -103,7 +103,7 @@ def user_profile(request):
     # return {'user_profile': user_profile,'recruiter': recruiter, 'settings':settings, 'zinnia_settings':zinnia_settings}
 
 def notifications(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         msgs = Notification.objects.filter(user=request.user)
         try:
             request.session['last_notification'] = msgs.latest('id').id

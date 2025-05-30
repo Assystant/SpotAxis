@@ -2,8 +2,8 @@
 
 from __future__ import absolute_import
 import datetime
-from datetime import date
-from django.shortcuts import render_to_response, redirect
+from datetime import date, timezone
+from django.shortcuts import render as render_to_response, redirect
 from django.urls import reverse
 from django.template import RequestContext
 import autodoc
@@ -12,7 +12,6 @@ from common.models import Employment_Type, Degree
 from companies.models import Company_Industry as Industry, Company
 from vacancies.models import Vacancy, Salary_Type, Employment_Experience as Experience
 from vacancies.forms import BasicSearchVacancyForm
-from django.utils.timezone import utc
 from TRM.context_processors import subdomain
 from TRM import settings
 from django.db.models import Q, Max
@@ -41,7 +40,7 @@ def index(request):
             return redirect('vacancies_first_search_vacancies')
     else:
         form = BasicSearchVacancyForm()
-    return render_to_response('index.html', {'isIndex': True, 'form': form}, context_instance=RequestContext(request))
+    return render_to_response(request, 'index.html', {'isIndex': True, 'form': form})
 
 def companies(request):
     return render_to_response('company_index.html', {'isCompanie': True}, context_instance=RequestContext(request))

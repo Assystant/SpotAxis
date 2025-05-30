@@ -4,6 +4,8 @@ from __future__ import print_function
 import ast
 import json
 import traceback
+
+from pytz import utc
 from activities.utils import post_activity
 from candidates.models import Candidate, Curriculum, Academic, Academic_Status
 from common.forms import ContactForm
@@ -18,12 +20,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse, NoReverseMatch, resolve
 from django.db.models import Count, Q
 from django.http import QueryDict, HttpResponseNotFound, JsonResponse, Http404, HttpResponse
-from django.shortcuts import render_to_response, redirect, get_object_or_404, render
+from django.shortcuts import render as render_to_response, redirect, get_object_or_404, render
 from django.template import RequestContext,Context, Node, Library, TemplateSyntaxError, VariableDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.utils.six.moves.urllib.parse import urlparse
-from django.utils.timezone import utc
+from urllib.parse import urlparse
+from datetime import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from weasyprint import HTML

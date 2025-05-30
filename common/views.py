@@ -2,7 +2,7 @@
 
 import traceback
 import urllib
-import urlparse
+from urllib.parse import urlparse
 import requests
 import json
 from django.urls import reverse

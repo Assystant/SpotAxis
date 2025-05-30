@@ -11,6 +11,7 @@
     "cut"
   ],
   "dependencies": {
+    "clipboard": "file:",
     "good-listener": "^1.2.0",
     "select": "^1.0.6",
     "tiny-emitter": "^1.0.0"
