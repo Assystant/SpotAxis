@@ -4,7 +4,6 @@ from __future__ import absolute_import
 import datetime
 from datetime import date
 from django.shortcuts import render, redirect
-#from django.shortcuts import render_to_response, redirect
 from django.urls import reverse
 from django.template import RequestContext
 import autodoc
@@ -43,47 +42,38 @@ def index(request):
     else:
         form = BasicSearchVacancyForm()
         return render(request,'index.html', {'isIndex': True, 'form': form})
-    #return render_to_response('index.html', {'isIndex': True, 'form': form}, context_instance=RequestContext(request))
-
+   
 def companies(request):
       return render(request,'company_index.html', {'isCompanie': True})
-    #return render_to_response('company_index.html', {'isCompanie': True}, context_instance=RequestContext(request))
-
+   
 def privacy_policy(request):
      return render(request,'privacy_policy.html', {'isProfile': True})
-    #return render_to_response('privacy_policy.html', {'isProfile': True}, context_instance=RequestContext(request))
-
+    
 def terms_and_conditions(request):
      return render(request,'terms_and_conditions.html', {'isProfile': True})
-    #return render_to_response('terms_and_conditions.html', {'isProfile': True}, context_instance=RequestContext(request))
-
+    
 def email_campaign_0(request):
     
-    #return render_to_response('email_campaigns/campaign_0.html', context_instance=RequestContext(request))
+    
  def handler500(request):
     response = render('500.html', {})
-    """response = render_to_response('500.html', {},
-                                  context_instance=RequetContext(request))"""
     response.status_code = 500
     return response
 
 def pricing_comparison(request):
      return render(request,'pricing.html',{})
-    #return render_to_response('pricing.html',{},RequestContext(request))
-
+   
 def about_us(request):
      return render(request,'about_us.html',{})
-    #return render_to_response('about_us.html',{},context_instance = RequestContext(request))
+    
 
 def product(request):
      return render(request,'product.html',{})
-    #return render_to_response('product.html',{},context_instance = RequestContext(request))
-
+    
 def pricing(request):
     packages = Package.objects.all()
     return render(request,'pricing.html',{'packages':packages})
-    #return render_to_response('pricing.html',{'packages':packages},context_instance = RequestContext(request))
-
+   
 def contact(request):
     if request.method == 'POST':
         form_contact = ContactForm(request=request,data=request.POST )
@@ -93,8 +83,7 @@ def contact(request):
     else:
         form_contact = ContactForm(request=request)
         return render(request,'contact.html',{'form_contact':form_contact})
-    #return render_to_response('contact.html',{'form_contact':form_contact},context_instance = RequestContext(request))
-
+    
 def comingsoon(request):
     if request.method == 'POST':
         form_request = EarlyAccessForm(request=request,data=request.POST )
@@ -104,8 +93,7 @@ def comingsoon(request):
     else:
         form_request = EarlyAccessForm(request=request)
         return render(request,'comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request})
-    #return render_to_response('comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request},context_instance = RequestContext(request))
-
+    
 def job_board(request):
     subdomain_data = subdomain(request)
     if subdomain_data['active_host']:

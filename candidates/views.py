@@ -12,10 +12,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-#from django.http import Http404, JsonResponse
 from django.http import Http404, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-#from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 from weasyprint import HTML
 from companies.models import Company_Industry
@@ -69,7 +67,6 @@ def resume_builder(request):
     projectForm = ProjectForm()
     languageForm = CvLanguageForm()
     return render(request,'resume_builder.html',
-    #return render_to_response('resume_builder.html',
                               {'user': request.user,
                                'ispublicCV': True,
                                'form_academic': academicForm,
@@ -84,10 +81,10 @@ def resume_builder(request):
                                'form_training': trainingForm,
                                'form_certificate': certificateForm,
                                'form_project': projectForm,
-                               'form_language': languageForm}),
+                               'form_language': languageForm})
 
                                
-                              #context_instance=RequestContext(request))
+                              
 
 def resume_builder_templates(request,candidate_id=None):
     """
@@ -112,9 +109,9 @@ def resume_builder_templates(request,candidate_id=None):
     context={}
     context['candidate'] = candidate
     return render(request,'resume_template.html',{
-    #return render_to_response('resume_template.html',{
+    
                                                         'candidate':candidate,
-                                                    }) #, context_instance = RequestContext(request))
+                                                    }) 
 
     return JsonResponse(context)
 def record_candidate(request):
@@ -391,9 +388,6 @@ def cv_personal_info(request):
         return render(request,'cv_personal_form.html',
                               {'isCV': True, 'form_candidate': form_candidate, 'form_user_photo': form_user_photo})
 
-        """ return render_to_response('cv_personal_form.html',
-                              {'isCV': True, 'form_candidate': form_candidate, 'form_user_photo': form_user_photo},
-                              context_instance = RequestContext(request))"""
     else:
         return JsonResponse(context)
 
@@ -421,9 +415,7 @@ def cv_objective(request):
         form_objective = ObjectiveForm(instance=candidate)
         return render(request,'cv_objective_form.html',
                               {'isCV': True, 'form_objective': form_objective, 'objective': candidate.objective})
-    """return render_to_response('cv_objective_form.html',
-                              {'isCV': True, 'form_objective': form_objective, 'objective': candidate.objective},
-                              context_instance=RequestContext(request))"""
+   
 
 
 # @login_required
@@ -504,9 +496,7 @@ def cv_expertise(request, expertise_id=None):
     if not request.is_ajax():
         return render(request,'cv_expertise_form.html',
                               {'isCV': True, 'form_expertise': form_expertise, 'update': update})
-        """return render_to_response('cv_expertise_form.html',
-                              {'isCV': True, 'form_expertise': form_expertise, 'update': update},
-                              context_instance=RequestContext(request))"""
+        
     else:
         return JsonResponse(context)
 
@@ -570,9 +560,7 @@ def cv_academic(request, academic_id=None):
     if not request.is_ajax():
         return render(request,'cv_academic_form.html',
                               {'isCV': True, 'form_academic': form_academic, 'update': update})
-        """return render_to_response('cv_academic_form.html',
-                              {'isCV': True, 'form_academic': form_academic, 'update': update},
-                              context_instance = RequestContext(request))"""
+        
     else:
         return JsonResponse(context)
 
@@ -601,10 +589,7 @@ def cv_language(request):
         formset_languages = LanguageFormSet(queryset=CV_Language.objects.filter(candidate=candidate))
     return render(request,'cv_language_form.html',
                               {'isCV': True, 'formset_languages': formset_languages, })
-    """return render_to_response('cv_language_form.html',
-                              {'isCV': True, 'formset_languages': formset_languages, },
-                              context_instance = RequestContext(request))"""
-
+    
 @login_required
 def cv_delete_item(request, expertise_id=None, academic_id=None, software_id=None):
     """
@@ -873,7 +858,6 @@ def vacancies_favorites(request):
                 fav.delete()
     candidate_favs = Candidate_Fav.objects.filter(candidate=candidate)
     return render(request,'vacancies_favorites.html',
-    #return render_to_response('vacancies_favorites.html',
                               {'candidate_favs': candidate_favs,
                               'isFav': True}),
-                            # context_instance = RequestContext(request))
+                            
