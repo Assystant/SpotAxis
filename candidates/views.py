@@ -809,9 +809,9 @@ def create_candidates(request):
             curriculum.academic = True
         if languages:
             curriculum.language = True
-        # if softwares:
+        """# if softwares:
         #     curriculum.software = True
-        # Setting percentage completion of Curriculum
+        # Setting percentage completion of Curriculum"""
         curriculum.set_advance()
         curriculum.save()
 
@@ -876,4 +876,4 @@ def vacancies_favorites(request):
     #return render_to_response('vacancies_favorites.html',
                               {'candidate_favs': candidate_favs,
                               'isFav': True}),
-                             # context_instance = RequestContext(request))
+                            # context_instance = RequestContext(request))
