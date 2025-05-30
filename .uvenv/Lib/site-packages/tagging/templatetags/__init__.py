@@ -1,3 +1,0 @@
-"""
-Templatetags module for tagging.
-"""
