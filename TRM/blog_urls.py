@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
-from django.conf.urls import *
-# from django.conf import settings
+from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.http import HttpResponse
@@ -21,41 +20,38 @@ from payments import views as payments_views
 from vacancies import views as vacancy_views
 from socialmultishare import views as socialmultishare_views
 from TRM import settings
-# from django.views.generic.simple import direct_to_template
 from companies.views import upload_vacancy_file, delete_vacancy_file
 
 admin.autodiscover()
 handler500 = 'TRM.views.handler500'
 
 # blog_urls = ([
-#     url(r'^', include('zinnia.urls.capabilities')),
-#     url(r'^search/', include('zinnia.urls.search')),
-#     url(r'^sitemap/', include('zinnia.urls.sitemap')),
-#     url(r'^trackback/', include('zinnia.urls.trackback')),
-#     url(r'^blog/tags/', include('zinnia.urls.tags')),
-#     url(r'^blog/feeds/', include('zinnia.urls.feeds')),
-#     url(r'^blog/random/', include('zinnia.urls.random')),
-#     url(r'^blog/authors/', include('zinnia.urls.authors')),
-#     url(r'^blog/categories/', include('zinnia.urls.categories')),
-#     url(r'^blog/comments/', include('zinnia.urls.comments')),
-#     url(r'^blog/', include('zinnia.urls.entries')),
-#     url(r'^blog/', include('zinnia.urls.archives')),
-#     url(r'^blog/', include('zinnia.urls.shortlink')),
-#     url(r'^blog/', include('zinnia.urls.quick_entry'))
+#     path('', include('zinnia.urls.capabilities')),
+#     path('search/', include('zinnia.urls.search')),
+#     path('sitemap/', include('zinnia.urls.sitemap')),
+#     path('trackback/', include('zinnia.urls.trackback')),
+#     path('blog/tags/', include('zinnia.urls.tags')),
+#     path('blog/feeds/', include('zinnia.urls.feeds')),
+#     path('blog/random/', include('zinnia.urls.random')),
+#     path('blog/authors/', include('zinnia.urls.authors')),
+#     path('blog/categories/', include('zinnia.urls.categories')),
+#     path('blog/comments/', include('zinnia.urls.comments')),
+#     path('blog/', include('zinnia.urls.entries')),
+#     path('blog/', include('zinnia.urls.archives')),
+#     path('blog/', include('zinnia.urls.shortlink')),
+#     path('blog/', include('zinnia.urls.quick_entry'))
 # ], 'zinnia')
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    # url(r'^', include('zinnia.urls')),
-	url(r'^comments/', include('django_comments.urls')),
-
-
-	# url(r'^', include(blog_urls))
+    path('admin/', admin.site.urls),
+    # path('', include('zinnia.urls')),
+    path('comments/', include('django_comments.urls')),
+    # path('', include(blog_urls))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #
 # if settings.DEBUG:
 urlpatterns += [
-    url(r'^media/(?P<path>.*)$', serve, {
+    path('media/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT,
     }),
 ]
