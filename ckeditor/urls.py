@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-from django.urls import re_path
+from django.urls import path
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.cache import never_cache
 
@@ -13,6 +13,6 @@ Access to these views is restricted to staff members, with caching disabled
 for the browsing view to ensure fresh content.
 """
 urlpatterns = [
-    re_path(r'^upload/', staff_member_required(views.upload), name='ckeditor_upload'),
-    re_path(r'^browse/', never_cache(staff_member_required(views.browse)), name='ckeditor_browse'),
+    path('upload/', staff_member_required(views.upload), name='ckeditor_upload'),
+    path('browse/', never_cache(staff_member_required(views.browse)), name='ckeditor_browse'),
 ]

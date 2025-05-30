@@ -599,6 +599,8 @@ class Training(models.Model):
 ## Start of Section Certificate ##
 
 class Certificate(models.Model):
+
+    
     """
     Model representing a certificate associated with a candidate.
 

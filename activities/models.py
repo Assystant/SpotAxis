@@ -127,6 +127,7 @@ class Activity(models.Model):
 
 class Notification(models.Model):
 
+
     """
     A model representing notifications sent to users.
     

@@ -128,7 +128,7 @@ def send_TRM_email(subject_template_name, email_template_name, context_email, to
             msg.attach_file(file)
         return msg.send()
     except Exception as e:
-        print('%s (%s)' % (str(e), type(e)))
+        print ('%s (%s)' % (e.message, type(e)))
         return 0
 
 def send_email_to_TRM(subject="No Subject", body_email=None, notify = False):
@@ -240,7 +240,6 @@ def generate_confirm_expire_date():
 
 
 class EmailVerification(models.Model):
-
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=False, null=True, default=None, on_delete=models.SET_NULL)
     old_email = models.EmailField(_('Email Old'))
     new_email = models.EmailField(_('Email New'))
@@ -304,7 +303,6 @@ class Country(models.Model):
 
 
 class State(models.Model):
-
     country = models.ForeignKey(Country,verbose_name=_('Country'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.SET_NULL)
     name = models.CharField(Name, max_length=60, null=True, blank=True, default=None)
 
@@ -318,8 +316,7 @@ class State(models.Model):
 
 
 class Municipal(models.Model):
-
-    state = models.ForeignKey(State, verbose_name=_('State'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.SET_NULL)
+    state = models.ForeignKey(State, verbose_name=_(u'State'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.CASCADE)
 
     name = models.CharField(Name, max_length=80, null=True, blank=True, default=None)
 
