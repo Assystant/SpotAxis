@@ -2,7 +2,7 @@
 
 This document outlines the standards and processes all contributors must follow while contributing to the project. These rules ensure code quality, consistency, and maintainability.
 
----
+-----
 
 # **Who Can Contribute?** Everyone is welcome to contribute to SpotAxis, including but not limited to:
 
