@@ -4,7 +4,11 @@
 
 from __future__ import absolute_import
 import os.path
+from pathlib import Path
 from rest_framework.permissions import AllowAny
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 PROJECT_NAME = 'SpotAxis'
 
@@ -14,7 +18,7 @@ ADMINS = (('Saket', 'saket@spotaxis.com'),('Holesh','holesh@spotaxis.com'))
 
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'spotaxis.com']
 
 # SESSION_COOKIE_DOMAIN = '.'
 
@@ -168,14 +172,15 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
-                'django.core.context_processors.debug',
-                'django.core.context_processors.i18n',
-                'django.core.context_processors.media',
-                'django.core.context_processors.static',
-                'django.core.context_processors.request',
-                'django.core.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
                 'django.template.context_processors.request',
+                'django.template.context_processors.tz',
+                # 'django.core.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                # 'django.template.context_processors.request',
                 'TRM.context_processors.project_name',
                 'TRM.context_processors.user_profile',
                 'TRM.context_processors.candidate_full_name',

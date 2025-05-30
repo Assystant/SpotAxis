@@ -44,7 +44,7 @@ urlpatterns = [
     # re_path(r'help/', include('helpdesk.urls')),
 
     # Index
-    re_path(r'^$', vacancy_views.search_vacancies, {'template_name': 'index.html'}, name='TRM-index'),
+    re_path(r'^$', TRM_views.index, name='TRM-index'),
     # url(r'^pricing/$', TRM_views.pricing_comparison, name = 'pricing_comparison'),
     re_path(r'^aboutus/$',  TRM_views.about_us, name="about_us"),
     re_path(r'^product/$',  TRM_views.product, name="product"),

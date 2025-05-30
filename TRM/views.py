@@ -40,7 +40,7 @@ def index(request):
             return redirect('vacancies_first_search_vacancies')
     else:
         form = BasicSearchVacancyForm()
-    return render_to_response('index.html', {'isIndex': True, 'form': form}, context_instance=RequestContext(request))
+    return render_to_response(request, 'index.html', {'isIndex': True, 'form': form})
 
 def companies(request):
     return render_to_response('company_index.html', {'isCompanie': True}, context_instance=RequestContext(request))
