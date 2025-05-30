@@ -36,6 +36,9 @@ class TestKBDisabled(TestCase):
             reload_urlconf()
 
     def test_navigation(self):
+
+        """Test proper rendering of navigation.html by accessing the dashboard"""
+
         """
         Test proper rendering of navigation.html by accessing the dashboard
         
@@ -44,6 +47,7 @@ class TestKBDisabled(TestCase):
         Confirms that reversing 'helpdesk_kb_index' raises NoReverseMatch,
         and that the dashboard loads with HTTP 200 status.
         """
+
         from django.urls import NoReverseMatch
 
         self.client.login(username=get_staff_user().get_username(), password='password')

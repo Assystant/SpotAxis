@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Count
+from django.utils.encoding import smart_text
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext_lazy 
