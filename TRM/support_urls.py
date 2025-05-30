@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
-from django.conf.urls import *
-# from django.conf import settings
+from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.http import HttpResponse
@@ -21,7 +20,6 @@ from payments import views as payments_views
 from vacancies import views as vacancy_views
 from socialmultishare import views as socialmultishare_views
 from TRM import settings
-# from django.views.generic.simple import direct_to_template
 from companies.views import upload_vacancy_file, delete_vacancy_file
 
 admin.autodiscover()
@@ -34,7 +32,7 @@ urlpatterns = [
 #
 # if settings.DEBUG:
 urlpatterns += [
-    url(r'^media/(?P<path>.*)$', serve, {
+    path('media/<path:path>', serve, {
         'document_root': settings.MEDIA_ROOT,
     }),
 ]
