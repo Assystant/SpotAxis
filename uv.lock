@@ -399,6 +399,15 @@ wheels = [
 ]
 
 [[package]]
+name = "email-reply-parser"
+version = "0.5.12"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ed/f9/3fbd22530467a831a0506267477c5005d24661d07abf776678ab42d51b35/email_reply_parser-0.5.12.tar.gz", hash = "sha256:9dbf3eca69990932234f09e7f50aa73756574fc1f88e88c324fec1a741ee6a74", size = 4694, upload-time = "2020-10-07T17:26:34.734Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ab/8d/11696d31eafc68ceea8108f635d30aefc6df9cb27640949f45aec963d637/email_reply_parser-0.5.12-py3-none-any.whl", hash = "sha256:3499c02284679e020acf8aa30ef9e43c62f9ab5ccee0a35bfac85a0c1fa685fd", size = 4139, upload-time = "2020-10-07T17:26:46.835Z" },
+]
+
+[[package]]
 name = "fonttools"
 version = "4.58.1"
 source = { registry = "https://pypi.org/simple" }
@@ -550,6 +559,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/2f/15/222b423b0b88689c266d9eac4e61396fe2cc53464459d6a37618ac863b24/markdown-3.8.tar.gz", hash = "sha256:7df81e63f0df5c4b24b7d156eb81e4690595239b7d70937d0409f1b0de319c6f", size = 360906, upload-time = "2025-04-11T14:42:50.928Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/51/3f/afe76f8e2246ffbc867440cbcf90525264df0e658f8a5ca1f872b3f6192a/markdown-3.8-py3-none-any.whl", hash = "sha256:794a929b79c5af141ef5ab0f2f642d0f7b1872981250230e72682346f7cc90dc", size = 106210, upload-time = "2025-04-11T14:42:49.178Z" },
+]
+
+[[package]]
+name = "mots-vides"
+version = "2015.5.11"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ce/f3/5e55cedd94550cbfd9dd62d48cd0d535de049e8a49e066ca720326101bbe/mots-vides-2015.5.11.tar.gz", hash = "sha256:cfbc05d38538af21e20e7b1c44c82076f1489c8d4949019f184f0765c8bf6a44", size = 53017, upload-time = "2015-05-11T13:16:40.243Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/95/34/f5a4ec9cfad0e484b087de46e381efc991d5fde07412de51b85f59853ed7/mots_vides-2015.5.11-py2.py3-none-any.whl", hash = "sha256:5c00af05234f4021396c6d888c8e34142cfe880fe732ff063f6cfad2d6342dc8", size = 59484, upload-time = "2015-05-11T13:16:43.315Z" },
 ]
 
 [[package]]
@@ -952,10 +970,12 @@ dependencies = [
     { name = "django-xmlrpc" },
     { name = "djangorestframework" },
     { name = "docutils" },
+    { name = "email-reply-parser" },
     { name = "hashids" },
     { name = "ipgetter2" },
     { name = "mammoth" },
     { name = "markdown" },
+    { name = "mots-vides" },
     { name = "oauth2" },
     { name = "paypalrestsdk" },
     { name = "pdfminer-six" },
@@ -992,10 +1012,12 @@ requires-dist = [
     { name = "django-xmlrpc", specifier = ">=0.1.8" },
     { name = "djangorestframework", specifier = ">=3.16.0" },
     { name = "docutils", specifier = ">=0.21.2" },
+    { name = "email-reply-parser", specifier = ">=0.5.12" },
     { name = "hashids", specifier = ">=1.3.1" },
     { name = "ipgetter2", specifier = ">=1.1.10" },
     { name = "mammoth", specifier = ">=1.9.1" },
     { name = "markdown", specifier = ">=3.8" },
+    { name = "mots-vides", specifier = ">=2015.5.11" },
     { name = "oauth2", specifier = ">=1.9.0.post1" },
     { name = "paypalrestsdk", specifier = ">=1.13.3" },
     { name = "pdfminer-six", specifier = ">=20250506" },

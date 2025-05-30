@@ -4,7 +4,6 @@
 
 from __future__ import absolute_import
 from el_pagination.tests.integration import SeleniumTestCase
-from six.moves import range
 
 
 class OnScrollPaginationTest(SeleniumTestCase):

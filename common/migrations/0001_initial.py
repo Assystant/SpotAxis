@@ -10,7 +10,7 @@ import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-import phonenumber_field.modelfields
+#import phonenumber_field.modelfields
 
 
 class Migration(migrations.Migration):
@@ -35,10 +35,10 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
                 ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
-        .        ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('phone', phonenumber_field.modelfields.PhoneNumberField(blank=True, default=None, null=True, verbose_name='Phone')),
+                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
+                #('phone', phonenumber_field.modelfields.PhoneNumberField(blank=True, default=None, null=True, verbose_name='Phone')),
                 ('phone_ext', models.PositiveIntegerField(blank=True, default=None, null=True, verbose_name='Extension')),
-                ('cellphone', phonenumber_field.modelfields.PhoneNumberField(blank=True, default=None, null=True, verbose_name='Celular')),
+                #('cellphone', phonenumber_field.modelfields.PhoneNumberField(blank=True, default=None, null=True, verbose_name='Celular')),
                 ('photo', models.ImageField(blank=True, default=b'logos_TRM/logo_TRM_user_default.png', max_length=200, null=True, upload_to=b'photos/', verbose_name='Photo')),
                 ('logued_by', models.CharField(blank=True, choices=[(b'EL', b'Site'), (b'FB', b'Facebook'), (b'GO', b'Google'), (b'LI', b'LinkedIn'), (b'TW', b'Twitter')], default=None, max_length=2, null=True, verbose_name='Loggin Method')),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),

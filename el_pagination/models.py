@@ -14,7 +14,6 @@ from el_pagination import (
     settings,
     utils,
 )
-from six.moves import range
 
 
 # Page templates cache.

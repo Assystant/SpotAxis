@@ -14,7 +14,6 @@ from el_pagination import (
     utils,
 )
 from el_pagination.paginators import DefaultPaginator
-from six.moves import range
 
 
 @contextmanager

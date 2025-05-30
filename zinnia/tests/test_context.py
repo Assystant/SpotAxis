@@ -7,7 +7,6 @@ from django.test import TestCase
 from zinnia.context import get_context_first_matching_object
 from zinnia.context import get_context_first_object
 from zinnia.context import get_context_loop_positions
-from six.moves import range
 
 
 class ContextTestCase(TestCase):
