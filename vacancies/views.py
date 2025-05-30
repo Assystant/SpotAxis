@@ -7,9 +7,9 @@ import traceback
 
 from pytz import utc
 from activities.utils import post_activity
-from candidates.models import Candidate, Curriculum, Academic, Academic_Status
+from candidates.models import Candidate, Curriculum, Academic, Academic_Status, Expertise
 from common.forms import ContactForm
-from common.models import Employment_Type, Country, Gender, User, Profile, SocialAuth, send_TRM_email
+from common.models import Employment_Type, Country, Gender, User, Profile, SocialAuth, send_TRM_email, State, Municipal, Area
 from common.views import debug_token, get_fb_user_groups, get_fb_user_pages, get_li_companies
 from companies.models import Company, Stage, Recruiter, Company_Industry as Industry, ExternalReferal
 from customField.forms import TemplatedForm
@@ -2130,9 +2130,9 @@ def new_application_resolve_conflicts(request, vacancy_id, card_type):
                 end_date = request.POST.get('end_date','').strip()
                 industry = request.POST.get('industry','').strip()
                 try:
-                    industry = Company_Industry.objects.filter(id__in=industry)
+                    industry = Industry.objects.filter(id__in=industry)
                 except:
-                    industry = Company_Industry.objects.none()
+                    industry = Industry.objects.none()
                 old_cards = request.POST.get('old_cards')
                 try:
                     old_expertises = Expertise.objects.filter(id__in=old_cards)
