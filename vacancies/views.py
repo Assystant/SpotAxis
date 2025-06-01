@@ -18,7 +18,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse, NoReverseMatch, resolve
 from django.db.models import Count, Q
 from django.http import QueryDict, HttpResponseNotFound, JsonResponse, Http404, HttpResponse
-from django.shortcuts import render,redirect, get_object_or_404, render
+from django.shortcuts import render,redirect, get_object_or_404
 from django.template import RequestContext,Context, Node, Library, TemplateSyntaxError, VariableDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -57,7 +57,7 @@ def first_search(request):
     Retrieve the Vacancy_Status instance with codename 'open' representing active vacancies.
 
     Returns:
-        Vacancy_Status or None: The Vacancy_Status object with codename 'open', or None if not found.
+        Vacancy_Status or None: The Vacancy_Status object with codename 'open' or None if not found.
     """
     if request.user.is_authenticated() and not request.user.email:
         # If user is logged in and has no email...
@@ -1343,7 +1343,7 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
                                'form_question': form_question,
                                'company': company,
                                'vacancy_stage': vacancy_stage,
-                               'stage_section': str(stage_section)}),
+                               'stage_section': str(stage_section)})
                                # 'vacancies': vacancies},
                                # 'public_form': public_form})
                             
@@ -1675,13 +1675,12 @@ def public_apply(request, vacancy_id = None, referer = None, external_referer=No
         messages.error(request, error_message)
         return redirect('TRM-Subindex')
     response =  render(request,'job_public_apply.html',{
-    #response =  render_to_response('job_public_apply.html',{
         'company': company,
         'vacancy': vacancy,
         'referer': referer,
         'external_referer': external_referer,
         'public_form': public_form,
-        })  #,context_instance=RequestContext(request))
+        })  
     if referer:
         response.set_cookie('referer-'+str(vacancy.id),str(referer.id))
     if external_referer:
@@ -2301,7 +2300,7 @@ def vacancy_talent_sourcing(request, vacancy_id):
         raise Http404
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id,company__in=recruiter.company.all())
     external_referers = ExternalReferal.objects.filter(company=company, referal_type='ER')
-    return render(request, 'vacancy_talent_sourcing.html', {
+    return render(request,'vacancy_talent_sourcing.html', {
         'vacancy': vacancy,
         'isVacancy': True,
         'vacancy_id': vacancy_id,
