@@ -1,8 +1,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
-from django.shortcuts import render
 from django.conf import settings
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, JsonResponse
@@ -15,9 +14,9 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 from utils import validate_code
-# Create your views here.
+"""# Create your views here.
 # gateway = braintree.BraintreeGateway(access_token=settings.BRAINTREE_ACCESS_TOKEN)
-# gateway = braintree.Configuration.gateway()
+# gateway = braintree.Configuration.gateway()"""
 
 """
 This module handles the payment processing view for company subscription plans.
