@@ -6,6 +6,7 @@ import json
 import traceback
 
 from pytz import utc
+from TRM.context_processors import subdomain
 from activities.utils import post_activity
 from candidates.models import *
 from common.forms import ContactForm

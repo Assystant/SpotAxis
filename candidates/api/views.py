@@ -4,7 +4,7 @@ from candidates.models import (
     Candidate, Expertise, Academic, CV_Language,
     Training, Certificate, Project, Curriculum
 )
-from candidates.serializers import (
+from candidates.api.serializers import (
     CandidateSerializer, ExpertiseSerializer, AcademicSerializer, 
     CVLanguageSerializer, TrainingSerializer, CertificateSerializer, 
     ProjectSerializer, CurriculumSerializer

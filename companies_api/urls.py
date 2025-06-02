@@ -28,9 +28,9 @@ router.register(r'company-recommendations', CompanyRecommendationsViewSet, basen
 router.register(r'search-curricula', SearchCurriculaViewSet, basename='search-curricula')
 router.register(r'company-wallet', CompanyWalletViewSet, basename='company-wallet')
 router.register(r'widget-jobs', WidgetJobsViewSet, basename='widget-jobs')
-router.register(r'billing', BillingViewSet, basename='billing')
+# router.register(r'billing', BillingViewSet, basename='billing')
 router.register(r'template-editor', TemplateEditorViewSet, basename='template-editor')
-router.register(r'template-preview', SiteTemplatePreviewViewSet, basename='template-preview')
+# router.register(r'template-preview', SiteTemplatePreviewViewSet, basename='template-preview')
 router.register(r'site-template-info', GetSiteTemplateViewSet, basename='site-template-info')
 
 urlpatterns = [

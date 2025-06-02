@@ -1,4 +1,4 @@
-from rest_framework import DefaultRouter
+from rest_framework.routers import DefaultRouter
 
 from activities.api.views import ActivityViewSet,MessageChunkViewSet,NotificationViewSet
 
