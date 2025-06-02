@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import datetime
 from datetime import date
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.template import RequestContext
 import autodoc
@@ -12,7 +12,9 @@ from common.models import Employment_Type, Degree
 from companies.models import Company_Industry as Industry, Company
 from vacancies.models import Vacancy, Salary_Type, Employment_Experience as Experience
 from vacancies.forms import BasicSearchVacancyForm
-from django.utils.timezone import utc
+#from django.utils.timezone import utc
+import datetime
+utc = datetime.timezone.utc
 from TRM.context_processors import subdomain
 from TRM import settings
 from django.db.models import Q, Max
@@ -41,38 +43,38 @@ def index(request):
             return redirect('vacancies_first_search_vacancies')
     else:
         form = BasicSearchVacancyForm()
-    return render_to_response('index.html', {'isIndex': True, 'form': form}, context_instance=RequestContext(request))
+    return render(request, 'index.html', {'isIndex': True, 'form': form}, context_instance=RequestContext(request))
 
 def companies(request):
-    return render_to_response('company_index.html', {'isCompanie': True}, context_instance=RequestContext(request))
+    return render(request, 'company_index.html', {'isCompanie': True}, context_instance=RequestContext(request))
 
 def privacy_policy(request):
-    return render_to_response('privacy_policy.html', {'isProfile': True}, context_instance=RequestContext(request))
+    return render(request, 'privacy_policy.html', {'isProfile': True}, context_instance=RequestContext(request))
 
 def terms_and_conditions(request):
-    return render_to_response('terms_and_conditions.html', {'isProfile': True}, context_instance=RequestContext(request))
+    return render(request, 'terms_and_conditions.html', {'isProfile': True}, context_instance=RequestContext(request))
 
 def email_campaign_0(request):
-    return render_to_response('email_campaigns/campaign_0.html', context_instance=RequestContext(request))
+    return render(request, 'email_campaigns/campaign_0.html', context_instance=RequestContext(request))
 
 def handler500(request):
-    response = render_to_response('500.html', {},
+    response = render(request, '500.html', {},
                                   context_instance=RequestContext(request))
     response.status_code = 500
     return response
 
 def pricing_comparison(request):
-    return render_to_response('pricing.html',{},RequestContext(request))
+    return render(request, 'pricing.html',{},RequestContext(request))
 
 def about_us(request):
-    return render_to_response('about_us.html',{},context_instance = RequestContext(request))
+    return render(request, 'about_us.html',{},context_instance = RequestContext(request))
 
 def product(request):
-    return render_to_response('product.html',{},context_instance = RequestContext(request))
+    return render(request, 'product.html',{},context_instance = RequestContext(request))
 
 def pricing(request):
     packages = Package.objects.all()
-    return render_to_response('pricing.html',{'packages':packages},context_instance = RequestContext(request))
+    return render(request, 'pricing.html',{'packages':packages},context_instance = RequestContext(request))
 
 def contact(request):
     if request.method == 'POST':
@@ -82,7 +84,7 @@ def contact(request):
             form_contact = ContactForm(request=request)
     else:
         form_contact = ContactForm(request=request)
-    return render_to_response('contact.html',{'form_contact':form_contact},context_instance = RequestContext(request))
+    return render(request, 'contact.html',{'form_contact':form_contact},context_instance = RequestContext(request))
 
 def comingsoon(request):
     if request.method == 'POST':
@@ -92,7 +94,7 @@ def comingsoon(request):
             form_request = EarlyAccessForm(request=request)
     else:
         form_request = EarlyAccessForm(request=request)
-    return render_to_response('comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request},context_instance = RequestContext(request))
+    return render(request, 'comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request},context_instance = RequestContext(request))
 
 def job_board(request):
     subdomain_data = subdomain(request)
@@ -191,7 +193,7 @@ def job_board(request):
     page_template = 'job_board_item.html'
     if request.is_ajax():
         template = page_template
-    return render_to_response(
+    return render(request, 
         template,
         {
             'page_template': page_template,

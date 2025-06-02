@@ -4,7 +4,9 @@ from rest_framework import status
 from django.shortcuts import redirect
 from django.urls import reverse, resolve
 from django.db.models import Q, Count
-from django.utils.timezone import utc, now
+#from django.utils.timezone import utc, now
+from datetime import timezone
+from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, Http404, HttpResponse
@@ -35,7 +37,7 @@ from TRM.settings import days_default_search, SITE_URL, LOGO_COMPANY_DEFAULT, nu
 from vacancies.forms import BasicSearchVacancyForm, QuestionVacancyForm, Public_FilesForm, Public_Files_OnlyForm, get_notice_period
 from vacancies.models import Vacancy, PubDate_Search, Vacancy_Status, Postulate, Salary_Type, \
     Employment_Experience, Degree, Question, Vacancy_Files, Candidate_Fav, VacancyStage, \
-    Postulate_Stage, Postulate_Score, Comment, Medium, State, Industry
+    Postulate_Stage, Postulate_Score, Comment, Medium, Industry, State
 from .serializers import (VacancyStatusSerializer, PubDateSearchSerializer, EmploymentExperienceSerializer, SalaryTypeSerializer,
     VacancySerializer, PublishHistorySerializer, QuestionSerializer, CandidateFavSerializer, 
     VacancyFilesSerializer, VacancyStageSerializer, StageCriterionSerializer, VacancyTagsSerializer, MediumSerializer, 
@@ -178,7 +180,7 @@ class VacancyAndFilterAPIView(APIView):
 
         session['del_filters'] = del_filters
 
-        now = datetime.utcnow().replace(tzinfo=utc)
+        now = datetime.utcnow().replace(tzinfo=timezone.utc)
 
         if not vacancies_search_pub_date:
             vacancies_search_pub_date = now - timedelta(days=days_default_search)

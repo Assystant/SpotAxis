@@ -14,7 +14,8 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.http import Http404, JsonResponse
 from django.http import Http404, JsonResponse, HttpResponse
-from django.shortcuts import render_to_response, redirect, get_object_or_404
+#from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template import RequestContext
 from weasyprint import HTML
 from companies.models import Company_Industry
@@ -67,7 +68,7 @@ def resume_builder(request):
     certificateForm = CertificateForm()
     projectForm = ProjectForm()
     languageForm = CvLanguageForm()
-    return render_to_response('resume_builder.html',
+    return render(request,'resume_builder.html',
                               {'user': request.user,
                                'ispublicCV': True,
                                'form_academic': academicForm,
@@ -108,7 +109,7 @@ def resume_builder_templates(request,candidate_id=None):
         raise Http404
     context={}
     context['candidate'] = candidate
-    return render_to_response('resume_template.html',{
+    return render(request,'resume_template.html',{
                                                         'candidate':candidate,
                                                     }, context_instance = RequestContext(request))
 
@@ -153,7 +154,7 @@ def record_candidate(request):
         form_user = UserDataForm()
 
     # raise ValueError(form_user.errors)
-    return render_to_response('candidate_registration.html',
+    return render(request,'candidate_registration.html',
                               {'form_user': form_user},
                                context_instance = RequestContext(request))
 
@@ -309,7 +310,7 @@ def edit_curriculum(request, candidate_id=None):
     curriculum.save()
 
     today = datetime.now().date()
-    return render_to_response('edit_view_curriculum.html',
+    return render(request,'edit_view_curriculum.html',
                               {'user': request.user,
                                'isCV': True,
                                'today': today,
@@ -381,7 +382,7 @@ def cv_personal_info(request):
         form_candidate = CandidateForm(instance=candidate)#, state_selected=candidate.state)
         form_user_photo = UserPhotoForm(instance=candidate.user)
     if not request.is_ajax():
-        return render_to_response('cv_personal_form.html',
+        return render(request,'cv_personal_form.html',
                               {'isCV': True, 'form_candidate': form_candidate, 'form_user_photo': form_user_photo},
                               context_instance = RequestContext(request))
     else:
@@ -409,7 +410,7 @@ def cv_objective(request):
             return redirect('candidates_edit_curriculum')
     else:
         form_objective = ObjectiveForm(instance=candidate)
-    return render_to_response('cv_objective_form.html',
+    return render(request,'cv_objective_form.html',
                               {'isCV': True, 'form_objective': form_objective, 'objective': candidate.objective},
                               context_instance=RequestContext(request))
 
@@ -490,7 +491,7 @@ def cv_expertise(request, expertise_id=None):
                                        industry_selected=industry_selected,
                                        update=update)
     if not request.is_ajax():
-        return render_to_response('cv_expertise_form.html',
+        return render(request,'cv_expertise_form.html',
                               {'isCV': True, 'form_expertise': form_expertise, 'update': update},
                               context_instance=RequestContext(request))
     else:
@@ -554,7 +555,7 @@ def cv_academic(request, academic_id=None):
                                        area_selected=area_selected,
                                        update=update)
     if not request.is_ajax():
-        return render_to_response('cv_academic_form.html',
+        return render(request,'cv_academic_form.html',
                               {'isCV': True, 'form_academic': form_academic, 'update': update},
                               context_instance = RequestContext(request))
     else:
@@ -583,7 +584,7 @@ def cv_language(request):
             return redirect('candidates_edit_curriculum')
     else:
         formset_languages = LanguageFormSet(queryset=CV_Language.objects.filter(candidate=candidate))
-    return render_to_response('cv_language_form.html',
+    return render(request,'cv_language_form.html',
                               {'isCV': True, 'formset_languages': formset_languages, },
                               context_instance = RequestContext(request))
 
@@ -821,7 +822,7 @@ def vacancies_postulated(request):
     finalize_postulates = Postulate.objects.filter(candidate = candidate, discard = False, finalize = True, vacancy__status = finalized_status)
     active_postulates = Postulate.objects.filter(candidate = candidate, vacancy__status = active_status, discard = False)
     rejected_postulates = Postulate.objects.filter(Q(candidate = candidate, discard = True) | Q(candidate = candidate, vacancy__status = finalized_status, finalize = False))
-    return render_to_response(
+    return render(request,
         'vacancies_postulated.html', {
             'isApplication': True,
             'active_postulates': active_postulates,
@@ -853,7 +854,7 @@ def vacancies_favorites(request):
             if fav.vacancy == application.vacancy:
                 fav.delete()
     candidate_favs = Candidate_Fav.objects.filter(candidate=candidate)
-    return render_to_response('vacancies_favorites.html',
+    return render(request,'vacancies_favorites.html',
                               {'candidate_favs': candidate_favs,
                               'isFav': True},
                               context_instance = RequestContext(request))

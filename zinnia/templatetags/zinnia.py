@@ -3,7 +3,6 @@ from __future__ import absolute_import
 import re
 from datetime import date
 from hashlib import md5
-from six.moves import map
 try:
     from urllib.parse import urlencode
 except ImportError:  # Python 2
