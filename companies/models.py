@@ -402,6 +402,7 @@ REFERAL_TYPES = (
 
 class ExternalReferal(models.Model):
     """Model representing an external referral source."""
+
     company = models.ForeignKey(Company, default=None, blank=True, null=True,on_delete=models.SET_NULL)
     name = models.CharField(max_length=50, default = "")
     active = models.BooleanField(default=True, blank=True)

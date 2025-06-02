@@ -119,7 +119,9 @@ SLAB_PERIOD = (
 )
 
 class PriceSlab(models.Model):
+
     """Represents pricing for a package based on duration and currency."""
+
     currency = models.ForeignKey(Currency, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     slab_period = models.CharField(choices = SLAB_PERIOD, max_length = 1, null=True, blank=True, default=None)
     expiry_period = models.PositiveSmallIntegerField(null=True, blank=True, default =0)

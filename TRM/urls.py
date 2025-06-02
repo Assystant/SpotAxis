@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
-from django.conf.urls import *
+from django.urls import path, re_path, include
 # from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import re_path, include
@@ -86,6 +86,7 @@ urlpatterns = [
     
     # Common - Django Contrib Auth
     # url(r'^', include('common.common_auth_urls')),
+
     re_path(r'^login/$', django_auth_views.login, {'template_name': 'login.html', 'extra_context': {'static_header': True}}, name='auth_login'),
     re_path(r'^logout/$', django_auth_views.logout, {'next_page': '/'}, name='auth_logout'),
     re_path(r'^password/change/$', django_auth_views.password_change,
@@ -98,17 +99,17 @@ urlpatterns = [
          'template_name': 'new_password_reset.html',
          'email_template_name': 'mails/password_reset_email.html',
          'subject_template_name': 'mails/password_reset_subject.html', 
-         'extra_context': {'static_header': True} },
+         'extra_context': {'static_header': True}},
         name='auth_password_reset'),
     re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
         django_auth_views.password_reset_confirm,
         {'template_name': 'new_password_reset_confirm.html',
          'post_reset_redirect': 'custom_password_reset_complete',
-         'extra_context': {'static_header': True} },
+         'extra_context': {'static_header': True}},
         name='auth_password_reset_confirm'),
     re_path(r'^password/reset/done/$', django_auth_views.password_reset_done,
         {'template_name': 'new_password_reset_done.html',
-         'extra_context': {'static_header': True} },
+         'extra_context': {'static_header': True}},
         name='password_reset_done'),
     re_path(r'^username/recover/$', django_auth_views.password_reset,
         {'password_reset_form': RecoverUserForm,
@@ -116,7 +117,7 @@ urlpatterns = [
          'email_template_name': 'mails/recover_user_email.html',
          'subject_template_name': 'mails/recover_user_subject.html',
          'post_reset_redirect': 'common_recover_user_requested',
-         'extra_context': {'static_header': True}  },
+         'extra_context': {'static_header': True}},
         name='recover_user'),
 
     # Common - common.views.py

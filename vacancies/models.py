@@ -774,6 +774,7 @@ class Question(models.Model):
         question_date (DateTimeField): Timestamp when the question was created.
         answer_date (DateTimeField): Timestamp when the answer was provided.
     """
+
     vacancy = models.ForeignKey(Vacancy, verbose_name=_('Job'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
     question = models.CharField(verbose_name=_('Question'), max_length=200, null=True, blank=True, default=None)
@@ -796,6 +797,7 @@ class Question(models.Model):
         ordering = ('-question_date',)
 
 class Candidate_Fav(models.Model):
+
     """
     Represents a candidate's favorite jobs.
 
@@ -1573,6 +1575,7 @@ class Postulate_Score(models.Model):
         return process.postulate.comment_set.all().filter(comment_type=2, recruiter=self.recruiter)[0]
 
 class Postulate_Stage(models.Model):
+
 
     """
     Associates a candidate's application (Postulate) with a specific vacancy stage and holds related scores.
