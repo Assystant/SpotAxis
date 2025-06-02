@@ -1,0 +1,3 @@
+"""
+Scripts for mots-vides
+"""
