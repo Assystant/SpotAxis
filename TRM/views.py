@@ -57,7 +57,7 @@ def terms_and_conditions(request):
 def email_campaign_0(request):
     return render(request, 'email_campaigns/campaign_0.html', {})
     
- def handler500(request):
+def handler500(request):
     response = render(request, '500.html', {})
     response.status_code = 500
     return response
