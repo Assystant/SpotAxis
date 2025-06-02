@@ -7,7 +7,7 @@ Step1:	Cloning the Repository
 
 Step2:	Step into the Spotaxis folder
 	- cd SpotAxis
-	(check that pyproject.toml should be there)
+	(Make sure to check that pyproject.toml should be present in the spotaxis folder)
 
 Step3: 	Changing my branch from master to develop
 	- git checkout develop
