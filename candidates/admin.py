@@ -14,7 +14,7 @@ options are applied to improve usability.
 # # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 from django.conf import settings
-
+import numpy as np
 from django.contrib import admin
 from candidates.models import Candidate, Expertise, Academic_Area, Academic_Status, Academic, Language_Level, Language, CV_Language, Curriculum
 from common.admin import CustomModelAdminAllFields
