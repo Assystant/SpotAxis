@@ -1,0 +1,97 @@
+Process to setup UV and Install modules according to UV.
+
+Step0:	Sync the repository in develop.
+
+Step1:	Cloning the Repository
+	- git clone https://github.com/SaiBhaskar0987/SpotAxis.git
+
+Step2:	Step into the Spotaxis folder
+	- cd SpotAxis
+	(check that pyproject.toml should be there)
+
+Step3: 	Changing my branch from master to develop
+	- git checkout develop
+	- git branch
+
+Step4: 	Creating your own branch
+	- git checkout -b branch name
+
+(I choose try in powershell from this step, Open VScode and open SpotAxis folder.)
+Step4: 	Making new virtual environment(.uvenu) in SpoxAxis
+	- python3 -m venv .uvenu
+	(.uvenu is my new virtual environment name, you can keep your own)
+
+Step5: 	Activating Environment
+	Git Bash:
+		- source .uvenu/Scripts/activate
+
+	Powershell (VScode-Terminal):
+		- .uvenu\Scripts\Activate.ps1
+Step6: 	Install UV
+	- pip install uv
+	(Check that uv should be installed in your new virtual environment)
+	-pip list
+
+step7: 	Install all the modules from pyproject.toml
+	- uv pip install -e .
+
+Done with UV and you will get rid of all import errors. Thank you
+
+
+
+
+Questions:(For getting understanding about UV)
+
+
+1. What is UV?
+Ans:
+UV is a tool that helps us install Python packages (little pieces of code made by other people that we can use in our own programs).
+	👉 Think of UV like a super-fast robot helper that brings you the tools you need to build your Python projects.
+	📦 For example: If your code wants to make a chart, UV will go and fetch a package called matplotlib that helps make charts.
+
+2. Explain UV in depth?
+Ans:
+UV is:
+	⚡ Very fast – It uses a language called Rust which makes it super speedy.
+	🧠 Smart – It solves complicated dependency puzzles (figuring out which versions of packages can work together).
+	📦 A package manager – Just like pip, but better in many ways.
+	🌱 Built to be modern – It works really well with new Python projects and pyproject.toml.
+	📘 Example: If your pyproject.toml says you need Django, UV will find the best version and install it very quickly in your 	environment.
+
+3. Why UV Setup is Required?
+Ans:
+We set up UV to:
+	✅ Use the new pyproject.toml format easily.
+	🚀 Speed up the setup of big projects.
+	💼 Work better with modern tools and virtual environments.
+	🧰 Help keep all needed packages organized inside a clean space (like a toolbox).
+	🧪 Example: You start a new project called “MyCoolApp.” You use UV to quickly install all the tools your app needs.
+
+4. Why are we using UV, when we already have pip?
+Ans:
+Yes, we have pip, but:
+		pip					uv
+	📦 Good					⚡ Faster and smarter
+	🐢 Slower in big projects		🚀 Much faster
+	   Works well				   Works better with modern setups
+	   Needs manual fixes sometimes	           Auto-fixes lots of problems
+
+🏁 Example: It’s like using a bicycle (pip) 🚲 vs. a racing car (uv) 🏎️!
+	Using pip:
+ 	 - pip install -r requirements.txt
+	Using uv (much faster!):
+ 	 - uv pip install -r requirements.txt
+
+
+5. What is the difference between UV and PIP?
+
+| Feature                    | pip                | uv                 |
+| -------------------------- | ------------------ | ------------------ |
+| Speed                      | Slower             | Much faster ⚡     |
+| Language                   | Python             | Rust (super-fast)  |
+| Handles pyproject.toml     | Not directly       | Yes, very well ✅  |
+| Solves tricky dependencies | Not always         | Yes, very smart 🧠 |
+| Modern?                    | Old but still used | New and modern 🚀  |
+
+
+
