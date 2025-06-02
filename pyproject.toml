@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "spotaxis"
 version = "0.1.0"
@@ -35,6 +39,8 @@ dependencies = [
     "python-linkedin>=4.1",
     "requests>=2.32.3",
     "requests-oauthlib>=2.0.0",
+    "rosetta>=0.3",
+    "scipy>=1.15.3",
     "selenium>=4.33.0",
     "six>=1.17.0",
     "south>=1.0.2",
@@ -43,4 +49,27 @@ dependencies = [
     "unidecode>=1.4.0",
     "weasyprint>=65.1",
     "xvfbwrapper>=0.2.13",
+]
+
+[tool.setuptools]
+packages = [
+    "trm",
+    "activities",
+    "candidates",
+    "ckeditor",
+    "common",
+    "companies",
+    "customField",
+    "el_pagination",
+    "example",
+    "helpdesk",
+    "locale",
+    "payments",
+    "resume_parser",
+    "scheduler",
+    "socialmultishare",
+    "ssl",
+    "upload_logos",
+    "zinnia",
+    "vacancies"
 ]
