@@ -6,21 +6,24 @@
   "homepage": "http://hakanersu.github.io/AmaranJS/",
   "version": "0.5.4",
   "devDependencies": {
-      "gulp" : "*",
-      "gulp-ruby-sass" : "*",
-      "gulp-autoprefixer" : "*",
-      "gulp-minify-css" : "*",
-      "gulp-jshint" : "*",
-      "gulp-uglify" : "*",
-      "gulp-imagemin" : "*",
-      "gulp-rename" : "*",
-      "gulp-clean" : "*",
-      "gulp-concat" : "*",
-      "gulp-notify" : "*",
-      "gulp-cache" : "*",
-      "gulp-livereload" : "*",
-      "tiny-lr" : "*",
-      "gulp-coffee":"*",
-      "gulp-plumber":"*"
+    "gulp": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-cache": "*",
+    "gulp-clean": "*",
+    "gulp-coffee": "*",
+    "gulp-concat": "*",
+    "gulp-imagemin": "*",
+    "gulp-jshint": "*",
+    "gulp-livereload": "*",
+    "gulp-minify-css": "*",
+    "gulp-notify": "*",
+    "gulp-plumber": "*",
+    "gulp-rename": "*",
+    "gulp-ruby-sass": "*",
+    "gulp-uglify": "*",
+    "tiny-lr": "*"
+  },
+  "dependencies": {
+    "AmaranJS": "file:"
   }
 }

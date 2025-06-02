@@ -29,7 +29,7 @@ from tagging.models import Tag
 from tagging.utils import calculate_cloud
 
 from ..breadcrumbs import retrieve_breadcrumbs
-from ..calendar import Calendar
+from ..calendar1 import ZinniaCalendar as Calendar
 from ..comparison import EntryPublishedVectorBuilder
 from ..context import get_context_first_matching_object
 from ..context import get_context_first_object

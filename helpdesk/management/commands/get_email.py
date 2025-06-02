@@ -30,7 +30,7 @@ from email_reply_parser import EmailReplyParser
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.db.models import Q
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from helpdesk import settings
 
 try:

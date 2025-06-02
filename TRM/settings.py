@@ -4,7 +4,11 @@
 
 from __future__ import absolute_import
 import os.path
+from pathlib import Path
 from rest_framework.permissions import AllowAny
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 PROJECT_NAME = 'SpotAxis'
 
@@ -14,7 +18,7 @@ ADMINS = (('Saket', 'saket@spotaxis.com'),('Holesh','holesh@spotaxis.com'))
 
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'spotaxis.com']
 
 # SESSION_COOKIE_DOMAIN = '.'
 
@@ -83,7 +87,7 @@ STATICFILES_FINDERS = [
 SECRET_KEY = 'o&amp;-l=w!!q%mgfn9#%9wdawrifyy+bsxr38b$p4ujw%ok=zv9&amp;d'
 
 # Change the defautl Serialization in Django 1.6 form Json to Pickle
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 ROOT_URLCONF = 'TRM.urls'
 
@@ -135,7 +139,7 @@ INSTALLED_APPS = (
 
 AUTH_USER_MODEL = 'common.User'
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     # 'TRM.middleware.CrossDomainSessionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -143,7 +147,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'TRM.middleware.CustomSocialAuthExceptionMiddleware',
@@ -168,13 +172,15 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
-                'django.core.context_processors.debug',
-                'django.core.context_processors.i18n',
-                'django.core.context_processors.media',
-                'django.core.context_processors.static',
-                'django.core.context_processors.request',
-                'django.core.context_processors.tz',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.request',
+                'django.template.context_processors.tz',
+                # 'django.core.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                # 'django.template.context_processors.request',
                 'TRM.context_processors.project_name',
                 'TRM.context_processors.user_profile',
                 'TRM.context_processors.candidate_full_name',
@@ -215,12 +221,12 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'helpdesk': {
-            'level': 'DEBUG',
-            'filters': [],
-            'class': 'logging.FileHandler',
-            'filename': PROJECT_PATH+'/debug.log'
-        },
+        # 'helpdesk': {
+        #     'level': 'DEBUG',
+        #     'filters': [],
+        #     'class': 'logging.FileHandler',
+        #     'filename': PROJECT_PATH+'/debug.log'
+        # },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -331,3 +337,5 @@ REST_FRAMEWORK = {
         #'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

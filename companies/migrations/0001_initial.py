@@ -7,7 +7,7 @@ from django.conf import settings
 import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
-import phonenumber_field.modelfields
+from phonenumber_field.modelfields import PhoneNumberField
 import re
 
 """
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(blank=True, default=None, max_length=200, null=True, verbose_name='Tradename')),
                 ('social_name', models.CharField(blank=True, default=None, max_length=200, null=True, verbose_name='Busness Name')),
                 ('description', models.TextField(blank=True, default=None, max_length=500, null=True, verbose_name='Short Description')),
-                ('phone', phonenumber_field.modelfields.PhoneNumberField(blank=True, default=None, null=True, verbose_name='Phone')),
+                ('phone', PhoneNumberField(blank=True, default=None, null=True, verbose_name='Phone')),
                 ('url', models.URLField(blank=True, default=None, null=True, verbose_name='Website')),
                 ('facebook', models.URLField(blank=True, default=None, null=True, verbose_name='Facebook')),
                 ('twitter', models.CharField(blank=True, default=None, max_length=16, null=True, validators=[django.core.validators.RegexValidator(re.compile(b'^[\\w.@+-]+$'))], verbose_name='Twitter')),

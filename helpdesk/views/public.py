@@ -29,11 +29,11 @@ def homepage(request):
     - Validates form on POST request and creates a new ticket.
     - Checks for spam using `text_is_spam()` from `helpdesk.lib`.
     """
-    if not request.user.is_authenticated() and helpdesk_settings.HELPDESK_REDIRECT_TO_LOGIN_BY_DEFAULT:
+    if not request.user.is_authenticated and helpdesk_settings.HELPDESK_REDIRECT_TO_LOGIN_BY_DEFAULT:
         return HttpResponseRedirect(reverse('login'))
 
     if request.user.is_staff or \
-            (request.user.is_authenticated() and
+            (request.user.is_authenticated and
              helpdesk_settings.HELPDESK_ALLOW_NON_STAFF_TICKET_UPDATE):
         try:
             if request.user.usersettings.settings.get('login_view_ticketlist', False):

@@ -14,7 +14,7 @@ from django import VERSION
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
-from django.urlrs import reverse
+from django.urls import reverse
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.core import paginator
 from django.db import connection
@@ -463,7 +463,7 @@ def update_ticket(request, ticket_id, public=False):
     """
 
     if not (public or (
-            request.user.is_authenticated() and
+            request.user.is_authenticated and
             request.user.is_active and (
                 request.user.is_staff or
                 helpdesk_settings.HELPDESK_ALLOW_NON_STAFF_TICKET_UPDATE))):
@@ -527,7 +527,7 @@ def update_ticket(request, ticket_id, public=False):
 
     comment = template_func(comment).render(context)
 
-    if owner is -1 and ticket.assigned_to:
+    if owner == -1 and ticket.assigned_to:
         owner = ticket.assigned_to.id
 
     f = FollowUp(ticket=ticket, date=timezone.now(), comment=comment)
@@ -539,7 +539,7 @@ def update_ticket(request, ticket_id, public=False):
 
     reassigned = False
 
-    if owner is not -1:
+    if owner != -1:
         if owner != 0 and ((ticket.assigned_to and owner != ticket.assigned_to.id) or not ticket.assigned_to):
             new_user = User.objects.get(id=owner)
             f.title = _('Assigned to %(username)s') % {
@@ -724,7 +724,7 @@ def update_ticket(request, ticket_id, public=False):
     ticket.save()
 
     # auto subscribe user if enabled
-    if helpdesk_settings.HELPDESK_AUTO_SUBSCRIBE_ON_TICKET_RESPONSE and request.user.is_authenticated():
+    if helpdesk_settings.HELPDESK_AUTO_SUBSCRIBE_ON_TICKET_RESPONSE and request.user.is_authenticated:
         ticketcc_string, SHOW_SUBSCRIBE = return_ticketccstring_and_show_subscribe(request.user, ticket)
         if SHOW_SUBSCRIBE:
             subscribe_staff_member_to_ticket(ticket, request.user)

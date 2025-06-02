@@ -39,7 +39,7 @@
                                             <li><a href="" class="s-header-v2__dropdown-menu-link">Case Studies</a></li>
                                             <li><a href="" class="s-header-v2__dropdown-menu-link">Blogs</a></li>
                                         </ul-->
-                                        <a href="{{settings.HOSTED_URL}}{% url 'zinnia:entry_archive_index' %}" class="s-header-v2__nav-link">Resources</a>
+                                        <!-- <a href="{{settings.HOSTED_URL}}" class="s-header-v2__nav-link">Resources</a> -->
                                     </li>
                                     <!-- End Pages -->
                                     {% if request.user.is_anonymous %}
@@ -91,11 +91,11 @@
                                                 <li class="hidden divider no-margin"></li>
                                                 <li><a class="pt10 pb10" href="{% url 'auth_password_change' %}">Change Password <span class="glyphicon glyphicon-lock pull-right"></span></a></li>
                                                 <li class="divider no-margin"></li>
-                                                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}{% url 'zinnia:entry_archive_index' %}" target="_blank">Resources <span class="fa fa-lightbulb-o fa-lg mr3 pull-right"></span></a></li>
+                                                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}" target="_blank">Resources <span class="fa fa-lightbulb-o fa-lg mr3 pull-right"></span></a></li>
                                                 <li class="divider no-margin"></li>
-                                                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}{% url 'helpdesk_home' %}" target="_blank">Help <span class="fa fa-question fa-lg mr3 pull-right"></span></a></li>
+                                                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}" target="_blank">Help <span class="fa fa-question fa-lg mr3 pull-right"></span></a></li>
                                                 <li class="divider no-margin"></li>
-                                                <li><a class="pt10 pb10" href="{% url 'auth_logout' %}{% if request.path|resolveNamespace:'zinnia' %}?next={{request.path}}{% endif %}">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+                                                <li><a class="pt10 pb10" href="{% url 'auth_logout' %}">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
                                             </ul>
                                         </li>
                                     {% endif %}

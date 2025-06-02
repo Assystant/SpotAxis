@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from candidates.views import (
+from candidates.api.views import (
     CandidateViewSet, ExpertiseViewSet, AcademicViewSet,
     CVLanguageViewSet, TrainingViewSet, CertificateViewSet,
     ProjectViewSet, CurriculumViewSet

@@ -8,10 +8,11 @@ from django.urls import reverse
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
+from six import python_2_unicode_compatible
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 import django_comments as comments
 from django_comments.models import CommentFlag
@@ -175,6 +176,7 @@ class CoreEntry(models.Model):
         publication_date = self.publication_date
         if timezone.is_aware(publication_date):
             publication_date = timezone.localtime(publication_date)
+
         return reverse('zinnia:entry_detail', kwargs={
             'year': publication_date.strftime('%Y'),
             'month': publication_date.strftime('%m'),
@@ -194,12 +196,15 @@ class CoreEntry(models.Model):
         get_latest_by = 'publication_date'
         verbose_name = _('entry')
         verbose_name_plural = _('entries')
-        index_together = [['slug', 'publication_date'],
-                          ['status', 'publication_date',
-                           'start_publication', 'end_publication']]
-        permissions = (('can_view_all', 'Can view all entries'),
-                       ('can_change_status', 'Can change status'),
-                       ('can_change_author', 'Can change author(s)'), )
+        permissions = (
+            ('can_view_all', 'Can view all entries'),
+            ('can_change_status', 'Can change status'),
+            ('can_change_author', 'Can change author(s)'),
+        )
+        indexes = [
+            models.Index(fields=['slug', 'publication_date']),
+            models.Index(fields=['status', 'publication_date', 'start_publication', 'end_publication']),
+        ]
 
 
 class ContentEntry(models.Model):

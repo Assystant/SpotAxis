@@ -5,7 +5,7 @@ from math import sqrt
 from django.contrib.sites.models import Site
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache import caches
-from django.utils import six
+import six
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 

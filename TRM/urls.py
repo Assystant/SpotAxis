@@ -22,6 +22,7 @@ from vacancies import views as vacancy_views
 from TRM import settings
 # from django.views.generic.simple import direct_to_template
 from companies.views import upload_vacancy_file, delete_vacancy_file
+from django.urls import re_path
 
 admin.autodiscover()
 handler500 = 'TRM.views.handler500'
@@ -29,7 +30,7 @@ handler500 = 'TRM.views.handler500'
 urlpatterns = [
     # Admin:
     path('admin/doc/', include('django.contrib.admindocs.urls')),
-    path('admin/', include(admin.site.urls)),
+    re_path(r'^admin/', admin.site.urls),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     path('sitemap.xml', TemplateView.as_view(template_name='sitemap.xml', content_type='text/plain')),
     path('google7467b69f25fa8f1e.html', TemplateView.as_view(template_name='google7467b69f25fa8f1e.html')),
@@ -49,7 +50,7 @@ urlpatterns = [
     # url(r'help/', include('helpdesk.urls')),
 
     # Index
-    path('', vacancy_views.search_vacancies, {'template_name': 'index.html'}, name='TRM-index'),
+    path('', TRM_views.index, name='TRM-index'),
     # url(r'^pricing/$', TRM_views.pricing_comparison, name = 'pricing_comparison'),
     path('aboutus/', TRM_views.about_us, name="about_us"),
     path('product/', TRM_views.product, name="product"),
@@ -85,37 +86,37 @@ urlpatterns = [
     
     # Common - Django Contrib Auth
     # url(r'^', include('common.common_auth_urls')),
-    path('login/', django_auth_views.login, {'template_name': 'login.html', 'extra_context': {'static_header': True}}, name='auth_login'),
-    path('logout/', django_auth_views.logout, {'next_page': '/'}, name='auth_logout'),
-    path('password/change/', django_auth_views.password_change,
+re_path(r'^login/$', django_auth_views.LoginView.as_view(), {'template_name': 'login.html', 'extra_context': {'static_header': True}}, name='auth_login'),
+    re_path(r'^logout/$', django_auth_views.LogoutView.as_view(), {'next_page': '/'}, name='auth_logout'),
+    re_path(r'^password/change/$', django_auth_views.PasswordChangeView.as_view(),
         {'post_change_redirect': 'common_password_change_done',
          'template_name': 'password_change.html',
          'password_change_form': ChangePasswordForm},
         name='auth_password_change'),
-    path('password/reset/', django_auth_views.password_reset,
+    re_path(r'^password/reset/$', django_auth_views.PasswordResetView.as_view(),
         {'password_reset_form': CustomPasswordResetForm,
          'template_name': 'new_password_reset.html',
          'email_template_name': 'mails/password_reset_email.html',
          'subject_template_name': 'mails/password_reset_subject.html', 
-         'extra_context': {'static_header': True}},
+         'extra_context': {'static_header': True} },
         name='auth_password_reset'),
     re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
-        django_auth_views.password_reset_confirm,
+        django_auth_views.PasswordResetConfirmView.as_view(),
         {'template_name': 'new_password_reset_confirm.html',
          'post_reset_redirect': 'custom_password_reset_complete',
-         'extra_context': {'static_header': True}},
+         'extra_context': {'static_header': True} },
         name='auth_password_reset_confirm'),
-    path('password/reset/done/', django_auth_views.password_reset_done,
+    re_path(r'^password/reset/done/$', django_auth_views.PasswordResetDoneView.as_view(),
         {'template_name': 'new_password_reset_done.html',
-         'extra_context': {'static_header': True}},
+         'extra_context': {'static_header': True} },
         name='password_reset_done'),
-    path('username/recover/', django_auth_views.password_reset,
+    re_path(r'^username/recover/$', django_auth_views.PasswordResetView.as_view(),
         {'password_reset_form': RecoverUserForm,
          'template_name': 'new_recover_user.html',
          'email_template_name': 'mails/recover_user_email.html',
          'subject_template_name': 'mails/recover_user_subject.html',
          'post_reset_redirect': 'common_recover_user_requested',
-         'extra_context': {'static_header': True}},
+         'extra_context': {'static_header': True}  },
         name='recover_user'),
 
     # Common - common.views.py
@@ -206,12 +207,12 @@ urlpatterns = [
     path('profile/candidate/(?P<candidate_id>\d+)/', companies_views.curriculum_detail, name='companies_curriculum_detail'),
     path('profile/candidate/(?P<candidate_id>\d+)/(?P<vacancy_id>\d+)/', companies_views.curriculum_detail,
         name='companies_curriculum_detail'),
-    # url(r'^public/candidate/(?P<candidate_id>\d+)/(?P<vacancy_id>\d+)/$', companies_views.public_curriculum_detail,
+    # re_path(r'^public/candidate/(?P<candidate_id>\d+)/(?P<vacancy_id>\d+)/$', companies_views.public_curriculum_detail,
         # name='companies_public_curriculum_detail'),
-    # url(r'^profile/discard/candidate/(?P<vacancy_id>\d+)/(?P<candidate_id>\d+)/$', companies_views.discard_candidate,
+    # re_path(r'^profile/discard/candidate/(?P<vacancy_id>\d+)/(?P<candidate_id>\d+)/$', companies_views.discard_candidate,
         # name='companies_discard_candidate'),
-    # url(r'^recommendations/$', companies_views.company_recommendations, name='companies_company_recommendations'),
-    # url(r'^money/$', companies_views.company_wallet, name='companies_company_wallet'),
+    # re_path(r'^recommendations/$', companies_views.company_recommendations, name='companies_company_recommendations'),
+    # re_path(r'^money/$', companies_views.company_wallet, name='companies_company_wallet'),
 
     # TRM - TRM.views.py
     # url(r'^companies/$', TRM_views.companies, name='TRM_companies'),
@@ -220,19 +221,19 @@ urlpatterns = [
     # url(r'^campaigns/0$', TRM_views.email_campaign_0, name='TRM_email_campaign_0'),
 
     # Example - example.views.py
-    # url(r'^test/$', example_views.test, name='test'),
+    # re_path(r'^test/$', example_views.test, name='test'),
 
     # Vacancies - vacancies.views.py
-    # url(r'^search/vacancies/$', vacancy_views.first_search, name='vacancies_first_search'),
-    # url(r'^vacancies/$', vacancy_views.search_vacancies, {'template_name': 'search_vacancies.html'},
-    #     name='vacancies_search_vacancies'),
-    # url(r'^jobs/fetch/(?P<days>\d+)/$', vacancy_views.filter_vacancies_by_pub_date,
+    re_path(r'^search/vacancies/$', vacancy_views.first_search, name='vacancies_first_search'),
+    re_path(r'^vacancies/$', vacancy_views.search_vacancies, {'template_name': 'search_vacancies.html'},
+        name='vacancies_search_vacancies'),
+    # re_path(r'^jobs/fetch/(?P<days>\d+)/$', vacancy_views.filter_vacancies_by_pub_date,
     #     name='vacancies_filter_vacancies_by_pub_date'),
-    # url(r'^jobs/industry/(?P<industry_id>\d+)/$', vacancy_views.filter_vacancies_by_industry,
+    # re_path(r'^jobs/industry/(?P<industry_id>\d+)/$', vacancy_views.filter_vacancies_by_industry,
     #     name='vacancies_filter_vacancies_by_industry'),
-    # url(r'^jobs/state/(?P<state_id>\d+)/$', vacancy_views.filter_vacancies_by_state,
+    # re_path(r'^jobs/state/(?P<state_id>\d+)/$', vacancy_views.filter_vacancies_by_state,
     #     name='vacancies_filter_vacancies_by_state'),
-    # url(r'^jobs/type/(?P<employmentType_id>\d+)/$', vacancy_views.filter_vacancies_by_employment_type,
+    # re_path(r'^jobs/type/(?P<employmentType_id>\d+)/$', vacancy_views.filter_vacancies_by_employment_type,
     #     name='vacancies_filter_vacancies_by_employmentType'),
     path('jobs/(?P<vacancy_id>\d+)/', vacancy_views.vacancy_details, name='vacancies_get_vacancy_details'),
     path('jobs/(?P<vacancy_id>\d+)/social/(?P<social_code>\w+)/', vacancy_views.vacancy_details, name='vacancies_apply_via_social'),
@@ -246,13 +247,13 @@ urlpatterns = [
     path('jobs/pdf/(?P<vacancy_id>\d+)/', vacancy_views.vacancy_to_pdf, name='vacancies_vacancy_to_pdf'),
 
     #Social Multi Share views
-    # url(r'^job/share/(?P<vacancy_id>\d+)/$', socialmultishare_views.share_to_social_media, name='socialmultishare_share_to_social_media'),
-    # url(r'^twitter_connect/(?P<vacancy_id>\d+)/$', socialmultishare_views.connect_to_twitter, name='socialmultishare_connect_to_twitter'),
-    # url(r'^facebook_connect/(?P<vacancy_id>\d+)/$', socialmultishare_views.connect_to_facebook, name='socialmultishare_connect_to_facebook'),
-    # url(r'^linkedin_connect/(?P<vacancy_id>\d+)/$', socialmultishare_views.connect_to_linkedin, name='socialmultishare_connect_to_linkedin'),
+    # re_path(r'^job/share/(?P<vacancy_id>\d+)/$', socialmultishare_views.share_to_social_media, name='socialmultishare_share_to_social_media'),
+    # re_path(r'^twitter_connect/(?P<vacancy_id>\d+)/$', socialmultishare_views.connect_to_twitter, name='socialmultishare_connect_to_twitter'),
+    # re_path(r'^facebook_connect/(?P<vacancy_id>\d+)/$', socialmultishare_views.connect_to_facebook, name='socialmultishare_connect_to_facebook'),
+    # re_path(r'^linkedin_connect/(?P<vacancy_id>\d+)/$', socialmultishare_views.connect_to_linkedin, name='socialmultishare_connect_to_linkedin'),
 
     # Google Verification
-    # url(r'^google279fe40bd6505938\.html$',
+    # re_path(r'^google279fe40bd6505938\.html$',
     #  lambda r: HttpResponse("google-site-verification: google279fe40bd6505938.html", content_type="text/plain")),
 
     # Includes
