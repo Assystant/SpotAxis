@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, Http404, HttpResponse
 from django.template.loader import render_to_string
 from django.contrib import messages
+from rest_framework import permissions
 from django.contrib.auth.models import AnonymousUser
 from django.middleware import csrf
 from rest_framework.pagination import PageNumberPagination
@@ -26,7 +27,7 @@ from urllib.parse import urlparse
 from candidates.models import Candidate, Curriculum, Academic, Academic_Status, Expertise, Degree
 from candidates.forms import CandidateMiniForm, ExpertiseFormset, AcademicFormset
 from common.forms import ContactForm
-from common.models import Employment_Type, Country, Gender, User, Profile, SocialAuth, send_TRM_email
+from common.models import Employment_Type, Country, Gender, User, Profile, SocialAuth, State, send_TRM_email
 from common.views import debug_token, get_fb_user_groups, get_fb_user_pages, get_li_companies
 from companies.models import Company, Stage, Recruiter, Company_Industry as Industry, ExternalReferal
 from customField.forms import TemplatedForm
@@ -37,7 +38,7 @@ from TRM.settings import days_default_search, SITE_URL, LOGO_COMPANY_DEFAULT, nu
 from vacancies.forms import BasicSearchVacancyForm, QuestionVacancyForm, Public_FilesForm, Public_Files_OnlyForm, get_notice_period
 from vacancies.models import Vacancy, PubDate_Search, Vacancy_Status, Postulate, Salary_Type, \
     Employment_Experience, Degree, Question, Vacancy_Files, Candidate_Fav, VacancyStage, \
-    Postulate_Stage, Postulate_Score, Comment, Medium, Industry, State
+    Postulate_Stage, Postulate_Score, Comment, Medium, Industry
 from .serializers import (VacancyStatusSerializer, PubDateSearchSerializer, EmploymentExperienceSerializer, SalaryTypeSerializer,
     VacancySerializer, PublishHistorySerializer, QuestionSerializer, CandidateFavSerializer, 
     VacancyFilesSerializer, VacancyStageSerializer, StageCriterionSerializer, VacancyTagsSerializer, MediumSerializer, 

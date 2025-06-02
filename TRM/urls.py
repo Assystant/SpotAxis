@@ -16,7 +16,7 @@ from common import views as common_views
 from common import ajax as common_ajax_views
 from companies import views as companies_views
 from TRM import views as TRM_views
-from TRM.views.static import RobotsTxtView, SitemapXmlView, GoogleVerificationView
+from TRM.static_views import RobotsTxtView, SitemapXmlView, GoogleVerificationView
 from example import views as example_views
 from payments import views as payments_views
 from vacancies import views as vacancy_views
@@ -31,7 +31,7 @@ handler500 = 'TRM.views.handler500'
 urlpatterns = [
     # Admin:
     path('admin/doc/', include('django.contrib.admindocs.urls')),
-    path('admin/', include(admin.site.urls)),
+    path('admin/', admin.site.urls),
     path('robots.txt', RobotsTxtView.as_view()),
     path('sitemap.xml', SitemapXmlView.as_view()),
     path('google7467b69f25fa8f1e.html', GoogleVerificationView.as_view()),
@@ -86,13 +86,13 @@ urlpatterns = [
     
     # Common - Django Contrib Auth
     # url(r'^', include('common.common_auth_urls')),
-    path('login/', django_auth_views.login, name='auth_login'),
-    path('logout/', django_auth_views.logout, name='auth_logout'),
-    path('password/change/', django_auth_views.password_change, name='auth_password_change'),
-    path('password/reset/', django_auth_views.password_reset, name='auth_password_reset'),
-    re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', django_auth_views.password_reset_confirm, name='auth_password_reset_confirm'),
-    path('password/reset/done/', django_auth_views.password_reset_done, name='password_reset_done'),
-    path('username/recover/', django_auth_views.password_reset, name='recover_user'),
+    path('login/', django_auth_views.LoginView.as_view(), name='auth_login'),
+    path('logout/', django_auth_views.LogoutView.as_view(), name='auth_logout'),
+    path('password/change/', django_auth_views.PasswordChangeView.as_view(), name='auth_password_change'),
+    path('password/reset/', django_auth_views.PasswordResetView.as_view(), name='auth_password_reset'),
+    re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', django_auth_views.PasswordResetConfirmView.as_view(), name='auth_password_reset_confirm'),
+    path('password/reset/done/', django_auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('username/recover/', django_auth_views.PasswordResetView.as_view(), name='recover_user'),
 
     # Common - common.views.py
     re_path(r'^login/social/(?P<social_code>\w+)/$', common_views.social_login, name="social_login"),
@@ -233,7 +233,7 @@ urlpatterns = [
     # Includes
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
     re_path(r'^ajax-uploads/', include('upload_logos.urls')),
-    re_path(r'^rosetta/', include('rosetta.urls')),
+    # re_path(r'^rosetta/', include('rosetta.urls')),
     re_path(r'^ckeditor/', include('ckeditor.urls')),
     # url('', include('social.apps.django_app.urls', namespace='social')),  # Auth con face, google, twitter
     # url('', include('django.contrib.auth.urls', namespace='auth')),  # Auth con face, google, twitter
