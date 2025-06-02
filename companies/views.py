@@ -26,7 +26,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import Http404, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404, render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template import RequestContext, Context, TemplateDoesNotExist
 from django.template.loader import get_template, render_to_string
 from django.utils.translation import gettext as _
@@ -147,8 +147,8 @@ def record_recruiter(request, token=None):
                                'registration': True,
                                'invitation': invitation,
                                'token': token,
-                               'static_header': static_header},
-                              context_instance=RequestContext(request))
+                               'static_header': static_header})
+                              #context_instance=RequestContext(request))
 
 @login_required
 def record_company(request):
@@ -260,10 +260,10 @@ def record_company(request):
 
     return render(request,'record_edit_company.html',{
                               # {'form_user': form_user,
-                              #  'form_address': form_address,
+                              # 'form_address': form_address,
                                'form_company': form_company,
-                               'registration': True},
-                              context_instance=RequestContext(request))
+                               'registration': True})
+                              
 
 @login_required
 def edit_company(request):
@@ -398,7 +398,7 @@ def recruiter_profile(request):
         form_user_photo = UserPhotoForm(instance=request.user)
     # company = get_object_or_404(Company, user=request.user)
     created = False
-    return render(request,'recruiter_profile.html',
+    return render(request, 'recruiter_profile.html',
                               {'isProfile': True,
                                'user': request.user,
                                'form_user': form_user,
@@ -408,8 +408,8 @@ def recruiter_profile(request):
                                # 'company': company,
                                # 'company_wallet': company_wallet,
                                'created': created
-                              },
-                              context_instance=RequestContext(request))
+                              })
+                            
 
 @login_required
 def company_profile(request):
@@ -491,8 +491,8 @@ def company_profile(request):
                                'company_wallet': company_wallet,
                                'created': created,
                                'vacancies': vacancies
-                              },
-                              context_instance=RequestContext(request))
+                              })
+                              
 
 @login_required
 def site_management(request, setting=None):
@@ -546,8 +546,8 @@ def site_management(request, setting=None):
     else:
         raise Http404
     context['isCompanyManagement'] = True
-    return render(request,'site_management.html',context, context_instance = RequestContext(request))
-
+    return render(request,'site_management.html',context)
+    
 @login_required
 def team_space(request):
     """Displays the team space page where the recruiter can invite new team members and view existing members."""
@@ -586,8 +586,8 @@ def team_space(request):
     context['company'] = company
     context['isTeamSpace'] = True
     context['isTeam'] = True
-    return render(request,'company_profile.html',context,context_instance=RequestContext(request))
-
+    return render(request,'company_profile.html',context)
+    
 @login_required
 def finalize_vacancy(request, vacancy_id, message=None):
     """ Finalizes (closes) a vacancy with a reason for closing."""
@@ -719,8 +719,10 @@ def applications_for_vacancy(request, vacancy_id):
 
     today = datetime.now().date()
     return render(request,'vacancies/vacancy_applications.html',
+                              {'isVacancy': True, 'curricula': curricula, 'vacancy': vacancy, 'today': today})
+    """return render_to_response('vacancies/vacancy_applications.html',
                               {'isVacancy': True, 'curricula': curricula, 'vacancy': vacancy, 'today': today},
-                              context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))"""
 
 @login_required
 def discard_candidate(request, vacancy_id, candidate_id):
@@ -801,8 +803,8 @@ def curriculum_detail(request, candidate_id=None, vacancy_id=None):
                                'languages': languages,
                                'trainings': trainings,
                                'certificates': certificates,
-                               'projects': projects },
-                              context_instance=RequestContext(request))
+                               'projects': projects })
+                            
 
 # @login_required
 # def public_curriculum_detail(request, candidate_id=None, vacancy_id=None):
@@ -1013,7 +1015,7 @@ def vacancies_summary(request, vacancy_status_name=None):
                                'public_form': public_form,
                                'jobs_template':jobs_template, 
                                'stylesheet':stylesheet,
-                            },context_instance=RequestContext(request))
+                            })
     elif vacancy_status_name:
         return render(request,'vacancies/vacancies_summary.html' ,
                             {'isVacancy': True,
@@ -1028,7 +1030,7 @@ def vacancies_summary(request, vacancy_status_name=None):
                                'company': company,
                                'my_vacancy': my_vacancy,
                                'public_form': public_form,
-                            },context_instance=RequestContext(request))
+                            }) 
     else:
         packages = Package.objects.all()
         service_categories = ServiceCategory.objects.all()
@@ -1046,8 +1048,7 @@ def vacancies_summary(request, vacancy_status_name=None):
                                 'packages': packages,
                                 'first_time': first_time,
                                 'service_categories': service_categories,
-                            },context_instance=RequestContext(request))
-
+                            })
 def upload_vacancy_file(request):
     """
     Handle AJAX file upload for vacancy files, validate and save the file(s).
@@ -1442,8 +1443,8 @@ def add_update_vacancy(request, vacancy_id=False):
                                'template_form': template_form,
                                'template_formset': template_formset,
                                'page':1
-                               },
-                              context_instance=RequestContext(request))
+                               })
+                             
 
 @login_required
 def add_update_vacancy_hiring_process(request, vacancy_id = None):
@@ -1559,8 +1560,8 @@ def company_recommendations(request):
     company = get_object_or_404(Company, user=request.user)
     recommendations = Recommendations.objects.filter(to_company=company)
     return render(request,'recommendations.html',
-                              {'isProfile': True, 'company': company, 'recommendations': recommendations},
-                              context_instance=RequestContext(request))
+                              {'isProfile': True, 'company': company, 'recommendations': recommendations})
+   
 
 @login_required
 def first_search_curricula(request):
@@ -1896,9 +1897,8 @@ def search_curricula(request):
                                'link_siguiente': link_siguiente,
                                'link_anterior': link_anterior,
                                'num_pages_visible':num_pages_visible,
-                              },
-                              context_instance=RequestContext(request))
-
+                              })
+                              
 @login_required
 def company_wallet(request):
     """
@@ -1916,9 +1916,8 @@ def company_wallet(request):
                                'company': company,
                                'company_wallet': company_wallet,
                                'last_movement': last_movement,
-                               'wallet_movements': wallet_movements},
-                              context_instance=RequestContext(request))
-
+                               'wallet_movements': wallet_movements})
+                              
 @xframe_options_exempt
 def widget_jobs(request):
     """
@@ -1968,8 +1967,8 @@ def widget_jobs(request):
                                             'vacancies': vacancies,
                                             'company': company,
                                             'preview': preview
-                                            },
-                                            context_instance=RequestContext(request))
+                                            })
+                                           
 
 @login_required
 def billing(request):
@@ -2063,13 +2062,13 @@ def billing(request):
 
             if amount_to_pay < 0:
                 amount_to_pay = 0
-            # else:
+            """# else:
             #     if slab.amount:
             #         amount_to_pay = slab.amount
             #     else:
             #         amount_to_pay = 0
             # DO updates
-        # else:
+        # else:"""
 
         if not remove_users:
             pass
@@ -2135,8 +2134,7 @@ def billing(request):
                             'carried_forward_message': carried_forward_message,
                             'renewal': renewal,
                             'post_payment': post_payment,
-                            }, context_instance=RequestContext(request))
-
+                            })
 @login_required
 def template_editor(request):
     """

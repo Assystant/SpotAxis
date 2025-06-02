@@ -2079,9 +2079,8 @@ def compare_candidates(request):
                 raise ValueError()
     else:
         raise ValueError()
-    return render(request,'compare_candidates.html',context,
-                              context_instance=RequestContext(request))
-
+    return render(request, 'compare_candidates.html', context)
+   
 @csrf_exempt
 def filter_candidates(request):
     context = {}

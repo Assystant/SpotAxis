@@ -14,7 +14,6 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.http import Http404, JsonResponse
 from django.http import Http404, JsonResponse, HttpResponse
-#from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import RequestContext
 from weasyprint import HTML
@@ -83,9 +82,10 @@ def resume_builder(request):
                                'form_training': trainingForm,
                                'form_certificate': certificateForm,
                                'form_project': projectForm,
-                               'form_language': languageForm},
+                               'form_language': languageForm})
+
                                
-                              context_instance=RequestContext(request))
+                              
 
 def resume_builder_templates(request,candidate_id=None):
     """
@@ -110,8 +110,9 @@ def resume_builder_templates(request,candidate_id=None):
     context={}
     context['candidate'] = candidate
     return render(request,'resume_template.html',{
+    
                                                         'candidate':candidate,
-                                                    }, context_instance = RequestContext(request))
+                                                    }) 
 
     return JsonResponse(context)
 def record_candidate(request):
@@ -155,8 +156,8 @@ def record_candidate(request):
 
     # raise ValueError(form_user.errors)
     return render(request,'candidate_registration.html',
-                              {'form_user': form_user},
-                               context_instance = RequestContext(request))
+                              {'form_user': form_user})
+   
 
 
 @login_required
@@ -338,9 +339,8 @@ def edit_curriculum(request, candidate_id=None):
                                'expertises': expertises,
                                'languages': languages,
                                # 'softwares': softwares,
-                               'company': company},
-                              context_instance=RequestContext(request))
-
+                               'company': company})
+                              
 
 @login_required
 def cv_personal_info(request):
@@ -383,8 +383,8 @@ def cv_personal_info(request):
         form_user_photo = UserPhotoForm(instance=candidate.user)
     if not request.is_ajax():
         return render(request,'cv_personal_form.html',
-                              {'isCV': True, 'form_candidate': form_candidate, 'form_user_photo': form_user_photo},
-                              context_instance = RequestContext(request))
+                              {'isCV': True, 'form_candidate': form_candidate, 'form_user_photo': form_user_photo})
+
     else:
         return JsonResponse(context)
 
@@ -410,9 +410,9 @@ def cv_objective(request):
             return redirect('candidates_edit_curriculum')
     else:
         form_objective = ObjectiveForm(instance=candidate)
-    return render(request,'cv_objective_form.html',
-                              {'isCV': True, 'form_objective': form_objective, 'objective': candidate.objective},
-                              context_instance=RequestContext(request))
+        return render(request,'cv_objective_form.html',
+                              {'isCV': True, 'form_objective': form_objective, 'objective': candidate.objective})
+   
 
 
 # @login_required
@@ -492,8 +492,8 @@ def cv_expertise(request, expertise_id=None):
                                        update=update)
     if not request.is_ajax():
         return render(request,'cv_expertise_form.html',
-                              {'isCV': True, 'form_expertise': form_expertise, 'update': update},
-                              context_instance=RequestContext(request))
+                              {'isCV': True, 'form_expertise': form_expertise, 'update': update})
+        
     else:
         return JsonResponse(context)
 
@@ -556,8 +556,8 @@ def cv_academic(request, academic_id=None):
                                        update=update)
     if not request.is_ajax():
         return render(request,'cv_academic_form.html',
-                              {'isCV': True, 'form_academic': form_academic, 'update': update},
-                              context_instance = RequestContext(request))
+                              {'isCV': True, 'form_academic': form_academic, 'update': update})
+        
     else:
         return JsonResponse(context)
 
@@ -585,9 +585,8 @@ def cv_language(request):
     else:
         formset_languages = LanguageFormSet(queryset=CV_Language.objects.filter(candidate=candidate))
     return render(request,'cv_language_form.html',
-                              {'isCV': True, 'formset_languages': formset_languages, },
-                              context_instance = RequestContext(request))
-
+                              {'isCV': True, 'formset_languages': formset_languages, })
+    
 @login_required
 def cv_delete_item(request, expertise_id=None, academic_id=None, software_id=None):
     """
@@ -792,9 +791,9 @@ def create_candidates(request):
             curriculum.academic = True
         if languages:
             curriculum.language = True
-        # if softwares:
+        """# if softwares:
         #     curriculum.software = True
-        # Setting percentage completion of Curriculum
+        # Setting percentage completion of Curriculum"""
         curriculum.set_advance()
         curriculum.save()
 
@@ -830,8 +829,8 @@ def vacancies_postulated(request):
             'rejected_postulates': rejected_postulates,
             'active_status':active_status,
             'finalized_status':finalized_status,
-        }, 
-        context_instance = RequestContext(request)
+        }
+      
     )
 
 
@@ -856,5 +855,5 @@ def vacancies_favorites(request):
     candidate_favs = Candidate_Fav.objects.filter(candidate=candidate)
     return render(request,'vacancies_favorites.html',
                               {'candidate_favs': candidate_favs,
-                              'isFav': True},
-                              context_instance = RequestContext(request))
+                              'isFav': True})
+                            

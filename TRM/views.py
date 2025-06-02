@@ -43,39 +43,39 @@ def index(request):
             return redirect('vacancies_first_search_vacancies')
     else:
         form = BasicSearchVacancyForm()
-    return render(request, 'index.html', {'isIndex': True, 'form': form}, context_instance=RequestContext(request))
-
+        return render(request,'index.html', {'isIndex': True, 'form': form})
+   
 def companies(request):
-    return render(request, 'company_index.html', {'isCompanie': True}, context_instance=RequestContext(request))
-
+      return render(request,'company_index.html', {'isCompanie': True})
+   
 def privacy_policy(request):
-    return render(request, 'privacy_policy.html', {'isProfile': True}, context_instance=RequestContext(request))
-
+     return render(request,'privacy_policy.html', {'isProfile': True})
+    
 def terms_and_conditions(request):
-    return render(request, 'terms_and_conditions.html', {'isProfile': True}, context_instance=RequestContext(request))
-
+     return render(request,'terms_and_conditions.html', {'isProfile': True})
+    
 def email_campaign_0(request):
-    return render(request, 'email_campaigns/campaign_0.html', context_instance=RequestContext(request))
-
-def handler500(request):
-    response = render(request, '500.html', {},
-                                  context_instance=RequestContext(request))
+    return render(request, 'email_campaigns/campaign_0.html', {})
+    
+ def handler500(request):
+    response = render(request, '500.html', {})
     response.status_code = 500
     return response
 
 def pricing_comparison(request):
-    return render(request, 'pricing.html',{},RequestContext(request))
-
+     return render(request,'pricing.html',{})
+   
 def about_us(request):
-    return render(request, 'about_us.html',{},context_instance = RequestContext(request))
+     return render(request,'about_us.html',{})
+    
 
 def product(request):
-    return render(request, 'product.html',{},context_instance = RequestContext(request))
-
+     return render(request,'product.html',{})
+    
 def pricing(request):
     packages = Package.objects.all()
-    return render(request, 'pricing.html',{'packages':packages},context_instance = RequestContext(request))
-
+    return render(request,'pricing.html',{'packages':packages})
+   
 def contact(request):
     if request.method == 'POST':
         form_contact = ContactForm(request=request,data=request.POST )
@@ -84,8 +84,8 @@ def contact(request):
             form_contact = ContactForm(request=request)
     else:
         form_contact = ContactForm(request=request)
-    return render(request, 'contact.html',{'form_contact':form_contact},context_instance = RequestContext(request))
-
+        return render(request,'contact.html',{'form_contact':form_contact})
+    
 def comingsoon(request):
     if request.method == 'POST':
         form_request = EarlyAccessForm(request=request,data=request.POST )
@@ -94,8 +94,8 @@ def comingsoon(request):
             form_request = EarlyAccessForm(request=request)
     else:
         form_request = EarlyAccessForm(request=request)
-    return render(request, 'comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request},context_instance = RequestContext(request))
-
+        return render(request,'comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request})
+    
 def job_board(request):
     subdomain_data = subdomain(request)
     if subdomain_data['active_host']:
@@ -206,5 +206,5 @@ def job_board(request):
             'salaries': Salary_Type.objects.all(),
             'locations': alllocations,
             'filters': filters,
-        },
-        context_instance = RequestContext(request))
+        })
+    #,context_instance = RequestContext(request))

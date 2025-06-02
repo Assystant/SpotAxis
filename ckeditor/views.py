@@ -7,7 +7,7 @@ from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
 from django.views import generic
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 
 from ckeditor import image_processing
@@ -202,9 +202,9 @@ def get_files_browse_urls(user=None):
 
 def is_image(path):
     """
-    Check if a given file path corresponds to an image based on file extension.
+    #Check if a given file path corresponds to an image based on file extension.
 
-    Supported image extensions: jpg, jpeg, png, gif.
+    #Supported image extensions: jpg, jpeg, png, gif.
     """
     ext = path.split('.')[-1].lower()
     return ext in ['jpg', 'jpeg', 'png', 'gif']
@@ -219,4 +219,5 @@ def browse(request):
     context = RequestContext(request, {
         'files': get_files_browse_urls(request.user),
     })
-    return render_to_response('browse.html', context)
+    return render(request,'browse.html', context)
+    
