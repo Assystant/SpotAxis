@@ -1,3 +1,0 @@
-class WrongFileType(ValueError):
-    pass
-
