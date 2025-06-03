@@ -390,6 +390,23 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c0/eb/3be8fade09655623e7b5d5184e2f86e26a8b9cfade7f7cd225331bddbb43/django-nested-formset-0.1.4.tar.gz", hash = "sha256:3c847c3df8ce3a2b8a2c342a6c2291a990aab1ef57dc5a3a398e311917cb50ab", size = 9569, upload-time = "2015-03-08T00:52:35.606Z" }
 
 [[package]]
+name = "django-phonenumber-field"
+version = "8.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/95/4b/edec2f3e4b8f8048540d7d1844bc576a0bdb711e1f6a4cde364c505c865d/django_phonenumber_field-8.1.0.tar.gz", hash = "sha256:f19450625574ad3a2de047c409527d0e57699496849e71e53b53e8679ff67b27", size = 43854, upload-time = "2025-04-10T16:09:29.363Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/89/98/0413e47d7d1fab0e5a81eda6caacdcba69d50f74f64b65febf943cbd1f1e/django_phonenumber_field-8.1.0-py3-none-any.whl", hash = "sha256:9ba66873bf47401b13fc57797fbf85e785864a6bfdc8b9daa3a9012886567045", size = 65208, upload-time = "2025-04-10T16:09:27.843Z" },
+]
+
+[package.optional-dependencies]
+phonenumbers = [
+    { name = "phonenumbers" },
+]
+
+[[package]]
 name = "django-tagging"
 version = "0.5.0"
 source = { registry = "https://pypi.org/simple" }
@@ -801,6 +818,15 @@ wheels = [
 ]
 
 [[package]]
+name = "phonenumbers"
+version = "9.0.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/57/2923088eb7fe397a544dcf31f31705ddd3d2d6f965d68c8d7ce2afe70856/phonenumbers-9.0.6.tar.gz", hash = "sha256:bfb228cfc4a5644f7c1a32ded1bd2ee6f8e3749e422fbdabd57661e86ad8872d", size = 2297098, upload-time = "2025-05-28T05:45:48.251Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1a/65/b760522ce1b080e1d8af50d63e537beb5642ff043d789e4d7f5e3b4c3b30/phonenumbers-9.0.6-py2.py3-none-any.whl", hash = "sha256:b4a0f5a0dc30235b273d06acfe9afc2160cce4f1c8220067985ed81d72bb29a9", size = 2582823, upload-time = "2025-05-28T05:45:44.078Z" },
+]
+
+[[package]]
 name = "pillow"
 version = "11.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1161,6 +1187,7 @@ dependencies = [
     { name = "django-filter" },
     { name = "django-mptt" },
     { name = "django-nested-formset" },
+    { name = "django-phonenumber-field", extra = ["phonenumbers"] },
     { name = "django-tagging" },
     { name = "django-xmlrpc" },
     { name = "djangorestframework" },
@@ -1213,6 +1240,7 @@ requires-dist = [
     { name = "django-filter", specifier = ">=25.1" },
     { name = "django-mptt", specifier = ">=0.17.0" },
     { name = "django-nested-formset", specifier = ">=0.1.4" },
+    { name = "django-phonenumber-field", extras = ["phonenumbers"], specifier = ">=8.1.0" },
     { name = "django-tagging", specifier = ">=0.5.0" },
     { name = "django-xmlrpc", specifier = ">=0.1.8" },
     { name = "djangorestframework", specifier = ">=3.16.0" },
