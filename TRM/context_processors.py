@@ -20,7 +20,7 @@ def project_name(request):
 
 def candidate_full_name(request):
     full_name = _('Your Name')
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user_profile = request.user.profile.codename
         if user_profile == 'candidate':
             candidate = get_object_or_404(Candidate, user=request.user)
