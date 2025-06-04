@@ -331,3 +331,6 @@ REST_FRAMEWORK = {
         #'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+#I tried adding it next to the time zone setting but it won't work so I had it at the end.
+USE_TZ = True
