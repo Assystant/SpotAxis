@@ -513,7 +513,7 @@ def add_stage(request):
     context['success'] = False
     context['auth'] = request.is_ajax()
     subdomain_data = subdomain(request)
-    if request.is_ajax() and request.user.is_authenticated():
+    if request.is_ajax() and request.user.is_authenticated:
         stage_name = request.POST['stage_name']
         try:
             company = Company.objects.get(subdomain__slug=subdomain_data['active_subdomain'])
@@ -530,7 +530,7 @@ def add_stage(request):
 def update_vacancy_stage(request):
     context={}
     context['success'] = False
-    if request.method == 'POST' and request.user.is_authenticated():
+    if request.method == 'POST' and request.user.is_authenticated:
         vacancy = Vacancy.objects.filter(id=request.POST['vacancy'])
         if vacancy:
             vacancy = vacancy[0]
@@ -625,7 +625,7 @@ def upgrade_postulate(request):
     context={}
     formdata = json.loads(request.POST.get('formdata',''))
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated() and formdata:
+    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated and formdata:
         user = request.user
         try:
             vacancy = Vacancy.objects.get(id=request.POST['vacancy'])
@@ -702,7 +702,7 @@ def downgrade_postulate(request):
     context={}
     formdata = json.loads(request.POST.get('formdata',''))
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated() and formdata:
+    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated and formdata:
         user = request.user
         try:
             vacancy = Vacancy.objects.get(id=request.POST['vacancy'])
@@ -776,7 +776,7 @@ def archive_postulate(request):
     context={}
     formdata = json.loads(request.POST.get('formdata',''))
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated() and formdata:
+    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated and formdata:
         user = request.user
         try:
             cpage = request.POST.get('cpage',False)
@@ -1980,7 +1980,7 @@ def tag(request):
 def withdraw(request):
     context={}
     context['success'] = False
-    if request.user.is_authenticated() and request.method=='POST':
+    if request.user.is_authenticated and request.method=='POST':
         try:
             postulate = Postulate.objects.get(id = request.POST.get('id'), candidate__user=request.user)
             if postulate.vacancy_stage.order != 100:
@@ -2033,7 +2033,7 @@ def compare_candidates(request):
         context['candidates'] = None
         subdomain_data = subdomain(request)
         # candidate processes
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             # raise ValueError()
             try:
                 recruiter = Recruiter.objects.get(user=request.user, user__is_active=True, company__subdomain__slug=subdomain_data['active_subdomain'])
@@ -2507,7 +2507,7 @@ def renew_now(request):
     context={}
     context['success'] = False
     if request.method == 'POST':
-        if request.user.is_authenticated() and request.user.profile.codename == 'recruiter' and request.user.recruiter.is_admin():
+        if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and request.user.recruiter.is_admin():
             company = request.user.recruiter.company.all()[0]
             if not company.subscription.expiry:
                 context['msg'] = 'Your current Plan is not renewable.'
@@ -2643,7 +2643,7 @@ def socialshare(request):
     context = {}
     context['success'] = False
     context['msg'] = 'Unauthorised access'
-    if request.method == 'POST' and request.user.is_authenticated() and hasattr(request.user,'recruiter'):
+    if request.method == 'POST' and request.user.is_authenticated and hasattr(request.user,'recruiter'):
         context['msg'] = 'Unauthorised access.'
 
         code = request.POST.get('social_code')
@@ -2747,7 +2747,7 @@ def socialshare(request):
 def revoke_social_auth(request, social_code):
     context = {}
     context['success'] = False
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         # try:
             socialUser = SocialAuth.objects.get(user = request.user,social_code = social_code)
             result = revoke_token(socialUser.oauth_token,social_code)
@@ -2816,7 +2816,7 @@ def remove_schedule(request):
     """
     context = {}
     context['success'] = False
-    if request.method == 'POST' and request.is_ajax() and request.user.is_authenticated():
+    if request.method == 'POST' and request.is_ajax() and request.user.is_authenticated:
         candidate = Postulate.objects.filter(id = int(request.POST.get('candidate', 0)))
         if candidate:
             candidate = candidate[0]
@@ -2847,7 +2847,7 @@ def get_upcoming_schedule(request):
     """
     context={}
     json_context = {}
-    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated():
+    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated:
         context['recruiter'] = request.user.recruiter
         json_context['html_response'] = render_to_string('scheduled_widget.html',context)
     return JsonResponse(json_context)
@@ -2918,7 +2918,7 @@ def update_site_template(request):
     """
     context={}
     context['success'] = False
-    if request.user.is_authenticated() and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
         template_id = request.POST.get('template_id', None)
         template = 'careers/base/t-'+ str(template_id) +'/jobs.html'
         valid = False
@@ -2970,7 +2970,7 @@ def save_template(request):
         context['msg'] = 'Unauthorised access'
         return JsonResponse(context)
     company = company[0]
-    if request.user.is_authenticated() and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
         above_jobs = request.POST.get('above_jobs');
         below_jobs = request.POST.get('below_jobs');
         if above_jobs and below_jobs:
@@ -2997,7 +2997,7 @@ def get_evaluators(request):
         context['msg'] = 'Unauthorised access'
         return JsonResponse(context)
     company = company[0]
-    if request.user.is_authenticated() and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
         try:
             vstage = VacancyStage.objects.get(id = request.POST.get('vid'))
         except:
@@ -3022,7 +3022,7 @@ def get_process_criterias(request):
         context['msg'] = 'Unauthorised access'
         return JsonResponse(context)
     company = company[0]
-    if request.user.is_authenticated() and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
         try:
             vstage = VacancyStage.objects.get(id = request.POST.get('vid'))
         except:
@@ -3053,7 +3053,7 @@ def resolve_conflicts_delete(request):
     context = {}
     context['success'] = False
     context['reload'] = True
-    if request.user.is_authenticated() and request.user.profile.codename == 'candidate' and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.profile.codename == 'candidate' and request.is_ajax() and request.method == 'POST':
         ids = request.POST.getlist('ids[]')
         card_type = request.POST.get('card_type')
         length = 0
@@ -3141,7 +3141,7 @@ def resolve_conflicts_unconflict(request):
     context = {}
     context['success'] = False
     context['reload'] = True
-    if request.user.is_authenticated() and request.user.profile.codename == 'candidate' and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.profile.codename == 'candidate' and request.is_ajax() and request.method == 'POST':
         ids = request.POST.getlist('ids[]')
         card_type = request.POST.get('card_type')
         length = 0
@@ -3179,7 +3179,7 @@ def resolve_conflicts_merge(request):
     context = {}
     context['success'] = False
     context['reload'] = False
-    if request.user.is_authenticated() and request.user.profile.codename == 'candidate' and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.profile.codename == 'candidate' and request.is_ajax() and request.method == 'POST':
         ids = request.POST.getlist('ids[]')
         card_type = request.POST.get('card_type')
         length = 0
@@ -3318,7 +3318,7 @@ def add_external_referal(request):
     context = {}
     context['success'] = False
     context['reload'] = False
-    if request.user.is_authenticated() and request.user.profile.codename == 'recruiter' and request.is_ajax() and request.method == 'POST' and request.user.recruiter.is_manager():
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and request.is_ajax() and request.method == 'POST' and request.user.recruiter.is_manager():
         reftype = request.POST.get('reftype')
         refname = request.POST.get('refname')
         vacancy_id = request.POST.get('vid')
@@ -3358,7 +3358,7 @@ def remove_external_referal(request):
     context = {}
     context['success'] = False
     context['reload'] = False
-    if request.user.is_authenticated() and request.user.profile.codename == 'recruiter' and request.is_ajax() and request.method == 'POST' and request.user.recruiter.is_manager():
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and request.is_ajax() and request.method == 'POST' and request.user.recruiter.is_manager():
         refid= request.POST.get('refid')
         try:
             company = request.user.recruiter.company.all()[0]

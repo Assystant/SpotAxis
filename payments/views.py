@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from django.conf import settings
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, JsonResponse

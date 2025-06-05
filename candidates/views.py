@@ -177,7 +177,7 @@ def edit_curriculum(request, candidate_id=None):
     Returns:
         HttpResponse: Rendered edit CV page with forms and candidate data.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # iF THE USER IS LOGGED IN AND HAS NO EMAIL...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
