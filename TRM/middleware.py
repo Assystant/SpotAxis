@@ -164,7 +164,7 @@ from django.contrib import messages
 class ExpiredPlanMiddleware:
     def process_request(self,request):
         # if excess users, trigger mesage and redirect
-        if request.user.is_authenticated() and request.user.profile.codename == 'recruiter':
+        if request.user.is_authenticated and request.user.profile.codename == 'recruiter':
             current_url = resolve(request.path_info).url_name
             # messages.success(request, request.path_info)
             if request.user.recruiter.company.all():
