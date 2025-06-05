@@ -390,6 +390,32 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c0/eb/3be8fade09655623e7b5d5184e2f86e26a8b9cfade7f7cd225331bddbb43/django-nested-formset-0.1.4.tar.gz", hash = "sha256:3c847c3df8ce3a2b8a2c342a6c2291a990aab1ef57dc5a3a398e311917cb50ab", size = 9569, upload-time = "2015-03-08T00:52:35.606Z" }
 
 [[package]]
+name = "django-phonenumber-field"
+version = "8.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/95/4b/edec2f3e4b8f8048540d7d1844bc576a0bdb711e1f6a4cde364c505c865d/django_phonenumber_field-8.1.0.tar.gz", hash = "sha256:f19450625574ad3a2de047c409527d0e57699496849e71e53b53e8679ff67b27", size = 43854, upload-time = "2025-04-10T16:09:29.363Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/89/98/0413e47d7d1fab0e5a81eda6caacdcba69d50f74f64b65febf943cbd1f1e/django_phonenumber_field-8.1.0-py3-none-any.whl", hash = "sha256:9ba66873bf47401b13fc57797fbf85e785864a6bfdc8b9daa3a9012886567045", size = 65208, upload-time = "2025-04-10T16:09:27.843Z" },
+]
+
+[[package]]
+name = "django-rosetta"
+version = "0.10.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "polib" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ff/d0/7c5de2e1479f9a97af8d86a6173ea635ec819b3848f5c4ea852b3f22b173/django_rosetta-0.10.2.tar.gz", hash = "sha256:7e02427fe43b578dc12e02d6ce2cb4d045cc751a91b6e7f2c5ef4f706e1fb3d0", size = 262724, upload-time = "2025-04-03T13:05:36.432Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0f/0b/0a0088fa3721c0bddbd52177b072b0e8065be9ced68f9b579c55bd01d706/django_rosetta-0.10.2-py3-none-any.whl", hash = "sha256:44bd2b9ff2b88322d1a1f0cae62d8dfd4996b465f4a22a31f016cfd64d022352", size = 122592, upload-time = "2025-04-03T13:05:34.914Z" },
+]
+
+[[package]]
 name = "django-tagging"
 version = "0.5.0"
 source = { registry = "https://pypi.org/simple" }
@@ -842,6 +868,15 @@ wheels = [
 ]
 
 [[package]]
+name = "polib"
+version = "1.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/10/9a/79b1067d27e38ddf84fe7da6ec516f1743f31f752c6122193e7bce38bdbf/polib-1.2.0.tar.gz", hash = "sha256:f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b", size = 161658, upload-time = "2023-02-23T17:53:56.873Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6b/99/45bb1f9926efe370c6dbe324741c749658e44cb060124f28dad201202274/polib-1.2.0-py2.py3-none-any.whl", hash = "sha256:1c77ee1b81feb31df9bca258cbc58db1bbb32d10214b173882452c73af06d62d", size = 20634, upload-time = "2023-02-23T17:53:59.919Z" },
+]
+
+[[package]]
 name = "pycparser"
 version = "2.22"
 source = { registry = "https://pypi.org/simple" }
@@ -1161,6 +1196,8 @@ dependencies = [
     { name = "django-filter" },
     { name = "django-mptt" },
     { name = "django-nested-formset" },
+    { name = "django-phonenumber-field" },
+    { name = "django-rosetta" },
     { name = "django-tagging" },
     { name = "django-xmlrpc" },
     { name = "djangorestframework" },
@@ -1213,6 +1250,8 @@ requires-dist = [
     { name = "django-filter", specifier = ">=25.1" },
     { name = "django-mptt", specifier = ">=0.17.0" },
     { name = "django-nested-formset", specifier = ">=0.1.4" },
+    { name = "django-phonenumber-field", specifier = ">=8.1.0" },
+    { name = "django-rosetta", specifier = ">=0.10.2" },
     { name = "django-tagging", specifier = ">=0.5.0" },
     { name = "django-xmlrpc", specifier = ">=0.1.8" },
     { name = "djangorestframework", specifier = ">=3.16.0" },
