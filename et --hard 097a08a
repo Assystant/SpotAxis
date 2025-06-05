@@ -1,0 +1,84 @@
+[33m5bac313[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mupdate[m[33m)[m Merge branch 'master' of https://github.com/SaiBhaskar0987/SpotAxis into update
+[33m097a08a[m[33m ([m[1;31morigin/update[m[33m)[m Update from comparsion of 99-chore-replace-pypi-to-uv
+[33m69960de[m Merge branch 'develop' into update
+[33m4518c5a[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m convert is_authenticated to property in candidates views (#144)
+[33m0fe08e0[m helo (#143)
+[33me25bdc1[m[33m ([m[1;31morigin/99-chore-replace-pypi-with-uv[m[33m, [m[1;32m99-chore-replace-pypi-with-uv[m[33m)[m indentation issue fixed
+[33m15e3def[m toml fixes code restrictions on api endpoints for missing declarations other bug fixes
+[33m52da585[m * excluded context dict info
+[33m79462d7[m 118 render to response (#135)
+[33md9eb95a[m updated pyproject requirements
+[33me400c86[m [refactor] Replace package manager from PyPI to UV #99 (#139)
+[33me74fadb[m #136 excluded context dict info (#137)
+[33m7066af9[m 118 render to response (#135)
+[33m24172fc[m fixed deprecated url patterns (#132)
+[33mdff00fa[m Develop (#129)
+[33m162b60c[m added on-delete-params on one-to-one relationships (#130)
+[33mf757c8c[m [fix] Remove deprecated models.permalink usage (#110) (#127)
+[33m31ae562[m chore: unplugged zinnia (#126)
+[33mc7ce912[m chore: unplugged helpdesk (#125)
+[33mbcb4b8e[m #109 remove python2 unicode imports and decorator declarations (#124)
+[33ma922174[m fixed lru_cache import (#122)
+[33mf5f7f2d[m #111 invalid imports replacement (#121)
+[33m97fa92d[m #98 module integration serializer (#120)
+[33m26e59c1[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m Revert "fix: replace deprecated render_to_response with render (#118)" (#123)
+[33md96b208[m fix: replace deprecated render_to_response with render (#118)
+[33m105a6d3[m ref(html2pdf): replace html2pdf with weasyprint (#13) (#101)
+[33mc07d2fe[m #91 Added configuration file for pre commit. (#115)
+[33meb334c2[m Added module: helpdesk_api (#100)
+[33m4cb37da[m Added Serializers: scheduler (#97)
+[33m1dfb73c[m zinnia drf (#96)
+[33m44677f8[m Fixed Indentation Issues in vacancies/models.py (#92)
+[33m65deca7[m Added Serializers: customField (#89)
+[33m7ed2bd7[m Added API: ckeditor (#88)
+[33m4f52964[m docs(resume_parser): add documentation for Resume Parser module #26 (#93)
+[33m3995a46[m Added module: comapnies_api (#87)
+[33mc266cf7[m drf-for-candidates (#82)
+[33ma7815fa[m [docs] Add documentation for Payments module (#25) (#95)
+[33m62dfccc[m [docs] Add documentation for Helpdesk module (#24) (#94)
+[33mea3386f[m [docs] Add documentation for Custom Field module (#23) (#86)
+[33mb2c9dc5[m [docs] Add documentation for Scheduler module (#27) (#85)
+[33m4b90c21[m [docs] Add documentation for CKeditor module (#20) (#84)
+[33m7593611[m [docs] Add documentation for Companies module (#22) (#83)
+[33m039b200[m Develop (#77)
+[33m09cf8ac[m [Document] Contribution Guidelines (40) (#81)
+[33mbab7954[m Added DRF API for Activities Module (#79)
+[33mff54bd3[m Added module: vacancies_api (#75)
+[33m52f8e56[m docs(candidates): add detailed docstrings for classes and methods (#71)
+[33mf12688a[m completed documentation for activities module (#70)
+[33md31688a[m Drf api modules. Completed  (#68)
+[33m0bc3ac1[m Add Documentation: Vacancies (#63)
+[33mc14cd52[m Added comprehensive docstring documentation to common app modules (#59)
+[33m9c54b8a[m Set up Django Rest Framework (#67)
+[33m57c6613[m upgrade reportlab from 4.2.5 to 4.4 (#50)
+[33m0ede75d[m Merge pull request #53 from Shaunaksb/upgrade-python-docx
+[33mf13b814[m Merge branch 'develop' into upgrade-python-docx
+[33mf46c482[m upgrade idna from 3.8 to 3.10
+[33mc52a568[m upgrade pymysql from 0.7.6 to 1.1.1
+[33mc733ad0[m upgrade from pypdf2 1.2.6 to pypdf 5.5.0
+[33m596e763[m upgrade pillow from 11.1.0 to 11.2.1
+[33mf14038b[m upgrade requests from 2.11 to 2.32.3
+[33mea9fb23[m remove ipaddress library
+[33m0b4cca9[m upgrade python-docx from 0.8.6 to 1.1.2
+[33m05f776e[m SET_NULL added
+[33m8e4acc8[m on_delete on foreign keys
+[33m6d4a72d[m upgrade docutils from 0.12 to 0.21.1
+[33m735c4e1[m upgrade coverage from 4.4 to 7.8.0
+[33m3d14110[m Upgraded idna 2.1 to 3.8
+[33m27c039c[m Fixed issues as per review comments
+[33m090e3f5[m Django 2.0 removes the django.core.urlresolvers module, which was moved to django.urls
+[33m72b7063[m ugettext_lazy has been removed from Django 3+ version, Replace it with gettext_lazy
+[33m3243bfe[m ipgetter#15 Class name Refactor (#33)
+[33mf6c1c0c[m Merge pull request #32 from Assystant/upgrade-django-python
+[33m3016940[m Update README.md
+[33mae28923[m Update README.md
+[33mdda2b79[m Update README.md
+[33m5f5e067[m Update README.md
+[33m4e0e5ed[m Upgrade Django to 5.x and Python 2.x to 3.x; fix syntax issues
+[33m6bef15e[m Update README.md
+[33mdd3c065[m Update README.md
+[33me52e13c[m Update README.md
+[33m2941787[m Create LICENSE
+[33m741b80a[m Update README.md
+[33mdb800c6[m readme update
+[33m2b943a1[m[33m ([m[1;31morigin/main[m[33m)[m Initial commit
