@@ -8,8 +8,6 @@ from datetime import datetime
 from django.db.models import Count
 from payments.models import Discount, Discount_Usage
 from time import mktime
-from six.moves import range
-from six.moves import zip
 
 def get_epoch():
     dt = datetime.now()

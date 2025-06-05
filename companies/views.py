@@ -26,7 +26,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import Http404, HttpResponse
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template import RequestContext, Context, TemplateDoesNotExist
 from django.template.loader import get_template, render_to_string
 from django.utils.translation import gettext as _
@@ -142,8 +142,7 @@ def record_recruiter(request, token=None):
     if subdomain_data['active_host']:
         template = 'record_edit_recruiter.html'
         static_header = False
-        return render(request, template,
-    #return render_to_response(template,
+    return render(request, template,
                               {'form_user': form_user,
                                'registration': True,
                                'invitation': invitation,
@@ -259,7 +258,6 @@ def record_company(request):
         # form_address = AdressForm()
         form_company = CompanyForm()
 
-    
     return render(request,'record_edit_company.html',{
                               # {'form_user': form_user,
                               # 'form_address': form_address,
@@ -1019,7 +1017,7 @@ def vacancies_summary(request, vacancy_status_name=None):
                                'stylesheet':stylesheet,
                             })
     elif vacancy_status_name:
-          return render(request,'vacancies/vacancies_summary.html' ,                   
+        return render(request,'vacancies/vacancies_summary.html' ,
                             {'isVacancy': True,
                                # 'active_vacancies': active_vacancies,
                                # 'inactive_vacancies': inactive_vacancies,
@@ -1963,7 +1961,6 @@ def widget_jobs(request):
     statuses = Vacancy_Status.objects.all()
     vacancies = Vacancy.publishedjobs.filter(company = company)
     return render(request,'vacancies/widget_summary.html',{
-    
                                             'isVacancy':True,
                                             'vacancy_status': vacancy_status,
                                             'statuses': statuses,

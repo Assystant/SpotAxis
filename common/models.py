@@ -8,7 +8,7 @@ import uuid
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.db import models
 from django.utils import timezone
 from common import registration_settings as registration_settings
@@ -16,7 +16,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.contrib.sites.models import Site
 from django.template import loader
 from TRM.settings import logo_email, SITE_URL, PHOTO_USER_DEFAULT, NOTIFICATION_EMAILS, MEDIA_URL, SITE_SUFFIX, DEFAULT_FROM_EMAIL, ADMINS
-from phonenumber_field.modelfields import PhoneNumberField
+#from localflavor.us.models import PhoneNumberField
 import types
 
 Name = _('Name')
@@ -47,9 +47,9 @@ import os
 class User(AbstractUser):
     """ Custom User """
     profile = models.ForeignKey(Profile, verbose_name=_('Profile'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    phone = PhoneNumberField(verbose_name=_(u'Phone'), null=True, blank=True, default=None)
+    #phone = PhoneNumberField(verbose_name=_(u'Phone'), null=True, blank=True, default=None)
     phone_ext = models.PositiveIntegerField(verbose_name=_(u'Extension'), null=True, blank=True, default=None)
-    cellphone = PhoneNumberField(verbose_name=_('Celular'), null=True, blank=True, default=None)
+    #cellphone = PhoneNumberField(verbose_name=_('Celular'), null=True, blank=True, default=None)
     photo = models.ImageField(verbose_name=_('Photo'), upload_to='photos/', default=PHOTO_USER_DEFAULT, blank=True, null=True, max_length=200)
     logued_by = models.CharField(_('Loggin Method'), choices=LOGIN_OPTIONS, max_length=2, null=True, blank=True, default=None)
 
@@ -128,7 +128,7 @@ def send_TRM_email(subject_template_name, email_template_name, context_email, to
             msg.attach_file(file)
         return msg.send()
     except Exception as e:
-        print ('%s (%s)' % (e.message, type(e)))
+        print('%s (%s)' % (e, type(e)))#print '%s (%s)' % (e.message, type(e))
         return 0
 
 def send_email_to_TRM(subject="No Subject", body_email=None, notify = False):

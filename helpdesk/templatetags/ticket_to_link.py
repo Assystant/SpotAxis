@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import re
 
 from django import template
-from django.urlrs import reverse
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from helpdesk.models import Ticket

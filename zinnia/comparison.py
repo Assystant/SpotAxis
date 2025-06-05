@@ -5,7 +5,7 @@ from math import sqrt
 from django.contrib.sites.models import Site
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache import caches
-from django.utils import six
+import six
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 
@@ -14,8 +14,6 @@ import regex as re
 from zinnia.models.entry import Entry
 from zinnia.settings import COMPARISON_FIELDS
 from zinnia.settings import STOP_WORDS
-from six.moves import map
-from six.moves import range
 
 
 PUNCTUATION = re.compile(r'\p{P}+')

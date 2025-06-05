@@ -20,7 +20,6 @@ from el_pagination.exceptions import PaginationError
 from el_pagination.models import PageList
 from el_pagination import settings
 from project.models import make_model_instances
-from six.moves import range
 
 skip_if_old_etree = unittest.skipIf(
     sys.version_info < (2, 7), 'XPath not supported by this Python version.')

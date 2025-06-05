@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from datetime import datetime, timedelta
 from django import template
 from django.template.defaultfilters import stringfilter
-from django.urlrs import reverse
+from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from vacancies.models import Vacancy_Status, Postulate_Stage
@@ -117,7 +117,7 @@ def inAuthList(value):
     Used to get year of birthdate of a candidate
     {{ candidate.birthday|timesince|upto:',' }}
     """
-    from django.core.urlresolvers import reverse
+    from django.urls import reverse
     if value == reverse('auth_login') or value == reverse('auth_logout') or value == reverse('companies_record_recruiter') or value == reverse('candidates_register_candidate'):
         return True
     else:
@@ -131,7 +131,7 @@ def resolveNamespace(value, namespace = None):
     Used to get year of birthdate of a candidate
     {{ candidate.birthday|timesince|upto:',' }}
     """
-    from django.core.urlresolvers import resolve
+    from django.urls import resolve
     if namespace and namespace in resolve(value).namespaces:
         return True
     else:
@@ -160,7 +160,8 @@ def show_no_email(value):
 def split(value, arg):
     return value.split(arg)
 
-@register.assignment_tag
+#@register.assignment_tag
+@register.simple_tag
 def get_status_count(status,company):
     try:
         return Vacancy_Status.objects.get(name = status).vacancy_set.filter(company__id=company).count()

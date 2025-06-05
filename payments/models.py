@@ -151,8 +151,8 @@ class PriceSlab(models.Model):
         return False
 
 class Subscription(models.Model):
-    """Model representing a company's subscription to a pricing plan."""
-    company = models.OneToOneField(Company, null=True, blank=True, default=None, on_delete=models.CASCADE)
+    #company = models.OneToOneField(Company, null=True, blank=True, default=None)
+    company = models.OneToOneField(Company, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     expiry = models.DateTimeField(null=True, blank=True, default=None)
     added_users = models.PositiveIntegerField(null=True, blank=True, default=0)
     price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None,on_delete=models.SET_NULL)

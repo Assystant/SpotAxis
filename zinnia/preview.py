@@ -3,9 +3,7 @@
 
 from __future__ import absolute_import
 from bs4 import BeautifulSoup
-
-from django.utils import six
-
+import six
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 from django.utils.text import Truncator

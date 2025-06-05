@@ -15,7 +15,7 @@ def test(request):
     # else:
     #     form = BasicSearchVacancyForm()"""
 
-    return render(request,'test.html',
+    return render(request, 'test.html',
                               {'isIndex': True,
                                })
  

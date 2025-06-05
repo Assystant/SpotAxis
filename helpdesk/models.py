@@ -15,7 +15,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _, gettext 
+from django.utils.translation import gettext_lazy as _, gettext
+from django.urls import reverse
+#from django.utils.encoding import python_2_unicode_compatible
 
 try:
     from django.utils import timezone
@@ -23,6 +25,7 @@ except ImportError:
     from datetime import datetime as timezone
 
 
+#@python_2_unicode_compatible
 class Queue(models.Model):
     """
     A queue is a collection of tickets into what would generally be business
@@ -572,8 +575,11 @@ class Ticket(models.Model):
     def __str__(self):
         return '%s %s' % (self.id, self.title)
 
+
     def get_absolute_url(self):
         return reverse('helpdesk_view', args=[self.id])
+        #return 'helpdesk_view', (self.id,)
+    #get_absolute_url = models.permalink(get_absolute_url)
 
     def save(self, *args, **kwargs):
         """
@@ -643,6 +649,7 @@ class FollowUpManager(models.Manager):
         return self.filter(public=True)
 
 
+#@python_2_unicode_compatible
 class FollowUp(models.Model):
     """
     A FollowUp is a comment and/or change to a ticket. We keep a simple
@@ -734,6 +741,7 @@ class FollowUp(models.Model):
         super(FollowUp, self).save(*args, **kwargs)
 
 
+#@python_2_unicode_compatible
 class TicketChange(models.Model):
     """
     Tracks changes to a ticket's fields associated with a follow-up.
@@ -808,6 +816,7 @@ def attachment_path(instance, filename):
     return os.path.join(path, filename)
 
 
+#@python_2_unicode_compatible
 class Attachment(models.Model):
     """
     Represents a file attached to a follow-up. This could come from an e-mail
@@ -861,6 +870,7 @@ class Attachment(models.Model):
         verbose_name_plural = _('Attachments')
 
 
+#@python_2_unicode_compatible
 class PreSetReply(models.Model):
     """
     We can allow the admin to define a number of pre-set replies, used to
@@ -908,6 +918,7 @@ class PreSetReply(models.Model):
         return '%s' % self.name
 
 
+#@python_2_unicode_compatible
 class EscalationExclusion(models.Model):
     """
     An 'EscalationExclusion' lets us define a date on which escalation should
@@ -945,6 +956,7 @@ class EscalationExclusion(models.Model):
         verbose_name_plural = _('Escalation exclusions')
 
 
+#@python_2_unicode_compatible
 class EmailTemplate(models.Model):
     """
     Since these are more likely to be changed than other templates, we store
@@ -1007,6 +1019,7 @@ class EmailTemplate(models.Model):
         verbose_name_plural = _('e-mail templates')
 
 
+#@python_2_unicode_compatible
 class KBCategory(models.Model):
     """
     Lets help users help themselves: the Knowledge Base is a categorised
@@ -1035,10 +1048,12 @@ class KBCategory(models.Model):
         verbose_name_plural = _('Knowledge base categories')
 
     def get_absolute_url(self):
-        """Returns the URL path to view this knowledge base category."""
         return reverse('helpdesk_kb_category', kwargs={'slug': self.slug})
+        #return 'helpdesk_kb_category', (), {'slug': self.slug}
+    #get_absolute_url = models.permalink(get_absolute_url)
 
 
+#@python_2_unicode_compatible
 class KBItem(models.Model):
     """
     An item within the knowledgebase. Very straightforward question/answer
@@ -1111,10 +1126,12 @@ class KBItem(models.Model):
         verbose_name_plural = _('Knowledge base items')
 
     def get_absolute_url(self):
-        """Returns the URL path to view this knowledge base item."""
         return reverse('helpdesk_kb_item', args=[self.id])
+        #return 'helpdesk_kb_item', (self.id,)
+    #get_absolute_url = models.permalink(get_absolute_url)
 
 
+#@python_2_unicode_compatible
 class SavedSearch(models.Model):
     """
     Allow a user to save a ticket search, eg their filtering and sorting
@@ -1162,6 +1179,7 @@ class SavedSearch(models.Model):
         verbose_name_plural = _('Saved searches')
 
 
+#@python_2_unicode_compatible
 class UserSettings(models.Model):
     """
     A bunch of user-specific settings that we want to be able to define, such
@@ -1232,6 +1250,7 @@ def create_usersettings(sender, instance, created, **kwargs):
 models.signals.post_save.connect(create_usersettings, sender=settings.AUTH_USER_MODEL)
 
 
+#@python_2_unicode_compatible
 class IgnoreEmail(models.Model):
     """
     This model lets us easily ignore e-mails from certain senders when
@@ -1310,6 +1329,7 @@ class IgnoreEmail(models.Model):
             return False
 
 
+#@python_2_unicode_compatible
 class TicketCC(models.Model):
     """
     Often, there are people who wish to follow a ticket who aren't the
@@ -1388,6 +1408,7 @@ class CustomFieldManager(models.Manager):
         return super(CustomFieldManager, self).get_queryset().order_by('ordering')
 
 
+#@python_2_unicode_compatible
 class CustomField(models.Model):
     """
     Definitions for custom fields that are glued onto each ticket.
@@ -1508,6 +1529,7 @@ class CustomField(models.Model):
         verbose_name_plural = _('Custom fields')
 
 
+#@python_2_unicode_compatible
 class TicketCustomFieldValue(models.Model):
     """
     Stores the value of a custom field for a specific ticket.
@@ -1538,6 +1560,7 @@ class TicketCustomFieldValue(models.Model):
         verbose_name_plural = _('Ticket custom field values')
 
 
+#@python_2_unicode_compatible
 class TicketDependency(models.Model):
     """
     The ticket identified by `ticket` cannot be resolved until the ticket in `depends_on` has been resolved.

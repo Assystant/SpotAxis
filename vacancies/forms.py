@@ -13,7 +13,7 @@ from datetime import datetime, date, timedelta
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.forms.extras import SelectDateWidget
+from django.forms.widgets import SelectDateWidget
 from django.utils.translation import gettext as _
 from TRM.settings import days_default_search
 from upload_logos.widgets import AjaxClearableFileInput
@@ -1039,18 +1039,18 @@ class BasicSearchVacancyForm(forms.Form):
     )
 
     def __init__(self, vacancy=None, *args, **kwargs):
-    """
-    Initialize the form with optional vacancy and industry_selected parameters.
+        """
+        Initialize the form with optional vacancy and industry_selected parameters.
 
-    Args:
-        vacancy (Vacancy, optional): A Vacancy instance for context (default is None).
-        *args: Variable length argument list for parent form.
-        **kwargs: Keyword arguments; may include 'industry_selected' to preselect an industry.
+        Args:
+            vacancy (Vacancy, optional): A Vacancy instance for context (default is None).
+            *args: Variable length argument list for parent form.
+            **kwargs: Keyword arguments; may include 'industry_selected' to preselect an industry.
 
-    Notes:
-        The 'industry_selected' kwarg is popped out and can be used to filter form fields.
-        Calls the superclass initializer with remaining args and kwargs.
-    """
+        Notes:
+            The 'industry_selected' kwarg is popped out and can be used to filter form fields.
+            Calls the superclass initializer with remaining args and kwargs.
+        """
         industry_selected = kwargs.pop('industry_selected', None)
         super(BasicSearchVacancyForm, self).__init__(*args, **kwargs)
 
@@ -1058,15 +1058,15 @@ class BasicSearchVacancyForm(forms.Form):
         #     self.fields['area'].choices = get_areas(industry_selected)
 
     def clean_state(self):
-    """
-    Validate the 'state' field to ensure the selected state belongs to the initial country.
+        """
+        Validate the 'state' field to ensure the selected state belongs to the initial country.
 
-    Returns:
-        State instance or None if no state selected.
+        Returns:
+            State instance or None if no state selected.
 
-    Raises:
-        forms.ValidationError: If the selected state is invalid or does not exist.
-    """
+        Raises:
+            forms.ValidationError: If the selected state is invalid or does not exist.
+        """
         state_id = int(self.data['state'])
         if state_id < 0:
             return None
@@ -1087,15 +1087,15 @@ class BasicSearchVacancyForm(forms.Form):
         return state
 
     def clean_industry(self):
-    """
-    Validate the 'industry' field to ensure the selected industry exists in the choices.
+        """
+        Validate the 'industry' field to ensure the selected industry exists in the choices.
 
-    Returns:
-        Industry instance or None if no industry selected.
+        Returns:
+            Industry instance or None if no industry selected.
 
-    Raises:
-        forms.ValidationError: If the selected industry is invalid or does not exist.
-    """
+        Raises:
+            forms.ValidationError: If the selected industry is invalid or does not exist.
+        """
         industry_id = int(self.data['industry'])
         error = ('Industry invalid')
         if industry_id == -1:
@@ -1142,15 +1142,15 @@ class BasicSearchVacancyForm(forms.Form):
     #     return area
 
     def clean_vacancyPubDateSearch(self):
-    """
-    Validate the 'vacancyPubDateSearch' field to ensure the selected publication date is valid.
+        """
+        Validate the 'vacancyPubDateSearch' field to ensure the selected publication date is valid.
 
-    Returns:
-        PubDate_Search instance or None.
+        Returns:
+            PubDate_Search instance or None.
 
-    Raises:
-        forms.ValidationError: If the publication date is not valid.
-    """
+        Raises:
+            forms.ValidationError: If the publication date is not valid.
+        """
         try:
             pubDate = self.cleaned_data.get('vacancyPubDateSearch')
         except PubDate_Search.DoesNotExist:
@@ -1158,15 +1158,15 @@ class BasicSearchVacancyForm(forms.Form):
         return pubDate
 
     def clean_gender(self):
-    """
-    Validate the 'gender' field to ensure the selected gender exists.
+        """
+        Validate the 'gender' field to ensure the selected gender exists.
 
-    Returns:
-        Gender instance or None.
+        Returns:
+            Gender instance or None.
 
-    Raises:
-        forms.ValidationError: If the selected gender is not valid.
-    """
+        Raises:
+            forms.ValidationError: If the selected gender is not valid.
+        """
         try:
             gender = self.cleaned_data.get('gender')
         except Gender.DoesNotExist:
@@ -1174,15 +1174,15 @@ class BasicSearchVacancyForm(forms.Form):
         return gender
 
     def clean_degree(self):
-    """
-    Validate the 'degree' field to ensure the selected education level exists.
+        """
+        Validate the 'degree' field to ensure the selected education level exists.
 
-    Returns:
-        Degree instance or None.
+        Returns:
+            Degree instance or None.
 
-    Raises:
-        forms.ValidationError: If the selected degree is not valid.
-    """
+        Raises:
+            forms.ValidationError: If the selected degree is not valid.
+        """
         try:
             degree = self.cleaned_data.get('degree')
         except Degree.DoesNotExist:
@@ -1215,17 +1215,17 @@ class QuestionVacancyForm(forms.ModelForm):
     )
 
     def save(self, vacancy=None, user=None, question=None):
-    """
-    Create and save a new Question instance with the given vacancy, user, and question text.
+        """
+        Create and save a new Question instance with the given vacancy, user, and question text.
 
-    Args:
-        vacancy (Vacancy, optional): The Vacancy instance related to the question.
-        user (User, optional): The User instance who asked the question.
-        question (str, optional): The text content of the question.
+        Args:
+            vacancy (Vacancy, optional): The Vacancy instance related to the question.
+            user (User, optional): The User instance who asked the question.
+            question (str, optional): The text content of the question.
 
-    Returns:
-        Question: The newly created Question object.
-    """
+        Returns:
+            Question: The newly created Question object.
+        """
         Question.objects.create(vacancy=vacancy, user=user, question=question)
 
     class Meta:
@@ -1254,7 +1254,7 @@ class VacancyFileForm(forms.ModelForm):
     file = forms.FileField(
         widget=forms.FileInput(
             attrs={
-                'multiple': True,
+                #'multiple': True,
                 'accept': 'image/jpeg,'
                           'image/bmp,'
                           'image/png,'
@@ -1271,34 +1271,34 @@ class VacancyFileForm(forms.ModelForm):
     )
 
     def validate_number_files(self, files):
-    """
-    Validate that the number of uploaded files does not exceed the allowed maximum.
+        """
+        Validate that the number of uploaded files does not exceed the allowed maximum.
 
-    Args:
-        files (int): The number of files being uploaded.
+        Args:
+            files (int): The number of files being uploaded.
 
-    Adds a form error if the number of files exceeds the maximum allowed.
-    """
+        Adds a form error if the number of files exceeds the maximum allowed.
+        """
         if files > self.max_files:
             msg = _('You can only upload upto %s files') % self.max_files
             self.add_error('file', msg)
         pass
 
     def clean_file(self):
-    """
-    Clean and validate the uploaded file.
+        """
+        Clean and validate the uploaded file.
 
-    Checks file size against the maximum allowed size,
-    validates the file extension,
-    and normalizes the filename by removing accents and special characters.
+        Checks file size against the maximum allowed size,
+        validates the file extension,
+        and normalizes the filename by removing accents and special characters.
 
-    Returns:
-        File: The cleaned file object if valid, otherwise None.
+        Returns:
+            File: The cleaned file object if valid, otherwise None.
 
-    Raises:
-        ValidationError: If the file size exceeds the allowed limit or
-                         if the file extension is not supported.
-    """
+        Raises:
+            ValidationError: If the file size exceeds the allowed limit or
+                            if the file extension is not supported.
+        """
         file = self.cleaned_data['file']
 
         if file:
@@ -1321,17 +1321,17 @@ class VacancyFileForm(forms.ModelForm):
             return None
 
     def save(self, vacancy=None, random_number=None, commit=True):
-    """
-    Save the VacancyFileForm instance with optional vacancy and random number assignments.
+        """
+        Save the VacancyFileForm instance with optional vacancy and random number assignments.
 
-    Args:
-        vacancy (Vacancy, optional): The Vacancy instance to associate with the file.
-        random_number (int or str, optional): A random number to assign to the file instance.
-        commit (bool): Whether to commit the save operation immediately.
+        Args:
+            vacancy (Vacancy, optional): The Vacancy instance to associate with the file.
+            random_number (int or str, optional): A random number to assign to the file instance.
+            commit (bool): Whether to commit the save operation immediately.
 
-    Returns:
-        Vacancy_Files: The saved Vacancy_Files model instance.
-    """
+        Returns:
+            Vacancy_Files: The saved Vacancy_Files model instance.
+        """
         instance = super(VacancyFileForm, self).save(commit=False)
         instance.vacancy = vacancy
         instance.random_number = random_number
@@ -1430,46 +1430,46 @@ class Public_FilesForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-    """
-    Initialize the Public_FilesForm.
+        """
+        Initialize the Public_FilesForm.
 
-    Extracts 'v_id' from kwargs to set the vacancy ID associated with the form.
+        Extracts 'v_id' from kwargs to set the vacancy ID associated with the form.
 
-    Args:
-        *args: Variable length argument list.
-        **kwargs: Keyword arguments containing 'v_id' for vacancy ID.
-    """
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Keyword arguments containing 'v_id' for vacancy ID.
+        """
         self.vacancy_id = kwargs.pop('v_id', None)
         super(Public_FilesForm, self).__init__(*args, **kwargs)
 
     def validate_number_files(self, files):
-    """
-    Validate the number of files uploaded against the maximum allowed.
+        """
+        Validate the number of files uploaded against the maximum allowed.
 
-    Args:
-        files (int): The number of files being uploaded.
+        Args:
+            files (int): The number of files being uploaded.
 
-    Adds an error to the form if the file count exceeds the maximum allowed.
-    """
+        Adds an error to the form if the file count exceeds the maximum allowed.
+        """
         if files > self.max_files:
             msg = _('You can only upload upto %s files') % self.max_files
             self.add_error('file', msg)
         pass
 
     def clean_file(self):
-    """
-    Clean and validate the uploaded file.
+        """
+        Clean and validate the uploaded file.
 
-    Checks if the file size exceeds the maximum allowed size.
-    Validates the file extension against allowed types (doc, docx, pdf).
-    Normalizes the file name by removing accents and special characters.
+        Checks if the file size exceeds the maximum allowed size.
+        Validates the file extension against allowed types (doc, docx, pdf).
+        Normalizes the file name by removing accents and special characters.
 
-    Returns:
-        File: The cleaned file object if valid, otherwise None.
+        Returns:
+            File: The cleaned file object if valid, otherwise None.
 
-    Raises:
-        ValidationError: If the file size is too large or if the file type is unsupported.
-    """
+        Raises:
+            ValidationError: If the file size is too large or if the file type is unsupported.
+        """
         file = self.cleaned_data['file']
         if file:
             if file.size > self.max_megas * 1024000:
@@ -1491,18 +1491,18 @@ class Public_FilesForm(forms.Form):
             return None
 
     def clean_email(self):
-    """
-    Validate the email field.
+        """
+        Validate the email field.
 
-    Checks if an account with the email already exists.
-    Verifies if the email is banned from applying to the company or specific vacancy functions.
+        Checks if an account with the email already exists.
+        Verifies if the email is banned from applying to the company or specific vacancy functions.
 
-    Returns:
-        str: The validated email address.
+        Returns:
+            str: The validated email address.
 
-    Raises:
-        ValidationError: If the email belongs to an existing account or is banned by the company.
-    """
+        Raises:
+            ValidationError: If the email belongs to an existing account or is banned by the company.
+        """
         e_mail = self.cleaned_data['email']
         user = User.objects.filter(email = e_mail)
         if user:
@@ -1528,12 +1528,12 @@ class Public_FilesForm(forms.Form):
     #     fields = ['vacancy','first_name','candidate.public_email','description','file']
 
     def save(self):
-    """
-    Raise an error to prevent saving via this method.
+        """
+        Raise an error to prevent saving via this method.
 
-    Raises:
-        ValueError: Always raised to indicate saving is not supported through this form method.
-    """
+        Raises:
+            ValueError: Always raised to indicate saving is not supported through this form method.
+        """
         raise ValueError()
 
 
@@ -1567,46 +1567,46 @@ class Public_Files_OnlyForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-    """
-    Initialize the Public_Files_OnlyForm.
+        """
+        Initialize the Public_Files_OnlyForm.
 
-    Extracts 'v_id' from kwargs to set the vacancy ID associated with the form.
+        Extracts 'v_id' from kwargs to set the vacancy ID associated with the form.
 
-    Args:
-        *args: Variable length argument list.
-        **kwargs: Keyword arguments containing 'v_id' for vacancy ID.
-    """
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Keyword arguments containing 'v_id' for vacancy ID.
+        """
         self.vacancy_id = kwargs.pop('v_id', None)
         super(Public_Files_OnlyForm, self).__init__(*args, **kwargs)
 
     def validate_number_files(self, files):
-    """
-    Validate the number of files uploaded against the maximum allowed.
+        """
+        Validate the number of files uploaded against the maximum allowed.
 
-    Args:
-        files (int): The number of files being uploaded.
+        Args:
+            files (int): The number of files being uploaded.
 
-    Adds an error to the form if the file count exceeds the maximum allowed.
-    """
+        Adds an error to the form if the file count exceeds the maximum allowed.
+        """
         if files > self.max_files:
             msg = _('You can only upload upto %s files') % self.max_files
             self.add_error('file', msg)
         pass
 
     def clean_file(self):
-    """
-    Clean and validate the uploaded file.
+        """
+        Clean and validate the uploaded file.
 
-    Checks if the file size exceeds the maximum allowed size.
-    Validates the file extension against allowed types (doc, docx, pdf).
-    Normalizes the file name by removing accents and special characters.
+        Checks if the file size exceeds the maximum allowed size.
+        Validates the file extension against allowed types (doc, docx, pdf).
+        Normalizes the file name by removing accents and special characters.
 
-    Returns:
-        File: The cleaned file object if valid, otherwise None.
+        Returns:
+            File: The cleaned file object if valid, otherwise None.
 
-    Raises:
-        ValidationError: If the file size is too large or if the file type is unsupported.
-    """
+        Raises:
+            ValidationError: If the file size is too large or if the file type is unsupported.
+        """
         file = self.cleaned_data['file']
         if file:
             if file.size > self.max_megas * 1024000:
@@ -1628,11 +1628,11 @@ class Public_Files_OnlyForm(forms.Form):
             return None
 
     def save(self):
-    """
-    Prevent saving of the form instance through this method.
+        """
+        Prevent saving of the form instance through this method.
 
-    Raises:
-        ValueError: Always raised to indicate saving is not supported via this form.
-    """
+        Raises:
+            ValueError: Always raised to indicate saving is not supported via this form.
+        """
         raise ValueError()
 

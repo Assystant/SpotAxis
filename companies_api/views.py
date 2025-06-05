@@ -26,16 +26,17 @@ import traceback
 from companies.models import *
 from .serializers import *
 from payments.models import *
-from payments_api.models import BillingSerializer
+# from payments_api.models import BillingSerializer
 from candidates.models import *
-from candidates_api.serializers import CandidateSerializer, CurriculumSerializer, ExpertiseSerializer, AcademicSerializer, CVLanguageSerializer, TrainingSerializer, ProjectSerializer, CertificateSerializer  
-from vacancies_api.serializers import VacancySerializer, PostulateSerializer, VacancyFileSerializer, VacancyStageSerializer
+from candidates.api.serializers import CandidateSerializer, CurriculumSerializer, ExpertiseSerializer, AcademicSerializer, CVLanguageSerializer, TrainingSerializer, ProjectSerializer, CertificateSerializer  
+from vacancies_api.serializers import VacancySerializer, PostulateSerializer, VacancyStageSerializer
+# VacancyFileSerializer
 from common import registration_settings
 from common.forms import AdressForm, UserDataForm, BasicUserDataForm, send_TRM_email, UserPhotoForm, SubdomainForm
 from common.models import Profile, Country, send_email_to_TRM, Gender, Subdomain, State
 from companies.forms import CompanyForm, SearchCvForm, CompanyLogoForm, MemberInviteForm
 from activities.utils import post_notification, post_org_notification, post_activity
-from candidates.models import Country, Profile
+from candidates.models import Country
 from common.forms import UserDataForm
 from customField.forms import TemplateForm, FieldFormset
 from TRM.context_processors import subdomain
@@ -919,97 +920,97 @@ class VacanciesSummaryViewSet(viewsets.ModelViewSet):
         else:
             return Response(form_invite.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UploadVacancyFileViewSet(viewsets.ModelViewSet):
-    queryset = Vacancy_Files.objects.all()
-    serializer_class = VacancyFileSerializer
-    parser_classes = [MultiPartParser, FormParser]
+# class UploadVacancyFileViewSet(viewsets.ModelViewSet):
+#     queryset = Vacancy_Files.objects.all()
+#     serializer_class = VacancyFileSerializer
+#     parser_classes = [MultiPartParser, FormParser]
 
-    @action(detail=False, methods=['post'])
-    def upload(self, request, *args, **kwargs):
-        try:
-            # Form needs data + files
-            form = VacancyFileForm(data=request.data, files=request.FILES)
+#     @action(detail=False, methods=['post'])
+#     def upload(self, request, *args, **kwargs):
+#         try:
+#             # Form needs data + files
+#             form = VacancyFileForm(data=request.data, files=request.FILES)
 
-            if request.FILES and request.FILES.getlist('file'):
-                uploaded_files = len(request.FILES.getlist('file'))
-                form.validate_number_files(uploaded_files)
+#             if request.FILES and request.FILES.getlist('file'):
+#                 uploaded_files = len(request.FILES.getlist('file'))
+#                 form.validate_number_files(uploaded_files)
 
-            if form.is_valid():
-                vacancy = None
-                vacancy_id = request.data.get('vacancy_id')
-                if vacancy_id and int(vacancy_id) > 0:
-                    vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
+#             if form.is_valid():
+#                 vacancy = None
+#                 vacancy_id = request.data.get('vacancy_id')
+#                 if vacancy_id and int(vacancy_id) > 0:
+#                     vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
 
-                obj = form.save(vacancy=vacancy, random_number=request.session.get('random_number'))
+#                 obj = form.save(vacancy=vacancy, random_number=request.session.get('random_number'))
 
-                if vacancy:
-                    obj_files_count = Vacancy_Files.objects.filter(vacancy=vacancy).count()
-                else:
-                    obj_files_count = Vacancy_Files.objects.filter(random_number=request.session.get('random_number')).count()
+#                 if vacancy:
+#                     obj_files_count = Vacancy_Files.objects.filter(vacancy=vacancy).count()
+#                 else:
+#                     obj_files_count = Vacancy_Files.objects.filter(random_number=request.session.get('random_number')).count()
 
-                # Use your serialize function to convert to dict/list for response
-                files = [serialize(obj)]
+#                 # Use your serialize function to convert to dict/list for response
+#                 files = [serialize(obj)]
 
-                data = {'files': files, 'objFiles': obj_files_count}
-                return Response(data)
+#                 data = {'files': files, 'objFiles': obj_files_count}
+#                 return Response(data)
 
-            else:
-                errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
-                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+#             else:
+#                 errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
+#                 return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
-        except Exception as e:
-            import traceback
-            tb = traceback.format_exc()
-            print(tb)
-            return Response({"detail": "Error uploading file."}, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             import traceback
+#             tb = traceback.format_exc()
+#             print(tb)
+#             return Response({"detail": "Error uploading file."}, status=status.HTTP_400_BAD_REQUEST)
 
-class DeleteVacancyFileViewSet(viewsets.ModelViewSet):
-    queryset = Vacancy_Files.objects.all()
-    serializer_class = VacancyFileSerializer
-    parser_classes = [MultiPartParser, FormParser]
+# class DeleteVacancyFileViewSet(viewsets.ModelViewSet):
+#     queryset = Vacancy_Files.objects.all()
+#     serializer_class = VacancyFileSerializer
+#     parser_classes = [MultiPartParser, FormParser]
 
-    @action(detail=False, methods=['post'])
-    def upload(self, request, *args, **kwargs):
-        try:
-            form = VacancyFileForm(data=request.data, files=request.FILES)
-            if request.FILES and request.FILES.getlist('file'):
-                form.validate_number_files(len(request.FILES.getlist('file')))
+#     @action(detail=False, methods=['post'])
+#     def upload(self, request, *args, **kwargs):
+#         try:
+#             form = VacancyFileForm(data=request.data, files=request.FILES)
+#             if request.FILES and request.FILES.getlist('file'):
+#                 form.validate_number_files(len(request.FILES.getlist('file')))
 
-            if form.is_valid():
-                vacancy = None
-                vacancy_id = request.data.get('vacancy_id')
-                if vacancy_id and int(vacancy_id) > 0:
-                    vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
+#             if form.is_valid():
+#                 vacancy = None
+#                 vacancy_id = request.data.get('vacancy_id')
+#                 if vacancy_id and int(vacancy_id) > 0:
+#                     vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
 
-                obj = form.save(vacancy=vacancy, random_number=request.session.get('random_number'))
+#                 obj = form.save(vacancy=vacancy, random_number=request.session.get('random_number'))
 
-                obj_files_count = Vacancy_Files.objects.filter(
-                    vacancy=vacancy if vacancy else None,
-                    random_number=None if vacancy else request.session.get('random_number')
-                ).count()
+#                 obj_files_count = Vacancy_Files.objects.filter(
+#                     vacancy=vacancy if vacancy else None,
+#                     random_number=None if vacancy else request.session.get('random_number')
+#                 ).count()
 
-                files = [serialize(obj)]
+#                 files = [serialize(obj)]
 
-                return Response({'files': files, 'objFiles': obj_files_count})
+#                 return Response({'files': files, 'objFiles': obj_files_count})
 
-            else:
-                errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
-                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+#             else:
+#                 errors = {k: [str(e) for e in v] for k, v in form.errors.items()}
+#                 return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
-        except Exception as e:
-            import traceback
-            print(traceback.format_exc())
-            return Response({"detail": "Error uploading file."}, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             import traceback
+#             print(traceback.format_exc())
+#             return Response({"detail": "Error uploading file."}, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-            return Response(True)
-        except Exception as e:
-            import traceback
-            print(traceback.format_exc())
-            return Response({"detail": "Error deleting file."}, status=status.HTTP_400_BAD_REQUEST)
+#     def destroy(self, request, *args, **kwargs):
+#         try:
+#             instance = self.get_object()
+#             self.perform_destroy(instance)
+#             return Response(True)
+#         except Exception as e:
+#             import traceback
+#             print(traceback.format_exc())
+#             return Response({"detail": "Error deleting file."}, status=status.HTTP_400_BAD_REQUEST)
 
 class AddUpdateVacancyViewSet(viewsets.ModelViewSet):
     queryset = Vacancy.objects.all()
@@ -1414,104 +1415,104 @@ class WidgetJobsViewSet(viewsets.ModelViewSet):
             'vacancies': serializer.data
         })
 
-class BillingViewSet(viewsets.ModelViewSet):
-    http_method_names = ['get']
-    serializer_class = BillingSerializer
-    queryset = Subscription.objects.none()
+# class BillingViewSet(viewsets.ModelViewSet):
+#     http_method_names = ['get']
+#     serializer_class = BillingSerializer
+#     queryset = Subscription.objects.none()
 
-    def list(self, request, *args, **kwargs):
-        user = request.user
+#     def list(self, request, *args, **kwargs):
+#         user = request.user
 
-        # Access validation
-        if not hasattr(user, 'profile') or user.profile.codename != 'recruiter':
-            raise NotFound("User must be a recruiter.")
-        recruiter = getattr(user, 'recruiter', None)
-        if not recruiter or not recruiter.is_admin():
-            raise PermissionDenied("Only admin recruiters may access billing.")
+#         # Access validation
+#         if not hasattr(user, 'profile') or user.profile.codename != 'recruiter':
+#             raise NotFound("User must be a recruiter.")
+#         recruiter = getattr(user, 'recruiter', None)
+#         if not recruiter or not recruiter.is_admin():
+#             raise PermissionDenied("Only admin recruiters may access billing.")
 
-        company_qs = recruiter.company.all()
-        if not company_qs.exists():
-            raise NotFound("Recruiter is not associated with any company.")
-        company = company_qs.first()
+#         company_qs = recruiter.company.all()
+#         if not company_qs.exists():
+#             raise NotFound("Recruiter is not associated with any company.")
+#         company = company_qs.first()
 
-        # Subscription logic
-        try:
-            subscription = company.subscription
-        except:
-            subscription = Subscription.objects.create(
-                company=company,
-                price_slab=PriceSlab.objects.get(id=2)
-            )
-            company.refresh_from_db()
+#         # Subscription logic
+#         try:
+#             subscription = company.subscription
+#         except:
+#             subscription = Subscription.objects.create(
+#                 company=company,
+#                 price_slab=PriceSlab.objects.get(id=2)
+#             )
+#             company.refresh_from_db()
 
-        current_slab = subscription.price_slab
-        slab = current_slab
-        future_slab = None
-        amount_to_pay = Decimal('0.00')
-        carried_forward_balance = Decimal('0.00')
-        carried_forward_message = None
-        renewal = slab.amount or Decimal('0.00')
-        user_count = company.recruiter_set.count()
+#         current_slab = subscription.price_slab
+#         slab = current_slab
+#         future_slab = None
+#         amount_to_pay = Decimal('0.00')
+#         carried_forward_balance = Decimal('0.00')
+#         carried_forward_message = None
+#         renewal = slab.amount or Decimal('0.00')
+#         user_count = company.recruiter_set.count()
 
-        # Slab update logic
-        post_payment = 'slab' in request.session or 'plan' in request.query_params
-        if post_payment:
-            plan_id = request.session.pop('slab', request.query_params.get('plan'))
-            slab = PriceSlab.objects.get(id=plan_id)
+#         # Slab update logic
+#         post_payment = 'slab' in request.session or 'plan' in request.query_params
+#         if post_payment:
+#             plan_id = request.session.pop('slab', request.query_params.get('plan'))
+#             slab = PriceSlab.objects.get(id=plan_id)
 
-            try:
-                future_slab = company.scheduledtransactions_set.first().price_slab
-            except:
-                future_slab = slab
+#             try:
+#                 future_slab = company.scheduledtransactions_set.first().price_slab
+#             except:
+#                 future_slab = slab
 
-            max_users = slab.package.max_users
-            consolidation_ratio = Decimal(
-                (subscription.expiry - datetime.now()).days
-            ) / Decimal(current_slab.expiry_period or 1)
-            consolidation_ratio = max(consolidation_ratio, 1)
+#             max_users = slab.package.max_users
+#             consolidation_ratio = Decimal(
+#                 (subscription.expiry - datetime.now()).days
+#             ) / Decimal(current_slab.expiry_period or 1)
+#             consolidation_ratio = max(consolidation_ratio, 1)
 
-            if current_slab != slab:
-                days_left = Decimal((subscription.expiry - datetime.now()).days)
-                period = Decimal(current_slab.expiry_period or 1)
-                carried_forward_balance = (days_left / period) * (current_slab.amount or 0)
-                amount_to_pay = slab.amount - carried_forward_balance
-                amount_to_pay = max(amount_to_pay, 0)
+#             if current_slab != slab:
+#                 days_left = Decimal((subscription.expiry - datetime.now()).days)
+#                 period = Decimal(current_slab.expiry_period or 1)
+#                 carried_forward_balance = (days_left / period) * (current_slab.amount or 0)
+#                 amount_to_pay = slab.amount - carried_forward_balance
+#                 amount_to_pay = max(amount_to_pay, 0)
 
-            user_amount_to_pay = (
-                subscription.added_users *
-                current_slab.price_per_user *
-                consolidation_ratio
-            )
-            carried_forward_balance += user_amount_to_pay
-            carried_forward_message = (
-                f"From slab: {round(carried_forward_balance - user_amount_to_pay, 2)} "
-                f"and users: {round(user_amount_to_pay, 2)}"
-            )
-            if current_slab == slab:
-                carried_forward_balance = Decimal('0.00')
+#             user_amount_to_pay = (
+#                 subscription.added_users *
+#                 current_slab.price_per_user *
+#                 consolidation_ratio
+#             )
+#             carried_forward_balance += user_amount_to_pay
+#             carried_forward_message = (
+#                 f"From slab: {round(carried_forward_balance - user_amount_to_pay, 2)} "
+#                 f"and users: {round(user_amount_to_pay, 2)}"
+#             )
+#             if current_slab == slab:
+#                 carried_forward_balance = Decimal('0.00')
 
-            renewal += (
-                max(0, user_count - slab.package.free_users)
-                * slab.price_per_user
-            )
+#             renewal += (
+#                 max(0, user_count - slab.package.free_users)
+#                 * slab.price_per_user
+#             )
 
-        else:
-            if subscription.added_users > 0:
-                renewal += subscription.added_users * current_slab.price_per_user
+#         else:
+#             if subscription.added_users > 0:
+#                 renewal += subscription.added_users * current_slab.price_per_user
 
-        data = {
-            'company': company.name,
-            'current_slab': current_slab.name,
-            'future_slab': future_slab.name if future_slab else None,
-            'renewal': round(renewal, 2),
-            'amount_to_pay': round(amount_to_pay, 2),
-            'carried_forward_balance': round(carried_forward_balance, 2),
-            'carried_forward_message': carried_forward_message,
-            'post_payment': post_payment,
-        }
+#         data = {
+#             'company': company.name,
+#             'current_slab': current_slab.name,
+#             'future_slab': future_slab.name if future_slab else None,
+#             'renewal': round(renewal, 2),
+#             'amount_to_pay': round(amount_to_pay, 2),
+#             'carried_forward_balance': round(carried_forward_balance, 2),
+#             'carried_forward_message': carried_forward_message,
+#             'post_payment': post_payment,
+#         }
 
-        serializer = self.get_serializer(data)
-        return Response(serializer.data)
+#         serializer = self.get_serializer(data)
+#         return Response(serializer.data)
 
 class TemplateEditorViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
@@ -1556,32 +1557,32 @@ class TemplateEditorViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-class SiteTemplatePreviewViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all()
-    serializer_class = CompanySiteTemplateSerializer
+# class SiteTemplatePreviewViewSet(viewsets.ModelViewSet):
+#     queryset = Company.objects.all()
+#     serializer_class = CompanySiteTemplateSerializer
 
-    class StandardResultsSetPagination(PageNumberPagination):
-        page_size = 10
-        page_size_query_param = 'page_size'
-        max_page_size = 100
+#     class StandardResultsSetPagination(PageNumberPagination):
+#         page_size = 10
+#         page_size_query_param = 'page_size'
+#         max_page_size = 100
 
-    pagination_class = StandardResultsSetPagination
+#     pagination_class = StandardResultsSetPagination
 
-    def get_queryset(self):
-        user = self.request.user
-        if not hasattr(user, 'recruiter'):
-            return Company.objects.none()
-        return Company.objects.filter(recruiter__user=user).distinct()
+#     def get_queryset(self):
+#         user = self.request.user
+#         if not hasattr(user, 'recruiter'):
+#             return Company.objects.none()
+#         return Company.objects.filter(recruiter__user=user).distinct()
 
-    def perform_update(self, serializer):
-        user = self.request.user
-        company = serializer.instance
-        recruiter = getattr(user, 'recruiter', None)
-        if not recruiter or company not in recruiter.company.all():
-            raise PermissionDenied("You do not manage this company.")
-        if not recruiter.is_manager():
-            raise PermissionDenied("Only managers can update templates.")
-        serializer.save()
+#     def perform_update(self, serializer):
+#         user = self.request.user
+#         company = serializer.instance
+#         recruiter = getattr(user, 'recruiter', None)
+#         if not recruiter or company not in recruiter.company.all():
+#             raise PermissionDenied("You do not manage this company.")
+#         if not recruiter.is_manager():
+#             raise PermissionDenied("Only managers can update templates.")
+#         serializer.save()
 
 class GetSiteTemplateViewSet(viewsets.ViewSet):
     """

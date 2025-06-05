@@ -10,7 +10,6 @@ from zinnia.comparison import ModelVectorBuilder
 from zinnia.comparison import pearson_score
 from zinnia.models.entry import Entry
 from zinnia.signals import disconnect_entry_signals
-from six.moves import range
 
 
 class ComparisonTestCase(TestCase):

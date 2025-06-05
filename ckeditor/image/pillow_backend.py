@@ -14,8 +14,9 @@ determines whether thumbnails should be created for given files.
 try:
     from PIL import Image, ImageOps
 except ImportError:
-    import Image
-    import ImageOps
+    from PIL import Image, ImageOps
+    #import Image
+    #import ImageOps
 
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
