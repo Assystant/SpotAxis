@@ -61,7 +61,7 @@ def first_search(request):
     Returns:
         Vacancy_Status or None: The Vacancy_Status object with codename 'open' or None if not found.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -431,7 +431,7 @@ def search_vacancies(request, template_name):
         # raise ValueError()
         raise Http404
         # pass
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -1578,7 +1578,7 @@ def public_apply(request, vacancy_id = None, referer = None, external_referer=No
     context['success'] = False
     # global recruiter
     recruiter = None
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         try:
             recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
         except:

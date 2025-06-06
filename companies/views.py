@@ -275,7 +275,7 @@ def edit_company(request):
     Handles POST requests to validate and save updated user, address, and company information,
     including updating the company subdomain slug and notifying relevant recruiters.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -364,7 +364,7 @@ def recruiter_profile(request):
     """
     context={}
     context['success'] = False
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -422,7 +422,7 @@ def company_profile(request):
     Handles both standard and AJAX requests, returning JSON responses for AJAX updates.
     Loads and passes company vacancies and their stages to the template.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -497,7 +497,7 @@ def company_profile(request):
 @login_required
 def site_management(request, setting=None):
     """ Handles site management pages for a recruiter's company including template, subdomain, and embed settings."""
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -551,7 +551,7 @@ def site_management(request, setting=None):
 @login_required
 def team_space(request):
     """Displays the team space page where the recruiter can invite new team members and view existing members."""
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
     context={}
@@ -687,7 +687,7 @@ def unpublish_vacancy(request, vacancy_id):
 def applications_for_vacancy(request, vacancy_id):
     """ Displays a list of candidates who have applied for a specific vacancy.
     Handles discarding candidates via POST requests."""
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -872,7 +872,7 @@ def vacancies_summary(request, vacancy_status_name=None):
     renders appropriate templates."""
     """ Show the summary of a Company's vacancies """
     # raise ValueError()
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -1133,7 +1133,7 @@ def add_update_vacancy(request, vacancy_id=False):
     a vacancy for their company. It supports both displaying the vacancy form and processing
     form submissions including file uploads related to the vacancy.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -1457,7 +1457,7 @@ def add_update_vacancy_hiring_process(request, vacancy_id = None):
     - Retrieves stages already added to the vacancy and all other stages available in the company.
     - Renders the 'add_update_vacancy_hiring_process.html' template with vacancy and stage data.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)    
@@ -1504,7 +1504,7 @@ def add_update_vacancy_talent_sourcing(request, vacancy_id = None):
     - Renders the 'add_update_vacancy_talent_sourcing.html' template with relevant data.
 
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)    
@@ -1552,7 +1552,7 @@ def company_recommendations(request):
     - Fetches recommendations directed to this company.
     - Renders 'recommendations.html' template with company and recommendations data.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is registered and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -1629,7 +1629,7 @@ def search_curricula(request):
 
     Filters are stored in the session to preserve state across page navigations.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
