@@ -2,6 +2,10 @@
 
 from __future__ import absolute_import
 import os.path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -17,12 +21,12 @@ SITE_SUFFIX = '.spotaxis.com/'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'TRM_production',          # Or path to database file if using sqlite3.
-        'USER': 'TRM_user',                # Not used with sqlite3.
-        'PASSWORD': 'TRM_db_password',            # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': os.getenv('productive_db_engine'),  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': os.getenv('productive_db_name'),          # Or path to database file if using sqlite3.
+        'USER': os.getenv('productive_db_user'),                # Not used with sqlite3.
+        'PASSWORD': os.getenv('productive_db_password'),            # Not used with sqlite3.
+        'HOST': os.getenv('productive_db_host'),                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': os.getenv('productive_db_host'),                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -49,14 +53,14 @@ STATICFILES_DIRS = [
     # Don't forget to use absolute paths, not relative paths.
     '/var/www/spotaxis/trm/TRM/static/',
 ]
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 25
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL='SpotAxis <noreply@mail.spotaxis.com>'
-SERVER_EMAIL = 'SpotAxis <server@mail.spotaxis.com>'
+EMAIL_BACKEND = os.getenv('productive_email_backend')
+EMAIL_HOST = os.getenv('productive_email_host')
+EMAIL_PORT = os.getenv('productive_email_port')
+EMAIL_HOST_USER = os.getenv('productive_email_host_user')
+EMAIL_HOST_PASSWORD = os.getenv('productive_email_host_passw')
+EMAIL_USE_TLS = os.getenv('productive_email_use_tls')
+DEFAULT_FROM_EMAIL= os.getenv('productive_default_from_email')
+SERVER_EMAIL = os.getenv('productive_server_email')
 
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_HOST_USER = 'contact.travelder@gmail.com'
@@ -64,7 +68,7 @@ SERVER_EMAIL = 'SpotAxis <server@mail.spotaxis.com>'
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
 
-
+#is this field unintentionally left active?
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # SPOTAXIS
@@ -74,11 +78,11 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # SPOTAXIS
 # FACEBOOK_APP_ID = ''
 # FACEBOOK_APP_SECRET = ''
-PAYPAL_MERCHANT_ID = 'XKMWAANJEJQ5U'
-PAYPAL_ACCESS_TOKEN = 'access_token$sandbox$42fgg8mwznb89ys2$81fa0749fc14faafabffe99ea319375b'
-PAYPAL_CLIENT_ID = 'AXlssOdyNmxlCzwD67yW7GDIXkynUdUMMaGOkCcQFmWIvdWz4dM_K4JYnh4926J7_psWxdjS0_fMchDD'
-PAYPAL_APP_SECRET = 'EF2MmDhcbBzk5sU2oUSkuDBVec8xbDfubOyLHudg3Ca06OI8qMSJCe4NuV--5tpWOcz-Hbh94fpBKe-Q'
-PAYPAL_ACCOUNT = 'contact@travelder.com'
+PAYPAL_MERCHANT_ID = os.getenv('productive_paypal_merchant_id')
+PAYPAL_ACCESS_TOKEN = os.getenv('productive_paypal_access_token')
+PAYPAL_CLIENT_ID = os.getenv('productive_paypal_client_id')
+PAYPAL_APP_SECRET = os.getenv('productive_paypal_app_secret')
+PAYPAL_ACCOUNT = os.getenv('productive_paypal_account')
 
 import paypalrestsdk
 paypalrestsdk.configure({
@@ -94,24 +98,24 @@ ALLOWED_HOSTS = [
 ]
 
 
-SOCIALAUTH_FACEBOOK_OAUTH_KEY = '745678155587072'
-SOCIALAUTH_FACEBOOK_OAUTH_SECRET = '6fc2442d9a23bcfc104bb4fc27d5ccc1'
+SOCIALAUTH_FACEBOOK_OAUTH_KEY = os.getenv('productive_facebook_oauth_key')
+SOCIALAUTH_FACEBOOK_OAUTH_SECRET = os.getenv('productive_facebook_oauth_secret')
 
-SOCIALAUTH_LINKEDIN_OAUTH_KEY = '81m81bg9hnd3jt'
-SOCIALAUTH_LINKEDIN_OAUTH_SECRET = '3S8YXZEOIllmDsef'
+SOCIALAUTH_LINKEDIN_OAUTH_KEY = os.getenv('productive_linkedin_oauth_key')
+SOCIALAUTH_LINKEDIN_OAUTH_SECRET = os.getenv('productive_linkedin_oauth_secret')
 
-SOCIALAUTH_ANGEL_OAUTH_KEY = ''
-SOCIALAUTH_ANGEL_OAUTH_SECRET = ''
+SOCIALAUTH_ANGEL_OAUTH_KEY = os.getenv('productive_angel_oauth_key')
+SOCIALAUTH_ANGEL_OAUTH_SECRET = os.getenv('productive_angel_oauth_secret')
 
-SOCIALAUTH_TWITTER_OAUTH_KEY = 'C6Jqc9i9Pr0whIcU18Fz8CNMQ'
-SOCIALAUTH_TWITTER_OAUTH_SECRET = 'hNA7Xqf2gTXdUFmYQbvVXZOoM1HzeQn6PR1kduWMDXcdqvRdD3'
+SOCIALAUTH_TWITTER_OAUTH_KEY = os.getenv('productive_twitter_oauth_key')
+SOCIALAUTH_TWITTER_OAUTH_SECRET = os.getenv('productive_twitter_oauth_secret')
 
-SOCIALAUTH_GOOGLEPLUS_OAUTH_KEY = '802095291346-o5eh8729ti70t1bbaj3h31qhmi99qitu.apps.googleusercontent.com'
-SOCIALAUTH_GOOGLEPLUS_OAUTH_SECRET = 'ZrIkLhkTQ5ce84_geu6HxmGo'
+SOCIALAUTH_GOOGLEPLUS_OAUTH_KEY = os.getenv('productive_googleplus_oauth_key')
+SOCIALAUTH_GOOGLEPLUS_OAUTH_SECRET = os.getenv('productive_googleplus_oauth_secret')
 
-SOCIALAUTH_GITHUB_OAUTH_KEY = 'fb93387bbc9f9ffcd2f7'
-SOCIALAUTH_GITHUB_OAUTH_SECRET = '9e17b019a9d6fb3b6b843a4d462006ffb8d0dfa0'
+SOCIALAUTH_GITHUB_OAUTH_KEY = os.getenv('productive_github_oauth_key')
+SOCIALAUTH_GITHUB_OAUTH_SECRET = os.getenv('productive_github_oauth_secret')
 
-SOCIALAUTH_STACKOVERFLOW_OAUTH_KEY = '8932'
-SOCIALAUTH_STACKOVERFLOW_OAUTH_SECRET = 'qREi*HWy7c6xpMlnhSqjiQ(('
-SOCIALAUTH_STACKOVERFLOW_OAUTH_REQUESTKEY = 'XDR1z6q3cmTZlOA**gbjPA(('
+SOCIALAUTH_STACKOVERFLOW_OAUTH_KEY = os.getenv('productive_stackoverflow_oauth_key')
+SOCIALAUTH_STACKOVERFLOW_OAUTH_SECRET = os.getenv('productive_stackoverflow_oauth_secret')
+SOCIALAUTH_STACKOVERFLOW_OAUTH_REQUESTKEY = os.getenv('productive_oauth_reuestkey')
