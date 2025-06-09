@@ -5,6 +5,11 @@
 from __future__ import absolute_import
 import os.path
 from rest_framework.permissions import AllowAny
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv()
 
 PROJECT_NAME = 'SpotAxis'
 
@@ -25,7 +30,9 @@ ALLOWED_HOSTS = ['*']
     # server_development: Desarrollo y pruebas en el servidor antes de pasar en productivo
     # productive: Ambiente totalmente en productivo
 
-from environment import ENVIRONMENT
+# from environment import ENVIRONMENT
+
+ENVIRONMENT=os.getenv('ENVIRONMENT')
 
 if ENVIRONMENT == 'local_development' or ENVIRONMENT == 'server_development':
     NOTIFICATION_EMAILS = ['notify@spotaxis.com']
@@ -80,7 +87,7 @@ STATICFILES_FINDERS = [
 ]
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'o&amp;-l=w!!q%mgfn9#%9wdawrifyy+bsxr38b$p4ujw%ok=zv9&amp;d'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # Change the defautl Serialization in Django 1.6 form Json to Pickle
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
