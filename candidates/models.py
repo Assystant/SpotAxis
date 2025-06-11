@@ -14,6 +14,7 @@ from companies.models import *
 from django.conf import settings
 from ckeditor.fields import RichTextField
 from utils import get_file_content, get_file_text
+from phonenumber_field.modelfields import PhoneNumberField
 from six.moves import range
 MEDIA_ROOT = settings.MEDIA_ROOT
 
@@ -58,8 +59,8 @@ class Candidate(models.Model):
     # municipal = models.ForeignKey(Municipal, verbose_name=_(u'City'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     state = models.CharField(verbose_name=_('State'),null=True,blank=True,default=None, max_length=50)
     city = models.CharField(verbose_name=_('City'),null=True,blank=True,default=None, max_length=50)
-    #phone = PhoneNumberField(null=True, blank=True, default=None)
-    #cellphone = PhoneNumberField(null=True, blank=True, default=None)
+    phone = PhoneNumberField(null=True, blank=True, default=None)
+    cellphone = PhoneNumberField(null=True, blank=True, default=None)
     travel = models.BooleanField(verbose_name=_('Availability to Travel'), default=False)
     residence = models.BooleanField(verbose_name=_('Availability to change residence'), default=False)
     min_salary = models.PositiveIntegerField(verbose_name=_('Minimum Salary'), null=True, blank=True, default=None)

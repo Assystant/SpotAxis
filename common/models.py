@@ -16,7 +16,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.contrib.sites.models import Site
 from django.template import loader
 from TRM.settings import logo_email, SITE_URL, PHOTO_USER_DEFAULT, NOTIFICATION_EMAILS, MEDIA_URL, SITE_SUFFIX, DEFAULT_FROM_EMAIL, ADMINS
-#from localflavor.us.models import PhoneNumberField
+from phonenumber_field.modelfields import PhoneNumberField
 import types
 
 Name = _('Name')
@@ -47,9 +47,9 @@ import os
 class User(AbstractUser):
     """ Custom User """
     profile = models.ForeignKey(Profile, verbose_name=_('Profile'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    #phone = PhoneNumberField(verbose_name=_(u'Phone'), null=True, blank=True, default=None)
+    phone = PhoneNumberField(verbose_name=_(u'Phone'), null=True, blank=True, default=None)
     phone_ext = models.PositiveIntegerField(verbose_name=_(u'Extension'), null=True, blank=True, default=None)
-    #cellphone = PhoneNumberField(verbose_name=_('Celular'), null=True, blank=True, default=None)
+    cellphone = PhoneNumberField(verbose_name=_('Celular'), null=True, blank=True, default=None)
     photo = models.ImageField(verbose_name=_('Photo'), upload_to='photos/', default=PHOTO_USER_DEFAULT, blank=True, null=True, max_length=200)
     logued_by = models.CharField(_('Loggin Method'), choices=LOGIN_OPTIONS, max_length=2, null=True, blank=True, default=None)
 
