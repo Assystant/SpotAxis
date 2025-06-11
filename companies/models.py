@@ -10,7 +10,7 @@ from django.db import models
 from django.db.models.fields import CharField
 from django.utils.translation import gettext as _
 from hashids import Hashids
-#from localflavor.us.models import PhoneNumberField
+from phonenumber_field.modelfields import PhoneNumberField
 from TRM import settings
 from TRM.settings import LOGO_COMPANY_DEFAULT, SITE_SUFFIX
 external_referer_hash = Hashids(salt='Job External Referal', min_length=5)
@@ -51,7 +51,7 @@ class Company(models.Model):
     city = models.CharField(verbose_name=_('City'),null=True,blank=True,default=None, max_length=50)
     
     description = RichTextField(verbose_name=_('Short Description'), blank=True, null=True, default=None)
-    #phone = PhoneNumberField(verbose_name=_('Phone'), null=True, blank=True, default=None)
+    phone = PhoneNumberField(verbose_name=_('Phone'), null=True, blank=True, default=None)
     url = models.URLField(verbose_name=_('Website'), blank=True, null=True, default=None)
     facebook = models.URLField(verbose_name=_('Facebook'), blank=True, null=True, default=None)
     twitter = models.CharField(verbose_name=_('Twitter'), max_length=16, blank=True, null=True, default=None,
