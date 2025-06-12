@@ -13,9 +13,10 @@ from dateutil.relativedelta import relativedelta
 from companies.models import *
 from django.conf import settings
 from ckeditor.fields import RichTextField
+from phonenumber_field.modelfields import PhoneNumberField
 from utils import get_file_content, get_file_text
 from phonenumber_field.modelfields import PhoneNumberField
-from six.moves import range
+
 MEDIA_ROOT = settings.MEDIA_ROOT
 
 candidate = _('Candidate')
