@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Migration(migrations.Migration):
-
+    """Adds image_caption and lead text fields to the Entry model in the Zinnia application."""
     dependencies = [
         ('zinnia', '0001_initial'),
     ]

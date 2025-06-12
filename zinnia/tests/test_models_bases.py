@@ -8,7 +8,7 @@ from zinnia.models_bases.entry import AbstractEntry
 
 
 class LoadModelClassTestCase(TestCase):
-
+    """Tests dynamic model class importing via load_model_class."""
     def test_load_model_class(self):
         self.assertEqual(
             load_model_class('zinnia.models_bases.entry.AbstractEntry'),

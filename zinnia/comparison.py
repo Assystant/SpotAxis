@@ -17,7 +17,6 @@ from zinnia.settings import STOP_WORDS
 from six.moves import map
 from six.moves import range
 
-
 PUNCTUATION = re.compile(r'\p{P}+')
 
 
