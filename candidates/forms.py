@@ -334,7 +334,8 @@ class CandidateContactForm(forms.ModelForm):
 
     class Meta:
         model = Candidate
-        fields = ('nationality', 'state', 'city', 'phone', 'cellphone', 'linkedin', 'facebook', 'twitter', 'google')
+        #fields = ('nationality', 'state', 'city', 'phone', 'cellphone', 'linkedin', 'facebook', 'twitter', 'google')
+        fields = ('nationality', 'state', 'city', 'linkedin', 'facebook', 'twitter', 'google')
 
 class ObjectiveForm(forms.ModelForm):
     """
@@ -1183,7 +1184,8 @@ class CandidateMiniForm(forms.ModelForm):
 
     class Meta:
         model = Candidate
-        fields =('public_photo','last_name','public_email','first_name', 'nationality', 'state', 'city', 'phone')
+        #fields =('public_photo','last_name','public_email','first_name', 'nationality', 'state', 'city', 'phone')
+        fields =('public_photo','last_name','public_email','first_name', 'nationality', 'state', 'city')
         # exclude = ('user', 'country', 'objective', 'courses', 'photo','')
 
 class ExpertiseMiniForm(forms.ModelForm):

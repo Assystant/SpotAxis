@@ -6,7 +6,6 @@ from __future__ import absolute_import
 from django.test import TestCase
 
 from el_pagination import paginators
-from six.moves import range
 
 
 class PaginatorTestMixin(object):

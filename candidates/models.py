@@ -15,6 +15,7 @@ from django.conf import settings
 from ckeditor.fields import RichTextField
 from phonenumber_field.modelfields import PhoneNumberField
 from utils import get_file_content, get_file_text
+from phonenumber_field.modelfields import PhoneNumberField
 
 MEDIA_ROOT = settings.MEDIA_ROOT
 

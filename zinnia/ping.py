@@ -3,17 +3,10 @@ from __future__ import absolute_import
 import socket
 import threading
 from logging import getLogger
-try:
-    from urllib.request import urlopen
-    from urllib.parse import urlsplit
-    from .xmlrpc.client import Error
-    from .xmlrpc.client import ServerProxy
-except ImportError:  # Python 2
-    from urllib.request import urlopen
-    from urllib.parse import urlsplit
-    from .xmlrpc.client import Error
-    from .xmlrpc.client import ServerProxy
-
+from urllib.request import urlopen
+from urllib.parse import urlsplit
+from xmlrpc.client import Error
+from xmlrpc.client import ServerProxy
 from bs4 import BeautifulSoup
 
 from django.contrib.sites.models import Site

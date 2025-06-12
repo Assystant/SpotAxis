@@ -8,7 +8,7 @@ import uuid
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.db import models
 from django.utils import timezone
 from common import registration_settings as registration_settings
@@ -128,7 +128,7 @@ def send_TRM_email(subject_template_name, email_template_name, context_email, to
             msg.attach_file(file)
         return msg.send()
     except Exception as e:
-        print ('%s (%s)' % (e.message, type(e)))
+        print('%s (%s)' % (e, type(e)))#print '%s (%s)' % (e.message, type(e))
         return 0
 
 def send_email_to_TRM(subject="No Subject", body_email=None, notify = False):

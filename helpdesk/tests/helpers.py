@@ -42,7 +42,7 @@ def reload_urlconf(urlconf=None):
     Uses 'imp.reload' for compatibility with Python 3.
     """
 
-    from imp import reload  # python 3 needs this import.
+    #from imp import reload  # python 3 needs this import.
 
     if urlconf is None:
         from django.conf import settings

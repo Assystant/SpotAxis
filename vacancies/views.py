@@ -22,8 +22,10 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.template import RequestContext,Context, Node, Library, TemplateSyntaxError, VariableDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.utils.six.moves.urllib.parse import urlparse
-from django.utils.timezone import utc
+from urllib.parse import urlparse
+#from django.utils.timezone import utc
+import datetime
+utc = datetime.timezone.utc
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from weasyprint import HTML
@@ -1319,9 +1321,8 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
     # vacancies = Vacancy.objects.filter(company = company)
     # for vacancy in vacancies:
     #     vacancy.stages = VacancyStage.objects.filter(vacancy=vacancy)
-    
-    return render(request,'vacancies_stage_details.html',                         
-                           {'isSearchVacancies': True,
+    return render(request,'vacancies_stage_details.html',
+                              {'isSearchVacancies': True,
                                'vacancy': vacancy,
                                'public_form': public_form,
                                'is_favorite': is_favorite,
@@ -1446,7 +1447,6 @@ def vacancies_by_company(request, company_id):
         link_anterior = minimo_paginas - 4
 
     return render(request,'vacancies_by_company.html',
-  
                               {'company': company,
                                'company_user': company_user,
                                'vacancies': vacancies,
@@ -2050,7 +2050,6 @@ def new_application(request, vacancy_id):
     if recruiter_upload:
         candidate = None
     return render(request,'new_application.html', {
-   
             'vacancy' : vacancy,
             'applicant': applicant,
             'candidate': candidate,

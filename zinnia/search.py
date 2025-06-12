@@ -1,8 +1,7 @@
 """Search module with complex query parsing for Zinnia"""
 from __future__ import absolute_import
 from django.db.models import Q
-from django.utils import six
-
+import six
 from pyparsing import CaselessLiteral
 from pyparsing import Combine
 from pyparsing import OneOrMore
