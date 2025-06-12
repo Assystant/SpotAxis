@@ -6,7 +6,7 @@ from django import forms
 from django.db.models import Q
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
-#from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.formfields import PhoneNumberField as PNF
 from candidates.models import Academic_Area, Academic_Status, get_degrees, Language
 from common.forms import get_states, get_initial_country
 from common.models import Country, User, Gender, Degree
@@ -167,8 +167,7 @@ class CompanyForm(forms.ModelForm):
             'required': _("Enter a description of the activities in your company."),
         },
     )
-    """
-    phone = PhoneNumberField(
+    phone = PNF(
         max_length=12,
         min_length=10,
         error_messages={
@@ -180,7 +179,6 @@ class CompanyForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'placeholder': _('10 digit business phone'),
                                       'class': "form-control"}),
     )
-    """
     url = forms.URLField(
         widget=forms.TextInput(attrs={'placeholder': _('Website of the Company'),
                                       'class': "form-control"}),
