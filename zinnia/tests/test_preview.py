@@ -7,7 +7,7 @@ from zinnia.preview import HTMLPreview
 
 
 class HTMLPreviewTestCase(TestCase):
-
+    """TestCase class for validating the functionality of the HTMLPreview class."""
     def test_splitters(self):
         text = '<p>Hello World</p><!-- more --><p>Hello dude</p>'
         preview = HTMLPreview(text, splitters=['<!--more-->'],

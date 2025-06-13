@@ -15,7 +15,6 @@ from zinnia.models.entry import Entry
 from zinnia.settings import COMPARISON_FIELDS
 from zinnia.settings import STOP_WORDS
 
-
 PUNCTUATION = re.compile(r'\p{P}+')
 
 
