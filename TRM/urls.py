@@ -51,7 +51,8 @@ urlpatterns = [
     # url(r'help/', include('helpdesk.urls')),
 
     # Index
-    path('', vacancy_views.search_vacancies, name='TRM-index'),
+    #path('', vacancy_views.search_vacancies, name='TRM-index'),
+    path('', TRM_views.index, name='TRM-index'),
     path('aboutus/', TRM_views.about_us, name="about_us"),
     path('product/', TRM_views.product, name="product"),
     path('pricing/', TRM_views.pricing, name="pricing"),
