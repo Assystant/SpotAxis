@@ -21,102 +21,76 @@ from TRM.context_processors import subdomain as check_subdomain
 #             pass
 
 class SubdomainMiddleware:
-    def process_request(self,request):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Migrate process_request logic here
         fqdn = request.get_host().split(':')[0]
         domain_parts = fqdn.split('.')
-        # isSupport = False
-        # isBlog = False
-        # if len(domain_parts) >= 3 and domain_parts[-2] == 'spotaxis' and domain_parts[0] == 'blog':
-        #     if len(domain_parts)>3:
-        #         subdomain = domain_parts[0]
-        #     else:
-        #         subdomain = None
-        #     try:
-        #         subdomain = Subdomain.objects.get(
-        #                 Q(cname=fqdn) |
-        #                 Q(slug=subdomain)
-        #             )
-        #     except:
-        #         subdomain = None
-        #     isBlog = True
-        # elif len(domain_parts) >= 3 and domain_parts[-2] == 'spotaxis' and domain_parts[0] == 'support':
-        # if len(domain_parts) >= 3 and domain_parts[-2] == 'spotaxis' and domain_parts[0] == 'support':
-        #     if len(domain_parts)>3:
-        #         subdomain = domain_parts[0]
-        #     else:
-        #         subdomain = None
-        #     try:
-        #         subdomain = Subdomain.objects.get(
-        #                 Q(cname=fqdn) |
-        #                 Q(slug=subdomain)
-        #             )
-        #     except:
-        #         subdomain = None
-        #     isSupport = True
-        # elif len(domain_parts) >= 3 and domain_parts[-2] == 'spotaxis' and domain_parts[-3] == 'demo':
+
+        subdomain = None
         if len(domain_parts) >= 3 and domain_parts[-2] == 'spotaxis' and domain_parts[-3] == 'demo':
-            if len(domain_parts)>3:
-                subdomain = domain_parts[0]
+            if len(domain_parts) > 3:
+                subdomain_slug = domain_parts[0]
             else:
-                subdomain = None
+                subdomain_slug = None
             try:
                 subdomain = Subdomain.objects.get(
-                        Q(cname=fqdn) |
-                        Q(slug=subdomain)
-                    )
-            except:
+                    Q(cname=fqdn) |
+                    Q(slug=subdomain_slug)
+                )
+            except Subdomain.DoesNotExist:
                 subdomain = None
         else:
-            if len(domain_parts) > 2 and ROOT_DOMAIN in domain_parts:
-                subdomain = domain_parts[0]
+            if len(domain_parts) > 2 and ROOT_DOMAIN in fqdn:
+                subdomain_slug = domain_parts[0]
             else:
-                subdomain = None
+                subdomain_slug = None
             try:
                 subdomain = Subdomain.objects.get(
-                        Q(cname=fqdn) |
-                        Q(slug=subdomain)
-                    )
-            except:
+                    Q(cname=fqdn) |
+                    Q(slug=subdomain_slug)
+                )
+            except Subdomain.DoesNotExist:
                 subdomain = None
-        # print(subdomain)
-        # print(fqdn)
-        # print(SITE_SUFFIX.strip('.').strip('/'))
-        # if not isSupport and not isBlog:
-        # if not isSupport:
+
         if subdomain:
             set_urlconf(SUBDOMAIN_URLCONF)
             request.urlconf = SUBDOMAIN_URLCONF
-        elif fqdn!= SITE_SUFFIX.strip('.').strip('/'):
-            # print('raising error')
+        elif fqdn != SITE_SUFFIX.strip('.').strip('/'):
             raise Http404()
-            # print(request.urlconf)
-        # elif isSupport:
-        #     set_urlconf(SUPPORT_URLCONF)
-        #     request.urlconf = SUPPORT_URLCONF
-        # elif isBlog:
-        #     set_urlconf(BLOG_URLCONF)
-        #     request.urlconf = BLOG_URLCONF
 
-    def process_response(self, request, response):
+        response = self.get_response(request)
+
+        # Migrate process_response logic here
         patch_vary_headers(response, ('Host',))
         return response
 
 
 class MediumMiddleware:
-    def process_request(self, request):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Equivalent of process_request
         subdomain_data = check_subdomain(request)
-        if subdomain_data['active_subdomain'] or subdomain_data['hasCNAME']:
+        if subdomain_data.get('active_subdomain') or subdomain_data.get('hasCNAME'):
             referer = request.META.get('HTTP_REFERER')
             if referer and "spotaxis.com" not in referer and request.get_host() not in referer:
                 try:
                     request.session['referral_source'] = referer.split('//', 1)[1].split('/', 1)[0]
-                except:
+                except Exception:
                     request.session['referral_source'] = referer
 
-import time
+        # Continue processing the request
+        response = self.get_response(request)
+        return response
 
-from django.utils.http import cookie_date
+import time
+from http.cookies import _getdate as cookie_date
 from django.contrib.sessions.middleware import SessionMiddleware
+
 
 # class SessionHostDomainMiddleware(SessionMiddleware):
 #     def process_response(self, request, response):
@@ -161,34 +135,53 @@ from django.contrib.sessions.middleware import SessionMiddleware
 #         return response
 
 from django.contrib import messages
+from django.urls import resolve, reverse
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+
 class ExpiredPlanMiddleware:
-    def process_request(self,request):
-        # if excess users, trigger mesage and redirect
-        if request.user.is_authenticated and request.user.profile.codename == 'recruiter':
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.process_request(request)
+        if response:
+            return response
+        return self.get_response(request)
+
+    def process_request(self, request):
+        if request.user.is_authenticated and getattr(request.user, 'profile', None) and request.user.profile.codename == 'recruiter':
             current_url = resolve(request.path_info).url_name
-            # messages.success(request, request.path_info)
-            if request.user.recruiter.company.all():
-                total_recruiters = request.user.recruiter.company.all()[0].recruiter_set.all().filter(user__is_active=True).count()
-                permitted_recruiters = request.user.recruiter.company.all()[0].subscription.price_slab.package.free_users + request.user.recruiter.company.all()[0].subscription.added_users
+
+            company_qs = request.user.recruiter.company.all()
+            if company_qs:
+                company = company_qs[0]
+                total_recruiters = company.recruiter_set.filter(user__is_active=True).count()
+                permitted_recruiters = (
+                    company.subscription.price_slab.package.free_users +
+                    company.subscription.added_users
+                )
+
                 if permitted_recruiters > 0 and total_recruiters > permitted_recruiters:
-                    if current_url=="companies_company_team_space" or current_url=="companies_recruiter_profile" or current_url=="companies_company_profile" or current_url=="companies_billing" or current_url=='common_email_change' or current_url=='auth_password_change' or current_url =='common_password_change_done' or current_url=='common_email_change_requested'or current_url=='common_email_change_approve'or current_url=='companies_payment'or current_url=='companies_job_widget'or current_url=="auth_logout" or current_url == "notifications" or current_url == "payments_checkout" or request.path_info == '/ajax/removemember/' or request.path_info == '/ajax/updatepermissions/' or request.path_info == '/ajax/changeownership/' or request.path_info == '/ajax/set_plan/'or request.path_info == '/ajax/verify_code/'or request.path_info == '/ajax/update_recurring/'or request.path_info == '/ajax/renew_now/'or request.path_info == '/ajax/':
-                        pass
-                    else:
+                    safe_urls = {
+                        "companies_company_team_space", "companies_recruiter_profile", "companies_company_profile",
+                        "companies_billing", "common_email_change", "auth_password_change",
+                        "common_password_change_done", "common_email_change_requested", "common_email_change_approve",
+                        "companies_payment", "companies_job_widget", "auth_logout", "notifications", "payments_checkout"
+                    }
+
+                    safe_paths = {
+                        "/ajax/removemember/", "/ajax/updatepermissions/", "/ajax/changeownership/",
+                        "/ajax/set_plan/", "/ajax/verify_code/", "/ajax/update_recurring/",
+                        "/ajax/renew_now/", "/ajax/"
+                    }
+
+                    if current_url not in safe_urls and request.path_info not in safe_paths:
                         if request.user.recruiter.is_admin():
-                            messages.error(request,'Your team strength exceeds the limit of your current plan. Remove members or upgrade plan to continue normal usage.')
+                            messages.error(request, 'Your team strength exceeds the limit of your current plan. Remove members or upgrade plan to continue normal usage.')
                         else:
-                            messages.error(request,'Your plan subscription has not been updated. Kindly contact your admin.')
-                            # messages.success(request,current_url)
+                            messages.error(request, 'Your plan subscription has not been updated. Kindly contact your admin.')
+
                         return HttpResponseRedirect(reverse('companies_company_team_space'))
 
-# class CrossDomainSessionMiddleware(object):
-#     def process_response(self, request, response):
-#         if response.cookies:
-#             host = request.get_host()
-#             # check if it's a different domain
-#             # if host not in settings.SESSION_COOKIE_DOMAIN:
-#             domain = ".{domain}".format(domain=host)
-#             for cookie in response.cookies:
-#                 if 'domain' in response.cookies[cookie]:
-#                     response.cookies[cookie]['domain'] = domain
-#         return response
+        return None

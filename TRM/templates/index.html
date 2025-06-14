@@ -1,7 +1,6 @@
 {% extends "base/outer_base.html" %}
 {% load i18n %}
 {% load TRM_tags %}
-{% load zinnia %}
 {% comment %} Home {% endcomment %}
 {%block meta %}
     {{ block.super }}
@@ -20,12 +19,12 @@
         article.s-promo-block-v6{
             min-height:350px;
         }
-        article .zinnia_more{
+        /*article .zinnia_more{
             bottom:40px;
             left:25%;
             right:25%;
             position:absolute;
-        }
+        }*/
     </style>
 {% endblock %}
 {% block content %}
@@ -253,7 +252,6 @@
         <div class="s-swiper js__swiper-news">
             <!-- Wrapper -->
             <div class="swiper-wrapper g-margin-b-40--xs">
-                {% get_recent_entries 10 'base/home_zinnia_listing.html'  %}
             </div>
             <!-- End Wrapper -->
 
@@ -263,7 +261,6 @@
         <!-- End Swiper -->
     </div>
     <div class="g-text-center--xs g-margin-b-80--xs">
-        <a href="{{settings.HOSTED_URL}}{% url 'zinnia:entry_archive_index' %}" class="text-uppercase s-btn s-btn-icon--md s-btn--primary-brd g-radius--50 g-padding-x-50--xs">Read More</a>
     </div>
     <!-- End News -->
 
