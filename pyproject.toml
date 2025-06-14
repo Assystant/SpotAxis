@@ -38,6 +38,7 @@ dependencies = [
     "pandas>=2.2.3",
     "paypalrestsdk>=1.13.3",
     "pdfminer-six>=20250506",
+    "phonenumbers>=9.0.7",
     "pillow>=11.2.1",
     "pymysql>=1.1.1",
     "pypdf>=5.5.0",

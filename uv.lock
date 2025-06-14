@@ -827,6 +827,15 @@ wheels = [
 ]
 
 [[package]]
+name = "phonenumbers"
+version = "9.0.7"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/49/8c/2c09b844e819e70c261ad79cc302a5e307d97cb0ab70c227031d8ad72871/phonenumbers-9.0.7.tar.gz", hash = "sha256:d4cc2aa36cbf9b0004c370f406d1510ddef56bba9e5f759471ef47e998d8a2f9", size = 2297250, upload-time = "2025-06-09T06:01:09.224Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/03/d6/71ed688698834669f61dbba51601a27b62c1a7f5f868444f973a3fd33dc8/phonenumbers-9.0.7-py2.py3-none-any.whl", hash = "sha256:306eb14d1eaeb82230a08aa1614d04c93322b65b1ded2fff585161ed7eca39fc", size = 2583027, upload-time = "2025-06-09T06:01:04.772Z" },
+]
+
+[[package]]
 name = "pillow"
 version = "11.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1214,6 +1223,7 @@ dependencies = [
     { name = "pandas" },
     { name = "paypalrestsdk" },
     { name = "pdfminer-six" },
+    { name = "phonenumbers" },
     { name = "pillow" },
     { name = "pymysql" },
     { name = "pypdf" },
@@ -1268,6 +1278,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "paypalrestsdk", specifier = ">=1.13.3" },
     { name = "pdfminer-six", specifier = ">=20250506" },
+    { name = "phonenumbers", specifier = ">=9.0.7" },
     { name = "pillow", specifier = ">=11.2.1" },
     { name = "pymysql", specifier = ">=1.1.1" },
     { name = "pypdf", specifier = ">=5.5.0" },
