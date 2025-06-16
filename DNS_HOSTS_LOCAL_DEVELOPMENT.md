@@ -2,6 +2,7 @@
 
 ## Introduction to DNS
 
+
 DNS (Domain Name System) is a hierarchical naming system that translates human-readable domain names (e.g., `spotaxis.com`) into IP addresses that computers can understand. In SpotAxis, DNS resolution is crucial for the multi-tenant subdomain architecture.
 
 ## SpotAxis Subdomain Architecture
