@@ -5,7 +5,9 @@ import mptt.fields
 
 
 class Migration(migrations.Migration):
-
+    """
+    Alters the 'parent' field in the 'Category' model to support MPTT-based hierarchy.
+    """
     dependencies = [
         ('zinnia', '0003_publication_date'),
     ]
