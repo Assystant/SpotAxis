@@ -14,7 +14,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.urls import reverse
 from django.template.defaultfilters import slugify
-from django.utils import six
+import six
 from django.utils import timezone
 from django.utils.translation import gettext as _
 

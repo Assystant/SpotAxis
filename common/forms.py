@@ -11,7 +11,7 @@ from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from common.models import User, AccountVerification, Address, Country, State, Municipal, EmailVerification, send_TRM_email, Subdomain
 from common import registration_settings
 from django.template import loader
@@ -256,7 +256,7 @@ class UserDataForm(forms.ModelForm):
         if registration_settings.DOUBLE_CHECK_EMAIL:
             if 'email' in self.cleaned_data and 'email_repeat' in self.cleaned_data:
                 if self.cleaned_data['email'] != self.cleaned_data['email_repeat']:
-                    from django.forms.util import ErrorList
+                    from django.forms.utils import ErrorList
                     self._errors['email'] = ErrorList()
                     self._errors['email'].append(_('Email addresses do not match'))
                     # raise forms.ValidationError(_(u'Email addresses do not match.'))

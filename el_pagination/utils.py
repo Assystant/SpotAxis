@@ -11,7 +11,6 @@ from el_pagination.settings import (
     DEFAULT_CALLABLE_EXTREMES,
     PAGE_LABEL,
 )
-from six.moves import range
 
 
 # Handle the Python 2 to 3 migration.

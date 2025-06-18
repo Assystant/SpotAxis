@@ -12,7 +12,9 @@ from common.models import Employment_Type, Degree
 from companies.models import Company_Industry as Industry, Company
 from vacancies.models import Vacancy, Salary_Type, Employment_Experience as Experience
 from vacancies.forms import BasicSearchVacancyForm
-from django.utils.timezone import utc
+#from django.utils.timezone import utc
+import datetime
+utc = datetime.timezone.utc
 from TRM.context_processors import subdomain
 from TRM import settings
 from django.db.models import Q, Max
@@ -53,10 +55,10 @@ def terms_and_conditions(request):
      return render(request,'terms_and_conditions.html', {'isProfile': True})
     
 def email_campaign_0(request):
+    return render(request, 'email_campaigns/campaign_0.html', {})
     
-    
- def handler500(request):
-    response = render('500.html', {})
+def handler500(request):
+    response = render(request, '500.html', {})
     response.status_code = 500
     return response
 
@@ -191,8 +193,7 @@ def job_board(request):
     page_template = 'job_board_item.html'
     if request.is_ajax():
         template = page_template
-    #return render_to_response(
-    return render(request,
+    return render(request, 
         template,
         {
             'page_template': page_template,

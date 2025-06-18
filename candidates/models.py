@@ -15,6 +15,7 @@ from django.conf import settings
 from ckeditor.fields import RichTextField
 from phonenumber_field.modelfields import PhoneNumberField
 from utils import get_file_content, get_file_text
+from phonenumber_field.modelfields import PhoneNumberField
 
 MEDIA_ROOT = settings.MEDIA_ROOT
 
@@ -67,7 +68,8 @@ class Candidate(models.Model):
     max_salary = models.PositiveIntegerField(verbose_name=_('Desired Salary'), null=True, blank=True, default=None)
     linkedin = models.URLField(verbose_name=_('Linkedin'), blank=True, null=True, default=None)
     facebook = models.URLField(verbose_name=_('Facebook'), blank=True, null=True, default=None)
-    twitter = models.CharField(verbose_name=_('Twitter'), max_length=16, blank=True, null=True, validators=[validators.RegexValidator(re.compile('^[\w.@+-]+$'))])
+    twitter = models.CharField(verbose_name=_('Twitter'), max_length=16, blank=True, null=True, validators=[validators.RegexValidator(re.compile(r'^[\w.@+-]+$'))])
+    #twitter = models.CharField(verbose_name=_('Twitter'), max_length=16, blank=True, null=True, validators=[validators.RegexValidator(re.compile('^[\w.@+-]+$'))])
     google = models.URLField(verbose_name=_('Google +'), blank=True, null=True, default=None)
     objective = models.TextField(verbose_name=_('Profesional Objetive'), max_length=300, null=True, blank=True, default=None)
     interests = RichTextField(verbose_name=_('Interests'), null=True, blank=True, default=None)

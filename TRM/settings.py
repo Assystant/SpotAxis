@@ -35,8 +35,12 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
+# Make this unique, and don't share it with anybody.
 SECRET_KEY = os.getenv('SECRET_KEY')
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+# Change the defautl Serialization in Django 1.6 form Json to Pickle
+#SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 ROOT_URLCONF = 'TRM.urls'
 SUBDOMAIN_URLCONF = 'TRM.subdomain_urls'
@@ -99,13 +103,16 @@ INSTALLED_APPS = (
     'rest_framework',
 )
 
-MIDDLEWARE_CLASSES = [
+
+
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # 'TRM.middleware.CrossDomainSessionMiddleware',
+    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'TRM.middleware.SubdomainMiddleware',
@@ -121,12 +128,12 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
-                'django.core.context_processors.debug',
-                'django.core.context_processors.i18n',
-                'django.core.context_processors.media',
-                'django.core.context_processors.static',
-                'django.core.context_processors.request',
-                'django.core.context_processors.tz',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.request',
+                'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'TRM.context_processors.project_name',
                 'TRM.context_processors.user_profile',

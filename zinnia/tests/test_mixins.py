@@ -20,7 +20,6 @@ from zinnia.views.mixins.prefetch_related import PrefetchRelatedMixin
 from zinnia.views.mixins.templates import EntryArchiveTemplateResponseMixin
 from zinnia.views.mixins.templates import EntryQuerysetArchiveTemplateResponseMixin  # noqa
 from zinnia.views.mixins.templates import EntryQuerysetTemplateResponseMixin
-from six.moves import range
 
 
 class MixinTestCase(TestCase):

@@ -15,7 +15,7 @@ from django.conf import settings
 from django.template import Origin
 from django.template.loaders.base import Loader
 from django.test.client import Client
-from django.utils import six
+import six
 from django.utils import timezone
 
 
