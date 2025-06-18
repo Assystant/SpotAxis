@@ -1,109 +1,68 @@
 # -*- coding: utf-8 -*-
 
-# Django settings for TRM project.
-
 from __future__ import absolute_import
-import os.path
-from rest_framework.permissions import AllowAny
-from dotenv import load_dotenv
 import os
-
+from dotenv import load_dotenv
+import paypalrestsdk
 
 load_dotenv()
 
 PROJECT_NAME = 'SpotAxis'
-
 PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
-ADMINS = (('Saket', 'saket@spotaxis.com'),('Holesh','holesh@spotaxis.com'))
-
+ADMINS = (('Saket', 'saket@spotaxis.com'), ('Holesh', 'holesh@spotaxis.com'))
 MANAGERS = ADMINS
 
+ENVIRONMENT = os.getenv('ENVIRONMENT')
+
+DEBUG = ENVIRONMENT in ['local_development', 'server_development']
+
 ALLOWED_HOSTS = ['*']
-
-# SESSION_COOKIE_DOMAIN = '.'
-
-# SESSION_COOKIE_NAME = 'sessionid'
-
-# En ENVIROMENT se establece en que ambiente se esta trabajando, hay 3 ambientes
-    # local_development: Desarrollo en la propia maquina
-    # server_development: Desarrollo y pruebas en el servidor antes de pasar en productivo
-    # productive: Ambiente totalmente en productivo
-
-# from environment import ENVIRONMENT
-
-ENVIRONMENT=os.getenv('ENVIRONMENT')
-
-if ENVIRONMENT == 'local_development' or ENVIRONMENT == 'server_development':
-    NOTIFICATION_EMAILS = ['notify@spotaxis.com']
-    DEBUG = True
-else:
-    NOTIFICATION_EMAILS = ['notify@spotaxis.com']
-    DEBUG = False
-
-# Dependiendo el ambiente se importan diferentes configuraciones
-if ENVIRONMENT == 'local_development':
-    from .settings_local_development import *
-    HOSTED_URL = "http://spotaxis.com"
-    ROOT_DOMAIN = "spotaxis"
-elif ENVIRONMENT == 'server_development':
-    HOSTED_URL = "http://demo.spotaxis.com"
-    ROOT_DOMAIN = "demo.spotaxis"
-    from .settings_server_development import *
-elif ENVIRONMENT == 'productive':
-    HOSTED_URL = "https://spotaxis.com"
-    from .settings_productive import *
-    ROOT_DOMAIN = "spotaxis"
-
+SESSION_COOKIE_DOMAIN = '.spotaxis.com'
 TIME_ZONE = 'Asia/Kolkata'
-
 LANGUAGE_CODE = 'en-IN'
+SITE_ID = 1
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
 
 gettext = lambda s: s
-
-LANGUAGES = (
-    ('en', gettext('English')),
-)
-
-SITE_ID = 1
-
-USE_I18N = True
-
-DEFAULT_SITE_TEMPLATE = 1
-
-# If you set this to False, Django will not format dates, numbers and calendars according to the current locale.
-USE_L10N = True
-
-# If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = False
+LANGUAGES = (('en', gettext('English')),) 
 
 STATIC_URL = '/static/'
-
-# List of finder classes that know how to find static files in various locations.
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 ]
 
-# Make this unique, and don't share it with anybody.
 SECRET_KEY = os.getenv('SECRET_KEY')
-
-# Change the defautl Serialization in Django 1.6 form Json to Pickle
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 ROOT_URLCONF = 'TRM.urls'
-
 SUBDOMAIN_URLCONF = 'TRM.subdomain_urls'
-
 SUPPORT_URLCONF = 'TRM.support_urls'
-
 BLOG_URLCONF = 'TRM.blog_urls'
+WSGI_APPLICATION = 'TRM.wsgi.application'
 
-DJANGO_SETTINGS_MODULE = 'TRM.settings'
+AUTH_USER_MODEL = 'common.User'
+LOGIN_URL = '/login/'
+LOGIN_ERROR_URL = '/login/'
+LOGIN_REDIRECT_URL = 'common_redirect_after_login'
+SOCIAL_AUTH_BACKEND_ERROR_URL = '/login/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login/'
+
+PHOTO_USER_DEFAULT = "logos_TRM/logo_TRM_user_default.png"
+LOGO_CANDIDATE_DEFAULT = "logos_TRM/logo_TRM_user_default.png"
+LOGO_COMPANY_DEFAULT = "logos_TRM/logo_TRM_company_default.png"
+
+DEFAULT_SITE_TEMPLATE = 1
+number_objects_page = 20
+num_pages = 8
+
+days_default_search = 30
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
+'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -140,37 +99,24 @@ INSTALLED_APPS = (
     'rest_framework',
 )
 
-AUTH_USER_MODEL = 'common.User'
-
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
-    # 'TRM.middleware.CrossDomainSessionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'TRM.middleware.SessionHostDomainMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'TRM.middleware.CustomSocialAuthExceptionMiddleware',
     'TRM.middleware.SubdomainMiddleware',
     'TRM.middleware.ExpiredPlanMiddleware',
     'TRM.middleware.MediumMiddleware',
 ]
-CRONJOBS = [
-    # ('*/5 * * * *', 'helpdesk.cron.EmailTicketCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
-    ('* * * * *', 'payments.cron.SubscriptionCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
-    ('0 0 * * *', 'vacancies.cron.PublishCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
-    ('0 0 * * *', 'vacancies.cron.UnPublishCronJob', '>> '+PROJECT_PATH+'cronjob.log'),
-    # ...
-]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(PROJECT_PATH, 'templates'),
-        ],
+        'DIRS': [os.path.join(PROJECT_PATH, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -190,154 +136,93 @@ TEMPLATES = [
                 'TRM.context_processors.subdomain',
                 'TRM.context_processors.notifications',
                 'TRM.context_processors.packages',
-                # 'social.apps.django_app.context_processors.backends',
-                # 'social.apps.django_app.context_processors.login_redirect',
-                # 'zinnia.context_processors.version',
             ],
         },
     },
 ]
 
-# Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'TRM.wsgi.application'
+CRONJOBS = [
+    ('* * * * *', 'payments.cron.SubscriptionCronJob', f'>> {PROJECT_PATH}/cronjob.log'),
+    ('0 0 * * *', 'vacancies.cron.PublishCronJob', f'>> {PROJECT_PATH}/cronjob.log'),
+    ('0 0 * * *', 'vacancies.cron.UnPublishCronJob', f'>> {PROJECT_PATH}/cronjob.log'),
+]
 
-CKEDITOR_UPLOAD_PATH = "uploads/"
-
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        },
-        'helpdesk': {
-            'level': 'DEBUG',
-            'filters': [],
-            'class': 'logging.FileHandler',
-            'filename': PROJECT_PATH+'/debug.log'
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        'django_crontab.crontab': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        # 'helpdesk': {
-        #     'handlers': ['helpdesk', 'mail_admins'],
-        #     'level': 'DEBUG',
-        #     'propagate': True
-        # },
-        'werkzeug': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
 }
-SESSION_COOKIE_DOMAIN = '.spotaxis.com'
-
-days_default_search = 30
 
 AUTHENTICATION_BACKENDS = (
-    # 'social.backends.facebook.FacebookOAuth2',
-    # 'social.backends.open_id.OpenIdAuth',
-    # 'social.backends.google.GoogleOpenId',
-    # 'social.backends.google.GoogleOAuth2',
-    # 'social.backends.google.GoogleOAuth',
-    # 'social.backends.twitter.TwitterOAuth',
-    # 'social.backends.yahoo.YahooOpenId',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_PIPELINE = (
-    # 'social.pipeline.social_auth.social_details',
-    # 'social.pipeline.social_auth.social_uid',
-    # 'social.pipeline.social_auth.auth_allowed',
-    # 'social.pipeline.social_auth.social_user',
-    # 'social.pipeline.user.get_username',
-    # 'social.pipeline.user.create_user',
-    # 'social.pipeline.social_auth.associate_user',
-    # 'social.pipeline.social_auth.load_extra_data',
-    # 'social.pipeline.user.user_details',
     'common.views.save_candidate_social_data',
 )
 
-# Para el correcto funcionamiento al momento de loguearse
-LOGIN_URL = '/login/'  # @login_required
-LOGIN_ERROR_URL = '/login/'
-LOGIN_REDIRECT_URL = 'common_redirect_after_login'
-
-SOCIAL_AUTH_BACKEND_ERROR_URL = '/login/'
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/login/'
-
-# Pide a facebook la dirección de email
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-
-# Datos de conexión con la App de Google
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '685803913612-84edpb92a8e48ir84s1adgbs3opmvrb1.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '5NP3l5qlQ81LCIpA6SLeLk__'
-
-# Logos por default para cuando empresas y candidatos no tienen una foto o logo en el sistema
-# o bien para cuando se muestran vacantes confidenciales
-PHOTO_USER_DEFAULT = "logos_TRM/logo_TRM_user_default.png"
-LOGO_CANDIDATE_DEFAULT = "logos_TRM/logo_TRM_user_default.png"
-LOGO_COMPANY_DEFAULT = "logos_TRM/logo_TRM_company_default.png"
-
-# SOCIALMULTISHARE_TWITTER_OAUTH_KEY = "7Y2xar0P1UPdolrt3XmKawlMh"
-# SOCIALMULTISHARE_TWITTER_OAUTH_SECRET = "Mhdx5JEYN73htm0PnNDtgbsGZvgy03fMghFATzyfrcx6NpCqhB"
-
-# if ENVIRONMENT == 'productive':
-#     pass
-#     SOCIALMULTISHARE_FACEBOOK_OAUTH_KEY = "886020148168119"
-#     SOCIALMULTISHARE_FACEBOOK_OAUTH_SECRET = "b7e32633ce8789a7ff072971cf12e303"
-# else:
-#     SOCIALMULTISHARE_FACEBOOK_OAUTH_KEY = "886020148168119"
-#     SOCIALMULTISHARE_FACEBOOK_OAUTH_SECRET = "b7e32633ce8789a7ff072971cf12e303"
-
-# SOCIALMULTISHARE_LINKEDIN_OAUTH_KEY = '75tlwz3vtjnw5w'
-# SOCIALMULTISHARE_LINKEDIN_OAUTH_SECRET = '7v29PqVN6IlOTZr7'
-
-# Variables para paginación
-# Número de páginas visibles antes y después de los puntos de división
-num_pages=8
-# Número de objetos por página
-number_objects_page=20
-
-social_application_list = ['fb', 'li', 'gp', 'an', 'gh', 'so', 'tw']
-
-REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     Add an authentication method for the APIs
-    # ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        #using 'allow any' permission class until authentication is needed and/ an authentication method is agreed upon.
-        #change permission class once required.
-        'rest_framework.permissions.AllowAny'
-        #'rest_framework.permissions.IsAuthenticated',
-    ],
+# OAuth configuration keys
+SOCIAL_AUTH_KEYS = {
+    'FACEBOOK_KEY': os.getenv('facebook_oauth_key'),
+    'FACEBOOK_SECRET': os.getenv('facebook_oauth_secret'),
+    'LINKEDIN_KEY': os.getenv('linkedin_oauth_key'),
+    'LINKEDIN_SECRET': os.getenv('linkedin_oauth_secret'),
+    'ANGEL_KEY': os.getenv('angel_oauth_key'),
+    'ANGEL_SECRET': os.getenv('angel_oauth_secret'),
+    'TWITTER_KEY': os.getenv('twitter_oauth_key'),
+    'TWITTER_SECRET': os.getenv('twitter_oauth_secret'),
+    'GOOGLEPLUS_KEY': os.getenv('googleplus_oauth_key'),
+    'GOOGLEPLUS_SECRET': os.getenv('googleplus_oauth_secret'),
+    'GITHUB_KEY': os.getenv('github_oauth_key'),
+    'GITHUB_SECRET': os.getenv('github_oauth_secret'),
+    'STACKOVERFLOW_KEY': os.getenv('stackoverflow_oauth_key'),
+    'STACKOVERFLOW_SECRET': os.getenv('stackoverflow_oauth_secret'),
+    'STACKOVERFLOW_REQUESTKEY': os.getenv('stackoverflow_oauth_requestkey'),
 }
 
-#I tried adding it next to the time zone setting but it won't work so I had it at the end.
-USE_TZ = True
+# PayPal SDK Setup
+PAYPAL_CLIENT_ID = os.getenv('paypal_client_id')
+PAYPAL_APP_SECRET = os.getenv('paypal_app_secret')
+paypalrestsdk.configure({
+    'mode': 'live' if ENVIRONMENT == 'productive' else 'sandbox',
+    'client_id': PAYPAL_CLIENT_ID,
+    'client_secret': PAYPAL_APP_SECRET,
+})
+
+# Email Settings
+EMAIL_BACKEND = os.getenv('email_backend')
+EMAIL_HOST = os.getenv('email_host')
+EMAIL_PORT = os.getenv('email_port')
+EMAIL_HOST_USER = os.getenv('email_host_user')
+EMAIL_HOST_PASSWORD = os.getenv('email_host_passw')
+EMAIL_USE_TLS = os.getenv('email_use_tls')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = os.getenv('server_email')
+
+# Database Config
+DATABASES = {
+    'default': {
+        'ENGINE': os.getenv('db_engine'),
+        'NAME': os.getenv('db_name'),
+        'USER': os.getenv('db_user'),
+        'PASSWORD': os.getenv('db_password'),
+        'HOST': os.getenv('db_host'),
+        'PORT': os.getenv('db_port') or os.getenv('db_host'),
+    }
+}
+
+# Media & Static Files
+MEDIA_ROOT = os.getenv('media_root', os.path.join(PROJECT_PATH, 'media'))
+MEDIA_URL = os.getenv('media_url', 'http://spotaxis.com/media/')
+STATIC_ROOT = os.getenv('static_root', '')
+STATICFILES_DIRS = [
+    os.getenv('static_dir') or os.path.join(PROJECT_PATH, 'static')
+]
+
+# Site URL
+PROTOCOL = 'https' if ENVIRONMENT == 'productive' else 'http'
+SITE_URL = os.getenv('site_url', f"{PROTOCOL}://spotaxis.com")
+SITE_SUFFIX = os.getenv('site_suffix', '.spotaxis.com/')
+
+logo_email = f"{SITE_URL}/static/img/logo/logo.png"
+NOTIFICATION_EMAILS = ['notify@spotaxis.com']
