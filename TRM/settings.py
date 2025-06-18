@@ -26,6 +26,19 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+if ENVIRONMENT == 'local_development':
+    HOSTED_URL = "http://spotaxis.com"
+    ROOT_DOMAIN = "spotaxis"
+elif ENVIRONMENT == 'server_development':
+    HOSTED_URL = "http://demo.spotaxis.com"
+    ROOT_DOMAIN = "demo.spotaxis"
+elif ENVIRONMENT == 'productive':
+    HOSTED_URL = "https://spotaxis.com"
+    ROOT_DOMAIN = "spotaxis"
+else:
+    HOSTED_URL = "http://spotaxis.com"
+    ROOT_DOMAIN = "spotaxis"
+
 gettext = lambda s: s
 LANGUAGES = (('en', gettext('English')),) 
 
@@ -233,3 +246,4 @@ SITE_SUFFIX = os.getenv('site_suffix', '.spotaxis.com/')
 
 logo_email = f"{SITE_URL}/static/img/logo/logo.png"
 NOTIFICATION_EMAILS = ['notify@spotaxis.com']
+CKEDITOR_UPLOAD_PATH = "uploads/"
