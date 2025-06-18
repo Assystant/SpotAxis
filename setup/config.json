@@ -1,0 +1,15 @@
+{
+  "env_type": "local_development",
+  "db_creds": {
+    "db_name": "TRM_local",
+    "db_user": "TRM_user",
+    "db_password": "pass",
+    "db_host": "",
+    "db_port": ""
+  },
+  "email_creds": {
+    "email_host_user": "contact.travelder@gmail.com",
+    "email_host_password": "qwerty123$",
+    "email_port": "587"
+  }
+}
