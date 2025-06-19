@@ -58,7 +58,7 @@ def record_recruiter(request, token=None):
     """
     context = {}
     context['success'] = False
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         raise Http404
     if request.GET:
         slabid = request.GET['price_slab']
