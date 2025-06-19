@@ -2235,7 +2235,7 @@ def filter_candidates(request):
 
 def notifications(request):
     response = HttpResponse("", content_type="text/event-stream")
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         msg = ""
         if not 'last_notification' in request.session:
             last_notification = 0

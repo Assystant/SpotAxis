@@ -78,7 +78,7 @@ def first_search(request):
     request.session['employment_types'] = []
 
     # Curricula Search Sessions
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         # profile = UserProfile.objects.get(user=request.user).profile.codename
         profile = request.user.profile
         if profile == 'recruiter':
@@ -648,7 +648,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
     context['success'] = False
     # global recruiter
     recruiter = None
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         try:
             recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
         except:
@@ -1147,7 +1147,7 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
     subdomain_data = subdomain(request)
     if not subdomain_data['active_subdomain']:
         raise Http404
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         # raise ValueError()
         try:
             recruiter = Recruiter.objects.get(user=request.user, user__is_active=True, company__subdomain__slug=subdomain_data['active_subdomain'])
@@ -2084,7 +2084,7 @@ def new_application_resolve_conflicts(request, vacancy_id, card_type):
         Http404: If the user is not authenticated or is not a candidate.
     """
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if not request.user.profile.codename == 'candidate':
             raise Http404
         candidate = request.user.candidate
