@@ -30,6 +30,7 @@ from utils import generate_random_username
 from requests_oauthlib import OAuth1
 from django.db.models import Q
 
+
 """
 View functions for the common app.
 
@@ -44,6 +45,20 @@ This module provides view functions and classes for:
 
 Most views require authentication unless explicitly noted.
 """
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.contrib import messages
+
+def safe_logout(request):
+    """
+    Custom logout view that prevents accessing AnonymousUser after logout.
+    """
+    if request.user.is_authenticated:
+        print(f"Logging out user: {request.user.username}")
+    
+    logout(request)
+    messages.success(request, "You have been logged out.")
+    return redirect('auth_login')  # or 'TRM-index' for home page
 
 # ------------------- #
 # Start Registration #

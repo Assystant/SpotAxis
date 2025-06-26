@@ -109,8 +109,8 @@ def send_TRM_email(subject_template_name, email_template_name, context_email, to
         # print(text_email)
         if not from_email:
             from_email = DEFAULT_FROM_EMAIL
-        html_email.encoding = "utf-8"
-        if isinstance(to_user, types.StringTypes):
+        #html_email.encoding = "utf-8"
+        if isinstance(to_user, str):
             to_user = [to_user]
         to_user = list(to_user)
         # try:
@@ -126,7 +126,8 @@ def send_TRM_email(subject_template_name, email_template_name, context_email, to
         #     msg.content_subtype = "html"
         if file:
             msg.attach_file(file)
-        return msg.send()
+        return msg.send(fail_silently=False)
+    
     except Exception as e:
         print('%s (%s)' % (e, type(e)))#print '%s (%s)' % (e.message, type(e))
         return 0
@@ -184,8 +185,8 @@ class AccountVerificationManager(models.Manager):
             'expiration_days': registration_settings.ACCOUNT_VERIFICATION_DAYS,
             'account_activation': True,
         }
-        subject_template_name='mails/activation_email_subject.html',
-        email_template_name='mails/activation_email.html',
+        subject_template_name='mails/activation_email_subject.html'
+        email_template_name='mails/activation_email.html'
 
         send_TRM_email(subject_template_name=subject_template_name, email_template_name=email_template_name, context_email=context_email, to_user=new_user.email, bcc=True)
 

@@ -71,7 +71,14 @@
                     <li class="divider no-margin"></li>
                     <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}{% url 'helpdesk_home' %}" target="_blank">Help <span class="fa fa-question fa-lg mr3 pull-right"></span></a></li>
                     <li class="divider no-margin"></li>
-                    <li><a class="pt10 pb10" href="{% url 'auth_logout' %}?next={{request.path}}{% endif %}">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+                    <li>
+                        <form action="{% url 'auth_logout' %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="pt10 pb10" style="background:none;border:none;padding:0;margin:0;color:#337ab7;text-align:left;width:100%;cursor:pointer;">
+                                Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span>
+                            </button>
+                        </form>
+                    </li>
                 </ul>
             </li>
         {%else%}

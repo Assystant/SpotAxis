@@ -88,7 +88,7 @@ urlpatterns = [
     # Common - Django Contrib Auth
     # url(r'^', include('common.common_auth_urls')),
     path('login/', django_auth_views.LoginView.as_view(), name='auth_login'),
-    path('logout/', django_auth_views.LogoutView.as_view(), name='auth_logout'),
+    path('logout/', common_views.safe_logout, name='auth_logout'),
     path('password/change/', django_auth_views.PasswordChangeView.as_view(), name='auth_password_change'),
     path('password/reset/', django_auth_views.PasswordResetView.as_view(), name='auth_password_reset'),
     re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', django_auth_views.PasswordResetConfirmView.as_view(), name='auth_password_reset_confirm'),

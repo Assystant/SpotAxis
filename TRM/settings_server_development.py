@@ -42,8 +42,8 @@ STATICFILES_DIRS = [
     # Don't forget to use absolute paths, not relative paths.
     '/var/www/demo/trm/TRM/static/',
 ]
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
@@ -63,7 +63,7 @@ SERVER_EMAIL = 'no-reply@spotaxis.com'
 # FACEBOOK_APP_ID = '1474071052897625'
 # FACEBOOK_APP_SECRET = 'bdac3b3fefdbd129bd7de7974f33bfc0'
 
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+#DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 logo_email = 'http://demo.spotaxis.com/static/img/logo/logo.png'
 
 ALLOWED_HOSTS = [

@@ -99,7 +99,7 @@ def subdomain(request):
         active_host = None
     return {'active_subdomain': slug,'active_host':active_host, 'isRoot':False, 'hasCNAME':hasCNAME}
 
-def user_profile(request):
+"""def user_profile(request):
     user_profile = None
     recruiter = None
     company = None
@@ -125,6 +125,36 @@ def user_profile(request):
         'recruiter': recruiter,
         'settings': settings
     }
+"""
+def user_profile(request):
+    user_profile = None
+    recruiter = None
+    company = None
+
+    # Try to resolve the subdomain and company first
+    try:
+        active_subdomain = subdomain(request)['active_subdomain']
+        if active_subdomain:
+            company = Company.objects.get(subdomain__slug=active_subdomain)
+    except Company.DoesNotExist:
+        company = None
+
+    # Only proceed if user is logged in
+    if request.user.is_authenticated:
+        profile = getattr(request.user, 'profile', None)
+        if profile:
+            user_profile = profile.codename
+        try:
+            recruiter = Recruiter.objects.get(user=request.user, company=company, user__is_active=True)
+        except Recruiter.DoesNotExist:
+            recruiter = None
+
+    return {
+        'user_profile': user_profile,
+        'recruiter': recruiter,
+        'settings': settings
+    }
+
 
 def notifications(request):
     if request.user.is_authenticated:
