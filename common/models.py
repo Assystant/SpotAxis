@@ -126,7 +126,7 @@ def send_TRM_email(subject_template_name, email_template_name, context_email, to
         #     msg.content_subtype = "html"
         if file:
             msg.attach_file(file)
-        return msg.send(fail_silently=False)
+        return msg.send()
     
     except Exception as e:
         print('%s (%s)' % (e, type(e)))#print '%s (%s)' % (e.message, type(e))
