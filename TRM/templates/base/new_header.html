@@ -92,9 +92,10 @@
                                                 <li class="divider no-margin"></li>
                                                 <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}" target="_blank">Resources <span class="fa fa-lightbulb-o fa-lg mr3 pull-right"></span></a></li>
                                                 <li class="divider no-margin"></li>
-                                                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}{% url 'helpdesk_home' %}" target="_blank">Help <span class="fa fa-question fa-lg mr3 pull-right"></span></a></li>
+                                                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}" target="_blank">Help <span class="fa fa-question fa-lg mr3 pull-right"></span></a></li>
                                                 <li class="divider no-margin"></li>
-                                                <li><a class="pt10 pb10" href="{% url 'auth_logout' %}">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+                                                <!--<li><a class="pt10 pb10" href="{% url 'auth_logout' %}">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>-->
+                                                <li><a class="pt10 pb10" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a><form id="logout-form" action="{% url 'auth_logout' %}" method="post" style="display:none;">{% csrf_token %}</form></li>
                                             </ul>
                                         </li>
                                     {% endif %}

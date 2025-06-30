@@ -55,7 +55,7 @@ class Company(models.Model):
     url = models.URLField(verbose_name=_('Website'), blank=True, null=True, default=None)
     facebook = models.URLField(verbose_name=_('Facebook'), blank=True, null=True, default=None)
     twitter = models.CharField(verbose_name=_('Twitter'), max_length=16, blank=True, null=True, default=None,
-                               validators=[validators.RegexValidator(re.compile('^[\w.@+-]+$'))])
+                               validators=[validators.RegexValidator(re.compile(r'^[\w.@+-]+$'))])
     company_email = models.EmailField(verbose_name=_('E-mail'), null=True, blank=True, default=None)
     # contact_phone = PhoneNumberField(verbose_name=_(u'Phone'), null=True, blank=True, default=None)
     # contact_phone_ext = models.PositiveIntegerField(verbose_name='Ext', null=True, blank=True, default=None)
