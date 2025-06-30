@@ -127,7 +127,6 @@ def user_profile(request):
     recruiter = None
     company = None
 
-    # Try to resolve the subdomain and company first
     try:
         active_subdomain = subdomain(request)['active_subdomain']
         if active_subdomain:
@@ -135,7 +134,6 @@ def user_profile(request):
     except Company.DoesNotExist:
         company = None
 
-    # Only proceed if user is logged in
     if request.user.is_authenticated:
         profile = getattr(request.user, 'profile', None)
         if profile:
