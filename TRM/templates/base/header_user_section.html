@@ -1,94 +1,94 @@
 {% load humanize %}
 {% load TRM_tags %}
-    <ul class="nav navbar-nav navbar-right no-margin">
-        {% if not user_profile and not request.path|startsWith:'/resources/' %}
-            <li class="{% if isJobBoard %}active {% endif %}"><a href="{% url 'job_board' %}">Jobs</a></li>
-        {% endif %}
-        {%if user_profile%}
-            {% if user_profile == 'recruiter' and recruiter.is_admin and recruiter.company.all.0.subscription.price_slab.amount == 0 %}
-                <li class="btn-group">
-                    <a class="btn btn-sm btn-info" data-toggle="modal" data-target="#billing-modal">Upgrade</a>
-                </li>
-            {% endif %}
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle notification-dropdown" data-toggle="dropdown">
-                    <i class="fa fa-bell fa-lg"></i>
-                    <small class="badge badge-sm" data-value='{{unseen_notification_count}}'><small>{{unseen_notification_count}}</small></small>
-                </a>
-                <ul class="dropdown-menu no-padding notification-menu border-light">
-                    {% for notification in notifications %}
-                        <li class="border-bottom border-light {% if not notification.seen %} unseen {% endif %}" data-notification = "{{notification.id}}">
-                            <p class="pt10 pb10 pr10{% if notification.actor %} has-img {% else %} pl10 {% endif %} text-muted">{% if notification.actor %}<img src="{{notification.actor.photo.url}}" class="img-card ml10 mr10 card-left" data-name="{{notification.actor.get_full_name}}">{% endif %}{% if notification.actor %} <b>{% if notificaton.actor == request.user %}You {% else %}{{ notification.actor|title }} {% endif %}</b>{% endif %}{% if notification.action %}{{ notification.action|default:'' }}{% endif %}{% if notification.target %}<b>{% if notification.target == request.user %}{% if notification.target_action %}you {% else %}your {% endif %}{% else %}{% if notification.actor == notification.target %}their {% else %}{{ notification.target|title }}{% if not notification.target_action %}'s{% endif %} {% endif %}{% endif %}</b>{% if notification.target_action %}{{ notification.target_action|default:'' }} {% endif %}{% endif %}{% if notification.subject %}<a{% if notification.action_url %} href="{{notification.action_url}}" {% endif %} target="_blank">{{ notification.subject|default:'' }}</a> {{notification.subject_action|default:''}}{% endif %}{% if notification.message %}{{ notification.message|default:'' }}{% endif %}<br><i><small>{% if notification.timestamp %} {{ notification.timestamp|naturaltime }} {% endif %}</small></i></p>
-                        </li>
-                    {% empty %}
-                        <li class="border-bottom border-light">
-                            <a class="pt10 pb10">
-                                <p>No Notifications Available</p>
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
+<ul class="nav navbar-nav navbar-right no-margin">
+    {% if not user_profile and not request.path|startsWith:'/resources/' %}
+        <li class="{% if isJobBoard %}active {% endif %}"><a href="{% url 'job_board' %}">Jobs</a></li>
+    {% endif %}
+
+    {% if user_profile %}
+        {% if user_profile == 'recruiter' and recruiter.is_admin and recruiter.company.all.0.subscription.price_slab.amount == 0 %}
+            <li class="btn-group">
+                <a class="btn btn-sm btn-info" data-toggle="modal" data-target="#billing-modal">Upgrade</a>
             </li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <img class="img-circle img-responsive navbar-img navbar-img-lg user-photo" src="/media/{%if candidate and not company%}{{candidate.user.photo}}{%else%}{{request.user.photo}}{%endif%}" alt="{% if candidate and not company %}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif%} Pic" data-name="{% if candidate and not company %}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %}">
-                    <strong>{{request.user.username}}</strong>
-                    <span class="glyphicon glyphicon-chevron-down"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <div class="navbar-login">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p class="text-center">
-                                        <img class="img-circle img-responsive user-photo" src="/media/{{request.user.photo}}" alt="{% if candidate and not company%}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %} Pic" data-name="{% if candidate and not company %}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %}">
-                                    </p>
-                                </div>
-                                <div class="col-xs-8 pt10">
-                                    <p class="text-center text-light"><strong>{{request.user.get_full_name|title}}</strong></p>
-                                    <p class="text-center text-muted small">{{request.user.email}}</p>
-                                    <p class="text-center">
-                                        {%if user_profile == 'recruiter' %}
-                                            <a href="{% url 'companies_recruiter_profile' %}">Profile</a>
-                                        {%elif user_profile == 'candidate' %}
-                                            <a href="{% url 'candidates_edit_curriculum' %}">Profile</a>
-                                        {%elif user_profile == 'Admin' %}
-                                            <a href="/admin/">Admin Panel</a>
-                                        {%endif%}
-                                    </p>
-                                </div>
+        {% endif %}
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle notification-dropdown" data-toggle="dropdown">
+                <i class="fa fa-bell fa-lg"></i>
+                <small class="badge badge-sm" data-value='{{unseen_notification_count}}'><small>{{unseen_notification_count}}</small></small>
+            </a>
+            <ul class="dropdown-menu no-padding notification-menu border-light">
+                {% for notification in notifications %}
+                    <li class="border-bottom border-light {% if not notification.seen %} unseen {% endif %}" data-notification = "{{notification.id}}">
+                        <p class="pt10 pb10 pr10{% if notification.actor %} has-img {% else %} pl10 {% endif %} text-muted">{% if notification.actor %}<img src="{{notification.actor.photo.url}}" class="img-card ml10 mr10 card-left" data-name="{{notification.actor.get_full_name}}">{% endif %}{% if notification.actor %} <b>{% if notification.actor == request.user %}You {% else %}{{ notification.actor|title }} {% endif %}</b>{% endif %}{% if notification.action %}{{ notification.action|default:'' }}{% endif %}{% if notification.target %}<b>{% if notification.target == request.user %}{% if notification.target_action %}you {% else %}your {% endif %}{% else %}{% if notification.actor == notification.target %}their {% else %}{{ notification.target|title }}{% if not notification.target_action %}'s{% endif %} {% endif %}{% endif %}</b>{% if notification.target_action %}{{ notification.target_action|default:'' }} {% endif %}{% endif %}{% if notification.subject %}<a{% if notification.action_url %} href="{{notification.action_url}}" {% endif %} target="_blank">{{ notification.subject|default:'' }}</a> {{notification.subject_action|default:''}}{% endif %}{% if notification.message %}{{ notification.message|default:'' }}{% endif %}<br><i><small>{% if notification.timestamp %} {{ notification.timestamp|naturaltime }} {% endif %}</small></i></p>
+                    </li>
+                {% empty %}
+                    <li class="border-bottom border-light">
+                        <a class="pt10 pb10">
+                            <p>No Notifications Available</p>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img class="img-circle img-responsive navbar-img navbar-img-lg user-photo" src="/media/{%if candidate and not company%}{{candidate.user.photo}}{%else%}{{request.user.photo}}{%endif%}" alt="{% if candidate and not company %}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif%} Pic" data-name="{% if candidate and not company %}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %}">
+                <strong>{{request.user.username}}</strong>
+                <span class="glyphicon glyphicon-chevron-down"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <div class="navbar-login">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <p class="text-center">
+                                    <img class="img-circle img-responsive user-photo" src="/media/{{request.user.photo}}" alt="{% if candidate and not company%}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %} Pic" data-name="{% if candidate and not company %}{{candidate.first_name}} {{candidate.last_name}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %}">
+                                </p>
+                            </div>
+                            <div class="col-xs-8 pt10">
+                                <p class="text-center text-light"><strong>{{request.user.get_full_name|title}}</strong></p>
+                                <p class="text-center text-muted small">{{request.user.email}}</p>
+                                <p class="text-center">
+                                    {%if user_profile == 'recruiter' %}
+                                        <a href="{% url 'companies_recruiter_profile' %}">Profile</a>
+                                    {%elif user_profile == 'candidate' %}
+                                        <a href="{% url 'candidates_edit_curriculum' %}">Profile</a>
+                                    {%elif user_profile == 'Admin' %}
+                                        <a href="/admin/">Admin Panel</a>
+                                    {%endif%}
+                                </p>
                             </div>
                         </div>
-                    </li>
-                    <li class="divider no-margin navbar-login-session-bg"></li>
-                     <li><a class="pt10 pb10" href="{% url 'common_email_change' %}">Change Email <span class="glyphicon glyphicon-envelope pull-right"></span></a></li>
-                    <li class="divider no-margin"></li>
-                    <li class="hidden"><a class="pt10 pb10" href="{% url 'recover_user' %}">Change Username <span class="fa fa-user fa-lg pull-right"></span></a></li>
-                    <li class="hidden divider no-margin"></li>
-                    <li><a class="pt10 pb10" href="{% url 'auth_password_change' %}">Change Password <span class="glyphicon glyphicon-lock pull-right"></span></a></li>
-                    <li class="divider no-margin"></li>
-                    <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}" target="_blank">Resources <span class="fa fa-lightbulb-o fa-lg mr3 pull-right"></span></a></li>
-                    <li class="divider no-margin"></li>
-                    <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}{% url 'helpdesk_home' %}" target="_blank">Help <span class="fa fa-question fa-lg mr3 pull-right"></span></a></li>
-                    <li class="divider no-margin"></li>
-                    <!--<li><a class="pt10 pb10" href="{% url 'auth_logout' %}?next={{request.path}}{% endif %}">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>-->
-                    <li><a class="pt10 pb10" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a><form id="logout-form" action="{% url 'auth_logout' %}" method="post" style="display:none;">{% csrf_token %}</form></li>
-                </ul>
-            </li>
-        {%else%}
-            {% if isIndex or request.user.is_anonymous %}
-                <li class="hidden"><a href="#">Resume Builder <sup class="label label-info">100% FREE</sup></a></li>
-            {%endif%}
-            {% if isIndex %}
+                    </div>
+                </li>
+                <li class="divider no-margin navbar-login-session-bg"></li>
+                <li><a class="pt10 pb10" href="{% url 'common_email_change' %}">Change Email <span class="glyphicon glyphicon-envelope pull-right"></span></a></li>
+                <li class="divider no-margin"></li>
+                <li class="hidden"><a class="pt10 pb10" href="{% url 'recover_user' %}">Change Username <span class="fa fa-user fa-lg pull-right"></span></a></li>
+                <li class="hidden divider no-margin"></li>
+                <li><a class="pt10 pb10" href="{% url 'auth_password_change' %}">Change Password <span class="glyphicon glyphicon-lock pull-right"></span></a></li>
+                <li class="divider no-margin"></li>
+                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}" target="_blank">Resources <span class="fa fa-lightbulb-o fa-lg mr3 pull-right"></span></a></li>
+                <li class="divider no-margin"></li>
+                <li><a class="pt10 pb10" href="{{settings.HOSTED_URL}}" target="_blank">Help <span class="fa fa-question fa-lg mr3 pull-right"></span></a></li>
+                <li class="divider no-margin"></li>
+                <li><a class="pt10 pb10" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a><form id="logout-form" action="{% url 'auth_logout' %}" method="post" style="display:none;">{% csrf_token %}</form></li>
+            </ul>
+        </li>
+    {% else %}
+        {% if isIndex or request.user.is_anonymous %}
+            <li class="hidden"><a href="#">Resume Builder <sup class="label label-info">100% FREE</sup></a></li>
+        {% endif %}
+        {% if isIndex %}
             <li><a href="#whyus">Why Us?</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#pricing">Pricing</a></li>
             <li><a href="/resources/" target="_blank">Resources</a></li>
             <li><a href="#contact">Contact</a></li>
-            {%endif%}
-            <li> <a href="{% url 'auth_login'%}{%if not isIndex and not request.GET.next and not request.path|inAuthList %}?next={{request.path}}{% endif %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}" class="pt10 pb5">  <span class="btn btn-sm btn-default pt5 pb5 pl15 pr15 text-light ">Login</span></a></li>
-            <li>
-                <a href="{% url 'companies_record_recruiter'%}">Sign Up</a>
-            </li>
-        {%endif%}
-    </ul>
+        {% endif %}
+        <li> <a href="{% url 'auth_login'%}{%if not isIndex and not request.GET.next and not request.path|inAuthList %}?next={{request.path}}{% endif %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}" class="pt10 pb5">  <span class="btn btn-sm btn-default pt5 pb5 pl15 pr15 text-light ">Login</span></a></li>
+        <li>
+            <a href="{% url 'companies_record_recruiter'%}">Sign Up</a>
+        </li>
+    {% endif %}
+</ul>
