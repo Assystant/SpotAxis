@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ckeditor.fields import RichTextField
+from spckeditor.fields import RichTextField
 
 
 class RichTextSerializer(serializers.Serializer):

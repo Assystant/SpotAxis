@@ -10,8 +10,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
 
-from ckeditor import image_processing
-from ckeditor import utils
+from spckeditor import image_processing
+from spckeditor import utils
 
 """
 This module provides views and utility functions to handle image uploads and browsing

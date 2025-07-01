@@ -291,7 +291,7 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('ajax-uploads/', include('upload_logos.urls')),
     # path('rosetta/', include('rosetta.urls')),
-    path('ckeditor/', include('ckeditor.urls')),
+    path('ckeditor/', include('spckeditor.urls')),
     # path('', include('social.apps.django_app.urls', namespace='social')),  # Auth con face, google, twitter
     # path('', include('django.contrib.auth.urls', namespace='auth')),  # Auth con face, google, twitter
     path('upload/file/', upload_vacancy_file, name='upload-file'),

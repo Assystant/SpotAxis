@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import os.path
 
-from ckeditor import utils
+from spckeditor import utils
 
 """
 Dummy backend for image processing used by django-ckeditor.

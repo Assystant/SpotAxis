@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 import re
-from ckeditor.fields import RichTextField
+from spckeditor.fields import RichTextField
 from common.models import Address, Subdomain, Country, Currency
 from django.core import validators
 from django.urls import reverse

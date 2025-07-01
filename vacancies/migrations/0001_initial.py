@@ -3,7 +3,7 @@
 
 
 from __future__ import absolute_import
-import ckeditor.fields
+import spckeditor.fields
 import datetime
 from django.conf import settings
 from django.db import migrations, models
@@ -132,7 +132,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('employment', models.CharField(blank=True, default=None, max_length=70, null=True, verbose_name='Post')),
-                ('description', ckeditor.fields.RichTextField(blank=True, default=None, null=True, verbose_name='Description of Post')),
+                ('description', spckeditor.fields.RichTextField(blank=True, default=None, null=True, verbose_name='Description of Post')),
                 ('min_age', models.CharField(blank=True, choices=[(0, 'Indistinct'), [b'18', b'18'], [b'19', b'19'], [b'20', b'20'], [b'21', b'21'], [b'22', b'22'], [b'23', b'23'], [b'24', b'24'], [b'25', b'25'], [b'26', b'26'], [b'27', b'27'], [b'28', b'28'], [b'29', b'29'], [b'30', b'30'], [b'31', b'31'], [b'32', b'32'], [b'33', b'33'], [b'34', b'34'], [b'35', b'35'], [b'36', b'36'], [b'37', b'37'], [b'38', b'38'], [b'39', b'39'], [b'40', b'40'], [b'41', b'41'], [b'42', b'42'], [b'43', b'43'], [b'44', b'44'], [b'45', b'45'], [b'46', b'46'], [b'47', b'47'], [b'48', b'48'], [b'49', b'49'], [b'50', b'50'], [b'51', b'51'], [b'52', b'52'], [b'53', b'53'], [b'54', b'54'], [b'55', b'55'], [b'56', b'56'], [b'57', b'57'], [b'58', b'58'], [b'59', b'59'], [b'60', b'60'], [b'61', b'61'], [b'62', b'62'], [b'63', b'63'], [b'64', b'64'], [b'65', b'65']], default=None, max_length=2, null=True)),
                 ('max_age', models.CharField(blank=True, choices=[(0, 'Indistinct'), [b'18', b'18'], [b'19', b'19'], [b'20', b'20'], [b'21', b'21'], [b'22', b'22'], [b'23', b'23'], [b'24', b'24'], [b'25', b'25'], [b'26', b'26'], [b'27', b'27'], [b'28', b'28'], [b'29', b'29'], [b'30', b'30'], [b'31', b'31'], [b'32', b'32'], [b'33', b'33'], [b'34', b'34'], [b'35', b'35'], [b'36', b'36'], [b'37', b'37'], [b'38', b'38'], [b'39', b'39'], [b'40', b'40'], [b'41', b'41'], [b'42', b'42'], [b'43', b'43'], [b'44', b'44'], [b'45', b'45'], [b'46', b'46'], [b'47', b'47'], [b'48', b'48'], [b'49', b'49'], [b'50', b'50'], [b'51', b'51'], [b'52', b'52'], [b'53', b'53'], [b'54', b'54'], [b'55', b'55'], [b'56', b'56'], [b'57', b'57'], [b'58', b'58'], [b'59', b'59'], [b'60', b'60'], [b'61', b'61'], [b'62', b'62'], [b'63', b'63'], [b'64', b'64'], [b'65', b'65']], default=None, max_length=2, null=True)),
                 ('min_salary', models.PositiveIntegerField(blank=True, default=None, null=True, verbose_name='Minimum Salary')),

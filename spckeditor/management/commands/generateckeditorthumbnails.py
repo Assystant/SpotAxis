@@ -4,9 +4,9 @@ import os
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 
-from ckeditor.views import get_image_files
-from ckeditor.utils import get_thumb_filename
-from ckeditor.image_processing import get_backend
+from spckeditor.views import get_image_files
+from spckeditor.utils import get_thumb_filename
+from spckeditor.image_processing import get_backend
 
 """
 Django management command to create thumbnail images for files managed

@@ -3,7 +3,7 @@ from django.urls import path
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.cache import never_cache
 
-from ckeditor import views
+from spckeditor import views
 
 """
 URL configuration module for CKEditor integration in a Django project.

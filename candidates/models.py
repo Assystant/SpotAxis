@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from dateutil.relativedelta import relativedelta
 from companies.models import *
 from django.conf import settings
-from ckeditor.fields import RichTextField
+from spckeditor.fields import RichTextField
 from phonenumber_field.modelfields import PhoneNumberField
 from utils import get_file_content, get_file_text
 from phonenumber_field.modelfields import PhoneNumberField

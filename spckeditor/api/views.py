@@ -3,9 +3,9 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from ckeditor import utils
-from ckeditor import image_processing
-from ckeditor.views import *
+from spckeditor import utils
+from spckeditor import image_processing
+from spckeditor.views import *
 
 class UploadImageAPIView(APIView):
     parser_classes = [MultiPartParser, FormParser]

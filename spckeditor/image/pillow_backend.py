@@ -21,7 +21,7 @@ except ImportError:
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-from ckeditor import utils
+from spckeditor import utils
 
 THUMBNAIL_SIZE = (75, 75)
 

@@ -3,7 +3,7 @@
 
 
 from __future__ import absolute_import
-import ckeditor.fields
+import spckeditor.fields
 from django.db import migrations
 
 
@@ -31,16 +31,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='candidate',
             name='hobbies',
-            field=ckeditor.fields.RichTextField(blank=True, default=None, null=True, verbose_name='Hobbies'),
+            field=spckeditor.fields.RichTextField(blank=True, default=None, null=True, verbose_name='Hobbies'),
         ),
         migrations.AlterField(
             model_name='candidate',
             name='interests',
-            field=ckeditor.fields.RichTextField(blank=True, default=None, null=True, verbose_name='Interests'),
+            field=spckeditor.fields.RichTextField(blank=True, default=None, null=True, verbose_name='Interests'),
         ),
         migrations.AlterField(
             model_name='candidate',
             name='others',
-            field=ckeditor.fields.RichTextField(blank=True, default=None, null=True, verbose_name='Others'),
+            field=spckeditor.fields.RichTextField(blank=True, default=None, null=True, verbose_name='Others'),
         ),
     ]

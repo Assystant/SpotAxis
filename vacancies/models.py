@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os
 
 from candidates.models import Candidate
-from ckeditor.fields import RichTextField
+from spckeditor.fields import RichTextField
 from common.models import Degree, Gender, Employment_Type, Country, Currency
 from companies.models import Company_Industry as Industry, Company, Stage, Recruiter, ExternalReferal
 from customField.models import Template, FieldValue

@@ -6,7 +6,7 @@ from zinnia.managers import PUBLISHED
 from django.utils import timezone
 
 # Import existing serializers from other modules
-from ckeditor.api.serializers import RichTextSerializer
+from spckeditor.api.serializers import RichTextSerializer
 from scheduler.api.serializers import ScheduleSerializer
 from customField.api.serializers import FieldSerializer
 
