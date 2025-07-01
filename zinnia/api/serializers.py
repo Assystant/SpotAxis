@@ -73,7 +73,7 @@ class EntrySerializer(serializers.ModelSerializer):
         queryset=Site.objects.all(),
         many=True
     )
-    ckeditor_content = RichTextSerializer(source='ckeditor', read_only=True)
+    ckeditor_content = RichTextSerializer(source='spckeditor', read_only=True)
     scheduler = ScheduleSerializer(read_only=True)
     custom_fields = FieldSerializer(many=True, read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)

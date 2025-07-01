@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 from django.db import models
 from django import forms
-
 from ckeditor.widgets import CKEditorWidget
 
 """

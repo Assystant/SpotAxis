@@ -41,7 +41,7 @@ urlpatterns = [
     re_path(r'^api/activities/',include('activities.api.urls')),
     re_path(r'^api/vacancy/', include('vacancies_api.urls')),
     # url(r'^api/zinnia/',include('zinna.api.urls')),
-    re_path(r'^api/spckeditor/', include('spckeditor.api.urls')),
+    re_path(r'^api/ckeditor/', include('spckeditor.api.urls')),
     re_path(r'api/companies/', include('companies_api.urls')),
     re_path(r'^api/candidates/', include('candidates.api.urls')),
 
@@ -235,7 +235,7 @@ urlpatterns = [
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
     re_path(r'^ajax-uploads/', include('upload_logos.urls')),
     # re_path(r'^rosetta/', include('rosetta.urls')),
-    re_path(r'^spckeditor/', include('spckeditor.urls')),
+    re_path(r'^ckeditor/', include('spckeditor.urls')),
     # url('', include('social.apps.django_app.urls', namespace='social')),  # Auth con face, google, twitter
     # url('', include('django.contrib.auth.urls', namespace='auth')),  # Auth con face, google, twitter
     re_path(r'^upload/file/$', upload_vacancy_file, name='upload-file'),
