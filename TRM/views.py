@@ -21,6 +21,9 @@ from django.db.models import Q, Max
 from common.forms import ContactForm, EarlyAccessForm
 from payments.models import Package
 
+def is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 def index(request):
     if request.method == 'POST':
         try:
@@ -191,7 +194,7 @@ def job_board(request):
         company.jobs = jobs.filter(company = company)
     template = 'job_board.html'
     page_template = 'job_board_item.html'
-    if request.is_ajax():
+    if is_ajax(request):
         template = page_template
     return render(request, 
         template,
