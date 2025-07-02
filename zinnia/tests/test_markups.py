@@ -19,6 +19,12 @@ from zinnia.tests.utils import is_lib_available
 
 
 class MarkupsTestCase(TestCase):
+    """
+    Tests markup rendering using Textile, Markdown, and reStructuredText.
+
+    Verifies proper HTML conversion of sample content and 
+    checks Markdown extension behavior.
+    """
     text = 'Hello *World* !'
 
     @skipUnless(is_lib_available('textile'), 'Textile is not available')
@@ -75,7 +81,14 @@ class MarkupsTestCase(TestCase):
 
 @skipUnless(sys.version_info >= (2, 7, 0),
             'Cannot run these tests under Python 2.7')
+
 class MarkupFailImportTestCase(TestCase):
+    """
+    Tests fallback behavior when markup libraries are not installed.
+
+    Simulates import failures and checks that the original content is returned
+    with appropriate runtime warnings.
+    """
     exclude_list = ['textile', 'markdown', 'docutils']
 
     def setUp(self):
@@ -123,7 +136,12 @@ class MarkupFailImportTestCase(TestCase):
 
 
 class HtmlFormatTestCase(TestCase):
+    """
+    Tests the html_format utility with different markup configurations.
 
+    Ensures correct HTML output or fallback behavior based on the 
+    current MARKUP_LANGUAGE setting.
+    """
     def setUp(self):
         self.original_rendering = markups.MARKUP_LANGUAGE
 

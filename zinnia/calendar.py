@@ -1,6 +1,5 @@
 """Calendar module for Zinnia"""
 
-
 from __future__ import absolute_import
 from .calendar import HTMLCalendar
 from datetime import date

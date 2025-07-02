@@ -10,7 +10,9 @@ from zinnia.signals import disconnect_entry_signals
 
 
 class CategoryTestCase(TestCase):
-
+    """
+    Test suite for validating behavior of Zinnia Category model.
+    """
     def setUp(self):
         disconnect_entry_signals()
         self.site = Site.objects.get_current()
