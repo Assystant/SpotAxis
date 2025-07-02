@@ -19,15 +19,18 @@ from zinnia.signals import disconnect_entry_signals
 
 
 class NoThreadMixin(object):
+    """Runs threaded pingers in a non-threaded, synchronous mode for testing."""
     def start(self):
         self.run()
 
 
 class NoThreadDirectoryPinger(NoThreadMixin, DirectoryPinger):
+    """Non-threaded version of DirectoryPinger for test cases."""
     pass
 
 
 class NoThreadExternalUrlsPinger(NoThreadMixin, ExternalUrlsPinger):
+    """Non-threaded version of ExternalUrlsPinger for test cases."""
     pass
 
 

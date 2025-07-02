@@ -61,6 +61,6 @@ class RichTextFormField(forms.fields.CharField):
 
 try:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^ckeditor\.fields\.RichTextField"])
+    add_introspection_rules([], [r"^ckeditor\.fields\.RichTextField"])
 except:
     pass

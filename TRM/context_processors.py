@@ -18,6 +18,7 @@ def debug_mode(request):
 def project_name(request):
     return {'project_name': settings.PROJECT_NAME, 'HOSTED_URL':settings.HOSTED_URL}
 
+"""
 def candidate_full_name(request):
     full_name = _('Your Name')
     if request.user.is_authenticated:
@@ -25,6 +26,22 @@ def candidate_full_name(request):
         if user_profile == 'candidate':
             candidate = get_object_or_404(Candidate, user=request.user)
             full_name = '%s %s' % (candidate.first_name, candidate.last_name)
+    return {'candidate_full_name': full_name}
+"""
+
+def candidate_full_name(request):
+    full_name = _('Your Name')
+
+    if request.user.is_authenticated:
+        profile = getattr(request.user, 'profile', None)
+
+        if profile and getattr(profile, 'codename', '') == 'candidate':
+            try:
+                candidate = Candidate.objects.get(user=request.user)
+                full_name = f"{candidate.first_name} {candidate.last_name}"
+            except Candidate.DoesNotExist:
+                pass
+
     return {'candidate_full_name': full_name}
 
 def logo_company_default(request):
@@ -82,6 +99,7 @@ def subdomain(request):
         active_host = None
     return {'active_subdomain': slug,'active_host':active_host, 'isRoot':False, 'hasCNAME':hasCNAME}
 
+"""
 def user_profile(request):
     if request.user.is_authenticated:
         user_profile = request.user.profile.codename
@@ -101,6 +119,35 @@ def user_profile(request):
     #added a new line without mentioning zinnia
     return {'user_profile': user_profile,'recruiter': recruiter, 'settings':settings}
     # return {'user_profile': user_profile,'recruiter': recruiter, 'settings':settings, 'zinnia_settings':zinnia_settings}
+
+"""
+
+def user_profile(request):
+    user_profile = None
+    recruiter = None
+    company = None
+
+    try:
+        active_subdomain = subdomain(request)['active_subdomain']
+        if active_subdomain:
+            company = Company.objects.get(subdomain__slug=active_subdomain)
+    except Company.DoesNotExist:
+        company = None
+
+    if request.user.is_authenticated:
+        profile = getattr(request.user, 'profile', None)
+        if profile:
+            user_profile = profile.codename
+        try:
+            recruiter = Recruiter.objects.get(user=request.user, company=company, user__is_active=True)
+        except Recruiter.DoesNotExist:
+            recruiter = None
+
+    return {
+        'user_profile': user_profile,
+        'recruiter': recruiter,
+        'settings': settings
+    }
 
 def notifications(request):
     if request.user.is_authenticated:

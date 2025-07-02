@@ -12,6 +12,13 @@ from customField.api.serializers import FieldSerializer
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Author model (uses the custom user model).
+
+    Adds calculated fields:
+    - entries_count: Total entries written by the author.
+    - published_entries_count: Total published entries by the author.
+    """
     entries_count = serializers.SerializerMethodField()
     published_entries_count = serializers.SerializerMethodField()
 
@@ -24,13 +31,20 @@ class AuthorSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'entries_count', 'published_entries_count', 'get_absolute_url']
 
     def get_entries_count(self, obj):
+        """
+        Returns the total number of entries by the author.
+        """
         return obj.entries.count()
 
     def get_published_entries_count(self, obj):
+        """
+        Returns the number of published entries by the author.
+        """
         return obj.entries.filter(status=PUBLISHED).count()
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """Serializer for the Category model."""
     parent = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(),
         required=False,
@@ -54,12 +68,21 @@ class CategorySerializer(serializers.ModelSerializer):
         ]
 
     def get_entries_count(self, obj):
+        """
+        Returns the total number of entries in this category.
+        """
         return obj.entries.count()
 
     def get_published_entries_count(self, obj):
+        """
+        Returns the number of published entries in this category.
+        """
         return obj.entries.filter(status=PUBLISHED).count()
 
     def get_children(self, obj):
+        """
+        Returns the serialized child categories for this category.
+        """
         children = obj.get_children()
         if children:
             return CategorySerializer(children, many=True).data
@@ -67,6 +90,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class EntrySerializer(serializers.ModelSerializer):
+    """Serializer for the Entry model (blog post)."""
     authors = AuthorSerializer(many=True, read_only=True)
     categories = CategorySerializer(many=True, read_only=True)
     sites = serializers.PrimaryKeyRelatedField(

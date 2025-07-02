@@ -18,7 +18,7 @@ from zinnia.tests.utils import skip_if_custom_user
 
 @skip_if_custom_user
 class ManagersTestCase(TestCase):
-
+    """Test case for validating the behavior of custom managers in Zinnia's models."""
     def setUp(self):
         disconnect_entry_signals()
         self.sites = [

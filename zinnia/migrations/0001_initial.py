@@ -12,7 +12,7 @@ import zinnia.settings
 
 
 class Migration(migrations.Migration):
-
+    """Creates initial models for the Zinnia application, including Category, Entry, and Author, with their fields, relationships, and options."""
     dependencies = [
         ('auth', '0001_initial'),
         ('sites', '0001_initial'),
