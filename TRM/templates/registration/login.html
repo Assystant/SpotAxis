@@ -1,0 +1,65 @@
+{% extends "base/outer_base.html" %}
+{% load i18n %}
+{% load TRM_tags %}
+
+{% comment %} Home {% endcomment %}
+{%block meta %}
+    {{ block.super }}
+    <link rel="canonical" href="https://spotaxis.com/">
+{%endblock %}
+
+{% block content %}
+
+        <!--========== PAGE CONTENT ==========-->
+        <!--<div class="g-bg-position--center g-fullheight--xs" style="background: url('{{ STATIC_URL }}newtheme/img/1920x1080/08.jpg'); background-color= white">-->
+        <div class="g-bg-position--center g-padding-y-80--xs" style="min-height:100vh">
+            <div class="container js__ver-center-aligned">
+                <div class="g-text-center--xs">
+                    <div class="g-margin-t-40--xs g-margin-b-60--xs g-margin-b-80--sm">
+                        <h1 class="g-font-size-32--xs g-font-size-50--sm g-font-size-60--md g-margin-b-30--xs">Login</h1>
+                        <!--p class="text-uppercase g-font-size-20--md g-font-weight--300">Be the first to know when we launch</p-->
+                    </div>
+                    <form role="form" method="post" action=".">
+                    	{% csrf_token %}
+                    	{% if next %}
+				            <input type="hidden" name="next" value="{{ next }}" />
+				        {% endif %}
+
+                        <div class="row g-margin-b-40--xs">
+                            <div class="col-sm-4 col-sm-offset-2 col-xs-6 g-full-width--xs g-margin-b-30--xs g-margin-b-0--md">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <i class="s-form-v4__icon ti-email"></i>
+                                    </span>
+                                    <!--<input type="email" class="form-control s-form-v4__input" placeholder="Your email"> -->
+                                    <input type="text" id="username" name="username" placeholder="Username" class="form-control s-form-v4__input">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-6 g-full-width--xs">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <i class="s-form-v4__icon ti-key"></i>
+                                    </span>
+                                    <input type="Password" class="form-control s-form-v4__input" placeholder="Password" name="password">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-margin-b-40--xs">
+                            <div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3 g-full-width--xs">
+                        
+                                {% if form.errors %}
+                                    <div class="text-danger">
+                                        {% trans 'Username and/or Password incorrect!' %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <button type="submit" class="text-uppercase s-btn s-btn--md s-btn--dark-brd g-radius--50 g-padding-x-50--xs g-margin-b-20--xs">Access</button>
+                        <h6 class="text-center">Forgot your <a href="{% url 'recover_user' %}" class="g-color--primary">{% trans 'Username' %}</a> or <a href="{% url 'auth_password_reset' %}" class="g-color--primary">{% trans 'Password' %}</a>?</h6>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--========== END PAGE CONTENT ==========-->
+
+{% endblock %}
