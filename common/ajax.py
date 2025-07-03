@@ -116,6 +116,9 @@ from vacancies.models import Question, VacancyStage, Vacancy, Comment, Postulate
 from vacancies.models import Vacancy, Postulate, Salary_Type, Candidate_Fav , VacancyTags
 from validate_email import validate_email
 
+def is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 def filter_text_from_profile(arr=[], postulate_ids = [], public = False):
     """Filter candidate profiles based on text search criteria.
 
@@ -363,7 +366,7 @@ def vacancies_postulate(request):
     Returns:
         HttpResponse: Application status or error message
     """
-    if request.is_ajax():
+    if is_ajax(request):
         vacancy_id = request.GET.get('vacancy_id')
         referer = request.GET.get('referer')
         if referer:
@@ -498,7 +501,7 @@ def ajax_login(request):
     """
     context = {}
     context['success'] = False
-    if request.is_ajax():
+    if is_ajax(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username,password=password)

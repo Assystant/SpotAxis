@@ -41,6 +41,9 @@ from six.moves import range
 referer_hash = Hashids(salt='Job Referal', min_length = 5)
 external_referer_hash = Hashids(salt='Job External Referal', min_length=5)
 
+def is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 def get_vacancy_active_status():
     """
     Retrieve the Vacancy_Status instance with codename 'open' representing active vacancies.
@@ -852,7 +855,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
                         request.session['fill_template'] = vacancy.id
                     request.session['applicant'] = save_response[2].id
                     fill_template = vacancy.id
-                if request.is_ajax():
+                if is_ajax(request):
                     return JsonResponse(context)
             else:
                 public_form = Public_Files_OnlyForm()
@@ -1193,7 +1196,7 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
     if recruiter:
         if request.method == 'POST':
             public_form = save_public_application(request, vacancy, recruiter)
-            if request.is_ajax():
+            if is_ajax(request):
                 return JsonResponse(context)
         else:
             public_form = Public_Files_OnlyForm()
@@ -1665,7 +1668,7 @@ def public_apply(request, vacancy_id = None, referer = None, external_referer=No
             if request.method == 'POST':
                 public_form = save_public_application(request, vacancy, recruiter, referer, external_referer)
 
-                if request.is_ajax():
+                if is_ajax(request):
                     return JsonResponse(context)
             else:
                 public_form = Public_Files_OnlyForm()
