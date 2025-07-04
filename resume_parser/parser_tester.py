@@ -4,7 +4,10 @@ the resume parser module.
 """
 from __future__ import absolute_import
 from __future__ import print_function
-import data_extraction as de
+import combined_parser as pr
 
 
-print((de.extract_file_content(r'C:\Python27\data_extraction\Vaibhav_Garg.pdf', 'json')))
+print((pr.extract_file_content(r'test_resume.pdf', 'json')))
+print((pr.extract_file_content(r'test1.pdf', 'json')))
+print((pr.extract_file_content(r'test2.pdf', 'json')))
+print((pr.extract_file_content(r'deedy-resume-reversed.pdf', 'json')))
