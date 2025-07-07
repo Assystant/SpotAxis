@@ -75,7 +75,7 @@ def product(request):
 def pricing(request):
     packages = Package.objects.all()
     return render(request,'pricing.html',{'packages':packages})
-   
+"""   
 def contact(request):
     if request.method == 'POST':
         form_contact = ContactForm(request=request,data=request.POST )
@@ -85,6 +85,27 @@ def contact(request):
     else:
         form_contact = ContactForm(request=request)
         return render(request,'contact.html',{'form_contact':form_contact})
+"""
+def contact(request):
+    if request.method == 'POST':
+        form_contact = ContactForm(request=request, data=request.POST)
+        if form_contact.is_valid():
+            form_contact.save()
+            form_contact = ContactForm(request=request)
+            return render(request, 'contact.html', {
+                'form_contact': form_contact,
+                'success': True
+            })
+        else:
+            return render(request, 'contact.html', {
+                'form_contact': form_contact
+            })
+    else:
+        form_contact = ContactForm(request=request)
+        return render(request, 'contact.html', {
+            'form_contact': form_contact
+        })
+
     
 def comingsoon(request):
     if request.method == 'POST':
