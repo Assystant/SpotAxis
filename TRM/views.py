@@ -94,7 +94,7 @@ def comingsoon(request):
             form_request = EarlyAccessForm(request=request)
     else:
         form_request = EarlyAccessForm(request=request)
-        return render(request,'comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request})
+    return render(request,'comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request})
     
 def job_board(request):
     subdomain_data = subdomain(request)

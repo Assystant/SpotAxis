@@ -58,11 +58,11 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL='SpotAxis <noreply@mail.spotaxis.com>'
 SERVER_EMAIL = 'SpotAxis <server@mail.spotaxis.com>'
 
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'contact.travelder@gmail.com'
-# EMAIL_HOST_PASSWORD = 'qwerty123$'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'contact.travelder@gmail.com'
+EMAIL_HOST_PASSWORD = 'qwerty123$'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
