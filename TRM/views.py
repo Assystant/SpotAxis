@@ -143,7 +143,6 @@ def comingsoon(request):
             'no_header': True,
             'no_footer': True
         })
-
     
 def job_board(request):
     subdomain_data = subdomain(request)
