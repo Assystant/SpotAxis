@@ -44,6 +44,8 @@ This module provides view functions and classes for:
 
 Most views require authentication unless explicitly noted.
 """
+def is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
 # ------------------- #
 # Start Registration #
@@ -223,7 +225,8 @@ def register_blank_email(request):
 @login_required
 def redirect_after_login(request):
     """ Redirecting the user depending on your profile """
-    profile = request.user.profile.codename
+    #profile = request.user.profile.codename
+    profile = getattr(getattr(request.user, 'profile', None), 'codename', None)
     redirect_page = 'TRM-index'
     context={}
     subdomain_data = subdomain(request)
@@ -261,7 +264,7 @@ def redirect_after_login(request):
             redirect_page = reverse('candidates_edit_curriculum')
     elif profile == 'Admin':
         redirect_page = SITE_URL + '/admin/'
-    if not request.is_ajax():
+    if not is_ajax(request):
         return redirect(redirect_page)
     else:
         return JsonResponse(context)
