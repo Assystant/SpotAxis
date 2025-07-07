@@ -33,6 +33,9 @@ from TRM.settings import SITE_URL
 from django.db.models import Q
 from six.moves import range
 
+def is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 def resume_builder(request):
     """
     Render the resume builder page with all required candidate-related forms.
@@ -49,7 +52,7 @@ def resume_builder(request):
     if subdomain_data['active_subdomain']:
         url = SITE_URL + reverse('candidates_resume_builder'),
         redirect(url)
-    if request.is_ajax():
+    if is_ajax(request):
         data = request.POST
         formno = request.POST['formno']
         if formno == 0:
@@ -372,7 +375,7 @@ def cv_personal_info(request):
             form_user_photo.save()
             context['msg'] = 'Profile Updated'
             context['success'] = True
-            if request.is_ajax():
+            if is_ajax(request):
                 return JsonResponse(context)
             else:
                 return redirect('candidates_edit_curriculum')
@@ -479,7 +482,7 @@ def cv_expertise(request, expertise_id=None):
             context['success'] = True
             context['id'] = expertise.id
             context['del_url'] = reverse('candidates_cv_delete_expertise', kwargs={'expertise_id':expertise.id})
-            if request.is_ajax():
+            if is_ajax(request):
                 return JsonResponse(context)
             else:
                 return redirect('candidates_edit_curriculum')
@@ -543,7 +546,7 @@ def cv_academic(request, academic_id=None):
             context['success'] = True
             context['id'] = academic.id
             context['del_url'] = reverse('candidates_cv_delete_academic', kwargs={'academic_id':academic.id})
-            if request.is_ajax():
+            if is_ajax(request):
                 return JsonResponse(context)
             else:
                 return redirect('candidates_edit_curriculum')
