@@ -45,9 +45,6 @@ STATICFILES_DIRS = [
 ]
 
 #EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL='SpotAxis no-reply@spotaxis.com'
-SERVER_EMAIL = 'no-reply@spotaxis.com'
-
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'contact.travelder@gmail.com'
 EMAIL_HOST_PASSWORD = 'qwerty123$'
@@ -55,6 +52,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL='SpotAxis no-reply@spotaxis.com'
+SERVER_EMAIL = 'no-reply@spotaxis.com'
 
 # TRM | localhost
 SOCIAL_AUTH_FACEBOOK_KEY = '886020148168119'
