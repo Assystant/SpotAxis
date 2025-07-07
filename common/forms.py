@@ -19,6 +19,7 @@ from django.template import RequestContext
 from django.contrib.sites.requests import RequestSite
 from TRM.settings import PHOTO_USER_DEFAULT
 from upload_logos.widgets import AjaxClearableFileInput
+from django.apps import apps
 
 def get_initial_country():
     """
@@ -1007,13 +1008,22 @@ class ContactForm(forms.Form):
         """
         if not self.is_valid():
             raise ValueError("Cannot generate Context from invalid contact form")
-        if Site._meta.installed:
-            site = Site.objects.get_current()
+        #if Site._meta.installed:
+        #    site = Site.objects.get_current()
+        if apps.is_installed('django.contrib.sites'):
+            try:
+                site = Site.objects.get_current()
+            except Site.DoesNotExist:
+                site = RequestSite(self.request)
         else:
             site = RequestSite(self.request)
-        return RequestContext(self.request,
-                              dict(self.cleaned_data,
-                                   site=site))
+        #return RequestContext(self.request,
+        #                      dict(self.cleaned_data,
+        #                           site=site))
+        return {
+            **self.cleaned_data,
+            "site": site
+        }
 
     def get_message_dict(self):
         """
