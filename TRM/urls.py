@@ -244,7 +244,7 @@ urlpatterns = [
     re_path(r'^notifications/$', common_ajax_views.notifications, name = "notifications"),
 
     #Widget Urls
-    re_path(r'^widget/jobs/$', companies_views.widget_jobs, name="companies_job_widget"),
+    #re_path(r'^widget/jobs/$', companies_views.widget_jobs, name="companies_job_widget"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #
