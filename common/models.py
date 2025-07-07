@@ -261,7 +261,7 @@ class EmailVerification(models.Model):
             if self.user.email == self.old_email:
                 self.user.email = self.new_email
                 self.user.save()
-            return super(EmailVerification, self).save(*args, **kwargs)
+        return super(EmailVerification, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return u'%s' % self.user
