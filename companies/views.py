@@ -884,7 +884,7 @@ def vacancies_summary(request, vacancy_status_name=None):
     if not subdomain_data['active_subdomain']:
         raise Http404
         # company = get_object_or_404(Company, user=request.user)
-    if request.user.is_authenticated() and request.user.profile.codename == 'recruiter':
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter':
         try:
             recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
         except:
@@ -1580,7 +1580,7 @@ def first_search_curricula(request):
     If the user is authenticated but has no registered email, they are redirected
     to complete their email registration.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
@@ -1937,7 +1937,7 @@ def widget_jobs(request):
     subdomain_data = subdomain(request)
     if not subdomain_data['active_subdomain']:
         raise Http404
-    if request.user.is_authenticated() and request.user.profile.codename == 'recruiter':
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter':
         try:
             recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
         except:

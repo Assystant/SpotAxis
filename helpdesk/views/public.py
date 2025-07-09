@@ -67,7 +67,7 @@ def homepage(request):
         if queue:
             initial_data['queue'] = queue.id
 
-        if request.user.is_authenticated() and request.user.email:
+        if request.user.is_authenticated and request.user.email:
             initial_data['submitter_email'] = request.user.email
 
         form = PublicTicketForm(initial=initial_data)

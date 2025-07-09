@@ -603,7 +603,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
         recruiter_id = request.session.pop('recruiter_id', None)
     if not vacancy_id:
         vacancy_id = request.session.pop('vacancy_id',None)
-    if request.user.is_authenticated() and not recruiter_id:
+    if request.user.is_authenticated and not recruiter_id:
         raise Http404
     if not social_code in settings.social_application_list:
         if not vacancy_id:
