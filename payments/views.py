@@ -319,7 +319,8 @@ def payment(request):
         else:
             messages.error(request, 'Unauthorised Transaction')
     else:
-        messages.error(request,'Unauthorised Transaction')
+        raise Http404
+        #messages.error(request,'Unauthorised Transaction')
     return redirect('companies_billing')
 
 @login_required
