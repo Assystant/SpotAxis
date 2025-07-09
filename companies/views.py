@@ -1580,7 +1580,7 @@ def first_search_curricula(request):
     If the user is authenticated but has no registered email, they are redirected
     to complete their email registration.
     """
-    if request.user.is_authenticated() and not request.user.email:
+    if request.user.is_authenticated and not request.user.email:
         # If the user is logged in and has no email...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
