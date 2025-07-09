@@ -73,35 +73,71 @@ urlpatterns = [
     
     # Common - Django Contrib Auth
     # url(r'^', include('common.common_auth_urls')),
-    path('login/', django_auth_views.login, {'template_name': 'old_login.html'}, name='auth_login'),
-    path('logout/', django_auth_views.logout, {'next_page': '/'}, name='auth_logout'),
-    path('password/change/', django_auth_views.password_change,
-        {'post_change_redirect': 'common_password_change_done',
-         'template_name': 'password_change.html',
-         'password_change_form': ChangePasswordForm},
-        name='auth_password_change'),
-    path('password/reset/', django_auth_views.password_reset,
-        {'password_reset_form': CustomPasswordResetForm,
-         'template_name': 'password_reset.html',
-         'email_template_name': 'mails/password_reset_email.html',
-         'subject_template_name': 'mails/password_reset_subject.html', },
-        name='auth_password_reset'),
-    path('password/reset/<uidb64>[0-9A-Za-z]+>-<token>.+/',
-        django_auth_views.password_reset_confirm,
-        {'template_name': 'password_reset_confirm.html',
-         'post_reset_redirect': 'custom_password_reset_complete'},
-        name='auth_password_reset_confirm'),
-    path('password/reset/done/', django_auth_views.password_reset_done,
-        {'template_name': 'password_reset_done.html'},
-        name='password_reset_done'),
-    path('username/recover/', django_auth_views.password_reset,
-        {'password_reset_form': RecoverUserForm,
-         'template_name': 'recover_user.html',
-         'email_template_name': 'mails/recover_user_email.html',
-         'subject_template_name': 'mails/recover_user_subject.html',
-         'post_reset_redirect': 'common_recover_user_requested', },
-        name='recover_user'),
+    
+    #path('login/', django_auth_views.login, {'template_name': 'old_login.html'}, name='auth_login'),
+    #path('logout/', django_auth_views.logout, {'next_page': '/'}, name='auth_logout'),
+    #path('password/change/', django_auth_views.password_change,
+    #    {'post_change_redirect': 'common_password_change_done',
+    #     'template_name': 'password_change.html',
+    #     'password_change_form': ChangePasswordForm},
+    #    name='auth_password_change'),
+    #path('password/reset/', django_auth_views.password_reset,
+    #    {'password_reset_form': CustomPasswordResetForm,
+    #     'template_name': 'password_reset.html',
+    #     'email_template_name': 'mails/password_reset_email.html',
+    #     'subject_template_name': 'mails/password_reset_subject.html', },
+    #    name='auth_password_reset'),
+    #path('password/reset/<uidb64>[0-9A-Za-z]+>-<token>.+/',
+    #    django_auth_views.password_reset_confirm,
+    #    {'template_name': 'password_reset_confirm.html',
+    #     'post_reset_redirect': 'custom_password_reset_complete'},
+    #    name='auth_password_reset_confirm'),
+    #path('password/reset/done/', django_auth_views.password_reset_done,
+    #    {'template_name': 'password_reset_done.html'},
+    #    name='password_reset_done'),
+    #path('username/recover/', django_auth_views.password_reset,
+    #    {'password_reset_form': RecoverUserForm,
+    #     'template_name': 'recover_user.html',
+    #     'email_template_name': 'mails/recover_user_email.html',
+    #     'subject_template_name': 'mails/recover_user_subject.html',
+    #     'post_reset_redirect': 'common_recover_user_requested', },
+    #    name='recover_user'),
+    path('login/', django_auth_views.LoginView.as_view(template_name='old_login.html'), name='auth_login'),
+    path('logout/', django_auth_views.LogoutView.as_view(next_page='/'), name='auth_logout'),
+    path('password/change/', django_auth_views.PasswordChangeView.as_view(
+        template_name='password_change.html',
+        success_url='common_password_change_done',
+        form_class=ChangePasswordForm
+    ), name='auth_password_change'),
 
+    path(
+        'password/reset/<uidb64>/<token>/',
+        django_auth_views.PasswordResetConfirmView.as_view(
+            template_name='password_reset_confirm.html',
+            success_url='custom_password_reset_complete',
+        ),
+        name='auth_password_reset_confirm'
+    ),
+
+    path(
+        'password/reset/done/',
+        django_auth_views.PasswordResetDoneView.as_view(
+            template_name='password_reset_done.html'
+        ),
+        name='password_reset_done'
+    ),
+
+    path(
+        'username/recover/',
+        django_auth_views.PasswordResetView.as_view(
+            template_name='recover_user.html',
+            email_template_name='mails/recover_user_email.html',
+            subject_template_name='mails/recover_user_subject.html',
+            form_class=RecoverUserForm,
+            success_url='common_recover_user_requested'
+        ),
+        name='recover_user'
+    ),
     # Common - common.views.py
     path('login/social/<str:social_code>/', common_views.social_login, name="social_login"),
     path('login/social/<str:social_code>/<int:vacancy_id>/', common_views.social_login, name="social_login"),
