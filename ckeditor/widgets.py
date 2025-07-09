@@ -9,6 +9,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
 from django.utils.encoding import force_str
 from django.utils.translation import gettext as _
+from django.utils.translation import get_language
 from django.core.exceptions import ImproperlyConfigured
 # from django.forms.util import flatatt
 from django.forms.utils import flatatt
@@ -131,7 +132,7 @@ class CKEditorWidget(forms.Textarea):
 
         self.external_plugin_resources = external_plugin_resources or []
 
-    def render(self, name, value, attrs={}):
+    def render(self, name, value, attrs=None, renderer=None):
         """
         Render the HTML of the widget including CKEditor initialization.
 
@@ -145,7 +146,7 @@ class CKEditorWidget(forms.Textarea):
         """
         if value is None:
             value = ''
-        final_attrs = self.build_attrs(attrs, name=name)
+        final_attrs = {**self.attrs, **(attrs or {}), 'name': name}
         self.config.setdefault('filebrowserUploadUrl', reverse('ckeditor_upload'))
         self.config.setdefault('filebrowserBrowseUrl', reverse('ckeditor_browse'))
         if not self.config.get('language'):
@@ -153,7 +154,7 @@ class CKEditorWidget(forms.Textarea):
 
         return mark_safe(render_to_string('ckeditor/widget.html', {
             'final_attrs': flatatt(final_attrs),
-            'value': conditional_escape(force_text(value)),
+            'value': conditional_escape(force_str(value)),
             'id': final_attrs['id'],
             'config': json_encode(self.config),
             'external_plugin_resources' : self.external_plugin_resources
