@@ -43,13 +43,13 @@ STATICFILES_DIRS = [
     '/var/www/demo/trm/TRM/static/',
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
-"""EMAIL_HOST_USER = ''
+EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = True"""
+EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL='SpotAxis <no-reply@spotaxis.com>'
 SERVER_EMAIL = 'no-reply@spotaxis.com'
 # EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
@@ -62,9 +62,10 @@ SERVER_EMAIL = 'no-reply@spotaxis.com'
 # SOCIAL_AUTH_FACEBOOK_SECRET = 'b8eb73b5bf1326fb91f7bac135b96475'
 
 # FACEBOOK_APP_ID = '1474071052897625'
-# FACEBOOK_APP_SECRET = 'bdac3b3fefdbd129bd7de7974f33bfc0'
+# FACEBOOK_APP_SECRET = 
+# 'bdac3b3fefdbd129bd7de7974f33bfc0'
 
-#DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 logo_email = 'http://demo.spotaxis.com/static/img/logo/logo.png'
 
 ALLOWED_HOSTS = [
