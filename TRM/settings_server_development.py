@@ -62,8 +62,7 @@ SERVER_EMAIL = 'no-reply@spotaxis.com'
 # SOCIAL_AUTH_FACEBOOK_SECRET = 'b8eb73b5bf1326fb91f7bac135b96475'
 
 # FACEBOOK_APP_ID = '1474071052897625'
-# FACEBOOK_APP_SECRET = 
-# 'bdac3b3fefdbd129bd7de7974f33bfc0'
+# FACEBOOK_APP_SECRET = 'bdac3b3fefdbd129bd7de7974f33bfc0'
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 logo_email = 'http://demo.spotaxis.com/static/img/logo/logo.png'
