@@ -109,8 +109,8 @@ def send_TRM_email(subject_template_name, email_template_name, context_email, to
         # print(text_email)
         if not from_email:
             from_email = DEFAULT_FROM_EMAIL
-        html_email.encoding = "utf-8"
-        if isinstance(to_user, types.StringTypes):
+        # html_email.encoding = "utf-8"
+        if isinstance(to_user, str):
             to_user = [to_user]
         to_user = list(to_user)
         # try:
