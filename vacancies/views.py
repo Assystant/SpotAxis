@@ -660,7 +660,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
     # if social_code and not social_code in settings.social_application_list or social_code and request.user.is_authenticated() and not :
     #     raise Http404
     if not recruiter:
-        if request.user.is_authenticated() and social_code or request.user.is_anonymous() and social_code and not social_code in settings.social_application_list:
+        if request.user.is_authenticated and social_code or request.user.is_anonymous() and social_code and not social_code in settings.social_application_list:
             raise Http404
     callback_url = None
     if vacancy_id:
@@ -1931,7 +1931,7 @@ def new_application(request, vacancy_id):
         fresh_application = True
     else:
         referer_path = request.session.get('referer', None)
-    if request.user.is_authenticated() and request.user.profile.codename == 'recruiter' and vacancy.company in request.user.recruiter.company.all():
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and vacancy.company in request.user.recruiter.company.all():
         recruiter_upload = True
     if request.user.is_anonymous() or recruiter_upload:
         if fresh_application:
@@ -1976,7 +1976,7 @@ def new_application(request, vacancy_id):
             curriculum = Curriculum.objects.get(candidate = candidate)
             if request.user.is_anonymous():
                 sa_profile = Candidate.objects.filter(~Q(user=None), user__email = candidate.public_email)
-    elif request.user.is_authenticated() and request.user.profile.codename == 'candidate':
+    elif request.user.is_authenticated and request.user.profile.codename == 'candidate':
         candidate = request.user.candidate
         curriculum = Curriculum.objects.get(candidate=candidate)
         if Postulate.objects.filter(candidate = candidate, vacancy = vacancy) or Postulate.objects.filter(candidate__public_email = candidate.user.email, vacancy = vacancy):
@@ -2004,7 +2004,7 @@ def new_application(request, vacancy_id):
             candidate_form.save()
             candidate.refresh_from_db()
             candidate_form = CandidateMiniForm(instance = candidate)
-            if request.user.is_authenticated() and not recruiter_upload and candidate.public_email:
+            if request.user.is_authenticated and not recruiter_upload and candidate.public_email:
                 if Postulate.objects.filter(candidate = candidate, vacancy = vacancy) or Postulate.objects.filter(candidate__public_email = candidate.user.email, vacancy = vacancy):
                     messages.error(request,'Already applied for this position.')
                     try:
@@ -2181,7 +2181,7 @@ def complete_application(request, vacancy_id):
     vacancy_has_form_template = vacancy.form_template
     referer_path = request.META.get('HTTP_REFERER', None)
     recruiter_upload = False
-    if request.user.is_authenticated() and request.user.profile.codename=='recruiter' and vacancy.company in request.user.recruiter.company.all():
+    if request.user.is_authenticated and request.user.profile.codename=='recruiter' and vacancy.company in request.user.recruiter.company.all():
         recruiter_upload = True
         vacancy_has_form_template = False
     try:
@@ -2189,7 +2189,7 @@ def complete_application(request, vacancy_id):
     except:
         referer_name = None
     referer_path = request.session.get('referer', None)
-    if request.user.is_authenticated() and not recruiter_upload:
+    if request.user.is_authenticated and not recruiter_upload:
         if not request.user.profile.codename == 'candidate':
             raise Http404
         candidate = request.user.candidate
