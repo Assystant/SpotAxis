@@ -18,6 +18,7 @@ from TRM import views as TRM_views
 from example import views as example_views
 from payments import views as payments_views
 from vacancies import views as vacancy_views
+from django.urls import reverse_lazy
 # from socialmultishare import views as socialmultishare_views
 from TRM import settings
 # from django.views.generic.simple import direct_to_template
@@ -134,7 +135,7 @@ urlpatterns = [
             email_template_name='mails/recover_user_email.html',
             subject_template_name='mails/recover_user_subject.html',
             form_class=RecoverUserForm,
-            success_url='common_recover_user_requested'
+            success_url=reverse_lazy('common_recover_user_requested')
         ),
         name='recover_user'
     ),
@@ -149,7 +150,8 @@ urlpatterns = [
     path('email/verify/<str:token>/<str:code>/', common_views.email_change_approve,
         name='common_email_change_approve'),
     path('activate/<str:activation_key>/', common_views.registration_activate, name='common_registration_activate'),
-    path('password/changed/', common_views.password_change_done, name='common_password_change_done'),
+    #path('password/changed/', common_views.password_change_done, name='common_password_change_done'),
+    path('password/change/done/', common_views.password_change_done, name='common_password_change_done'),
     path('password/reset/completed/', common_views.custom_password_reset_complete, name='custom_password_reset_complete'),
     path('username/recover/requested/', common_views.recover_user_requested, name='common_recover_user_requested'),
     # url(r'^contactus/$', common_views.ContactFormView.as_view(), name='common_contact_form'),

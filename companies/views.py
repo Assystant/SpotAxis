@@ -11,8 +11,8 @@ from activities.utils import *
 from activities.models import *
 from candidates.models import Candidate, Academic, CV_Language, Curriculum, Academic_Area, Expertise, Training, Certificate, Project
 from common import registration_settings
-from common.forms import AdressForm, UserDataForm, BasicUserDataForm, send_TRM_email, UserPhotoForm, SubdomainForm
-from common.models import Profile, Country, send_email_to_TRM, Gender, Subdomain
+from common.forms import AdressForm, UserDataForm, BasicUserDataForm, UserPhotoForm, SubdomainForm
+from common.models import Profile, Country, send_email_to_TRM, Gender, Subdomain, send_TRM_email
 from companies.forms import CompanyForm, SearchCvForm, CompanyLogoForm, MemberInviteForm
 from companies.models import Company_Industry, Recommendations, Recommendation_Status, Company, Wallet, Recruiter, Stage, RecruiterInvitation, ExternalReferal
 from customField.forms import TemplateForm, FieldFormset
