@@ -56,6 +56,7 @@ class SubdomainMiddleware:
                 subdomain = None
 
         if subdomain:
+            print(f"[MIDDLEWARE] Host: {fqdn}, Using URLConf: {SUBDOMAIN_URLCONF}")
             set_urlconf(SUBDOMAIN_URLCONF)
             request.urlconf = SUBDOMAIN_URLCONF
         elif fqdn != SITE_SUFFIX.strip('.').strip('/'):

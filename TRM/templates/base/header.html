@@ -30,6 +30,7 @@
             {%if user.recruiter.company.all%}
                 <li class="{%if isCompanyProfile%} active {% endif %}">
                     <a href="{{user.recruiter.company.all.0.get_absolute_url}}">Company</a>
+
                 </li>
                 {% if user.recruiter.is_admin %}
                     {# <li class="{% if isCompanyManagement %}active {%endif%}"><a href="{{user.recruiter.company.all.0.geturl}}{{user.recruiter.company.all.0|get_settings_url}}">Site Settings</a></li> #}
