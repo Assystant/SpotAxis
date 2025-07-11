@@ -165,9 +165,9 @@ urlpatterns = [
     re_path(r'^profile/company/$', companies_views.company_profile, name='companies_company_profile'),
     re_path(r'^careerssite/(?P<setting>\w+)/$', companies_views.site_management, name='companies_site_management'),
     re_path(r'^team/$', companies_views.team_space, name = 'companies_company_team_space'),
-    #re_path(r'^billing/$', companies_views.billing, name = 'companies_billing'),
-    #re_path(r'^payment/$', payments_views.payment, name = 'companies_payment'),
-    #re_path(r'^checkout/$', payments_views.checkout, name = 'payments_checkout'),
+    re_path(r'^billing/$', companies_views.billing, name = 'companies_billing'),
+    re_path(r'^payment/$', payments_views.payment, name = 'companies_payment'),
+    re_path(r'^checkout/$', payments_views.checkout, name = 'payments_checkout'),
     # url(r'^profile/company/change/$', companies_views.edit_company, name='companies_edit_company'),
     # url(r'^summary/jobs/$', companies_views.vacancies_summary, name='companies_vacancies_summary'),
     re_path(r'^job/edit/$', companies_views.add_update_vacancy, name='companies_add_update_vacancy'),
@@ -244,7 +244,7 @@ urlpatterns = [
     re_path(r'^notifications/$', common_ajax_views.notifications, name = "notifications"),
 
     #Widget Urls
-    #re_path(r'^widget/jobs/$', companies_views.widget_jobs, name="companies_job_widget"),
+    re_path(r'^widget/jobs/$', companies_views.widget_jobs, name="companies_job_widget"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #
