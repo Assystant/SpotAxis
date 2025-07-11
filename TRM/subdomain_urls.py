@@ -27,7 +27,6 @@ from companies.views import upload_vacancy_file, delete_vacancy_file
 admin.autodiscover()
 handler500 = 'TRM.views.handler500'
 
-print("🔁 subdomain_urls.py loaded")
 urlpatterns = [
 
     # Index
@@ -254,7 +253,7 @@ urlpatterns = [
     path('checkout/', payments_views.checkout, name = 'payments_checkout'),
     # url(r'^profile/company/change/$', companies_views.edit_company, name='companies_edit_company'),
     # url(r'^summary/jobs/$', companies_views.vacancies_summary, name='companies_vacancies_summary'),
-    path('job/edit/', companies_views.add_update_vacancy, {'vacancy_id': False}, name='companies_add_update_vacancy'),
+    path('job/edit/', companies_views.add_update_vacancy, name='companies_add_update_vacancy'),
     path('job/edit/<int:vacancy_id>/', companies_views.add_update_vacancy, name='companies_add_update_vacancy'),
     path('job/edit_hiring_process/<int:vacancy_id>/', companies_views.add_update_vacancy_hiring_process, name='companies_add_update_vacancy_hiring_process'),
     path('job/edit_talent_sourcing/<int:vacancy_id>/', companies_views.add_update_vacancy_talent_sourcing, name='companies_add_update_vacancy_talent_sourcing'),
