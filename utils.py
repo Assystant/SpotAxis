@@ -9,6 +9,9 @@ from django.db.models import Count
 from payments.models import Discount, Discount_Usage
 from time import mktime
 
+def is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 def get_epoch():
     dt = datetime.now()
     sec_since_epoch = mktime(dt.timetuple()) + dt.microsecond/1000000.0

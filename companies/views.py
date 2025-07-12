@@ -41,13 +41,12 @@ from vacancies.models import Vacancy, Vacancy_Status, Postulate, Vacancy_Files, 
 from vacancies.response import JSONResponse, response_mimetype
 from vacancies.serialize import serialize
 from vacancies.views import save_public_application
+from utils import is_ajax
 
 regex = re.compile('[^A-Za-z0-9]')
 subdomain_hash = Hashids(salt='TRM Subdomain',min_length=4)
 invite_hash = Hashids(salt='Invitation',min_length=7)
 
-def is_ajax(request):
-    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
 def record_recruiter(request, token=None):
     """

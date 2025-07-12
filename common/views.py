@@ -29,6 +29,7 @@ from vacancies.models import Vacancy, Postulate
 from utils import generate_random_username
 from requests_oauthlib import OAuth1
 from django.db.models import Q
+from utils import is_ajax
 
 """
 View functions for the common app.
@@ -44,8 +45,7 @@ This module provides view functions and classes for:
 
 Most views require authentication unless explicitly noted.
 """
-def is_ajax(request):
-    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 
 # ------------------- #
 # Start Registration #

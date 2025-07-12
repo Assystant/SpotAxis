@@ -38,11 +38,10 @@ from vacancies.models import Vacancy, PubDate_Search, Vacancy_Status, Postulate,
     Employment_Experience, Degree,Question, Vacancy_Files, Candidate_Fav, VacancyStage, \
     Postulate_Stage, Postulate_Score, Comment, Medium
 from six.moves import range
+from utils import is_ajax
 referer_hash = Hashids(salt='Job Referal', min_length = 5)
 external_referer_hash = Hashids(salt='Job External Referal', min_length=5)
 
-def is_ajax(request):
-    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
 def get_vacancy_active_status():
     """
