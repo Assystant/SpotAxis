@@ -23,6 +23,8 @@ from django.urls import reverse_lazy
 from TRM import settings
 # from django.views.generic.simple import direct_to_template
 from companies.views import upload_vacancy_file, delete_vacancy_file
+from django.shortcuts import redirect
+
 
 admin.autodiscover()
 handler500 = 'TRM.views.handler500'
@@ -43,6 +45,7 @@ urlpatterns = [
     path('contact/',  TRM_views.contact, name="contact"),
     path('comingsoon/',  TRM_views.comingsoon, name="comingsoon"),
     path('jobs/',  TRM_views.job_board, name="job_board"),
+    path('resources/comments/', lambda request: redirect('/resources/comments/posted/') if request.method == 'GET' else None),
     path('resources/comments/', include('django_comments.urls')),
     # url(r'resources/', include('zinnia.urls')),
     # url(r'help/', include('helpdesk.urls')),
