@@ -23,6 +23,7 @@ from django.urls import reverse_lazy
 from TRM import settings
 # from django.views.generic.simple import direct_to_template
 from companies.views import upload_vacancy_file, delete_vacancy_file
+from TRM.views import LogoutView
 
 admin.autodiscover()
 handler500 = 'TRM.views.handler500'
@@ -104,7 +105,8 @@ urlpatterns = [
     #     'post_reset_redirect': 'common_recover_user_requested', },
     #    name='recover_user'),
     path('login/', django_auth_views.LoginView.as_view(template_name='old_login.html'), name='auth_login'),
-    path('logout/', django_auth_views.LogoutView.as_view(next_page='/'), name='auth_logout'),
+    path('logout/', CustomLogoutView.as_view(next_page='/'), name='auth_logout'),
+    #path('logout/', django_auth_views.LogoutView.as_view(next_page='/'), name='auth_logout'),
     path('password/change/', django_auth_views.PasswordChangeView.as_view(
         template_name='password_change.html',
         success_url='common_password_change_done',
