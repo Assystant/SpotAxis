@@ -21,8 +21,7 @@ from django.db.models import Q, Max
 from common.forms import ContactForm, EarlyAccessForm
 from payments.models import Package
 from django.contrib.auth.views import LogoutView
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
+from django.contrib.auth import logout
 
 
 def is_ajax(request):
@@ -260,8 +259,7 @@ def job_board(request):
             'filters': filters,
         })
     #,context_instance = RequestContext(request))
-
-@method_decorator(csrf_exempt, name='dispatch')
-class CustomLogoutView(LogoutView):
-    def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
+def custom_logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect('/')
