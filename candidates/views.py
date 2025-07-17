@@ -163,6 +163,7 @@ def record_candidate(request):
 
 @login_required
 def edit_curriculum(request, candidate_id=None):
+    profile ='candidate'
     """
     View to edit a candidate's curriculum vitae (CV).
 
@@ -182,6 +183,11 @@ def edit_curriculum(request, candidate_id=None):
         # iF THE USER IS LOGGED IN AND HAS NO EMAIL...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
+
+    if profile == 'candidate':
+        candidate, created = Candidate.objects.get_or_create(user=request.user)
+    else:
+        raise Http404("Only candidates can access this page.")
 
     if candidate_id:
         candidate = get_object_or_404(Candidate, pk=candidate_id)
