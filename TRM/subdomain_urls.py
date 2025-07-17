@@ -12,7 +12,7 @@ from common.forms import ChangePasswordForm, RecoverUserForm, CustomPasswordRese
 from candidates import views as candidates_views
 from common import views as common_views
 from common import ajax as common_ajax_views
-from companies import views as companies_views
+from companies import views as companies_views                              
 from activities import views as activities_views
 from TRM import views as TRM_views
 from example import views as example_views
@@ -24,7 +24,7 @@ from TRM import settings
 # from django.views.generic.simple import direct_to_template
 from companies.views import upload_vacancy_file, delete_vacancy_file
 from django.shortcuts import redirect
-
+from TRM.views import custom_logout_view
 
 admin.autodiscover()
 handler500 = 'TRM.views.handler500'
@@ -85,12 +85,12 @@ urlpatterns = [
     #     'template_name': 'password_change.html',
     #     'password_change_form': ChangePasswordForm},
     #    name='auth_password_change'),
-    #path('password/reset/', django_auth_views.password_reset,
-    #    {'password_reset_form': CustomPasswordResetForm,
-    #     'template_name': 'password_reset.html',
-    #     'email_template_name': 'mails/password_reset_email.html',
-    #     'subject_template_name': 'mails/password_reset_subject.html', },
-    #    name='auth_password_reset'),
+    path('password/reset/', django_auth_views.PasswordResetView.as_view(),
+        {'password_reset_form': CustomPasswordResetForm,
+            'template_name': 'password_reset.html',
+            'email_template_name': 'mails/password_reset_email.html',
+            'subject_template_name': 'mails/password_reset_subject.html', },
+        name='auth_password_reset'),
     #path('password/reset/<uidb64>[0-9A-Za-z]+>-<token>.+/',
     #    django_auth_views.password_reset_confirm,
     #    {'template_name': 'password_reset_confirm.html',
@@ -107,7 +107,8 @@ urlpatterns = [
     #     'post_reset_redirect': 'common_recover_user_requested', },
     #    name='recover_user'),
     path('login/', django_auth_views.LoginView.as_view(template_name='old_login.html'), name='auth_login'),
-    path('logout/', django_auth_views.LogoutView.as_view(next_page='/'), name='auth_logout'),
+    path('logout/', custom_logout_view , name='auth_logout'),
+    #path('logout/', django_auth_views.LogoutView.as_view(next_page='/'), name='auth_logout'),
     path('password/change/', django_auth_views.PasswordChangeView.as_view(
         template_name='password_change.html',
         success_url='common_password_change_done',
@@ -120,7 +121,7 @@ urlpatterns = [
             template_name='password_reset_confirm.html',
             success_url='custom_password_reset_complete',
         ),
-        name='auth_password_reset_confirm'
+        name='password_reset_confirm'
     ),
 
     path(

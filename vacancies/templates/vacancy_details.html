@@ -1599,7 +1599,7 @@
                 onclickremove(this)
             });
 
-            popshare = "{{request.session|args:'enableshare'|call:'pop'|default:''}}"
+            popshare = "{{ popshare|default:'' }}"
             if(!popshare){
                 popshare = getCookie('popshare')
             }
