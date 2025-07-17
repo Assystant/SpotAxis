@@ -216,8 +216,8 @@ def browse(request):
 
     Passes a list of image files and their URLs in the template context.
     """
-    context = RequestContext(request, {
+    context = {
         'files': get_files_browse_urls(request.user),
-    })
+    }
     return render(request,'browse.html', context)
     
