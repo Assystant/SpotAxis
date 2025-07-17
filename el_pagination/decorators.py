@@ -3,7 +3,7 @@
 
 from __future__ import absolute_import
 from functools import wraps
-
+from utils import is_ajax
 from el_pagination.settings import (
     PAGE_LABEL,
     TEMPLATE_VARNAME,
@@ -11,8 +11,6 @@ from el_pagination.settings import (
 
 QS_KEY = 'querystring_key'
 
-def is_ajax(request):
-    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
 def page_template(template, key=PAGE_LABEL):
     """Return a view dynamically switching template if the request is Ajax.
