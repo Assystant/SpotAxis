@@ -11,10 +11,7 @@ from django.views.generic.base import View
 from django.views.generic.list import MultipleObjectTemplateResponseMixin
 
 from el_pagination.settings import PAGE_LABEL
-
-
-def is_ajax(request):
-    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+from utils import is_ajax
 
 class MultipleObjectMixin(object):
 

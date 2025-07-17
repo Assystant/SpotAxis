@@ -20,12 +20,9 @@ from TRM import settings
 from django.db.models import Q, Max
 from common.forms import ContactForm, EarlyAccessForm
 from payments.models import Package
+from utils import is_ajax
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth import logout
-
-
-def is_ajax(request):
-    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
 def index(request):
     if request.method == 'POST':

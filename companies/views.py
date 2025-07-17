@@ -41,13 +41,12 @@ from vacancies.models import Vacancy, Vacancy_Status, Postulate, Vacancy_Files, 
 from vacancies.response import JSONResponse, response_mimetype
 from vacancies.serialize import serialize
 from vacancies.views import save_public_application
+from utils import is_ajax
 
 regex = re.compile('[^A-Za-z0-9]')
 subdomain_hash = Hashids(salt='TRM Subdomain',min_length=4)
 invite_hash = Hashids(salt='Invitation',min_length=7)
 
-def is_ajax(request):
-    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
 def record_recruiter(request, token=None):
     """
@@ -884,8 +883,8 @@ def vacancies_summary(request, vacancy_status_name=None):
     if not subdomain_data['active_subdomain']:
         raise Http404
         # company = get_object_or_404(Company, user=request.user)
-    if request.user.is_authenticated and getattr(getattr(request.user, 'profile', None), 'codename', None) == 'recruiter':
-    #if request.user.is_authenticated and request.user.profile.codename == 'recruiter':
+    if request.user.is_authenticated and getattr(getattr(request.user, 'profile', None), 'codename', None)
+    #if request.user.is_authenticated and request.user.profile.codename == 'recruiter
         try:
             recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
         except:
