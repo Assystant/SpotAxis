@@ -20,6 +20,9 @@ from TRM import settings
 from django.db.models import Q, Max
 from common.forms import ContactForm, EarlyAccessForm
 from payments.models import Package
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth import logout
+
 
 def is_ajax(request):
     return request.headers.get('x-requested-with') == 'XMLHttpRequest'
@@ -256,3 +259,7 @@ def job_board(request):
             'filters': filters,
         })
     #,context_instance = RequestContext(request))
+def custom_logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect('/')
