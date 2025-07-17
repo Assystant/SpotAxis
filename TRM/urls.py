@@ -91,7 +91,7 @@ urlpatterns = [
     path('logout/', django_auth_views.LogoutView.as_view(), name='auth_logout'),
     path('password/change/', django_auth_views.PasswordChangeView.as_view(), name='auth_password_change'),
     path('password/reset/', django_auth_views.PasswordResetView.as_view(), name='auth_password_reset'),
-    re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', django_auth_views.PasswordResetConfirmView.as_view(), name='auth_password_reset_confirm'),
+    re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', django_auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password/reset/done/', django_auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('username/recover/', django_auth_views.PasswordResetView.as_view(), name='recover_user'),
 

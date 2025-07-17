@@ -115,9 +115,7 @@ from vacancies.forms import Public_FilesForm, diff_month
 from vacancies.models import Question, VacancyStage, Vacancy, Comment, Postulate_Stage, Postulate_Score
 from vacancies.models import Vacancy, Postulate, Salary_Type, Candidate_Fav , VacancyTags
 from validate_email import validate_email
-
-def is_ajax(request):
-    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+from utils import is_ajax
 
 def filter_text_from_profile(arr=[], postulate_ids = [], public = False):
     """Filter candidate profiles based on text search criteria.
@@ -514,9 +512,9 @@ def ajax_login(request):
 def add_stage(request):
     context={}
     context['success'] = False
-    context['auth'] = request.is_ajax()
+    context['auth'] = is_ajax(request)
     subdomain_data = subdomain(request)
-    if request.is_ajax() and request.user.is_authenticated:
+    if is_ajax(request) and request.user.is_authenticated:
         stage_name = request.POST['stage_name']
         try:
             company = Company.objects.get(subdomain__slug=subdomain_data['active_subdomain'])
@@ -628,7 +626,7 @@ def upgrade_postulate(request):
     context={}
     formdata = json.loads(request.POST.get('formdata',''))
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated and formdata:
+    if is_ajax(request) and request.method == 'POST' and request.user.is_authenticated and formdata:
         user = request.user
         try:
             vacancy = Vacancy.objects.get(id=request.POST['vacancy'])
@@ -705,7 +703,7 @@ def downgrade_postulate(request):
     context={}
     formdata = json.loads(request.POST.get('formdata',''))
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated and formdata:
+    if is_ajax(request) and request.method == 'POST' and request.user.is_authenticated and formdata:
         user = request.user
         try:
             vacancy = Vacancy.objects.get(id=request.POST['vacancy'])
@@ -779,7 +777,7 @@ def archive_postulate(request):
     context={}
     formdata = json.loads(request.POST.get('formdata',''))
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated and formdata:
+    if is_ajax(request) and request.method == 'POST' and request.user.is_authenticated and formdata:
         user = request.user
         try:
             cpage = request.POST.get('cpage',False)
@@ -867,7 +865,7 @@ def validate_personal_form(request):
     context={}
     context['success'] = False
     context['post'] = request.POST
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -905,7 +903,7 @@ def validate_contact_form(request):
     context={}
     context['success'] = False
     context['post'] = request.POST
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -934,7 +932,7 @@ def validate_contact_form(request):
 def validate_academic_form(request):
     context={}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -971,7 +969,7 @@ def validate_academic_form(request):
 def validate_experience_form(request):
     context={}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1006,7 +1004,7 @@ def validate_experience_form(request):
 def validate_training_form(request):
     context={}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1041,7 +1039,7 @@ def validate_training_form(request):
 def validate_project_form(request):
     context={}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1076,7 +1074,7 @@ def validate_project_form(request):
 def validate_certificate_form(request):
     context={}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1111,7 +1109,7 @@ def validate_certificate_form(request):
 def validate_objective_form(request):
     context={}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1139,7 +1137,7 @@ def validate_interests_form(request):
     context={}
     context['success'] = False
     # context['p']
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1167,7 +1165,7 @@ def validate_interests_form(request):
 def validate_hobbies_form(request):
     context={}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1194,7 +1192,7 @@ def validate_hobbies_form(request):
 def validate_extra_curriculars_form(request):
     context={}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1222,7 +1220,7 @@ def validate_extra_curriculars_form(request):
 def validate_others_form(request):
     context={}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1250,7 +1248,7 @@ def validate_language_form(request):
     context={}
     context['success'] = False
     context['post'] = request.POST
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         if request.user.is_anonymous() and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
@@ -1287,7 +1285,7 @@ def delete_section(request):
     context = {}
     context['success'] = False
     context['post'] = request.POST
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         try:
             section = request.POST['type']
             id = request.POST['id']
@@ -1338,7 +1336,7 @@ def generate_public_cv(request):
     context['success'] = False
     context['post'] = json.loads(request.POST['experiences'])
     # return JsonResponse(context)
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         # try:
         # if not validate_email(request.POST['email']):
         #     context['errors'] = 'email'
@@ -2386,7 +2384,7 @@ def mark_as_read(request):
 def set_plan(request):
     context = {}
     context['success'] = False
-    if request.is_ajax() and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         plan = request.POST['plan']
         slab = PriceSlab.objects.get(id = plan)
         company = request.user.recruiter.company.all()[0]
@@ -2588,7 +2586,7 @@ def smart_share(request,id):
         vacancy = Vacancy.objects.get(id=id,company__in=recruiter_social_profile.company.all())
     except:
         raise Http404
-    if not request.is_ajax() or not request.method == 'POST':
+    if not is_ajax(request) or not request.method == 'POST':
         raise Http404
     recruiter_social_profile.listatus = 0
     recruiter_social_profile.fbstatus = 0
@@ -2819,7 +2817,7 @@ def remove_schedule(request):
     """
     context = {}
     context['success'] = False
-    if request.method == 'POST' and request.is_ajax() and request.user.is_authenticated:
+    if request.method == 'POST' and is_ajax(request) and request.user.is_authenticated:
         candidate = Postulate.objects.filter(id = int(request.POST.get('candidate', 0)))
         if candidate:
             candidate = candidate[0]
@@ -2850,7 +2848,7 @@ def get_upcoming_schedule(request):
     """
     context={}
     json_context = {}
-    if request.is_ajax() and request.method == 'POST' and request.user.is_authenticated:
+    if is_ajax(request) and request.method == 'POST' and request.user.is_authenticated:
         context['recruiter'] = request.user.recruiter
         json_context['html_response'] = render_to_string('scheduled_widget.html',context)
     return JsonResponse(json_context)
@@ -2874,7 +2872,7 @@ def custom_template(request):
         recruiter = Recruiter.objects.get(user = request.user)
     except:
         recruiter = None
-    if request.is_ajax() and recruiter and recruiter.company.all()[0].check_service('JM_CUSTOM_APPLICATION_FORM'):
+    if is_ajax(request) and recruiter and recruiter.company.all()[0].check_service('JM_CUSTOM_APPLICATION_FORM'):
         form = TemplateForm()
         formset = FieldFormset()
         if request.method == 'POST':
@@ -2921,7 +2919,7 @@ def update_site_template(request):
     """
     context={}
     context['success'] = False
-    if request.user.is_authenticated and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.recruiter.is_manager() and is_ajax(request) and request.method == 'POST':
         template_id = request.POST.get('template_id', None)
         template = 'careers/base/t-'+ str(template_id) +'/jobs.html'
         valid = False
@@ -2973,7 +2971,7 @@ def save_template(request):
         context['msg'] = 'Unauthorised access'
         return JsonResponse(context)
     company = company[0]
-    if request.user.is_authenticated and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.recruiter.is_manager() and is_ajax(request) and request.method == 'POST':
         above_jobs = request.POST.get('above_jobs');
         below_jobs = request.POST.get('below_jobs');
         if above_jobs and below_jobs:
@@ -3000,7 +2998,7 @@ def get_evaluators(request):
         context['msg'] = 'Unauthorised access'
         return JsonResponse(context)
     company = company[0]
-    if request.user.is_authenticated and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.recruiter.is_manager() and is_ajax(request) and request.method == 'POST':
         try:
             vstage = VacancyStage.objects.get(id = request.POST.get('vid'))
         except:
@@ -3025,7 +3023,7 @@ def get_process_criterias(request):
         context['msg'] = 'Unauthorised access'
         return JsonResponse(context)
     company = company[0]
-    if request.user.is_authenticated and request.user.recruiter.is_manager() and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.recruiter.is_manager() and is_ajax(request) and request.method == 'POST':
         try:
             vstage = VacancyStage.objects.get(id = request.POST.get('vid'))
         except:
@@ -3056,7 +3054,7 @@ def resolve_conflicts_delete(request):
     context = {}
     context['success'] = False
     context['reload'] = True
-    if request.user.is_authenticated and request.user.profile.codename == 'candidate' and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.profile.codename == 'candidate' and is_ajax(request) and request.method == 'POST':
         ids = request.POST.getlist('ids[]')
         card_type = request.POST.get('card_type')
         length = 0
@@ -3095,7 +3093,7 @@ def template_form(request):
     except:
         vacancy = None
         postulate = None
-    if request.is_ajax() and request.method == 'POST' and vacancy and postulate and postulate.vacancy == vacancy and vacancy.form_template and vacancy.company.check_service('JM_CUSTOM_APPLICATION_FORM'):
+    if is_ajax(request) and request.method == 'POST' and vacancy and postulate and postulate.vacancy == vacancy and vacancy.form_template and vacancy.company.check_service('JM_CUSTOM_APPLICATION_FORM'):
         form = TemplatedForm(request.POST, template = vacancy.form_template, formClasses="form-control")
         if form.is_valid():
             fields = form.save()
@@ -3122,7 +3120,7 @@ def template_form_data(request):
         recruiter = Recruiter.objects.get(user = request.user)
     except:
         recruiter = None
-    if recruiter and request.is_ajax() and request.method == 'POST':
+    if recruiter and is_ajax(request) and request.method == 'POST':
         candidate = Postulate.objects.filter(id = int(request.POST.get('candidate', 0)))
         if candidate:
             candidate = candidate[0]
@@ -3144,7 +3142,7 @@ def resolve_conflicts_unconflict(request):
     context = {}
     context['success'] = False
     context['reload'] = True
-    if request.user.is_authenticated and request.user.profile.codename == 'candidate' and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.profile.codename == 'candidate' and is_ajax(request) and request.method == 'POST':
         ids = request.POST.getlist('ids[]')
         card_type = request.POST.get('card_type')
         length = 0
@@ -3182,7 +3180,7 @@ def resolve_conflicts_merge(request):
     context = {}
     context['success'] = False
     context['reload'] = False
-    if request.user.is_authenticated and request.user.profile.codename == 'candidate' and request.is_ajax() and request.method == 'POST':
+    if request.user.is_authenticated and request.user.profile.codename == 'candidate' and is_ajax(request) and request.method == 'POST':
         ids = request.POST.getlist('ids[]')
         card_type = request.POST.get('card_type')
         length = 0
@@ -3321,7 +3319,7 @@ def add_external_referal(request):
     context = {}
     context['success'] = False
     context['reload'] = False
-    if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and request.is_ajax() and request.method == 'POST' and request.user.recruiter.is_manager():
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and is_ajax(request) and request.method == 'POST' and request.user.recruiter.is_manager():
         reftype = request.POST.get('reftype')
         refname = request.POST.get('refname')
         vacancy_id = request.POST.get('vid')
@@ -3361,7 +3359,7 @@ def remove_external_referal(request):
     context = {}
     context['success'] = False
     context['reload'] = False
-    if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and request.is_ajax() and request.method == 'POST' and request.user.recruiter.is_manager():
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and is_ajax(request) and request.method == 'POST' and request.user.recruiter.is_manager():
         refid= request.POST.get('refid')
         try:
             company = request.user.recruiter.company.all()[0]
