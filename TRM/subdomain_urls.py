@@ -83,12 +83,12 @@ urlpatterns = [
     #     'template_name': 'password_change.html',
     #     'password_change_form': ChangePasswordForm},
     #    name='auth_password_change'),
-    #path('password/reset/', django_auth_views.password_reset,
-    #    {'password_reset_form': CustomPasswordResetForm,
-    #     'template_name': 'password_reset.html',
-    #     'email_template_name': 'mails/password_reset_email.html',
-    #     'subject_template_name': 'mails/password_reset_subject.html', },
-    #    name='auth_password_reset'),
+    path('password/reset/', django_auth_views.PasswordResetView.as_view(),
+        {'password_reset_form': CustomPasswordResetForm,
+            'template_name': 'password_reset.html',
+            'email_template_name': 'mails/password_reset_email.html',
+            'subject_template_name': 'mails/password_reset_subject.html', },
+        name='auth_password_reset'),
     #path('password/reset/<uidb64>[0-9A-Za-z]+>-<token>.+/',
     #    django_auth_views.password_reset_confirm,
     #    {'template_name': 'password_reset_confirm.html',
@@ -119,7 +119,7 @@ urlpatterns = [
             template_name='password_reset_confirm.html',
             success_url='custom_password_reset_complete',
         ),
-        name='auth_password_reset_confirm'
+        name='password_reset_confirm'
     ),
 
     path(
