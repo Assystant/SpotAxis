@@ -168,7 +168,7 @@ class CompanyForm(forms.ModelForm):
         },
     )
     phone = PNF(
-        max_length=12,
+        max_length=16,
         min_length=10,
         error_messages={
             'invalid': _("Enter a valid 10 dg=igit phone"),
