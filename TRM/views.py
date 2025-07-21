@@ -23,6 +23,9 @@ from payments.models import Package
 from utils import is_ajax
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.http import HttpResponseNotAllowed
+from django_comments.views.comments import comment_done
 
 def index(request):
     if request.method == 'POST':
@@ -260,3 +263,9 @@ def custom_logout_view(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect('/')
+
+
+def comments_entrypoint(request):
+    if request.method == 'GET':
+        return comment_done(request)
+    return None
