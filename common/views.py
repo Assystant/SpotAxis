@@ -29,6 +29,7 @@ from vacancies.models import Vacancy, Postulate
 from utils import generate_random_username
 from requests_oauthlib import OAuth1
 from django.db.models import Q
+from utils import is_ajax
 
 """
 View functions for the common app.
@@ -44,8 +45,7 @@ This module provides view functions and classes for:
 
 Most views require authentication unless explicitly noted.
 """
-def is_ajax(request):
-    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 
 # ------------------- #
 # Start Registration #
@@ -227,7 +227,7 @@ def redirect_after_login(request):
     """ Redirecting the user depending on your profile """
     #profile = request.user.profile.codename
     profile = getattr(getattr(request.user, 'profile', None), 'codename', None)
-    redirect_page = 'TRM-index'
+    redirect_page = 'TRM-Subindex'    
     context={}
     subdomain_data = subdomain(request)
     context['success']=True
@@ -236,7 +236,7 @@ def redirect_after_login(request):
     #     return redirect(redirect_page)
         
     if not request.user.email:
-        # IFf you have registered without email
+        # If you have registered without email
         redirect_page = 'common_register_blank_email'
     if profile == 'recruiter':
         # If is Recruiter/Company
@@ -261,6 +261,7 @@ def redirect_after_login(request):
         if host:
             redirect_page = reverse('TRM-Subindex')
         else:
+            #redirect_page = reverse('TRM-index')
             redirect_page = reverse('candidates_edit_curriculum')
     elif profile == 'Admin':
         redirect_page = SITE_URL + '/admin/'
