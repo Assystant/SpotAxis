@@ -283,9 +283,9 @@ class Ban(models.Model):
     company = models.ForeignKey(Company, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     add_date = models.DateTimeField(auto_now_add=True)
     ban_function = models.TextField(default=None)
-    def __unicode__(self):
+    def __str__(self):
         """Returns the string representation of the ban."""
-        return self.email
+        return str(self.email)
 
     class Meta:
         verbose_name = 'Ban'
@@ -388,7 +388,7 @@ class Stage(models.Model):
     name = models.CharField(verbose_name=_('Stage Name'), max_length=50, null=True, blank=True, default=None)
     company = models.ForeignKey(Company, verbose_name=_('Company'), null=True,blank=True, default=None, on_delete=models.SET_NULL)
     
-    def __unicode__(self):
+    def __str__(self):
         """Returns the name of the stage."""
         return str(self.name)
 

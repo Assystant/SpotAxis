@@ -890,14 +890,14 @@ class Vacancy_Files(models.Model):
         self.file.delete(False)
         super(Vacancy_Files, self).delete(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         """
         String representation of the Vacancy_Files instance.
 
         Returns:
             str: A formatted string with ID, job ID, and file name.
         """
-        return 'Id: %s - Job: %s - File: %s' % (str(self.pk), str(self.vacancy.pk), self.file.name)
+        return f'Id: {self.pk} - Job: {self.vacancy.pk} - File: {self.file.name}'
 
     class Meta:
         verbose_name = _('File for Job')
@@ -960,7 +960,7 @@ class VacancyStage(models.Model):
         Returns:
             str: The name of the linked Stage.
         """
-        return self.stage.name
+        return str(self.stage.name)
 
     def isLocked(self):
         """
@@ -1099,8 +1099,8 @@ class VacancyTags(models.Model):
     added = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
     vacancy = models.ForeignKey(Vacancy, null=True, default = None,on_delete=models.SET_NULL)
 
-    def __unicode__(self):
-        return self.name  
+    def __str__(self):
+        return str(self.name)  
     
     class Meta:
         verbose_name = "Job Tag"

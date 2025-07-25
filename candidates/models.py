@@ -451,9 +451,9 @@ class Academic(models.Model):
         from candidates.forms import AcademicForm
         return AcademicForm(instance=self)
 
-    def __unicode__(self):
+    def __str__(self):
         """Returns a string representation of the Academic object."""
-        return self.course_name
+        return str(self.course_name)
         # academic_name = ''
         # if self.degree:
         #     academic_name += self.degree.name
@@ -767,9 +767,9 @@ class Curriculum(models.Model):
         """Reads and returns the extracted text from the uploaded CV file."""
         return get_file_text(self.file.path)
 
-    def __unicode__(self):
+    def __str__(self):
         """ Returns a string representation of the curriculum showing candidate's name and ID."""
-        return '%s %s - Id: %s' % (self.candidate.first_name, self.candidate.last_name, str(self.candidate.id))
+        return f'{self.candidate.first_name} {self.candidate.last_name} - Id: {self.candidate.id}'
 
     class Meta:
         verbose_name = _('Curriculum')
