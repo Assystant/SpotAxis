@@ -48,14 +48,14 @@ class Vacancy_Status(models.Model):
     codename = models.CharField(max_length=30, blank=True, null=True, default=None)
     public = models.BooleanField(verbose_name = _('Is Public?'), default = False)
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Return the string representation of the Vacancy_Status instance.
 
         Returns:
             str: The name of the status.
         """
-        return '%s' % self.name
+        return self.name
 
     def count(self):
         """
@@ -88,14 +88,14 @@ class PubDate_Search(models.Model):
     days = models.PositiveIntegerField(verbose_name=_('Days'), blank=True, null=True, default=None)
     codename = models.CharField(max_length=30, blank=True, null=True, default=None)
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Return the string representation of the PubDate_Search instance.
 
         Returns:
             str: The name of the publication date filter.
         """
-        return '%s' % self.name
+        return self.name
 
     class Meta:
         verbose_name = _('Day for Search')
@@ -129,14 +129,14 @@ class Employment_Experience(models.Model):
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
     order = models.PositiveSmallIntegerField(blank=True, null=True, default=100)
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Return the string representation of the Employment_Experience instance.
 
         Returns:
             str: The name of the employment experience.
         """
-        return '%s' % self.name
+        return self.name
 
     class Meta:
         verbose_name = _('Employment Experience')
@@ -161,14 +161,14 @@ class Salary_Type(models.Model):
     codename = models.CharField(max_length=30, blank=True, null=True, default=None)
     order = models.PositiveSmallIntegerField(blank=True, null=True, default=100)
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Return the string representation of the Salary_Type instance.
 
         Returns:
             str: The name of the salary type.
         """
-        return '%s' % self.name
+        return self.name
 
     class Meta:
         verbose_name = _('Type of Salary')
@@ -479,15 +479,15 @@ class Vacancy(models.Model):
     scheduledjobs = Scheduled()
     closedjobs = Closed()
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Returns the string representation of the Vacancy instance.
 
         Returns:
             str: The employment/job title of the vacancy.
         """
-        return '%s' % self.employment
-        return '%s' % self.employment
+        return self.employment
+        #return '%s' % self.employment
 
     def non_members(self):
         """
@@ -782,14 +782,14 @@ class Question(models.Model):
     question_date = models.DateTimeField(verbose_name=_('Question date'), auto_now_add=True)
     answer_date = models.DateTimeField(verbose_name=_('Answer Date'), null=True, blank=True, default=None)
 
-    def __unicode__(self):
+    def __str__(self):
         """
         String representation of the Question instance.
 
         Returns:
             str: The question text.
         """
-        return '%s' % self.question
+        return self.question
 
     class Meta:
         verbose_name = _('Question')
@@ -811,14 +811,14 @@ class Candidate_Fav(models.Model):
     candidate = models.ForeignKey(Candidate, verbose_name=_('Candidate'), null=True, blank=True, default=None, on_delete=models.SET_NULL)
     add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         """
         String representation of the Candidate_Fav instance.
 
         Returns:
             str: A formatted string with ID, candidate ID, and job ID.
         """
-        return 'Id: %s - Candidate: %s - Job: %s' % (str(self.pk), str(self.candidate.pk), str(self.vacancy.pk))
+        return f'Id: {self.pk} - Candidate: {self.candidate.pk} - Job: {self.vacancy.pk}'
 
     class Meta:
         verbose_name = _('Favourite Job')
@@ -953,7 +953,7 @@ class VacancyStage(models.Model):
     recruiters = models.ManyToManyField(Recruiter, default=None)
     criteria = models.TextField(default=None, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Returns the string representation of the VacancyStage.
 
@@ -1079,7 +1079,7 @@ class StageCriterion(models.Model):
         verbose_name = "Stage Criterion"
         verbose_name_plural = "Stage Criterion"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name  
     
 class VacancyTags(models.Model):
@@ -1113,7 +1113,7 @@ class Medium(models.Model):
         name (CharField): Name of the medium/referral source.
 
     Methods:
-        __unicode__():
+        __str__():
             Returns the name of the medium as string representation.
     """
 
@@ -1124,7 +1124,7 @@ class Medium(models.Model):
         verbose_name = 'Medium'
         verbose_name_plural = 'Mediums'
 
-    def __unicode__(self):
+    def __str__(self):
         """Unicode representation of Medium."""
         return self.name
 
@@ -1153,7 +1153,7 @@ class Postulate(models.Model):
         medium (ForeignKey): External referral medium.
 
     Methods:
-        __unicode__():
+        __str__():
             Returns a string representation of the application.
 
         last_status():
@@ -1227,8 +1227,8 @@ class Postulate(models.Model):
     external_referer = models.ForeignKey(ExternalReferal, null = True, blank=True,default=None, on_delete=models.SET_DEFAULT)
     medium = models.ForeignKey(Medium, null=True, blank=True, default=None, on_delete=models.SET_DEFAULT)
 
-    def __unicode__(self):
-        return 'Id: %s - Job: %s - Candidate: %s - Seen: %s - Discard: %s' % (str(self.pk), str(self.vacancy.pk), str(self.candidate.pk), self.seen, self.discard)
+    def __str__(self):
+        return f'Id: {self.pk} - Job: {self.vacancy.pk} - Candidate: {self.candidate.pk} - Seen: {self.seen} - Discard: {self.discard}'
 
     class Meta:
         verbose_name = _('Application')
@@ -1535,7 +1535,7 @@ class Postulate_Score(models.Model):
         verbose_name = "Applicant Stage"
         verbose_name_plural = "Applicant Stages"
 
-    def __unicode__(self):
+    def __str__(self):
         """Returns a string describing the score, criterion, and recruiter."""
         return self.name  
 
@@ -1595,7 +1595,7 @@ class Postulate_Stage(models.Model):
         verbose_name = "Applicant Stage"
         verbose_name_plural = "Applicant Stages"
 
-    def __unicode__(self):
+    def __str__(self):
         """Returns a string describing the postulate and vacancy stage."""
         return str(self.vacancy_stage)
 

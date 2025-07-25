@@ -26,8 +26,8 @@ class Profile(models.Model):
     name = models.CharField(max_length=20)
     codename = models.CharField(max_length=20)
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = u'Profile'
@@ -58,11 +58,10 @@ class User(AbstractUser):
     # def __getprofilename__(self):
     #     return u'%s' % self.profile.name
 
-    def __unicode__(self):
-        name = self.username
-        if self.first_name:
-            name = self.get_full_name()
-        return u'%s' % name
+def __str__(self):
+    if self.first_name:
+        return self.get_full_name()
+    return self.username
 
     class Meta:
         verbose_name = u'User'
@@ -218,8 +217,8 @@ class AccountVerification(models.Model):
             or (self.user.date_joined + expiration_date <= timezone.now()))
     activation_key_expired.boolean = True
 
-    def __unicode__(self):
-        return u'%s' % self.user
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _(u'Checking Account')
@@ -263,8 +262,8 @@ class EmailVerification(models.Model):
                 self.user.save()
         return super(EmailVerification, self).save(*args, **kwargs)
 
-    def __unicode__(self):
-        return u'%s' % self.user
+    def __str__(self):
+        return self.user
 
     class Meta:
         verbose_name = _(u'Verification of Email')
@@ -295,8 +294,8 @@ class Country(models.Model):
     continent = models.CharField(_(u'Continents'), choices=CONTINENTS, max_length=2, null=True, blank=True, default=None)
     order = models.PositiveSmallIntegerField(_(u'Order'), null=True, blank=True, default=1000)
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _(u'Country')
@@ -308,8 +307,8 @@ class State(models.Model):
     country = models.ForeignKey(Country,verbose_name=_('Country'), null=True, blank=True, limit_choices_to={'pk__exact': 0}, on_delete=models.SET_NULL)
     name = models.CharField(Name, max_length=60, null=True, blank=True, default=None)
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _('State')
@@ -322,8 +321,8 @@ class Municipal(models.Model):
 
     name = models.CharField(Name, max_length=80, null=True, blank=True, default=None)
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _(u'City')
@@ -340,8 +339,8 @@ class Currency(models.Model):
     code = models.CharField(verbose_name='Code', max_length=50, null=True, blank=True, default=None)
     name_plural = models.CharField(verbose_name='Plural Name', max_length=50, null=True, blank=True, default=None)
 
-    def __unicode__(self):
-        return u'%s' % self.code
+    def __str__(self):
+        return self.code
 
     class Meta:
         verbose_name='Currency'
@@ -362,8 +361,9 @@ class Address(models.Model):
     municipal = models.ForeignKey(Municipal, verbose_name=_(u'City'), null=True, default=None, on_delete=models.SET_NULL)
     last_modified = models.DateTimeField(verbose_name=_(u'Last Modified'), auto_now=True)
 
-    def __unicode__(self):
-        return u'%s, %s, %s, %s, %s' % (self.street, self.city, self.state, self.country.name,  self.postal_code)
+    def __str__(self):
+        return f"{self.street}, {self.city}, {self.state}, {self.country.name}, {self.postal_code}"
+
 
     class Meta:
         verbose_name = _(u'Address')
@@ -401,8 +401,8 @@ class Degree(models.Model):
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
     order = models.PositiveSmallIntegerField(null=True, blank=True, default=100)
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _(u'School Grade')
@@ -414,8 +414,8 @@ class Identification_Doc(models.Model):
     name = models.CharField(verbose_name=Name, max_length=30, blank=True, null=True, default=None)
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _(u'Type of Identification')
@@ -427,8 +427,8 @@ class Marital_Status(models.Model):
     name = models.CharField(verbose_name=Name, max_length=20, blank=True, null=True, default=None)
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _(u'Marital Status')
@@ -441,8 +441,8 @@ class Employment_Type(models.Model):
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
     order = models.SmallIntegerField(blank=True, null=True, default=100)
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _(u'Type of Employment')
@@ -454,8 +454,8 @@ class Gender(models.Model):
     name = models.CharField(verbose_name=Name, max_length=20, blank=True, null=True, default=None)
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _(u'Gender')
@@ -470,11 +470,11 @@ class Subdomain(models.Model):
     cname = models.CharField(verbose_name=_(u'Cname'), max_length=255, null=True, blank=True, default=None, unique=True)
     slug = models.CharField(verbose_name=_(u'Subdomain'), max_length=255, null=True, blank=True, default=True)
 
-    def __unicode__(self):
-        if self.cname:
-            return u'%s' % self.cname
-        else:
-            return u'%s%s' % (self.slug , SITE_SUFFIX)
+def __str__(self):
+    if self.cname:
+        return self.cname
+    else:
+        return f"{self.slug}{SITE_SUFFIX}"
         # return u'%s.%s.%s' % (HOST,self.slug,SITE_URL)
 
     class Meta:
