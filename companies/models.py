@@ -270,7 +270,7 @@ class Recruiter(models.Model):
         Returns:
             str: The string form of the associated user.
         """
-        return self.user
+        return str(self.user)
 
     class Meta:
         verbose_name='Recruiter'
