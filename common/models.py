@@ -27,7 +27,7 @@ class Profile(models.Model):
     codename = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = u'Profile'
@@ -58,10 +58,10 @@ class User(AbstractUser):
     # def __getprofilename__(self):
     #     return u'%s' % self.profile.name
 
-def __str__(self):
-    if self.first_name:
-        return self.get_full_name()
-    return self.username
+    def __str__(self):
+        if self.first_name:
+            return self.get_full_name()
+        return str(self.username)
 
     class Meta:
         verbose_name = u'User'
@@ -218,7 +218,7 @@ class AccountVerification(models.Model):
     activation_key_expired.boolean = True
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _(u'Checking Account')
@@ -263,7 +263,7 @@ class EmailVerification(models.Model):
         return super(EmailVerification, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
     class Meta:
         verbose_name = _(u'Verification of Email')
@@ -295,7 +295,7 @@ class Country(models.Model):
     order = models.PositiveSmallIntegerField(_(u'Order'), null=True, blank=True, default=1000)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _(u'Country')
@@ -322,7 +322,7 @@ class Municipal(models.Model):
     name = models.CharField(Name, max_length=80, null=True, blank=True, default=None)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _(u'City')
@@ -340,7 +340,7 @@ class Currency(models.Model):
     name_plural = models.CharField(verbose_name='Plural Name', max_length=50, null=True, blank=True, default=None)
 
     def __str__(self):
-        return self.code
+        return str(self.code)
 
     class Meta:
         verbose_name='Currency'
@@ -402,7 +402,7 @@ class Degree(models.Model):
     order = models.PositiveSmallIntegerField(null=True, blank=True, default=100)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _(u'School Grade')
@@ -415,7 +415,7 @@ class Identification_Doc(models.Model):
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _(u'Type of Identification')
@@ -428,7 +428,7 @@ class Marital_Status(models.Model):
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _(u'Marital Status')
@@ -442,7 +442,7 @@ class Employment_Type(models.Model):
     order = models.SmallIntegerField(blank=True, null=True, default=100)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _(u'Type of Employment')
@@ -455,7 +455,7 @@ class Gender(models.Model):
     codename = models.CharField(max_length=20, blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _(u'Gender')
@@ -472,7 +472,7 @@ class Subdomain(models.Model):
 
 def __str__(self):
     if self.cname:
-        return self.cname
+        return str(self.cname)
     else:
         return f"{self.slug}{SITE_SUFFIX}"
         # return u'%s.%s.%s' % (HOST,self.slug,SITE_URL)

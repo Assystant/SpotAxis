@@ -43,7 +43,7 @@ class ServiceCategory(models.Model):
         verbose_name_plural = "ServiceCategories"
 
     def __str__(self):
-        return self.name
+        return str(self.name)
  
 class Services(models.Model):
     """ Model representing a service offered on the platform."""
@@ -61,7 +61,7 @@ class Services(models.Model):
     all_objects = models.Manager()
     
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Service')
@@ -80,7 +80,7 @@ class Package(models.Model):
         verbose_name_plural = "Packages"
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def package_slabs(self):
         """
@@ -166,7 +166,7 @@ class Subscription(models.Model):
         verbose_name_plural = "Subscriptions"
 
     def __str__(self):
-        return self.expiry
+        return str(self.expiry)
 
     def expired(self):
         """Returns True if the subscription has expired."""
@@ -208,7 +208,7 @@ class Transactions(models.Model):
     timestamp = models.DateTimeField(verbose_name=_('Date'), auto_now_add=True)
 
     def __str__(self):
-        return self.amount
+        return str(self.amount)
 
     class Meta:
         verbose_name = _('Transaction')
@@ -243,7 +243,7 @@ class Discount(models.Model):
     companies = models.ManyToManyField(Company, through="Discount_Usage")
 
     def __str__(self):
-        return self.amount
+        return str(self.amount) 
 
     class Meta:
         verbose_name = 'Discount'
@@ -277,7 +277,7 @@ class Discount_Usage(models.Model):
     used_count = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
 
     def __str__(self):
-        return self.company
+        return str(self.company)
     class Meta:
         verbose_name='Discount_Usage'
         verbose_name_plural = 'Discount Usages'

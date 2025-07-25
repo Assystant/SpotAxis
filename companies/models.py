@@ -27,7 +27,7 @@ class Company_Industry(models.Model):
     name = models.CharField(verbose_name=_('Name'), max_length=150, blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Company Industry')
@@ -70,7 +70,7 @@ class Company(models.Model):
     below_jobs = models.TextField(default="", null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def geturl(self):
         """Returns the full URL for the company's subdomain."""
@@ -305,7 +305,7 @@ class RecruiterInvitation(models.Model):
         Returns:
             str: The invitation token.
         """
-        return self.token
+        return str(self.token)
 
     class Meta:
         verbose_name='Recruiter Invitation'
@@ -357,7 +357,7 @@ class Recommendation_Status(models.Model):
 
     def __str__(self):
         """Returns the status name."""
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Status of Recommendation')
@@ -390,7 +390,7 @@ class Stage(models.Model):
     
     def __unicode__(self):
         """Returns the name of the stage."""
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Stage')

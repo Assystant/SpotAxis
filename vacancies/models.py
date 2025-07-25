@@ -55,7 +55,7 @@ class Vacancy_Status(models.Model):
         Returns:
             str: The name of the status.
         """
-        return self.name
+        return str(self.name)
 
     def count(self):
         """
@@ -95,7 +95,7 @@ class PubDate_Search(models.Model):
         Returns:
             str: The name of the publication date filter.
         """
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Day for Search')
@@ -136,7 +136,7 @@ class Employment_Experience(models.Model):
         Returns:
             str: The name of the employment experience.
         """
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Employment Experience')
@@ -168,7 +168,7 @@ class Salary_Type(models.Model):
         Returns:
             str: The name of the salary type.
         """
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Type of Salary')
@@ -486,7 +486,7 @@ class Vacancy(models.Model):
         Returns:
             str: The employment/job title of the vacancy.
         """
-        return self.employment
+        return str(self.employment)
         #return '%s' % self.employment
 
     def non_members(self):
@@ -789,7 +789,7 @@ class Question(models.Model):
         Returns:
             str: The question text.
         """
-        return self.question
+        return str(self.question)
 
     class Meta:
         verbose_name = _('Question')
@@ -1080,8 +1080,8 @@ class StageCriterion(models.Model):
         verbose_name_plural = "Stage Criterion"
 
     def __str__(self):
-        return self.name  
-    
+        return str(self.name)
+
 class VacancyTags(models.Model):
     """
     Represents tags assigned to a Vacancy for categorization.
@@ -1126,7 +1126,7 @@ class Medium(models.Model):
 
     def __str__(self):
         """Unicode representation of Medium."""
-        return self.name
+        return str(self.name)
 
 class Postulate(models.Model):
     """ Indicates whether a candidate is running a Job and if the Company has already seen or not the CV of the candidate nominated """

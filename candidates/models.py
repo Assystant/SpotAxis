@@ -301,7 +301,7 @@ class Expertise(models.Model):
     tasks = models.TextField(verbose_name=_('Tasks or Functions'), max_length=1000, null=True, blank=True, default=None)
 
     def __str__(self):
-        return self.employment
+        return str(self.employment)
 
     def get_form(self):
         from candidates.forms import ExpertiseForm
@@ -337,7 +337,7 @@ class Academic_Area(models.Model):
     order = models.PositiveSmallIntegerField(null=True, blank=True, default=100)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Academice Area')
@@ -367,7 +367,7 @@ class Academic_Status(models.Model):
     codename = models.CharField(max_length=15, null=True, blank=True, default=None)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Status/Academic Status')
@@ -489,7 +489,7 @@ class Language(models.Model):
     order = models.PositiveSmallIntegerField(null=True, blank=True, default=100)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Language')
@@ -509,7 +509,7 @@ class Language_Level(models.Model):
     codename = models.CharField(max_length=15, blank=True, null=True, default=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Language Proficiency')
@@ -559,7 +559,7 @@ class CV_Language(models.Model):
         #     return "Not Mentioned"
 
     def __str__(self):
-        return self.language
+        return str(self.language)
 
     class Meta:
         verbose_name = _('Language')
@@ -594,7 +594,7 @@ class Training(models.Model):
         verbose_name_plural = "Trainings"
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
 ## End of Section Training ""
 
@@ -625,7 +625,7 @@ class Certificate(models.Model):
         return CertificateForm(instance=self)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
 ## End of Section Certificate ""
 
@@ -653,7 +653,7 @@ class Project(models.Model):
         return ProjectForm(instance=self)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
 ## End of Section Project ""
 
