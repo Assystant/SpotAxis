@@ -17,9 +17,9 @@ ENVIRONMENT = os.getenv('ENVIRONMENT')
 
 DEBUG = ENVIRONMENT in ['local_development', 'server_development']
 
-ALLOWED_HOSTS = ['*']
-SESSION_COOKIE_DOMAIN = '.spotaxis.com'
-TIME_ZONE = 'Asia/Kolkata'
+ALLOWED_HOSTS = os.getenv('allowed_hosts')
+SESSION_COOKIE_DOMAIN = os.getenv('session_cookie_domain')
+TIME_ZONE = os.getenv('TIME_ZONE', 'Asia/Kolkata')
 LANGUAGE_CODE = 'en-IN'
 SITE_ID = 1
 USE_I18N = True
@@ -249,6 +249,6 @@ PROTOCOL = 'https' if ENVIRONMENT == 'productive' else 'http'
 SITE_URL = os.getenv('site_url', f"{PROTOCOL}://spotaxis.com")
 SITE_SUFFIX = os.getenv('site_suffix', '.spotaxis.com/')
 
-logo_email = f"{SITE_URL}/static/img/logo/logo.png"
-NOTIFICATION_EMAILS = ['notify@spotaxis.com']
+logo_email = os.getenv('logo_email')
+NOTIFICATION_EMAILS = os.getenv('notification_emails')
 CKEDITOR_UPLOAD_PATH = "uploads/"
