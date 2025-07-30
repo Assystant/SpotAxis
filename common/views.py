@@ -29,6 +29,7 @@ from vacancies.models import Vacancy, Postulate
 from utils import generate_random_username
 from requests_oauthlib import OAuth1
 from django.db.models import Q
+from utils import is_ajax
 
 """
 View functions for the common app.
@@ -44,6 +45,7 @@ This module provides view functions and classes for:
 
 Most views require authentication unless explicitly noted.
 """
+
 
 # ------------------- #
 # Start Registration #
@@ -223,8 +225,9 @@ def register_blank_email(request):
 @login_required
 def redirect_after_login(request):
     """ Redirecting the user depending on your profile """
-    profile = request.user.profile.codename
-    redirect_page = 'TRM-index'
+    #profile = request.user.profile.codename
+    profile = getattr(getattr(request.user, 'profile', None), 'codename', None)
+    redirect_page = 'TRM-Subindex'    
     context={}
     subdomain_data = subdomain(request)
     context['success']=True
@@ -233,7 +236,7 @@ def redirect_after_login(request):
     #     return redirect(redirect_page)
         
     if not request.user.email:
-        # IFf you have registered without email
+        # If you have registered without email
         redirect_page = 'common_register_blank_email'
     if profile == 'recruiter':
         # If is Recruiter/Company
@@ -258,10 +261,11 @@ def redirect_after_login(request):
         if host:
             redirect_page = reverse('TRM-Subindex')
         else:
+            #redirect_page = reverse('TRM-index')
             redirect_page = reverse('candidates_edit_curriculum')
     elif profile == 'Admin':
         redirect_page = SITE_URL + '/admin/'
-    if not request.is_ajax():
+    if not is_ajax(request):
         return redirect(redirect_page)
     else:
         return JsonResponse(context)
@@ -600,7 +604,7 @@ def social_login(request, social_code, vacancy_id=None, recruiter_id=None, redir
         recruiter_id = request.session.pop('recruiter_id', None)
     if not vacancy_id:
         vacancy_id = request.session.pop('vacancy_id',None)
-    if request.user.is_authenticated() and not recruiter_id:
+    if request.user.is_authenticated and not recruiter_id:
         raise Http404
     if not social_code in settings.social_application_list:
         if not vacancy_id:

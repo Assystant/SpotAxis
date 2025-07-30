@@ -32,6 +32,7 @@ from TRM.context_processors import subdomain
 from TRM.settings import SITE_URL
 from django.db.models import Q
 from six.moves import range
+from utils import is_ajax
 
 def resume_builder(request):
     """
@@ -49,7 +50,7 @@ def resume_builder(request):
     if subdomain_data['active_subdomain']:
         url = SITE_URL + reverse('candidates_resume_builder'),
         redirect(url)
-    if request.is_ajax():
+    if is_ajax(request):
         data = request.POST
         formno = request.POST['formno']
         if formno == 0:
@@ -162,6 +163,7 @@ def record_candidate(request):
 
 @login_required
 def edit_curriculum(request, candidate_id=None):
+    profile ='candidate'
     """
     View to edit a candidate's curriculum vitae (CV).
 
@@ -181,6 +183,11 @@ def edit_curriculum(request, candidate_id=None):
         # iF THE USER IS LOGGED IN AND HAS NO EMAIL...
         redirect_page = 'common_register_blank_email'
         return redirect(redirect_page)
+
+    if profile == 'candidate':
+        candidate, created = Candidate.objects.get_or_create(user=request.user)
+    else:
+        raise Http404("Only candidates can access this page.")
 
     if candidate_id:
         candidate = get_object_or_404(Candidate, pk=candidate_id)
@@ -372,7 +379,7 @@ def cv_personal_info(request):
             form_user_photo.save()
             context['msg'] = 'Profile Updated'
             context['success'] = True
-            if request.is_ajax():
+            if is_ajax(request):
                 return JsonResponse(context)
             else:
                 return redirect('candidates_edit_curriculum')
@@ -381,7 +388,7 @@ def cv_personal_info(request):
     else:
         form_candidate = CandidateForm(instance=candidate)#, state_selected=candidate.state)
         form_user_photo = UserPhotoForm(instance=candidate.user)
-    if not request.is_ajax():
+    if not is_ajax(request):
         return render(request,'cv_personal_form.html',
                               {'isCV': True, 'form_candidate': form_candidate, 'form_user_photo': form_user_photo})
 
@@ -479,7 +486,7 @@ def cv_expertise(request, expertise_id=None):
             context['success'] = True
             context['id'] = expertise.id
             context['del_url'] = reverse('candidates_cv_delete_expertise', kwargs={'expertise_id':expertise.id})
-            if request.is_ajax():
+            if is_ajax(request):
                 return JsonResponse(context)
             else:
                 return redirect('candidates_edit_curriculum')
@@ -490,7 +497,7 @@ def cv_expertise(request, expertise_id=None):
         form_expertise = ExpertiseForm(instance=expertise,
                                        industry_selected=industry_selected,
                                        update=update)
-    if not request.is_ajax():
+    if not is_ajax(request):
         return render(request,'cv_expertise_form.html',
                               {'isCV': True, 'form_expertise': form_expertise, 'update': update})
         
@@ -543,7 +550,7 @@ def cv_academic(request, academic_id=None):
             context['success'] = True
             context['id'] = academic.id
             context['del_url'] = reverse('candidates_cv_delete_academic', kwargs={'academic_id':academic.id})
-            if request.is_ajax():
+            if is_ajax(request):
                 return JsonResponse(context)
             else:
                 return redirect('candidates_edit_curriculum')
@@ -554,7 +561,7 @@ def cv_academic(request, academic_id=None):
         form_academic = AcademicForm(instance=academic,
                                        area_selected=area_selected,
                                        update=update)
-    if not request.is_ajax():
+    if not is_ajax(request):
         return render(request,'cv_academic_form.html',
                               {'isCV': True, 'form_academic': form_academic, 'update': update})
         

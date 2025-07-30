@@ -20,6 +20,12 @@ from TRM import settings
 from django.db.models import Q, Max
 from common.forms import ContactForm, EarlyAccessForm
 from payments.models import Package
+from utils import is_ajax
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.http import HttpResponseNotAllowed
+from django_comments.views.comments import comment_done
 
 def index(request):
     if request.method == 'POST':
@@ -75,7 +81,7 @@ def product(request):
 def pricing(request):
     packages = Package.objects.all()
     return render(request,'pricing.html',{'packages':packages})
-   
+"""   
 def contact(request):
     if request.method == 'POST':
         form_contact = ContactForm(request=request,data=request.POST )
@@ -85,8 +91,30 @@ def contact(request):
     else:
         form_contact = ContactForm(request=request)
         return render(request,'contact.html',{'form_contact':form_contact})
+"""
+def contact(request):
+    if request.method == 'POST':
+        form_contact = ContactForm(request=request, data=request.POST)
+        if form_contact.is_valid():
+            form_contact.save()
+            form_contact = ContactForm(request=request)
+            return render(request, 'contact.html', {
+                'form_contact': form_contact,
+                'success': True
+            })
+        else:
+            return render(request, 'contact.html', {
+                'form_contact': form_contact
+            })
+    else:
+        form_contact = ContactForm(request=request)
+        return render(request, 'contact.html', {
+            'form_contact': form_contact
+        })
+
     
 def comingsoon(request):
+    """
     if request.method == 'POST':
         form_request = EarlyAccessForm(request=request,data=request.POST )
         if form_request.is_valid():
@@ -95,6 +123,29 @@ def comingsoon(request):
     else:
         form_request = EarlyAccessForm(request=request)
         return render(request,'comingsoon.html',{'no_header':True, 'no_footer':True, 'form_request':form_request})
+    """
+    if request.method == 'POST':
+        form_request = EarlyAccessForm(request=request, data=request.POST)
+        if form_request.is_valid():
+            form_request.save()
+            return render(request, 'comingsoon.html', {
+                'form_request': EarlyAccessForm(request=request),
+                'no_header': True,
+                'no_footer': True,
+                'success': True
+            })
+        else:
+            return render(request, 'comingsoon.html', {
+                'form_request': form_request,
+                'no_header': True,
+                'no_footer': True
+            })
+    else:
+        return render(request, 'comingsoon.html', {
+            'form_request': EarlyAccessForm(request=request),
+            'no_header': True,
+            'no_footer': True
+        })
     
 def job_board(request):
     subdomain_data = subdomain(request)
@@ -191,7 +242,7 @@ def job_board(request):
         company.jobs = jobs.filter(company = company)
     template = 'job_board.html'
     page_template = 'job_board_item.html'
-    if request.is_ajax():
+    if is_ajax(request):
         template = page_template
     return render(request, 
         template,
@@ -208,3 +259,13 @@ def job_board(request):
             'filters': filters,
         })
     #,context_instance = RequestContext(request))
+def custom_logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect('/')
+
+
+def comments_entrypoint(request):
+    if request.method == 'GET':
+        return comment_done(request)
+    return None

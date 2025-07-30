@@ -11,7 +11,7 @@ from django.views.generic.base import View
 from django.views.generic.list import MultipleObjectTemplateResponseMixin
 
 from el_pagination.settings import PAGE_LABEL
-
+from utils import is_ajax
 
 class MultipleObjectMixin(object):
 
@@ -135,7 +135,7 @@ class AjaxMultipleObjectTemplateResponseMixin(
         key = 'querystring_key'
         querystring_key = request.GET.get(key,
             request.POST.get(key, PAGE_LABEL))
-        if request.is_ajax() and querystring_key == self.key:
+        if is_ajax(request) and querystring_key == self.key:
             return [self.page_template]
         return super(
             AjaxMultipleObjectTemplateResponseMixin, self).get_template_names()

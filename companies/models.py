@@ -26,8 +26,8 @@ class Company_Industry(models.Model):
     """
     name = models.CharField(verbose_name=_('Name'), max_length=150, blank=True, null=True, default=None)
 
-    def __unicode__(self):
-        return '%s' % self.name
+    def __str__(self):
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Company Industry')
@@ -69,8 +69,8 @@ class Company(models.Model):
     above_jobs = models.TextField(default="", null=True, blank=True)
     below_jobs = models.TextField(default="", null=True, blank=True)
 
-    def __unicode__(self):
-        return '%s' % self.name
+    def __str__(self):
+        return str(self.name)
 
     def geturl(self):
         """Returns the full URL for the company's subdomain."""
@@ -263,14 +263,14 @@ class Recruiter(models.Model):
         return collections.OrderedDict(sorted(queryset.items()))
 
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Returns a string representation of the recruiter.
 
         Returns:
             str: The string form of the associated user.
         """
-        return '%s' % str(self.user)
+        return str(self.user)
 
     class Meta:
         verbose_name='Recruiter'
@@ -283,9 +283,9 @@ class Ban(models.Model):
     company = models.ForeignKey(Company, null=True, blank=True, default=None,on_delete=models.SET_NULL)
     add_date = models.DateTimeField(auto_now_add=True)
     ban_function = models.TextField(default=None)
-    def __unicode__(self):
+    def __str__(self):
         """Returns the string representation of the ban."""
-        return self.email
+        return str(self.email)
 
     class Meta:
         verbose_name = 'Ban'
@@ -298,7 +298,7 @@ class RecruiterInvitation(models.Model):
     invited_by  = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name = 'Invited by', null=True, blank=True, default=None,on_delete=models.SET_NULL)
     membership = models.PositiveSmallIntegerField(default=1)
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Returns the string representation of the invitation.
 
@@ -326,14 +326,15 @@ class Wallet(models.Model):
         available_amount = self.adds - self.redeems
         self.available = available_amount
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Returns string representation of the wallet.
 
         Returns:
             str: Currency and available amount.
         """
-        return '%s %s' % (str(self.currency),str(self.available))
+        return f"{self.currency} {self.available}"
+
 
     class Meta:
         verbose_name = _('Electronic Wallet')
@@ -354,9 +355,9 @@ class Recommendation_Status(models.Model):
     codename = models.CharField(verbose_name=_('Codename'), max_length=30, null=True, blank=True, default=None)
     order = models.PositiveSmallIntegerField(verbose_name=_('Order'), null=True, blank=True, default=None)
 
-    def __unicode__(self):
+    def __str__(self):
         """Returns the status name."""
-        return '%s' % self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Status of Recommendation')
@@ -372,9 +373,10 @@ class Recommendations(models.Model):
     end_date = models.DateField(verbose_name=_('End Date'), null=True, blank=True, default=None)
     add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         """Returns a string representation of the recommendation."""
-        return '%s -> %s / %s' % (self.from_company.name, self.to_company.name, self.status)
+        return f"{self.from_company.name} -> {self.to_company.name} / {self.status}"
+
 
     class Meta:
         verbose_name = _('Recomendation')
@@ -386,9 +388,9 @@ class Stage(models.Model):
     name = models.CharField(verbose_name=_('Stage Name'), max_length=50, null=True, blank=True, default=None)
     company = models.ForeignKey(Company, verbose_name=_('Company'), null=True,blank=True, default=None, on_delete=models.SET_NULL)
     
-    def __unicode__(self):
+    def __str__(self):
         """Returns the name of the stage."""
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Stage')
@@ -414,7 +416,8 @@ class ExternalReferal(models.Model):
 
     def __str__(self):
         """Returns the name of the referral."""
-        return self.name
+        return f"{self.from_company.name} -> {self.to_company.name} / {self.status}"
+
 
     def refid(self):
         """Returns an encoded ID of the referral."""

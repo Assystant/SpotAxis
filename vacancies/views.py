@@ -38,8 +38,10 @@ from vacancies.models import Vacancy, PubDate_Search, Vacancy_Status, Postulate,
     Employment_Experience, Degree,Question, Vacancy_Files, Candidate_Fav, VacancyStage, \
     Postulate_Stage, Postulate_Score, Comment, Medium
 from six.moves import range
+from utils import is_ajax
 referer_hash = Hashids(salt='Job Referal', min_length = 5)
 external_referer_hash = Hashids(salt='Job External Referal', min_length=5)
+
 
 def get_vacancy_active_status():
     """
@@ -657,7 +659,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
     # if social_code and not social_code in settings.social_application_list or social_code and request.user.is_authenticated() and not :
     #     raise Http404
     if not recruiter:
-        if request.user.is_authenticated() and social_code or request.user.is_anonymous() and social_code and not social_code in settings.social_application_list:
+        if request.user.is_authenticated and social_code or request.user.is_anonymous and social_code and not social_code in settings.social_application_list:
             raise Http404
     callback_url = None
     if vacancy_id:
@@ -795,7 +797,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
                             external_referer = ExternalReferal.objects.get(id=external_referer_id[0], company = vacancy.company)
                         except:
                             external_referer = None
-        if user.is_authenticated():
+        if user.is_authenticated:
             user_profile = user.profile.codename
             if user_profile == 'candidate':
                 # Obtain info that has to do with relation Vacancy/Candidate
@@ -808,14 +810,14 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
                     is_favorite = Candidate_Fav.objects.get(candidate=candidate, vacancy=vacancy)
                 except Candidate_Fav.DoesNotExist:
                     pass
-        if user.is_anonymous() or user_profile == 'candidate':
+        if user.is_anonymous or user_profile == 'candidate':
             # If a candidate or an anonymous user, increases seen counter
             vacancy.seen += 1
             vacancy.save()
         files = Vacancy_Files.objects.filter(vacancy=vacancy)
         questions = Question.objects.filter(vacancy=vacancy)
         # Shows and validates the form to send qestions if the job allows them
-        if vacancy.questions and user.is_authenticated() and user.profile.codename == 'candidate':
+        if vacancy.questions and user.is_authenticated and user.profile.codename == 'candidate':
             if request.method == 'POST':
                 form_question = QuestionVacancyForm(data=request.POST)
                 if form_question.is_valid():
@@ -839,7 +841,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
             else:
                 form_question = QuestionVacancyForm()
         # Public Application
-        if user.is_anonymous() or recruiter:
+        if user.is_anonymous or recruiter:
             if request.method == 'POST' and not request.session.get('active_applicant') and not request.POST.get('socialshare'):
                 save_response = save_public_application(request, vacancy, recruiter, referer, external_referer, array=True)
                 public_form = save_response[0]
@@ -852,7 +854,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
                         request.session['fill_template'] = vacancy.id
                     request.session['applicant'] = save_response[2].id
                     fill_template = vacancy.id
-                if request.is_ajax():
+                if is_ajax(request):
                     return JsonResponse(context)
             else:
                 public_form = Public_Files_OnlyForm()
@@ -1079,6 +1081,7 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
             templated_form = TemplatedForm(template = vacancy.form_template, formClasses="form-control mt2")
         else:
             request.session.pop('fill_template')
+    popshare = request.session.pop('enableshare', None)
     response = render(request,'vacancy_details.html',
                               {'isSearchVacancies': True,
                                'og': og,
@@ -1105,8 +1108,8 @@ def vacancy_details(request, vacancy_id=None, referer = None, external_referer =
                                'fill_template': fill_template,
                                'templated_form': templated_form,
                                'talent_only': True,
+                               'popshare': popshare,
                                }
-    
                      )
     if referer:
         response.set_cookie('referer-'+str(vacancy.id),str(referer.id))
@@ -1193,7 +1196,7 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
     if recruiter:
         if request.method == 'POST':
             public_form = save_public_application(request, vacancy, recruiter)
-            if request.is_ajax():
+            if is_ajax(request):
                 return JsonResponse(context)
         else:
             public_form = Public_Files_OnlyForm()
@@ -1665,7 +1668,7 @@ def public_apply(request, vacancy_id = None, referer = None, external_referer=No
             if request.method == 'POST':
                 public_form = save_public_application(request, vacancy, recruiter, referer, external_referer)
 
-                if request.is_ajax():
+                if is_ajax(request):
                     return JsonResponse(context)
             else:
                 public_form = Public_Files_OnlyForm()
@@ -1928,7 +1931,7 @@ def new_application(request, vacancy_id):
         fresh_application = True
     else:
         referer_path = request.session.get('referer', None)
-    if request.user.is_authenticated() and request.user.profile.codename == 'recruiter' and vacancy.company in request.user.recruiter.company.all():
+    if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and vacancy.company in request.user.recruiter.company.all():
         recruiter_upload = True
     if request.user.is_anonymous() or recruiter_upload:
         if fresh_application:
@@ -1973,7 +1976,7 @@ def new_application(request, vacancy_id):
             curriculum = Curriculum.objects.get(candidate = candidate)
             if request.user.is_anonymous():
                 sa_profile = Candidate.objects.filter(~Q(user=None), user__email = candidate.public_email)
-    elif request.user.is_authenticated() and request.user.profile.codename == 'candidate':
+    elif request.user.is_authenticated and request.user.profile.codename == 'candidate':
         candidate = request.user.candidate
         curriculum = Curriculum.objects.get(candidate=candidate)
         if Postulate.objects.filter(candidate = candidate, vacancy = vacancy) or Postulate.objects.filter(candidate__public_email = candidate.user.email, vacancy = vacancy):
@@ -2001,7 +2004,7 @@ def new_application(request, vacancy_id):
             candidate_form.save()
             candidate.refresh_from_db()
             candidate_form = CandidateMiniForm(instance = candidate)
-            if request.user.is_authenticated() and not recruiter_upload and candidate.public_email:
+            if request.user.is_authenticated and not recruiter_upload and candidate.public_email:
                 if Postulate.objects.filter(candidate = candidate, vacancy = vacancy) or Postulate.objects.filter(candidate__public_email = candidate.user.email, vacancy = vacancy):
                     messages.error(request,'Already applied for this position.')
                     try:
@@ -2178,7 +2181,7 @@ def complete_application(request, vacancy_id):
     vacancy_has_form_template = vacancy.form_template
     referer_path = request.META.get('HTTP_REFERER', None)
     recruiter_upload = False
-    if request.user.is_authenticated() and request.user.profile.codename=='recruiter' and vacancy.company in request.user.recruiter.company.all():
+    if request.user.is_authenticated and request.user.profile.codename=='recruiter' and vacancy.company in request.user.recruiter.company.all():
         recruiter_upload = True
         vacancy_has_form_template = False
     try:
@@ -2186,7 +2189,7 @@ def complete_application(request, vacancy_id):
     except:
         referer_name = None
     referer_path = request.session.get('referer', None)
-    if request.user.is_authenticated() and not recruiter_upload:
+    if request.user.is_authenticated and not recruiter_upload:
         if not request.user.profile.codename == 'candidate':
             raise Http404
         candidate = request.user.candidate
