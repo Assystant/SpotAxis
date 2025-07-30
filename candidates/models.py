@@ -111,9 +111,9 @@ class Candidate(models.Model):
         address = address.strip(',')
         return '%s' % (address)
 
-    def __unicode__(self):
-        """Unicode string representation of the candidate."""
-        return u'%s %s' % (self.first_name, self.last_name)
+    def __str__(self):
+        """String representation of the candidate."""
+        return f"{self.first_name} {self.last_name}"
 
     def role(self):
         """Get a comma-separated string of current employment roles based on expertise marked as present."""
@@ -300,8 +300,8 @@ class Expertise(models.Model):
     present = models.BooleanField(verbose_name=_('Present?'), default=False)
     tasks = models.TextField(verbose_name=_('Tasks or Functions'), max_length=1000, null=True, blank=True, default=None)
 
-    def __unicode__(self):
-        return '%s' % self.employment
+    def __str__(self):
+        return str(self.employment)
 
     def get_form(self):
         from candidates.forms import ExpertiseForm
@@ -336,8 +336,8 @@ class Academic_Area(models.Model):
     name = models.CharField(verbose_name=_('Area'), max_length=100, null=True, blank=True, default=None)
     order = models.PositiveSmallIntegerField(null=True, blank=True, default=100)
 
-    def __unicode__(self):
-        return '%s' % self.name
+    def __str__(self):
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Academice Area')
@@ -366,8 +366,8 @@ class Academic_Status(models.Model):
     name = models.CharField(verbose_name=_('Status'), max_length=30, null=True, blank=True, default=None)
     codename = models.CharField(max_length=15, null=True, blank=True, default=None)
 
-    def __unicode__(self):
-        return '%s' % self.name
+    def __str__(self):
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Status/Academic Status')
@@ -451,9 +451,9 @@ class Academic(models.Model):
         from candidates.forms import AcademicForm
         return AcademicForm(instance=self)
 
-    def __unicode__(self):
+    def __str__(self):
         """Returns a string representation of the Academic object."""
-        return self.course_name
+        return str(self.course_name)
         # academic_name = ''
         # if self.degree:
         #     academic_name += self.degree.name
@@ -488,8 +488,8 @@ class Language(models.Model):
     codename = models.CharField(max_length=10, blank=True, null=True, default=None)
     order = models.PositiveSmallIntegerField(null=True, blank=True, default=100)
 
-    def __unicode__(self):
-        return '%s' % self.name
+    def __str__(self):
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Language')
@@ -508,8 +508,8 @@ class Language_Level(models.Model):
     name = models.CharField(verbose_name=_(u'Level'), max_length=15, blank=True, null=True, default=True)
     codename = models.CharField(max_length=15, blank=True, null=True, default=True)
 
-    def __unicode__(self):
-        return '%s' % self.name
+    def __str__(self):
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Language Proficiency')
@@ -558,9 +558,8 @@ class CV_Language(models.Model):
         # else:
         #     return "Not Mentioned"
 
-    def __unicode__(self):
-        """ Returns the string representation of the language."""
-        return '%s' % self.language
+    def __str__(self):
+        return str(self.language)
 
     class Meta:
         verbose_name = _('Language')
@@ -595,7 +594,7 @@ class Training(models.Model):
         verbose_name_plural = "Trainings"
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
 ## End of Section Training ""
 
@@ -626,7 +625,7 @@ class Certificate(models.Model):
         return CertificateForm(instance=self)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
 ## End of Section Certificate ""
 
@@ -654,7 +653,7 @@ class Project(models.Model):
         return ProjectForm(instance=self)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
 ## End of Section Project ""
 
@@ -768,9 +767,9 @@ class Curriculum(models.Model):
         """Reads and returns the extracted text from the uploaded CV file."""
         return get_file_text(self.file.path)
 
-    def __unicode__(self):
+    def __str__(self):
         """ Returns a string representation of the curriculum showing candidate's name and ID."""
-        return '%s %s - Id: %s' % (self.candidate.first_name, self.candidate.last_name, str(self.candidate.id))
+        return f'{self.candidate.first_name} {self.candidate.last_name} - Id: {self.candidate.id}'
 
     class Meta:
         verbose_name = _('Curriculum')

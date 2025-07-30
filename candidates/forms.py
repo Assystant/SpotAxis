@@ -232,7 +232,7 @@ class CandidateContactForm(forms.ModelForm):
     )
     phone = PNF(
         min_length=10,
-        max_length=12,
+        max_length=16,
         error_messages={
             'invalid': _("Enter a valid 10 digit phone"),
             'min_length': _("Enter a valid 10 digit phone"),
@@ -243,7 +243,7 @@ class CandidateContactForm(forms.ModelForm):
     )
     cellphone = PNF(
         min_length=10,
-        max_length=12,
+        max_length=16,
         error_messages={
             'invalid': _("Enter a valid 10 digit mobile phone"),
             'min_length': _("Enter a valid 10 digit mobile phone"),
@@ -1084,7 +1084,7 @@ class CandidateMiniForm(forms.ModelForm):
     )
     phone = PNF(
         min_length=10,
-        max_length=12,
+        max_length=16,
         error_messages={
             'invalid': _("Enter a valid 10 digit phone"),
             'min_length': _("Enter a valid 10 digit phone"),

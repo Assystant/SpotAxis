@@ -56,7 +56,7 @@ class ELPage(utils.UnicodeMixin):
         path = iri_to_uri(override_path or request.path)
         self.path = '{0}{1}'.format(path, self.url)
 
-    def __unicode__(self):
+    def __str__(self):
         """Render the page as a link."""
         extra_context = {
             'add_nofollow': settings.ADD_NOFOLLOW,
@@ -129,7 +129,7 @@ class PageList(utils.UnicodeMixin):
         for i in range(len(self)):
             yield self[i + 1]
 
-    def __unicode__(self):
+    def __str__(self):
         """Return a rendered Digg-style pagination (by default).
 
         The callable *settings.PAGE_LIST_CALLABLE* can be used to customize
