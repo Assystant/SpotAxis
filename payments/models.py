@@ -43,7 +43,7 @@ class ServiceCategory(models.Model):
         verbose_name_plural = "ServiceCategories"
 
     def __str__(self):
-        return self.name
+        return str(self.name)
  
 class Services(models.Model):
     """ Model representing a service offered on the platform."""
@@ -60,8 +60,8 @@ class Services(models.Model):
     objects = Active()
     all_objects = models.Manager()
     
-    def __unicode__(self):
-        return '%s' % self.name
+    def __str__(self):
+        return str(self.name)
 
     class Meta:
         verbose_name = _('Service')
@@ -79,8 +79,8 @@ class Package(models.Model):
         verbose_name = "Package"
         verbose_name_plural = "Packages"
 
-    def __unicode__(self):
-        return self.name
+    def __str__(self):
+        return str(self.name)
 
     def package_slabs(self):
         """
@@ -136,11 +136,12 @@ class PriceSlab(models.Model):
         verbose_name_plural = "Price Slabs"
         unique_together = ('currency', 'slab_period', 'package')
 
-    def __unicode__(self):
+    def __str__(self):
         if not self.get_slab_period_display():
             return self.package.name
         else:
-            return "%s - %s" % (str(self.package.name), str(self.get_slab_period_display()))
+            return f"{self.package.name} - {self.get_slab_period_display()}"
+
     
     def allows_additional_users(self):
         """
@@ -164,7 +165,7 @@ class Subscription(models.Model):
         verbose_name = "Subscription"
         verbose_name_plural = "Subscriptions"
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.expiry)
 
     def expired(self):
@@ -206,8 +207,8 @@ class Transactions(models.Model):
     balance = models.DecimalField(verbose_name=_('Balance'), max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     timestamp = models.DateTimeField(verbose_name=_('Date'), auto_now_add=True)
 
-    def __unicode__(self):
-        return '%s' % str(self.amount)
+    def __str__(self):
+        return str(self.amount)
 
     class Meta:
         verbose_name = _('Transaction')
@@ -241,8 +242,8 @@ class Discount(models.Model):
     plans = models.ManyToManyField(PriceSlab)
     companies = models.ManyToManyField(Company, through="Discount_Usage")
 
-    def __unicode__(self):
-        return '%s' % str(self.amount)
+    def __str__(self):
+        return str(self.amount) 
 
     class Meta:
         verbose_name = 'Discount'
@@ -259,8 +260,8 @@ class ScheduledTransactions(models.Model):
     added_users = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
     price_slab = models.ForeignKey(PriceSlab, null=True, blank=True, default=None,on_delete=models.SET_NULL)
 
-    def __unicode__(self):
-        return '%s' % str(self.company)
+    def __str__(self):
+        return self.company
 
     class Meta:
         verbose_name = "Scheduled Transaction"
@@ -275,7 +276,7 @@ class Discount_Usage(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     used_count = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.company)
     class Meta:
         verbose_name='Discount_Usage'
