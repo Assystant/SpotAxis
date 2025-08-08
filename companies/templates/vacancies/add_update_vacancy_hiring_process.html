@@ -293,8 +293,9 @@
             $('#bucket .bucket-item').click(function(e){
                 onclickremove(this)
             });
-
-            popshare = "{{request.session|args:'enableshare'|call:'pop'|default:''}}"
+           
+            popshare = "{{ request.session.pop('enableshare', '')|escapejs }}";
+            <!--popshare = "{{request.session|args:'enableshare'|call:'pop'|default:''}}"-->
             if(!popshare){
                 popshare = getCookie('popshare')
             }
