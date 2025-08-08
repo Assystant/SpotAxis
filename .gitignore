@@ -233,3 +233,4 @@ filecontent.txt
 .vscode
 
 venv/
+/.env
