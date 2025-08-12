@@ -17,7 +17,8 @@ ENVIRONMENT = os.getenv('ENVIRONMENT')
 
 DEBUG = ENVIRONMENT in ['local_development', 'server_development']
 
-ALLOWED_HOSTS = os.getenv('allowed_hosts')
+#ALLOWED_HOSTS = os.getenv('allowed_hosts')
+ALLOWED_HOSTS = ['*']
 SESSION_COOKIE_DOMAIN = os.getenv('session_cookie_domain')
 TIME_ZONE = os.getenv('TIME_ZONE', 'Asia/Kolkata')
 LANGUAGE_CODE = 'en-IN'
