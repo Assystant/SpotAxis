@@ -1818,6 +1818,8 @@ def extract_public_form_content(public_form):
     # new_cv_public = Postulate.objects.create(vacancy=vacancy, candidate = candidate, description=description, vacancy_stage=first_stage)
     # dat = read_file_content_directly(uploaded_file)
     dat = extract_file_content(curriculum.file.path, 'json')
+    if isinstance(dat, str):
+        dat = json.loads(dat)
     print(dat)
     if dat['name']:
         names = dat['name'][0].split(' ')
@@ -1933,7 +1935,7 @@ def new_application(request, vacancy_id):
         referer_path = request.session.get('referer', None)
     if request.user.is_authenticated and request.user.profile.codename == 'recruiter' and vacancy.company in request.user.recruiter.company.all():
         recruiter_upload = True
-    if request.user.is_anonymous() or recruiter_upload:
+    if request.user.is_anonymous or recruiter_upload:
         if fresh_application:
             if request.method == 'POST':
                 public_form = Public_Files_OnlyForm(data=request.POST, files = request.FILES, v_id=vacancy.id)
@@ -1974,7 +1976,7 @@ def new_application(request, vacancy_id):
                 except:
                     return redirect('vacancies_get_vacancy_details', vacancy.id)
             curriculum = Curriculum.objects.get(candidate = candidate)
-            if request.user.is_anonymous():
+            if request.user.is_anonymous:
                 sa_profile = Candidate.objects.filter(~Q(user=None), user__email = candidate.public_email)
     elif request.user.is_authenticated and request.user.profile.codename == 'candidate':
         candidate = request.user.candidate
