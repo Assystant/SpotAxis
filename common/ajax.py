@@ -866,7 +866,7 @@ def validate_personal_form(request):
     context['success'] = False
     context['post'] = request.POST
     if is_ajax(request) and request.method == 'POST':
-        if request.user.is_anonymous() and request.session.get('active_applicant'):
+        if request.user.is_anonymous and request.session.get('active_applicant'):
             try:
                 candidate = [SocialAuth.objects.get(id=int(request.session['active_applicant'])).user.candidate]
             except:
