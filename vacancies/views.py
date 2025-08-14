@@ -1173,7 +1173,7 @@ def vacancy_stage_details(request, vacancy_id=None, vacancy_stage=None, stage_se
 
             user_profile = None
 
-            if user.is_authenticated():
+            if user.is_authenticated:
                 user_profile = user.profile.codename
                        
         except Http404:
