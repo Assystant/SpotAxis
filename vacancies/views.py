@@ -1643,7 +1643,7 @@ def public_apply(request, vacancy_id = None, referer = None, external_referer=No
                             external_referer = ExternalReferal.objects.get(id=external_referer_id[0], company = vacancy.company)
                         except:
                             external_referer = None
-        if user.is_authenticated():
+        if user.is_authenticated:
             user_profile = user.profile.codename
             if user_profile == 'candidate':
                 # Obtain info that has to do with relation Vacancy/Candidate
@@ -1656,7 +1656,7 @@ def public_apply(request, vacancy_id = None, referer = None, external_referer=No
                     is_favorite = Candidate_Fav.objects.get(candidate=candidate, vacancy=vacancy)
                 except Candidate_Fav.DoesNotExist:
                     pass
-        if user.is_anonymous() or user_profile == 'candidate':
+        if user.is_anonymous or user_profile == 'candidate':
             # If a candidate or an anonymous user, increases seen counter
             vacancy.seen += 1
             vacancy.save()
@@ -1664,7 +1664,7 @@ def public_apply(request, vacancy_id = None, referer = None, external_referer=No
         files = Vacancy_Files.objects.filter(vacancy=vacancy)
 
         # Public Application
-        if user.is_anonymous() or recruiter:
+        if user.is_anonymous or recruiter:
             if request.method == 'POST':
                 public_form = save_public_application(request, vacancy, recruiter, referer, external_referer)
 
