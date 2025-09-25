@@ -68,6 +68,21 @@
                                     </div>
                                     <a class="btn btn-sm mt5 mb5 ml5 btn-default text-info btn-round border-info change-evaluators" data-toggle="modal" data-target="#stage-members" data-id="{{current_process.id}}" data-name="{{current_process}}"><i class="fa {% if recruiter.is_manager and vacancy.status.codename == 'open' %}fa-pencil{% else %}fa-ellipsis-h mt5{% endif %}"></i></a>
                                 </div>
+                                <div class="border-bottom border-light pt15 pb15 pl5 pr5">
+                                    <h6 class="text-light">Candidates in this stage</h6>
+                                    {% if current_process.candidates %}
+                                        <ul class="pl15">
+                                            {% for postulate in current_process.candidates %}
+                                                <li>
+                                                    {{ postulate.candidate.user.get_full_name }}
+                                                    ({{ postulate.candidate.user.email|default:"No email" }})
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p class="text-muted">No candidates in this stage.</p>
+                                    {% endif %}
+                                </div>
                                 {% if vacancy.company|args:'AS_RATINGS'|call:'check_service' %}
                                     {% if current_process.order == 100%}
                                         <p class="mt20 no-margin-bottom text-light">Only finalized candidates are categorized under "Onboarding", ratings can not be given in this round.</p>
