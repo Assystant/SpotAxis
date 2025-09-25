@@ -1451,38 +1451,39 @@ def add_update_vacancy(request, vacancy_id=False):
                              
 
 @login_required
-def add_update_vacancy_hiring_process(request, vacancy_id=None):
+def add_update_vacancy_hiring_process(request, vacancy_id = None):
+    """
+    View to display and manage the hiring process stages for a specific vacancy.
+    - Requires the user to be authenticated and have an email registered.
+    - Checks the active subdomain and verifies the user is a manager recruiter.
+    - Validates the vacancy belongs to the recruiter's companies and is not removed.
+    - Retrieves stages already added to the vacancy and all other stages available in the company.
+    - Renders the 'add_update_vacancy_hiring_process.html' template with vacancy and stage data.
+    """
     if request.user.is_authenticated and not request.user.email:
-        return redirect('common_register_blank_email')
-
-    subdomain_data = subdomain(request)
+        # If the user is registered and has no email...
+        redirect_page = 'common_register_blank_email'
+        return redirect(redirect_page)    
+    subdomain_data =  subdomain(request)
     if not subdomain_data['active_subdomain']:
         raise Http404
-
-    recruiter = get_object_or_404(Recruiter, user=request.user, user__is_active=True)
+    recruiter = get_object_or_404(Recruiter,user=request.user, user__is_active=True)
     if not recruiter.is_manager():
         raise Http404
-
     company = get_object_or_404(Company, subdomain__slug=subdomain_data['active_subdomain'])
     if not company.check_service('JP_POST'):
         raise Http404
-
-    vacancy = get_object_or_404(Vacancy, pk=vacancy_id, company__in=recruiter.company.all())
+    vacancy = get_object_or_404(Vacancy, pk=vacancy_id,company__in=recruiter.company.all())
     vacancy_status = vacancy.status.codename
-    finalized = vacancy_status == 'finalized'
-
+    if vacancy_status == 'removed':
+        raise Http404
+    if vacancy_status == 'finalized':
+        finalized = True
+    else:
+        finalized = False
     stages = VacancyStage.objects.filter(vacancy=vacancy)
-
-    # Attach candidates for each stage
-    from candidates.models import Postulate
-    for stage in stages:
-        stage.candidates = Postulate.objects.filter(
-            vacancy=vacancy,
-            stage=stage
-        ).select_related('candidate__user')
-
-    return render(request,
-        'vacancies/add_update_vacancy_hiring_process.html',
+    return render(request, 
+        'vacancies/add_update_vacancy_hiring_process.html', 
         {
             'isVacancy': True,
             'vacancy_id': vacancy_id,
