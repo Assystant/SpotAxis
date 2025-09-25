@@ -883,7 +883,7 @@ def vacancies_summary(request, vacancy_status_name=None):
     if not subdomain_data['active_subdomain']:
         raise Http404
         # company = get_object_or_404(Company, user=request.user)
-    if request.user.is_authenticated and getattr(getattr(request.user, 'profile', None), 'codename', None):
+    if request.user.is_authenticated and getattr(getattr(request.user, 'profile', None), 'codename', None)== 'recruiter':
     #if request.user.is_authenticated and request.user.profile.codename == 'recruiter
         try:
             recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)

@@ -253,3 +253,4 @@ SITE_SUFFIX = os.getenv('site_suffix', '.spotaxis.com/')
 logo_email = os.getenv('logo_email')
 NOTIFICATION_EMAILS = os.getenv('notification_emails')
 CKEDITOR_UPLOAD_PATH = "uploads/"
+X_FRAME_OPTIONS = 'SAMEORIGIN'
