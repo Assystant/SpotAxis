@@ -1,4 +1,11 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, viewsets, status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from django.contrib.auth import logout
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.utils.translation import gettext_lazy as _
+
 from common.models import (
     Country, State, Municipal, Currency, Profile, User, AccountVerification,
     EmailVerification, Address, Degree, Identification_Doc, Marital_Status,
@@ -8,7 +15,9 @@ from .serializers import (
     CountrySerializer, StateSerializer, MunicipalSerializer, CurrencySerializer,
     ProfileSerializer, UserSerializer, AccountVerificationSerializer, EmailVerificationSerializer,
     AddressSerializer, DegreeSerializer, IdentificationDocSerializer, MaritalStatusSerializer,
-    EmploymentTypeSerializer, GenderSerializer, SubdomainSerializer, SocialAuthSerializer
+    EmploymentTypeSerializer, GenderSerializer, SubdomainSerializer, SocialAuthSerializer,
+    SignUpSerializer, PasswordChangeSerializer, PasswordResetSerializer,
+    PasswordResetConfirmSerializer, UsernameRecoverSerializer
 )
 
 class CountryList(generics.ListCreateAPIView):
@@ -170,11 +179,72 @@ class SocialAuthDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAdminUser]
 
 
+class AuthViewSet(viewsets.GenericViewSet):
+    permission_classes = [AllowAny]
 
+    def get_serializer_class(self):
+        if self.action == 'signup':
+            return SignUpSerializer
+        elif self.action == 'password_change':
+            return PasswordChangeSerializer
+        elif self.action == 'password_reset':
+            return PasswordResetSerializer
+        elif self.action == 'password_reset_confirm':
+            return PasswordResetConfirmSerializer
+        elif self.action == 'username_recover':
+            return UsernameRecoverSerializer
+        return super().get_serializer_class()
 
+    @action(detail=False, methods=['post'])
+    def signup(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"detail": _("Verification email has been sent.")}, status=status.HTTP_201_CREATED)
 
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def logout(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            logout(request)
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['get'], url_path='verify/(?P<activation_key>[^/.]+)')
+    def verify(self, request, activation_key):
+        user = AccountVerification.objects.activate_user(activation_key)
+        if user:
+            return Response({'detail': _('Account activated successfully.')})
+        else:
+            return Response({'detail': _('Invalid activation key.')}, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def password_change(self, request):
+        serializer = self.get_serializer(data=request.data, context={'user': request.user})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"detail": _("Password has been changed successfully.")})
 
+    @action(detail=False, methods=['post'])
+    def password_reset(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"detail": _("Password reset e-mail has been sent.")})
 
+    @action(detail=False, methods=['post'])
+    def password_reset_confirm(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"detail": _("Password has been reset successfully.")})
 
+    @action(detail=False, methods=['post'])
+    def username_recover(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"detail": _("Username recovery e-mail has been sent.")})

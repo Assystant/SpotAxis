@@ -38,6 +38,7 @@ urlpatterns = [
   
     # API URLs
     re_path(r'^api/common/', include('common.api.urls')),
+    re_path(r'^api/auth/', include('common.api.auth_urls')),
     re_path(r'^api/activities/',include('activities.api.urls')),
     re_path(r'^api/vacancy/', include('vacancies_api.urls')),
     # url(r'^api/zinnia/',include('zinna.api.urls')),

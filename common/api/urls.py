@@ -42,4 +42,3 @@ urlpatterns = [
     path('social-auths/', SocialAuthList.as_view(), name='social-auth-list-create'),
     path('social-auths/<int:pk>/', SocialAuthDetail.as_view(), name='social-auth-detail'),
 ]
-
