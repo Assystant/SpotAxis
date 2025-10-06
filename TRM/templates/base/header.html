@@ -44,7 +44,7 @@
                     <li class="btn-group"><a class="btn btn-sm btn-info" href="{% url 'companies_add_update_vacancy' %}">Create a job</a></li>
                     {% endif %}
                 {%elif user_profile == 'recruiter' %}
-                    <li><a href="http://{{user.recruiter.company.all.0.subdomain}}open/">Jobs</a></li>
+                    <li><a href="{{user.recruiter.company.all.0.geturl}}/open/">Jobs</a></li>
                     {% if user.recruiter.is_manager and user.recruiter.company.all.0|args:'JP_POST'|call:'check_service' %}
                         <li class="btn-group"><a class="btn btn-sm btn-info" href="http://{{user.recruiter.company.all.0.subdomain}}{% url 'companies_add_update_vacancy' %}">Create a job</a></li>
                     {% endif %}

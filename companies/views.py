@@ -1454,7 +1454,6 @@ def add_update_vacancy(request, vacancy_id=False):
 def add_update_vacancy_hiring_process(request, vacancy_id = None):
     """
     View to display and manage the hiring process stages for a specific vacancy.
-
     - Requires the user to be authenticated and have an email registered.
     - Checks the active subdomain and verifies the user is a manager recruiter.
     - Validates the vacancy belongs to the recruiter's companies and is not removed.
