@@ -131,8 +131,9 @@ def record_candidate(request):
                       redirects after successful registration.
     """
     if request.method == 'POST':
-        form_user = UserDataForm(data=request.POST,
-                                 files=request.FILES,)
+        form_user = UserDataForm(request.POST, request.FILES)
+        #form_user = Form(data=request.POST,
+        #                         files=request.FILES,)
         if form_user.is_valid():
             new_user = form_user.save()
             candidate_profile = Profile.objects.get(codename='candidate')
@@ -140,8 +141,10 @@ def record_candidate(request):
             new_user.logued_by = 'EL'
             new_user.save()
             # try:
-            Candidate.objects.create(user=new_user, first_name=new_user.first_name, last_name=new_user.last_name)
+            Candidate.objects.create(user=new_user, first_name=new_user.first_name, last_name=new_user.last_name,resume=form_user.cleaned_data.get('resume')) 
             form_user.send_verification_mail(new_user)
+            if form_user.cleaned_data.get('resume'):
+                messages.success(request,_('Resume uploaded successfully')) 
             request.session['new_email'] = new_user.email
             # raise ValueError(request.session.keys())
             # raise ValueError(request.session['new_email'])

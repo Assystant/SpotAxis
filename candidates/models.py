@@ -81,6 +81,7 @@ class Candidate(models.Model):
     last_modified = models.DateTimeField(verbose_name=_('Last Modified'), auto_now=True)
     parent_profile = models.ForeignKey("self", related_name="conflicted_profiles", null=True, blank=True, default=None, on_delete=models.SET_NULL)
     profile_source = models.CharField(_('Profile Source'), choices=PROFILE_SOURCE, max_length=2, null=True, blank=True, default=None)
+    resume = models.FileField( upload_to='resumes/', null=True, blank=True, default=None, verbose_name=_('Resume'))
 
     def get_fullname(self):
         """Get the full name combining first name and last name.
@@ -682,8 +683,7 @@ class Curriculum(models.Model):
     advance = models.IntegerField(verbose_name=_('Percent Complete'), blank=True, null=True, default=0)
     add_date = models.DateTimeField(verbose_name=_('Add Date'), auto_now_add=True)
     last_modified = models.DateTimeField(verbose_name=_('Last Modified'), auto_now=True)
-    filecontent = models.TextField(default="", null=True, blank=True)
-
+    filecontent = models.TextField(default="", null=True, blank=True)    
 
     def get_form(self):
         from candidates.forms import cv_FileForm

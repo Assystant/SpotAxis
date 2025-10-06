@@ -80,6 +80,13 @@ class CandidateForm(forms.ModelForm):
         empty_label=select_text,
         required=True,
         label=_('Marital Status'))
+     # Resume Upload
+    resume = forms.FileField(
+        widget=forms.FileInput(attrs={'class': "form-control", 'accept': ".pdf,.doc,.docx,.txt"}),
+        required=False,
+        label=_("Upload Resume")
+    )
+
     
     # min_salary = forms.IntegerField(
      #     required=False,
@@ -125,6 +132,15 @@ class CandidateForm(forms.ModelForm):
         # self.fields['state'].choices = get_states(initial_country)
         # self.fields['municipal'].choices = get_municipals(state_selected)
 
+    def clean_resume(self):
+        file = self.cleaned_data.get('resume', None)
+        if file:
+            ext = file.name.split('.')[-1].lower()
+            if ext not in ['pdf', 'doc', 'docx', 'txt']:
+                raise forms.ValidationError(_('Only PDF, DOC, DOCX, or TXT files are allowed.'))
+            if file.size > 5 * 1024 * 1024:  # 5MB limit
+                raise forms.ValidationError(_('The file is too large (Max 5MB).'))
+        return file
     def clean_public_photo(self):
         """
         Validates the uploaded image:
@@ -154,6 +170,7 @@ class CandidateForm(forms.ModelForm):
 
             #validate file size
             if len(image) > (1 * 1024 * 1024):
+            #if len(image) > (1 * 1024 * 1024):
                 raise forms.ValidationError(_('The image selected is too large (Max 1MB)'))
         else:
             return default_photo
