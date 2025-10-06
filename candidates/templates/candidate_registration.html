@@ -46,10 +46,23 @@
             <a class="btn btn-sm btn-block btn-info" href="{% url 'companies_record_recruiter' %}">Switch to Employer SignUp</a>
             <small class="text-light">Are you an Employer?</small>
         </div>
-        <div clas="col-xs-12 clearfix"></div>
+        <div class="col-xs-12 clearfix"></div>
     </div>
-        <form id="create-candidate-form" action="." method="post" role="form" class="row mt10 mb50">
+            <form id="create-candidate-form"
+            action="."
+            method="post"
+            enctype="multipart/form-data"
+            role="form"
+            class="row mt10 mb50">
+
             {% csrf_token %}
+            {% if messages %}
+            <div class="col-sm-8 col-sm-push-2">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
             <div class="col-sm-8 col-sm-push-2 panel mt20">
                 <div class="row panel-body panel-shadow">
                     <div class="col-xs-12 hidden">
@@ -154,7 +167,7 @@
                                 <li>{{ error|escape }}</li>
                             {% endfor %}
                             </ul>
-                        {% else %}
+                            {% else %}
                             <label for="id_password_repeat">{% trans 'Confirm password' %}<span class="required">*</span></label>
                         {% endif %}
                         <div class="input-group {% if form_user.password_repeat.errors %}has-error{% endif %} mb20">
@@ -162,6 +175,28 @@
                             {{ form_user.password_repeat }}
                         </div>
                     </div></div>
+                    <!-- Resume Upload -->
+                <!-- Resume Upload -->
+                <div class="col-xs-12">
+    <div class="form-group">
+        {% if form_user.resume.errors %}
+            <ul class="list-unstyled error-list">
+                {% for error in form_user.resume.errors %}
+                    <li>{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <label for="{{ form_user.resume.id_for_label }}">
+                {% trans 'Upload Resume' %}
+            </label>
+        {% endif %}
+        
+        <div class="input-group {% if form_user.resume.errors %}has-error{% endif %} mb20">
+            {{ form_user.resume }}
+        </div>
+    </div>
+</div>
+
 
                     <!-- Submit Form -->
                     <div class="col-xs-12 mt30">

@@ -506,13 +506,15 @@ def site_management(request, setting=None):
         return redirect(redirect_page)
     context={}
     context['success'] = False
-    if not setting:
-        setting = 'template'
+    #if not setting:
+    #    setting = 'template'
     # if not setting:
     #     setting = 'subdomain'
+    if setting == 'embed' and company.check_service('CSM_JOBS_WIDGET'):
+        setting = 'template'
     try:
         recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
-    except:
+    except Recruiter.DoesNotExist:
         raise Http404
     if not recruiter.is_admin():
         raise Http404
@@ -530,7 +532,8 @@ def site_management(request, setting=None):
     elif setting == 'subdomain' and company.check_service('CSM_CNAME'):
         context['isSubdomainPage'] = True
         if request.method == 'POST':
-            form_subdomain = SubdomainForm(instance=context['sub_domain'], data=request.POST, files = request.FILES)
+            #form_subdomain = SubdomainForm(instance=context['sub_domain'], data=request.POST, files = request.FILES)
+            form_subdomain = SubdomainForm(instance=company, data=request.POST, files=request.FILES)
             if form_subdomain.is_valid():
                 form_subdomain.save()
                 messages.success(request, 'The subdomain has been successfully updated')
@@ -550,6 +553,57 @@ def site_management(request, setting=None):
         raise Http404
     context['isCompanyManagement'] = True
     return render(request,'site_management.html',context)
+"""def site_management(request, setting=None):
+    if request.user.is_authenticated and not request.user.email:
+        return redirect('common_register_blank_email')
+
+    if not setting:
+        setting = 'template'
+
+    try:
+        recruiter = Recruiter.objects.get(user=request.user, user__is_active=True)
+    except Recruiter.DoesNotExist:
+        raise Http404
+
+    if not recruiter.is_admin():
+        raise Http404
+
+    company = recruiter.company.first()
+    if not company:
+        raise Http404
+
+    context = {
+        "success": False,
+        "user": request.user,
+        "recruiter": recruiter,
+        "company": company,
+        "sub_domain": company.subdomain,
+        "isCompanyManagement": True,
+    }
+
+    if setting == 'template':
+        context["isTemplatePage"] = True
+
+    elif setting == 'subdomain' and company.check_service("CSM_CNAME"):
+        context["isSubdomainPage"] = True
+        if request.method == "POST":
+            form_subdomain = SubdomainForm(instance=company, data=request.POST, files=request.FILES)
+            if form_subdomain.is_valid():
+                form_subdomain.save()
+                messages.success(request, "The subdomain has been successfully updated")
+        else:
+            form_subdomain = SubdomainForm(instance=company)
+        context["form_subdomain"] = form_subdomain
+
+    elif setting == 'embed' and company.check_service("CSM_JOBS_WIDGET"):
+        context["isEmbedPage"] = True
+        context["Embedurl"] = company.geturl() + reverse("companies_job_widget")
+
+    else:
+        raise Http404
+
+    return render(request, "site_management.html", context)"""
+
     
 @login_required
 def team_space(request):

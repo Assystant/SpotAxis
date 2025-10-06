@@ -61,7 +61,7 @@
                             {% endif %}
                             {{ fileForm.file }}
                             <div class="mt20">
-                                <button id="submit_btn" type="submit" class="btn btn-sm btn-block btn-info">
+                                <button id="upload_cv_submit_btn" type="submit" class="btn btn-sm btn-block btn-info">
                                     {% if cv_file %}
                                         {% trans 'Upload' %}
                                     {% else %}
@@ -98,7 +98,7 @@
                             {% endif %}
                             {{ form_user_photo.photo }}
                             <div class="mt20">
-                                <button id="submit_btn" type="submit" class="btn btn-sm btn-block btn-info">
+                                <button id="update_image_submit_btn" type="submit" class="btn btn-sm btn-block btn-info">
                                     Update Image
                                 </button>
                             </div>
@@ -132,6 +132,9 @@
                 <nav class="affix-top mt40" data-spy="affix" data-offset-top="50" >
                     <a class="btn btn-info btn-block mb20 hidden" href="#"> Import from Linked<i class="fa fa-linkedin-square fa-fw"></i></a>
                     <a class="btn btn-default btn-block mb20" href="{% url 'vacancies_curriculum_to_pdf' candidate.id %}">Download Profile</a>
+                    {% if candidate.resume %}
+                    <a class="btn btn-default btn-block mb20" href="{{ candidate.resume.url }}" target="_blank">View uploaded resume</a>
+                    {% endif %}
                     {% if recruiter %}
                             <h6 class="text-left mb20"> <i class="fa fa-flag-checkered"></i> &nbsp;<small class="text-light">Current Process</small> <br>
                             <span class="text-left">

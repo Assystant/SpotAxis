@@ -117,6 +117,7 @@ class UserDataForm(forms.ModelForm):
     Handles user registration with email verification, password confirmation,
     and basic user information collection including name, email, and phone.
     """
+    resume = forms.FileField(required=False)
     email_repeat_msg = _('Confirm your email')
     password_repeat_msg = _('* Confirm your Password')
     username = forms.RegexField(
@@ -272,6 +273,19 @@ class UserDataForm(forms.ModelForm):
 
         return self.cleaned_data
 
+    def clean_resume(self):
+        """Validate resume file type and size."""
+        file = self.cleaned_data.get('resume')
+        if not file:
+            return None
+        # Max 5MB
+        if getattr(file, 'size', 0) > 5 * 1024 * 1024:
+            raise forms.ValidationError(_('The file is too large (Max 5MB).'))
+        ext = file.name.split('.')[-1].lower()
+        if ext not in ['pdf', 'doc', 'docx', 'txt']:
+            raise forms.ValidationError(_('Only PDF, DOC, DOCX, or TXT files are allowed.'))
+        return file
+
     def send_verification_mail(self, new_user):
         AccountVerification.objects.send_verification_mail(new_user=new_user)
 
@@ -306,7 +320,7 @@ class UserDataForm(forms.ModelForm):
 
     class Meta():
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email',)
+        fields = ('username', 'first_name', 'last_name', 'email')
 # ---------------------------------------------- #
 # Registration Form End User Data #
 # ---------------------------------------------- #
