@@ -182,10 +182,10 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'ATS API',
+    'TITLE': 'Spotaxis',
     'DESCRIPTION': 'A software that tracks the candidate for job',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
+    'VERSION': '0.1.0',
+    'SERVE_INCLUDE_SCHEMA': True,
     # OTHER SETTINGS
 }
 AUTHENTICATION_BACKENDS = (
