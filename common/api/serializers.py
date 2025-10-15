@@ -40,28 +40,28 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'first_name', 'last_name', 'profile', 
                  'phone', 'phone_ext', 'cellphone', 'photo', 'logued_by', 'date_joined')
-        read_only_fields = ('date_joined',)
+        read_only_fields = ['date_joined',]
 
 
 class AccountVerificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountVerification
         fields = '__all__'
-        read_only_fields = ('activation_key',)
+        read_only_fields = ['activation_key',]
 
 
 class EmailVerificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmailVerification
         fields = '__all__'
-        read_only_fields = ('token', 'code', 'expiration_date')
+        read_only_fields = ['token', 'code', 'expiration_date']
 
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = '__all__'
-        read_only_fields = ('last_modified',)
+        read_only_fields = ['last_modified',]
 
 
 class DegreeSerializer(serializers.ModelSerializer):
@@ -104,6 +104,6 @@ class SocialAuthSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialAuth
         fields = '__all__'
-        read_only_fields = ('oauth_token', 'oauth_secret', 'identifier')
+        read_only_fields = ['oauth_token', 'oauth_secret', 'identifier']
 
 
