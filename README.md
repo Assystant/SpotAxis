@@ -43,22 +43,28 @@ If you need support implementing this ATS on your server, please reach out to ho
 
 ## Project Dependencies ##
 
-* Python 2.7
+* Python 3.12
 * beautifulsoup4
 * autodoc
+* datefinder>=0.7.3
+* dicttoxml>=1.7.16
+* django-bootstrap-form>=3.4
+* django-contrib-comments>=2.2.0
+* django-crontab>=0.7.1
+* django-extensions>=4.1
 * dateutils
 * decorator
-* Django==1.9.5
+* Django==5.2.1
 * django-localflavor
 * django-rosetta
 * django-social-share
 * docutils
 * html5lib
-* httplib2
+* httplib2                                                                              
 * microsofttranslator
 * oauth2
 * oauthlib
-* Pillow==2.1.0
+* Pillow==11.2.1
 * pisa
 * polib
 * PyJWT
@@ -69,7 +75,7 @@ If you need support implementing this ATS on your server, please reach out to ho
 * python-openid
 * python-social-auth
 * pytz
-* reportlab==2.7
+* rosetta>=0.3
 * requests
 * requests-oauthlib
 * six
