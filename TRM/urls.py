@@ -46,10 +46,10 @@ urlpatterns = [
     re_path(r'^api/ckeditor/', include('ckeditor.api.urls')),
     re_path(r'api/companies/', include('companies_api.urls')),
     re_path(r'^api/candidates/', include('candidates.api.urls')),
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('api/docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
 
     # Resources

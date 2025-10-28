@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: ATS API
-  version: 1.0.0
+  title: Spotaxis
+  version: 0.1.0
   description: A software that tracks the candidate for job
 paths:
   /api/activities/activities/:
@@ -6243,6 +6243,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Vacancy'
+          description: ''
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - en
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
           description: ''
   /api/vacancy/{vacancy_id}/:
     get:
