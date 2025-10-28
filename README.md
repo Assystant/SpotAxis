@@ -43,6 +43,7 @@ If you need support implementing this ATS on your server, please reach out to ho
 
 ## Project Dependencies ##
 
+* python>=3.12
 * autodoc>=0.5.0,
 * beautifulsoup4>=4.13.4,
 * datefinder>=0.7.3,
