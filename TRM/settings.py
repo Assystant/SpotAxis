@@ -120,6 +120,7 @@ INSTALLED_APPS = (
     'scheduler',
     'customField',
     'rest_framework',
+    'drf_spectacular',
 )
 
 
@@ -175,10 +176,18 @@ CRONJOBS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',    
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Spotaxis',
+    'DESCRIPTION': 'A software that tracks the candidate for job',
+    'VERSION': '0.1.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+    # OTHER SETTINGS
+}
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )

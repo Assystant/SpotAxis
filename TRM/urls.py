@@ -20,6 +20,8 @@ from TRM.static_views import RobotsTxtView, SitemapXmlView, GoogleVerificationVi
 from example import views as example_views
 from payments import views as payments_views
 from vacancies import views as vacancy_views
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
 # from socialmultishare import views as socialmultishare_views
 from TRM import settings
 # from django.views.generic.simple import direct_to_template
@@ -44,6 +46,11 @@ urlpatterns = [
     re_path(r'^api/ckeditor/', include('ckeditor.api.urls')),
     re_path(r'api/companies/', include('companies_api.urls')),
     re_path(r'^api/candidates/', include('candidates.api.urls')),
+    path('api/docs/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
 
     # Resources
     re_path(r'resources/comments/', include('django_comments.urls')),

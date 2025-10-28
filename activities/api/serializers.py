@@ -5,19 +5,19 @@ class MessageChunkSerializer(serializers.ModelSerializer):
     class Meta:
         model= MessageChunk
         fields='__all__'
-        read_only_fields=('last_updated')
+        read_only_fields=['last_updated']
     
 
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model=Activity
         fields='__all__'
-        read_only_fields=('last_updated','timestamp')
+        read_only_fields=['last_updated','timestamp']
 
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model= Notification
         fields='__all__'
-        read_only_fields=('last_updated','timestamp','seen')
+        read_only_fields=['last_updated','timestamp','seen']
 
