@@ -15,7 +15,9 @@ MANAGERS = ADMINS
 
 ENVIRONMENT = os.getenv('ENVIRONMENT')
 
-DEBUG = ENVIRONMENT in ['local_development', 'server_development']
+#DEBUG = ENVIRONMENT in ['local_development', 'server_development']
+DEBUG = True
+
 
 #ALLOWED_HOSTS = os.getenv('allowed_hosts')
 ALLOWED_HOSTS = ['*']
@@ -127,16 +129,19 @@ INSTALLED_APPS = (
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     # 'TRM.middleware.CrossDomainSessionMiddleware',
-    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'TRM.middleware.SubdomainMiddleware',
-    'TRM.middleware.ExpiredPlanMiddleware',
-    'TRM.middleware.MediumMiddleware',
+    
+    # Comentamos os middlewares abaixo para desativar a lógica de subdomínios/pagamentos
+    # Isso permite que você acesse o sistema diretamente pelo 127.0.0.1
+    # 'TRM.middleware.SubdomainMiddleware',
+    # 'TRM.middleware.ExpiredPlanMiddleware',
+    # 'TRM.middleware.MediumMiddleware',
 ]
 
 TEMPLATES = [
