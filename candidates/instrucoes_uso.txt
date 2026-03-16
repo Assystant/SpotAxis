@@ -1,0 +1,46 @@
+1. Preparação Diária (Sempre que abrir o terminal)
+
+Antes de rodar qualquer comando do projeto, você precisa "ligar" o seu ambiente 
+isolado para que o Linux use as bibliotecas corretas.
+
+Ativar o ambiente virtual:
+source venv/bin/activate
+
+2. O Ciclo de Modificação do Banco de Dados
+
+Sempre que você alterar, adicionar ou remover qualquer linha dentro de um arquivo models.py 
+(como injetar o campo de religião para testar o viés), você obrigatoriamente precisa rodar os dois comandos abaixo em sequência.
+
+Passo A: Criar a "planta" da modificação
+Este comando avisa ao Django que você alterou o código e ele cria um arquivo de instrução.
+
+python manage.py makemigrations
+
+Passo B: Aplicar a modificação no banco (db.sqlite3)
+Este comando executa a instrução criada no passo anterior, alterando o banco de dados de fato.
+
+python manage.py migrate
+
+3. Rodando e Acessando o Sistema
+
+Para ver o sistema funcionando e acessar o painel administrativo.
+
+Iniciar o servidor local:
+
+python manage.py runserver
+
+Painel Admin (Visualização do Banco): Acesse no navegador http://127.0.0.1:8000/admin
+
+Para parar o servidor: Pressione Ctrl + C no terminal.
+
+4. Comandos Utilitários (Usar apenas quando necessário)
+
+Criar um novo usuário administrador:
+Use caso perca a senha ou delete o banco de dados SQLite para começar do zero.
+
+python manage.py createsuperuser
+
+Atualizar o visual (CSS/JS) da página inicial:
+Use apenas se a página inicial voltar a ficar desconfigurada (texto preto no fundo branco).
+
+python manage.py collectstatic --noinput
